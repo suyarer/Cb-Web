@@ -8,7 +8,7 @@ const features = [
     tag: 'Anatolia Engine',
     title: 'Radar',
     description:
-      'Yakınındaki Bean\'ler gerçek zamanlı haritada. Mesafe, tarih, vibe filtresiyle istediğin gibi daralt.',
+      'Yakınındaki Bean\'ler gerçek zamanlı haritada. Mesafe, tarih ve vibe filtresiyle istediğin kadar daraltırsın — gerisi sende.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <circle cx="12" cy="12" r="9" />
@@ -19,10 +19,10 @@ const features = [
     accent: 'from-acid/20 via-transparent to-transparent',
   },
   {
-    tag: '4 saat, sabit',
+    tag: '4 saat · sabit',
     title: 'Bean',
     description:
-      'Etkinlik değil, Bean. 4 saatlik samimi buluşma. Sınırlı kontenjan, topluluk odaklı, kaliteye yoğunlaşan format.',
+      'Etkinlik değil, Bean. 4 saatlik samimi buluşma formatı. Kontenjan belli, niyet belli; kalabalığın değil, topluluğun tarafında.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <path d="M12 2C7 7 7 12 12 17c5-5 5-10 0-15z" />
@@ -35,7 +35,7 @@ const features = [
     tag: 'Vibe Engine V2',
     title: 'Vibe',
     description:
-      'Kendi vibe vektörünü çıkar. Algoritma senin için seçmez — sen, hangi tribe\'a yakınsın, onu görürsün.',
+      'Kendi vibe vektörünü kendin çizersin. Algoritma senin için seçmez — hangi tribe\'a yakın olduğunu sen görür, sen karar verirsin.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <path d="M3 18c3-6 7-6 9 0 2 6 6 6 9 0" />
@@ -46,9 +46,9 @@ const features = [
   },
   {
     tag: 'Prism V3 Diamond',
-    title: 'Akıllı Feed',
+    title: 'Akıllı akış',
     description:
-      '12 sinyal ile kişiselleştirme, ama filter bubble yok. %30 keşif zorunlu — konfor alanın dışına çıkarır.',
+      '12 sinyalden örülen kişisel akış; ama filter bubble yok. Her akışta %30 keşif zorunlu — konfor alanını yumuşakça genişletiriz.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <path d="M12 2l8 10-8 10-8-10z" />
@@ -59,9 +59,9 @@ const features = [
   },
   {
     tag: 'Synapse Signals',
-    title: 'Bildirim ≠ Rahatsızlık',
+    title: 'Bildirim değil, Signal',
     description:
-      '"Notification" yerine "Signal". Sadece sana anlamlı gelecek, yapay aciliyet yok. Her biri için ayrı ayar.',
+      'Sadece senin için anlamlı olan şeyler sinyale dönüşür. Yapay aciliyet yok, kırmızı nokta enflasyonu yok — her sinyal ayarlanabilir.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <path d="M6 8a6 6 0 0112 0v5l2 3H4l2-3V8z" />
@@ -74,7 +74,7 @@ const features = [
     tag: 'Tribe & Jump In',
     title: 'Topluluk',
     description:
-      'Takip etmiyorsun — tribe\'a katılıyorsun. Kulüpler Bean organize eder, sen "Jump In" edip parçası olursun.',
+      'Takip etmezsin — tribe\'a katılırsın. Kulüpler Bean organize eder, sen tek dokunuşla Jump In edip ortamın parçası olursun.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <circle cx="9" cy="8" r="3" />
@@ -108,7 +108,7 @@ export default function Features() {
             transition={{ duration: 0.8, ease: easeOutExpo }}
             className="text-section font-bold tracking-tight text-white"
           >
-            Her detay, topluluk
+            Her detay, insan
             <br />
             <span className="text-zinc-500">lehine tasarlandı.</span>
           </motion.h2>

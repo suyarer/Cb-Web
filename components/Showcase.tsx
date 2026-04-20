@@ -1,35 +1,50 @@
 'use client';
 
 import { easeOutExpo } from '@/lib/motion';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import PhoneMockup from './PhoneMockup';
 
 const screens = [
   {
-    title: 'Ana Akış',
+    id: 'akis',
+    title: 'Ana akış',
     description:
-      'Prism V3 Diamond algoritması, 12 sinyali birleştirerek senin için kişiselleştirilmiş Bean ve post akışı hazırlar. %70 kişisel, %30 keşif.',
+      'Prism V3 Diamond, 12 sinyali birleştirerek senin için akışını hazırlar. %70 kişisel, %30 keşif — konforun dışında kalmanı da isteriz.',
     mockup: <FeedScreen />,
   },
   {
+    id: 'radar',
     title: 'Radar',
     description:
-      'Anatolia engine ile yakınındaki Bean\'leri haritada gör. Viewport culling sayesinde binlerce Bean olsa bile akıcı.',
+      'Anatolia ile yakınındaki Bean\'leri haritada görürsün. Binlerce Bean olsa bile akıcı; mesafe, zaman ve vibe filtresi elinde.',
     mockup: <RadarScreen />,
   },
   {
-    title: 'Bean Detayı',
+    id: 'bean',
+    title: 'Bean detayı',
     description:
-      'Her Bean 4 saatlik samimi bir buluşma. Ev sahibi, katılımcılar, mekan, vibe tag\'leri — hepsi tek ekranda.',
+      '4 saatlik bir buluşmanın tüm bilgisi tek ekranda: ev sahibi, mekan, vibe etiketleri, katılanlar. Jump In bir saniye.',
     mockup: <BeanDetailScreen />,
   },
 ];
 
 export default function Showcase() {
+  const reduced = useReducedMotion() ?? false;
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    if (reduced) return;
+    const id = setInterval(() => setActive((i) => (i + 1) % screens.length), 6000);
+    return () => clearInterval(id);
+  }, [reduced]);
+
+  const current = screens[active];
+
   return (
-    <section className="relative py-24 md:py-40 overflow-hidden">
+    <section id="uygulamada" className="relative py-24 md:py-36 overflow-hidden">
       <div className="container-x">
-        <div className="max-w-3xl mb-20">
+        <div className="max-w-3xl mb-16 md:mb-20">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -51,34 +66,79 @@ export default function Showcase() {
           </motion.h2>
         </div>
 
-        <div className="space-y-32 md:space-y-40">
-          {screens.map((screen, i) => (
-            <motion.div
-              key={screen.title}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-15%' }}
-              transition={{ duration: 1, ease: easeOutExpo }}
-              className={`grid lg:grid-cols-2 gap-12 lg:gap-24 items-center ${
-                i % 2 === 1 ? 'lg:[&>div:first-child]:order-2' : ''
-              }`}
-            >
-              <div>
-                <div className="text-xs font-mono uppercase tracking-wider text-acid mb-3">
-                  0{i + 1} / 0{screens.length}
-                </div>
-                <h3 className="text-3xl md:text-5xl font-bold tracking-tight mb-5">
-                  {screen.title}
-                </h3>
-                <p className="text-lg text-zinc-400 leading-relaxed max-w-xl">
-                  {screen.description}
-                </p>
-              </div>
-              <div className="flex justify-center">
-                <PhoneMockup floating={false}>{screen.mockup}</PhoneMockup>
-              </div>
-            </motion.div>
-          ))}
+        <div className="grid lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-20 items-center">
+          {/* Sol: tab listesi + açıklama */}
+          <div>
+            <ul className="space-y-1 mb-10">
+              {screens.map((s, i) => (
+                <li key={s.id}>
+                  <button
+                    type="button"
+                    onClick={() => setActive(i)}
+                    className={`w-full text-left flex items-center gap-4 py-4 border-t transition group ${
+                      i === active
+                        ? 'border-acid/40'
+                        : 'border-white/[0.06] hover:border-white/20'
+                    }`}
+                    aria-current={i === active}
+                  >
+                    <span
+                      className={`text-xs font-mono uppercase tracking-wider ${
+                        i === active ? 'text-acid' : 'text-zinc-600'
+                      }`}
+                    >
+                      0{i + 1}
+                    </span>
+                    <span
+                      className={`text-xl md:text-2xl font-bold tracking-tight ${
+                        i === active ? 'text-white' : 'text-zinc-500 group-hover:text-zinc-300'
+                      } transition`}
+                    >
+                      {s.title}
+                    </span>
+                    {i === active && (
+                      <motion.span
+                        layoutId="showcase-indicator"
+                        className="ml-auto w-6 h-[2px] bg-acid"
+                        transition={{ duration: 0.5, ease: easeOutExpo }}
+                      />
+                    )}
+                  </button>
+                </li>
+              ))}
+            </ul>
+
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={current.id}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.4, ease: easeOutExpo }}
+                className="text-lg text-zinc-400 leading-relaxed max-w-xl"
+              >
+                {current.description}
+              </motion.p>
+            </AnimatePresence>
+          </div>
+
+          {/* Sağ: Telefon + değişen içerik */}
+          <div className="flex justify-center lg:justify-end">
+            <PhoneMockup floating={false}>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={current.id}
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.5, ease: easeOutExpo }}
+                  className="h-full w-full"
+                >
+                  {current.mockup}
+                </motion.div>
+              </AnimatePresence>
+            </PhoneMockup>
+          </div>
         </div>
       </div>
     </section>
@@ -127,7 +187,6 @@ function RadarScreen() {
         <span className="font-semibold">21:47</span>
         <span>●●● ●●</span>
       </div>
-      {/* Map */}
       <div className="absolute inset-0 top-8">
         <div
           className="w-full h-full relative"
@@ -136,7 +195,6 @@ function RadarScreen() {
               'radial-gradient(circle at 50% 50%, rgba(168,230,0,0.08) 0%, transparent 40%), linear-gradient(180deg, #0a0a0a 0%, #050505 100%)',
           }}
         >
-          {/* Grid */}
           <div
             className="absolute inset-0 opacity-10"
             style={{
@@ -145,7 +203,6 @@ function RadarScreen() {
               backgroundSize: '30px 30px',
             }}
           />
-          {/* Markers */}
           {[
             { x: 45, y: 35, s: 'lg' },
             { x: 62, y: 52, s: 'md' },
@@ -170,11 +227,9 @@ function RadarScreen() {
               />
             </div>
           ))}
-          {/* Self */}
           <div className="absolute" style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}>
             <div className="w-5 h-5 rounded-full bg-white border-2 border-acid" />
           </div>
-          {/* Bottom card */}
           <div className="absolute left-4 right-4 bottom-4 bg-elevated/90 backdrop-blur-xl border border-white/10 rounded-2xl p-3">
             <div className="flex items-center justify-between">
               <div>
@@ -194,12 +249,11 @@ function RadarScreen() {
 
 function BeanDetailScreen() {
   return (
-    <div className="h-full bg-midnight overflow-hidden">
+    <div className="h-full bg-midnight overflow-hidden relative">
       <div className="flex justify-between text-[10px] text-white/60 px-4 py-3">
         <span className="font-semibold">21:47</span>
         <span>●●● ●●</span>
       </div>
-      {/* Cover */}
       <div className="relative h-36 bg-gradient-to-br from-purple-500/40 via-pink-500/20 to-amber-500/30">
         <div className="absolute inset-0 bg-gradient-to-t from-midnight via-transparent" />
         <div className="absolute bottom-2 left-3 right-3">
@@ -209,7 +263,6 @@ function BeanDetailScreen() {
           <div className="text-base font-bold">Kadıköy Retro Listening Party</div>
         </div>
       </div>
-      {/* Details */}
       <div className="px-4 py-3 space-y-3">
         <div className="flex items-center gap-2 text-xs">
           <span className="text-acid">●</span>
@@ -219,7 +272,6 @@ function BeanDetailScreen() {
           <span>📍</span>
           <span className="text-zinc-400">Moda Sahnesi, Kadıköy</span>
         </div>
-        {/* Host */}
         <div className="flex items-center gap-2 bg-elevated border border-white/5 rounded-xl p-2.5">
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-500" />
           <div className="flex-1">
@@ -228,7 +280,6 @@ function BeanDetailScreen() {
           </div>
           <div className="text-[10px] bg-white/10 rounded-full px-2 py-1">Takip</div>
         </div>
-        {/* Attendees */}
         <div className="flex items-center gap-2">
           <div className="flex -space-x-2">
             {[0, 1, 2, 3].map((i) => (
@@ -241,7 +292,6 @@ function BeanDetailScreen() {
           <span className="text-[10px] text-zinc-400">34 kişi Jump In etti</span>
         </div>
       </div>
-      {/* CTA */}
       <div className="absolute bottom-4 left-4 right-4">
         <div className="bg-acid text-midnight font-bold text-center py-3 rounded-2xl text-sm">
           Jump In →

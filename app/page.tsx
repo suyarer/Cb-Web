@@ -2,9 +2,11 @@ import Features from '@/components/Features';
 import FooterLegal from '@/components/FooterLegal';
 import Hero from '@/components/Hero';
 import Launch from '@/components/Launch';
+import Lexicon from '@/components/Lexicon';
 import Manifesto from '@/components/Manifesto';
 import Nav from '@/components/Nav';
 import Showcase from '@/components/Showcase';
+import Values from '@/components/Values';
 
 export default function HomePage() {
   return (
@@ -13,7 +15,9 @@ export default function HomePage() {
       <main>
         <Hero />
         <Manifesto />
+        <Values />
         <Features />
+        <Lexicon />
         <Showcase />
         <Launch />
       </main>

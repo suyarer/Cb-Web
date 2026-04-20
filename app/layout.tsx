@@ -15,15 +15,28 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'ClubBeans — Etkinlik odaklı anti-platform topluluk',
+  title: 'ClubBeans — Algoritma değil, sen seç.',
   description:
-    'Algoritma değil, sen seç. Yakınındaki Bean\'leri keşfet, vibe\'ına uyan tribe\'lara Jump In et. Yakında App Store ve Google Play\'de.',
+    'Etkinlik odaklı anti-platform topluluk. Yakınındaki Bean\'leri keşfedersin, ruhuna uyan tribe\'lara Jump In edersin. Algoritma yok, takip yok, veri satışı yok. 2026 Q2\'de App Store ve Google Play\'de.',
   metadataBase: new URL('https://clubbeans.com'),
-  keywords: ['etkinlik', 'topluluk', 'Bean', 'Tribe', 'vibe', 'radar', 'anti-platform'],
+  keywords: [
+    'etkinlik',
+    'topluluk',
+    'Bean',
+    'Tribe',
+    'Jump In',
+    'Vibe',
+    'Signal',
+    'radar',
+    'anti-platform',
+    'kulüp',
+    'meetup',
+    'İstanbul etkinlik',
+  ],
   authors: [{ name: 'ClubBeans' }],
   openGraph: {
-    title: 'ClubBeans',
-    description: 'Etkinlik odaklı anti-platform topluluk.',
+    title: 'ClubBeans — Algoritma değil, sen seç.',
+    description: 'Etkinlik odaklı anti-platform topluluk. Radar, tribe, Jump In.',
     url: 'https://clubbeans.com',
     siteName: 'ClubBeans',
     locale: 'tr_TR',
@@ -31,7 +44,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ClubBeans',
+    title: 'ClubBeans — Algoritma değil, sen seç.',
     description: 'Etkinlik odaklı anti-platform topluluk.',
   },
   robots: { index: true, follow: true },

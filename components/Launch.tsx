@@ -21,11 +21,13 @@ export default function Launch() {
           </div>
 
           <h2 className="text-display font-bold tracking-tight mb-6">
-            <span className="text-gradient-acid">Lansman</span> ilk senden haberdar olsun.
+            <span className="text-gradient-acid">Lansman</span>
+            <br className="md:hidden" /> ilk senden haberdar olsun.
           </h2>
 
           <p className="text-lg text-zinc-400 max-w-xl mx-auto mb-12">
-            Spam yok, pazarlama sosu yok. Sadece launch günü bir mail, bir link, bir davet kodu.
+            Pazarlama sosu yok, spam yok. Sadece lansman günü tek bir mail,
+            tek bir link, tek bir davet kodu.
           </p>
 
           {/* Store badges — disabled */}
@@ -45,6 +47,9 @@ export default function Launch() {
                 Bana haber ver →
               </span>
             </a>
+            <p className="mt-5 text-xs text-zinc-600">
+              Maili gönderirsin, seni listemize ekleriz. Başka bir şey istemeyiz.
+            </p>
           </div>
         </motion.div>
       </div>
