@@ -47,14 +47,14 @@ const features = [
     accent: 'from-pink-500/20 via-transparent to-transparent',
   },
   {
-    tag: 'Curated network',
-    title: 'TrustScore',
+    tag: 'Ruh halin',
+    title: 'Compass Mode',
     description:
-      'Rastgele ve kaotik bir yer değiliz. Her hesabın referansa dayalı bir güven skoru var; kim kiminle ne yaptı — şeffaf ve karşılıklı.',
+      'Enerjik mi, sakin mi, yakın çevreyle mi? Ruh halini seçersin — keşfin bugünkü seninle hizalanır. Kategori değil, atmosfer.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
-        <path d="M12 3l8 4v6c0 4.5-3 8-8 9-5-1-8-4.5-8-9V7l8-4z" />
-        <path d="M9 12l2 2 4-4" />
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 7l3 5-3 5-3-5 3-5z" />
       </svg>
     ),
     accent: 'from-amber-500/20 via-transparent to-transparent',

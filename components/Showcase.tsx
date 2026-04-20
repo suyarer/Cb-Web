@@ -21,6 +21,13 @@ const screens = [
     mockup: <RadarScreen />,
   },
   {
+    id: 'compass',
+    title: 'Compass',
+    description:
+      'Bugün nasıl hissediyorsun? Ruh halini seç — keşif sana göre yeniden hizalanır. HYPE enerjiye, CHILL sakinliğe, TRIBE yakın çevrene açılır.',
+    mockup: <CompassScreen />,
+  },
+  {
     id: 'bean',
     title: 'Bean detayı',
     description:
@@ -240,6 +247,65 @@ function RadarScreen() {
                 Listele
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CompassScreen() {
+  const modes = [
+    { key: 'NEUTRAL', desc: 'Dengeli keşif', hue: 'from-zinc-400/30 to-zinc-600/10', dot: 'bg-zinc-300' },
+    { key: 'HYPE', desc: 'Enerji · kalabalık', hue: 'from-rose-500/40 to-amber-500/20', dot: 'bg-rose-400' },
+    { key: 'CHILL', desc: 'Sakin · küçük masa', hue: 'from-teal-500/30 to-blue-500/20', dot: 'bg-teal-300' },
+    { key: 'TRIBE', desc: 'Yakın çevre', hue: 'from-acid/40 to-emerald-500/20', dot: 'bg-acid' },
+  ];
+  return (
+    <div className="h-full bg-midnight overflow-hidden relative px-4 py-4">
+      <div className="flex justify-between text-[10px] text-white/60 px-2 mb-4">
+        <span className="font-semibold">21:47</span>
+        <span>●●● ●●</span>
+      </div>
+      <div className="mb-3">
+        <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 mb-1">
+          Compass Mode
+        </div>
+        <div className="text-lg font-bold leading-tight">Bugün nasıl hissediyorsun?</div>
+      </div>
+
+      <div className="space-y-2">
+        {modes.map((m, i) => (
+          <div
+            key={m.key}
+            className={`relative rounded-2xl border p-3 bg-gradient-to-br ${m.hue} ${
+              i === 3 ? 'border-acid/60' : 'border-white/5'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <span className={`w-2.5 h-2.5 rounded-full ${m.dot}`} />
+              <div className="flex-1">
+                <div className="text-xs font-mono font-bold tracking-wider text-white">
+                  {m.key}
+                </div>
+                <div className="text-[10px] text-zinc-300">{m.desc}</div>
+              </div>
+              {i === 3 && (
+                <div className="text-[9px] bg-acid text-midnight font-bold px-2 py-0.5 rounded-full">
+                  SEÇİLİ
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="absolute bottom-4 left-4 right-4 bg-elevated/90 backdrop-blur-xl border border-white/10 rounded-2xl p-3">
+        <div className="text-[10px] text-zinc-500 mb-1">Bu ayar, sadece bu gece için geçerli.</div>
+        <div className="flex items-center justify-between">
+          <div className="text-xs text-white">Akışı güncelle</div>
+          <div className="text-[10px] bg-acid text-midnight font-bold px-3 py-1.5 rounded-full">
+            Uygula →
           </div>
         </div>
       </div>

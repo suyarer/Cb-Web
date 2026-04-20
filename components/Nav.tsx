@@ -7,10 +7,10 @@ import { useEffect, useState } from 'react';
 
 const LINKS = [
   { href: '/#sorunlar', label: 'Ne çözüyor' },
-  { href: '/#manifesto', label: 'Manifesto' },
-  { href: '/#ilkeler', label: 'İlkelerimiz' },
-  { href: '/#features', label: 'Özellikler' },
+  { href: '/#nasil-calisir', label: 'Nasıl çalışır' },
+  { href: '/#trustscore', label: 'TrustScore' },
   { href: '/#uygulamada', label: 'Uygulamada' },
+  { href: '/#karsilastirma', label: 'Fark' },
 ];
 
 export default function Nav() {
