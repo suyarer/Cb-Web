@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-midnight text-white;
+    font-feature-settings: 'ss01', 'cv11';
+  }
+
+  ::selection {
+    @apply bg-acid text-midnight;
+  }
+
+  *::-webkit-scrollbar {
+    @apply w-1.5;
+  }
+  *::-webkit-scrollbar-track {
+    @apply bg-midnight;
+  }
+  *::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    @apply bg-ghost;
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply max-w-7xl mx-auto px-6 md:px-10;
+  }
+
+  .grain-overlay {
+    @apply pointer-events-none fixed inset-0 opacity-[0.035] mix-blend-overlay bg-grain;
+    z-index: 1;
+  }
+
+  .text-gradient-acid {
+    background: linear-gradient(135deg, #FFFFFF 0%, #A8E600 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .border-glow {
+    position: relative;
+  }
+  .border-glow::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(168, 230, 0, 0.4), transparent 50%, rgba(168, 230, 0, 0.2));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .glass {
+    @apply bg-white/[0.02] backdrop-blur-xl border border-white/[0.05];
+  }
+
+  .prose-legal {
+    @apply max-w-3xl mx-auto;
+  }
+  .prose-legal h1 {
+    @apply text-4xl md:text-5xl font-bold tracking-tight mb-4;
+  }
+  .prose-legal h2 {
+    @apply text-2xl font-bold mt-12 mb-4 text-white;
+  }
+  .prose-legal h3 {
+    @apply text-lg font-semibold mt-6 mb-2 text-white;
+  }
+  .prose-legal p {
+    @apply text-zinc-400 leading-relaxed mb-4;
+  }
+  .prose-legal ul {
+    @apply list-disc list-outside pl-6 space-y-2 text-zinc-400 mb-6;
+  }
+  .prose-legal a {
+    @apply text-acid hover:underline;
+  }
+  .prose-legal strong {
+    @apply text-white;
+  }
+}

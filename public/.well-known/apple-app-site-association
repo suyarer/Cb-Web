@@ -1,0 +1,24 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "3FKY8YVC66.com.clubbeans.app",
+        "paths": [
+          "/bean/*",
+          "/club/*",
+          "/user/*",
+          "/post/*",
+          "/invite/*",
+          "NOT /privacy",
+          "NOT /terms",
+          "NOT /support",
+          "NOT /delete-account"
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["3FKY8YVC66.com.clubbeans.app"]
+  }
+}
