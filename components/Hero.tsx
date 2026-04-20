@@ -89,9 +89,9 @@ export default function Hero() {
               custom={1}
               className="text-hero font-bold tracking-tight leading-[0.95] mb-6"
             >
-              Algoritma değil
+              Ekran süresi değil,
               <br />
-              <span className="text-gradient-acid">sen seç.</span>
+              <span className="text-gradient-acid">yaşam süresi.</span>
             </motion.h1>
 
             <motion.p
@@ -101,11 +101,10 @@ export default function Hero() {
               custom={2}
               className="text-lg md:text-xl text-zinc-400 max-w-xl leading-relaxed mb-8"
             >
-              Yakınındaki <strong className="text-white">Bean</strong>&apos;leri kendi
-              filtrelerinle görürsün, ruhuna uyan{' '}
-              <strong className="text-white">tribe</strong>&apos;lara bir tıkla{' '}
-              <strong className="text-acid">Jump In</strong> edersin.
-              Algoritma değil, sen seçersin.
+              ClubBeans bir uygulama değil, bir anti-platformdur. Diğer platformlar
+              seni ekranda tutmak için algoritma yazar; biz seni sokağa çıkarmak için
+              yazarız. <strong className="text-white">Sosyal Obezite</strong>&apos;ye karşı,
+              kodla inşa edilmiş bir dalgakıran.
             </motion.p>
 
             <motion.div
@@ -116,13 +115,13 @@ export default function Hero() {
               className="flex flex-wrap items-center gap-2 mb-10"
             >
               {[
-                'Konum odaklı Radar',
-                '4 saatlik Bean',
-                'Takip değil Tribe',
+                'Yakında Bul',
+                'Birlikte Yap',
+                'Kolay Kur',
               ].map((label) => (
                 <span
                   key={label}
-                  className="inline-flex items-center gap-2 text-xs text-zinc-300 bg-white/[0.04] border border-white/10 rounded-full px-3 py-1.5"
+                  className="inline-flex items-center gap-2 text-xs font-semibold text-white bg-white/[0.04] border border-white/10 rounded-full px-3 py-1.5"
                 >
                   <span className="w-1 h-1 rounded-full bg-acid" />
                   {label}
@@ -160,8 +159,8 @@ export default function Hero() {
               className="mt-16 grid grid-cols-3 gap-6 max-w-md"
             >
               <Stat label="Bean süresi" value={4} suffix=" sa" />
-              <Stat label="Vibe kategorisi" value={12} suffix="+" />
-              <Stat label="Algoritma" value={0} accent />
+              <Stat label="Dakika · Club kur" value={1} suffix=" dk" />
+              <Stat label="Dikkat algoritması" value={0} accent />
             </motion.div>
           </div>
 

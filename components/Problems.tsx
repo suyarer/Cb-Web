@@ -6,21 +6,24 @@ import { motion } from 'framer-motion';
 const problems = [
   {
     n: '01',
-    pain: 'Ne izleyeceğine, kimi takip edeceğine, neye vakit ayıracağına algoritma karar veriyor.',
-    solution: 'Yakınındaki buluşmaları senin filtrelerinle listeleriz; sıralamayı algoritma değil, sen belirlersin.',
-    cta: 'Radar',
+    cta: 'Yakında Bul',
+    pain: 'Aynı şehirde yaşayan yüzlerce insan var; ortak ilgi alanlarına göre buluşanlar da. Ama sen hiçbirinden haberdar olamıyorsun.',
+    solution:
+      'Yakınındaki Beans tek ekranda listelenir. Konum, saat ve ilgi filtresi senin; sıralamayı algoritma değil, sen belirlersin.',
   },
   {
     n: '02',
-    pain: 'Etkinlikler sonsuz takvimlere dağılıyor, sonunda hangisine gideceğini bilmiyorsun; çoğu da kalabalık gürültüsü.',
-    solution: 'Her buluşma 4 saatlik, başı sonu belli bir Bean. Kontenjan ve niyet baştan açık — gelirsen ortama tam girersin.',
-    cta: 'Bean formatı',
+    cta: 'Birlikte Yap',
+    pain: 'Sosyal medyaların dünyası bireysel: like\'larsın, kaydırırsın, yorum yaparsın — ama kimseyle aslında buluşmazsın.',
+    solution:
+      'Bean, dijital bir aktivite değil, fiziksel bir buluşmadır. Ekrana değil masaya otururuz; sohbete değil yaşama zaman ayırırız.',
   },
   {
     n: '03',
-    pain: 'Sosyal ağlar seni takipçi sayısıyla ölçüyor; karşındakinin ne yaptığını, neye inandığını değil.',
-    solution: 'Takip etmezsin, tribe\'a katılırsın. Ortak vibe\'ı paylaşan insanlarla tek tıkla Jump In et.',
-    cta: 'Tribe & Jump In',
+    cta: 'Kolay Kur',
+    pain: 'Bir topluluk kurmak, onu duyurmak, katılımcıları toparlamak ayrı ayrı uygulamalarda dağılıyor. Kulüp kurmak işkenceye dönüyor.',
+    solution:
+      'Club\'ını dakikalar içinde kurarsın. Bean düzenle, davet et, TrustScore ile güveni koru — hepsi aynı ekranda, sürtünmesiz.',
   },
 ];
 
@@ -45,9 +48,9 @@ export default function Problems() {
             transition={{ duration: 0.8, ease: easeOutExpo }}
             className="text-section font-bold tracking-tight text-white"
           >
-            Sosyal uygulamalarla
+            Şehirli yalnızlığın
             <br />
-            <span className="text-zinc-500">üç temel sorunumuz var.</span>
+            <span className="text-zinc-500">üç somut belirtisi var.</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
@@ -56,7 +59,8 @@ export default function Problems() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mt-6 text-zinc-400 max-w-2xl"
           >
-            Ne yazdığımız değil, ne çözdüğümüz önemli. ClubBeans üç net derdin peşinde.
+            Girişimciler, beyaz yakalılar, freelancerlar — modern şehir insanının
+            ortak derdi aynı: çok çevre, niteliksiz temas. ClubBeans üç net derdin peşinde.
           </motion.p>
         </div>
 
@@ -82,7 +86,7 @@ export default function Problems() {
                 </div>
                 <div className="relative md:border-l md:border-white/[0.06] md:pl-10">
                   <div className="text-[10px] font-mono uppercase tracking-wider text-acid mb-3">
-                    Bizim yolumuz
+                    Bizim çözümümüz
                   </div>
                   <p className="text-lg md:text-xl text-white leading-snug mb-4">{p.solution}</p>
                   <span className="inline-flex items-center gap-2 bg-acid/10 border border-acid/30 text-acid text-xs font-semibold rounded-full px-3 py-1">

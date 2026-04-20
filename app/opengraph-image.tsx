@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'ClubBeans — Etkinlik odaklı anti-platform topluluk';
+export const alt = 'ClubBeans — Ekran süresi değil, yaşam süresi.';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -60,14 +60,14 @@ export default async function OG() {
         style={{
           display: 'flex',
           flexDirection: 'column',
-          fontSize: '96px',
+          fontSize: '92px',
           fontWeight: 900,
           lineHeight: 1,
           color: '#fff',
           letterSpacing: '-0.04em',
         }}
       >
-        <div>Algoritma değil</div>
+        <div>Ekran süresi değil,</div>
         <div
           style={{
             background: 'linear-gradient(135deg, #fff 0%, #A8E600 100%)',
@@ -75,7 +75,7 @@ export default async function OG() {
             color: 'transparent',
           }}
         >
-          sen seç.
+          yaşam süresi.
         </div>
       </div>
 
@@ -89,7 +89,7 @@ export default async function OG() {
           fontSize: '22px',
         }}
       >
-        <div>Etkinlik odaklı anti-platform topluluk · 2026</div>
+        <div>Yakında Bul · Birlikte Yap · Kolay Kur · Anti-platform</div>
         <div style={{ color: '#A8E600', fontFamily: 'monospace' }}>clubbeans.com</div>
       </div>
     </div>,

@@ -8,57 +8,57 @@ const terms = [
     term: 'Bean',
     pron: '/biːn/',
     kind: 'isim',
-    def: '4 saatlik, başı sonu belli samimi buluşma. ClubBeans\'in kalbindeki birim.',
-    ex: '"Cumartesi akşamı Kadıköy\'de bir Vinyl Night Bean\'i var."',
+    def: '4 saatlik, başı sonu belli fiziksel buluşma. ClubBeans\'in kalbindeki aktivite birimi — kahve, koşu, pitch night, kitap sohbeti.',
+    ex: '"Cumartesi Kadıköy\'de bir Vinyl Night Bean\'i var."',
   },
   {
-    term: 'Tribe',
-    pron: '/traɪb/',
+    term: 'Club',
+    pron: '/klʌb/',
     kind: 'isim',
-    def: 'Ortak vibe\'ı paylaşan topluluk. Takipçi değil, birlikte hareket eden grup.',
-    ex: '"Moda koşucuları tribe\'ı pazarları parkta buluşur."',
+    def: 'Belirli bir ilgi alanı etrafında kurulmuş topluluk. AI girişimcileri, Moda koşucuları, film kulübü — dikeyini seç, Bean düzenle.',
+    ex: '"@kadikoykosu Club\'ı pazarları Bean açıyor."',
+  },
+  {
+    term: 'TrustScore',
+    pron: '/trʌst skɔːr/',
+    kind: 'isim',
+    def: 'Hesabının güvenilirlik ve referans skoru. Kim kimle hangi Bean\'e geldi, kim Bean düzenledi — curated network\'ün temel ölçüsü.',
+    ex: '"TrustScore\'u 84, üç farklı Club\'da aktif."',
   },
   {
     term: 'Jump In',
     pron: '/dʒʌmp ɪn/',
     kind: 'fiil',
-    def: 'Bir Bean\'e katılma aksiyonu. "Katıl" yerine kullanılır; kararlılığın, anındalığın ifadesi.',
-    ex: '"34 kişi Jump In etti, sen de katıl."',
+    def: 'Bean\'e katılma aksiyonu. "Katıl" yerine kullanılır; anındalığın, kararlılığın ifadesi.',
+    ex: '"34 kişi Jump In etti."',
   },
   {
     term: 'Signal',
     pron: '/ˈsɪɡ.nəl/',
     kind: 'isim',
     def: 'Sadece senin için anlamlı bildirim. Gürültü değil, işaret — yapay aciliyetten arınmış.',
-    ex: '"Radar Signal\'i: Yakınındaki yeni Bean."',
+    ex: '"Yakınında yeni bir Bean var — tek Signal."',
   },
   {
     term: 'Vibe',
     pron: '/vaɪb/',
     kind: 'isim',
-    def: 'Bean\'in veya tribe\'ın tonu, ruhu, niyeti. Kategori değil, atmosfer.',
-    ex: '"Sakin vibe, gürültüsüz müzik, yavaş sohbet."',
+    def: 'Bean\'in veya Club\'ın tonu, ruhu. Kategori değil, atmosfer.',
+    ex: '"Sakin vibe, yavaş sohbet, ikili buluşma."',
   },
   {
     term: 'Radar',
     pron: '/ˈreɪ.dɑːr/',
     kind: 'isim',
-    def: 'Konum + zaman + vibe filtresiyle yakınındaki Bean\'leri gösteren harita. Algoritma değil, filtre.',
-    ex: '"Radar\'ı aç, 800m yarıçapta 12 aktif Bean var."',
+    def: 'Yakınındaki Beans\'leri konum + zaman + ilgiye göre gösteren keşif ekranı. Algoritma değil, senin filtrelerin.',
+    ex: '"800m yarıçapta 12 Bean aktif."',
   },
   {
-    term: 'Kulüp',
-    pron: '/kuˈlyp/',
+    term: 'Sosyal Obezite',
+    pron: '/sosˈjal obeˈzite/',
     kind: 'isim',
-    def: 'Bean organize eden hesap türü. Barlar, topluluklar, yaratıcılar — tribe\'ının gönüllü ev sahipleri.',
-    ex: '"@kulturevi kulübü bu hafta üç farklı Bean düzenliyor."',
-  },
-  {
-    term: 'Keşif',
-    pron: '/keˈʃif/',
-    kind: 'isim',
-    def: 'Akışının %30\'unda gördüğün, konfor alanının dışındaki Bean\'ler. Filter bubble\'dan çıkış kapısı.',
-    ex: '"Bu hafta keşif sayesinde ilk kez bir desen atölyesine gittim."',
+    def: 'Dijital çağın hastalığı: çok kaydırma, az yaşama. ClubBeans\'in karşıya aldığı sorunun adı.',
+    ex: '"Bugün ekran süreden 6 saat, buluşma 0 — Sosyal Obezite."',
   },
 ];
 
@@ -83,9 +83,9 @@ export default function Lexicon() {
             transition={{ duration: 0.8, ease: easeOutExpo }}
             className="text-section font-bold tracking-tight"
           >
-            Yeni dil, yeni
+            Yeni dil,
             <br />
-            <span className="text-zinc-500">topluluk kodları.</span>
+            <span className="text-zinc-500">yeni topluluk kodları.</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
@@ -94,8 +94,8 @@ export default function Lexicon() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-zinc-400 mt-6 max-w-2xl"
           >
-            Etkinlik, kullanıcı, takipçi, bildirim — bu kelimeler dikkat ekonomisinin
-            kelimeleri. Biz yeni bir sözlükle çalışıyoruz.
+            Kullanıcı, takipçi, etkinlik, bildirim — bunlar dikkat ekonomisinin
+            kelimeleri. Biz yeni bir sözlükle konuşuyoruz.
           </motion.p>
         </div>
 

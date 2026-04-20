@@ -26,8 +26,8 @@ export default function Launch() {
           </h2>
 
           <p className="text-lg text-zinc-400 max-w-xl mx-auto mb-12">
-            Pazarlama sosu yok, spam yok. Sadece lansman günü tek bir mail,
-            tek bir link, tek bir davet kodu.
+            Pazarlama sosu yok, spam yok — dikkatini çalmayacağımıza söz verdik.
+            Sadece lansman günü tek bir mail, tek bir link, tek bir davet kodu.
           </p>
 
           {/* Store badges — disabled */}

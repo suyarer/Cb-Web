@@ -8,23 +8,23 @@ import PhoneMockup from './PhoneMockup';
 const screens = [
   {
     id: 'akis',
-    title: 'Ana akış',
+    title: 'Akış',
     description:
-      'İlgilerin ve yakınlığın akışı belirler; ama küçük bir pay konforun dışına ayrılır. Böylece her gün tanımadığın bir ortamı da görürsün.',
+      'Yakında olan ve ilgine uyan Beans senin ekranında. Ama akışın bir bölümü her zaman konforun dışına ayrılır — yeni Club\'ları, yeni vibe\'ları orada fark edersin.',
     mockup: <FeedScreen />,
   },
   {
     id: 'radar',
     title: 'Radar',
     description:
-      'Yakınındaki Bean\'leri haritada görürsün. Mesafe, zaman ve ortam filtresi tek elinin altında — seçim senin.',
+      'Şehrinde ne dönüyor? Tek ekranda: harita, mesafe, saat, ilgi. Sıralamayı algoritma değil, senin filtrelerin belirler.',
     mockup: <RadarScreen />,
   },
   {
     id: 'bean',
     title: 'Bean detayı',
     description:
-      '4 saatlik buluşmanın bilmen gereken her şeyi tek ekranda: ev sahibi, mekan, ortam etiketleri, kimler geliyor. Jump In bir saniye.',
+      'Ev sahibi, mekan, saat, TrustScore, kimler geliyor — bilmen gereken her şey tek ekranda. Karar ver, Jump In et, masaya otur.',
     mockup: <BeanDetailScreen />,
   },
 ];

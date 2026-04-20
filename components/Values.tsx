@@ -6,24 +6,24 @@ import { motion } from 'framer-motion';
 
 const values = [
   {
-    big: { value: 0, suffix: '', prefix: '' },
-    title: 'algoritma',
-    text: 'Ne göreceğine karar veren kara kutu yok. Sıralamayı ve filtreyi sen seçersin; ClubBeans senin için değil, seninle çalışır.',
+    big: { value: 0, suffix: '', text: null },
+    title: 'dikkat algoritması',
+    text: 'Seni ekranda tutmak için hiçbir satır kod yazmıyoruz. Sıralama senin filtrelerinle çalışır; kararı kara kutu değil, sen verirsin.',
   },
   {
-    big: { value: 4, suffix: ' sa', prefix: '' },
+    big: { value: 1, suffix: ' dk', text: null },
+    title: "Club'ını kur",
+    text: 'Topluluk kurmak artık formlar, WhatsApp grupları ve Instagram postları arasında dolaşmak değil. Dakikalar içinde Club aç, Bean düzenle, davet et.',
+  },
+  {
+    big: { value: 4, suffix: ' sa', text: null },
     title: 'sabit buluşma süresi',
-    text: 'Her Bean 4 saat. Başı sonu belli, niyet açık. Sonsuz scroll yok, sanal aciliyet yok — buluştuğunda ortama tam girersin.',
+    text: 'Her Bean 4 saatlik, başı sonu belli bir fiziksel buluşma. Ekrana değil masaya otururuz; sohbete değil yaşamaya zaman ayırırız.',
   },
   {
-    big: { value: 30, suffix: '%', prefix: '' },
-    title: 'konforun dışı keşif',
-    text: 'Akışının bir kısmını ilgilerinin dışından gelen buluşmalara ayırırız. Her hafta yeni bir ortam, yeni bir tribe fark edersin.',
-  },
-  {
-    big: { value: 100, suffix: '%', prefix: '' },
-    title: 'verinin sahibi sensin',
-    text: 'Davranışını takip edip satmıyoruz. Üçüncü taraf reklam ağı yok. Verinle ilgili her kararı sen verirsin — ister indir, ister sil.',
+    big: { value: 0, suffix: '', text: 'Trust' },
+    title: 'Score ile kaliteli çevre',
+    text: 'Herkesin herkese ulaştığı kaotik bir yer değiliz. TrustScore referansı ve güveni ölçer — curated network bir vaadimiz değil, mekanizmamız.',
   },
 ];
 
@@ -68,8 +68,9 @@ export default function Values() {
               <div className="relative">
                 <div className="flex items-baseline gap-1 mb-2">
                   <span className="text-6xl md:text-7xl font-black text-acid tracking-tighter leading-none">
-                    {v.big.prefix}
-                    <AnimatedCounter value={v.big.value} duration={1.8} />
+                    {v.big.text ?? (
+                      <AnimatedCounter value={v.big.value} duration={1.8} />
+                    )}
                     {v.big.suffix}
                   </span>
                 </div>

@@ -5,10 +5,10 @@ import { motion } from 'framer-motion';
 
 const features = [
   {
-    tag: 'Konum odaklı keşif',
+    tag: 'Yakında Bul',
     title: 'Radar',
     description:
-      'Yakınındaki buluşmaları tek ekranda gör. Mesafe, tarih ve ortam filtresi elinde — kalanını senin tercihin belirler.',
+      'Yakınındaki Beans haritada ve listede. Konum, saat, ilgi filtresiyle şehrinde ne dönüyor — hepsini tek ekranda görürsün.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <circle cx="12" cy="12" r="9" />
@@ -19,10 +19,10 @@ const features = [
     accent: 'from-acid/20 via-transparent to-transparent',
   },
   {
-    tag: '4 saat · sabit format',
+    tag: 'Birlikte Yap',
     title: 'Bean',
     description:
-      'Her buluşma başı sonu belli 4 saatlik bir Bean. Kontenjan açık, niyet açık — gittiğinde ortama tam girersin, kayıp olmaz.',
+      'Her Bean 4 saatlik fiziksel bir buluşma. Kahve, koşu, pitch night, kitap sohbeti — başı sonu belli bir aktiviteye dahil olursun.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <path d="M12 2C7 7 7 12 12 17c5-5 5-10 0-15z" />
@@ -32,55 +32,55 @@ const features = [
     accent: 'from-purple-500/20 via-transparent to-transparent',
   },
   {
-    tag: 'Kendi tarzın',
-    title: 'Vibe',
+    tag: 'Kolay Kur',
+    title: 'Club',
     description:
-      'Ruhuna uyan ortamı sen seçersin. Bir buluşmanın tonu etiketlerde açıkça durur — nereye uyduğunu saniyede anlarsın.',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
-        <path d="M3 18c3-6 7-6 9 0 2 6 6 6 9 0" />
-        <path d="M3 6c3 6 7 6 9 0 2-6 6-6 9 0" />
-      </svg>
-    ),
-    accent: 'from-pink-500/20 via-transparent to-transparent',
-  },
-  {
-    tag: 'Kişisel akış',
-    title: 'Akış',
-    description:
-      'İlgilerin ve yakınlığın akışı şekillendirir; filtre balonu değil. Her akışta konforun dışından bir pay bırakırız — yeni şeyler görürsün.',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
-        <path d="M12 2l8 10-8 10-8-10z" />
-        <path d="M4 12h16" />
-      </svg>
-    ),
-    accent: 'from-amber-500/20 via-transparent to-transparent',
-  },
-  {
-    tag: 'Sessiz bildirim',
-    title: 'Signal',
-    description:
-      'Sadece senin için anlamlı olan şey bildirim olur. Kırmızı nokta şişmesi yok, yapay aciliyet yok — her sinyali ayrı açıp kapatırsın.',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
-        <path d="M6 8a6 6 0 0112 0v5l2 3H4l2-3V8z" />
-        <path d="M10 19a2 2 0 004 0" />
-      </svg>
-    ),
-    accent: 'from-teal-500/20 via-transparent to-transparent',
-  },
-  {
-    tag: 'Tribe & Jump In',
-    title: 'Topluluk',
-    description:
-      'Takipçi sayısı değil, birlikte hareket. Kulüpler Bean düzenler, sen tribe\'ınla tek dokunuşla Jump In edip ortamın parçası olursun.',
+      'Topluluğunu dakikalar içinde aç. "AI Girişimcileri", "Kadıköy Koşu Kulübü" — dikeyini seç, Bean düzenle, üyeni yönet. Tek ekrandan.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <circle cx="9" cy="8" r="3" />
         <circle cx="17" cy="10" r="2" />
         <path d="M3 20c0-4 3-6 6-6s6 2 6 6" />
         <path d="M15 18c0-2 2-3 4-3" />
+      </svg>
+    ),
+    accent: 'from-pink-500/20 via-transparent to-transparent',
+  },
+  {
+    tag: 'Curated network',
+    title: 'TrustScore',
+    description:
+      'Rastgele ve kaotik bir yer değiliz. Her hesabın referansa dayalı bir güven skoru var; kim kiminle ne yaptı — şeffaf ve karşılıklı.',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
+        <path d="M12 3l8 4v6c0 4.5-3 8-8 9-5-1-8-4.5-8-9V7l8-4z" />
+        <path d="M9 12l2 2 4-4" />
+      </svg>
+    ),
+    accent: 'from-amber-500/20 via-transparent to-transparent',
+  },
+  {
+    tag: 'Tek dokunuş',
+    title: 'Jump In',
+    description:
+      '"Katıl" değil, Jump In. Kalabalık bir formu doldurmak, mail beklemek yok — uyuyorsun, tıklıyorsun, masaya oturuyorsun.',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
+        <path d="M5 12h14" />
+        <path d="M13 6l6 6-6 6" />
+      </svg>
+    ),
+    accent: 'from-teal-500/20 via-transparent to-transparent',
+  },
+  {
+    tag: 'Sessiz bildirim',
+    title: 'Signal',
+    description:
+      'Sadece senin için gerçekten anlamlı olan şey bildirim olur. Kırmızı nokta enflasyonu yok, yapay aciliyet yok — her sinyal ayarlanabilir.',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
+        <path d="M6 8a6 6 0 0112 0v5l2 3H4l2-3V8z" />
+        <path d="M10 19a2 2 0 004 0" />
       </svg>
     ),
     accent: 'from-blue-500/20 via-transparent to-transparent',
@@ -108,9 +108,9 @@ export default function Features() {
             transition={{ duration: 0.8, ease: easeOutExpo }}
             className="text-section font-bold tracking-tight text-white"
           >
-            Her detay, insan
+            Üç ana söz,
             <br />
-            <span className="text-zinc-500">lehine tasarlandı.</span>
+            <span className="text-zinc-500">altı mekanizma.</span>
           </motion.h2>
         </div>
 
