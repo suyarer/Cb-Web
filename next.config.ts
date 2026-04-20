@@ -1,12 +1,11 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  // Static export — Vercel/Netlify/GH Pages uyumlu
-  output: 'export',
+  // Vercel server-rendered deploy (default) — OG image + Edge runtime uyumlu.
+  // Netlify/CF Pages gibi static-only host kullanılırsa `output: 'export'` eklenir
+  // ve opengraph-image.tsx'e 'force-static' tanımlanır.
   trailingSlash: true,
-  images: { unoptimized: true },
-  // Play Console + Apple için .well-known/ path'ini korumak kritik
-  // (public/ altında tutulur, Next otomatik serve eder)
+  reactStrictMode: true,
 };
 
 export default nextConfig;

@@ -27,19 +27,43 @@ export default function PhoneMockup({ children, className = '', floating = true 
       {...motionProps}
       className={`relative w-[280px] md:w-[340px] aspect-[9/19.5] ${className}`}
     >
-      {/* Glow */}
-      <div className="absolute -inset-20 bg-acid/10 blur-[120px] rounded-full pointer-events-none" />
+      {/* Multi-layer glow */}
+      <div className="absolute -inset-24 bg-acid/20 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute -inset-32 bg-purple-500/10 blur-[140px] rounded-full pointer-events-none" />
+
+      {/* Side buttons (left: volume up, volume down, silence) */}
+      <div
+        aria-hidden
+        className="absolute -left-[3px] top-[22%] w-[3px] h-[30px] bg-gradient-to-r from-zinc-900 to-zinc-700 rounded-l-sm"
+      />
+      <div
+        aria-hidden
+        className="absolute -left-[3px] top-[32%] w-[3px] h-[48px] bg-gradient-to-r from-zinc-900 to-zinc-700 rounded-l-sm"
+      />
+      <div
+        aria-hidden
+        className="absolute -left-[3px] top-[42%] w-[3px] h-[48px] bg-gradient-to-r from-zinc-900 to-zinc-700 rounded-l-sm"
+      />
+      {/* Right: power button */}
+      <div
+        aria-hidden
+        className="absolute -right-[3px] top-[28%] w-[3px] h-[72px] bg-gradient-to-l from-zinc-900 to-zinc-700 rounded-r-sm"
+      />
 
       {/* Phone body */}
-      <div className="relative w-full h-full rounded-[3rem] bg-gradient-to-br from-zinc-800 to-zinc-950 p-[3px] shadow-2xl shadow-black/50">
+      <div className="relative w-full h-full rounded-[3rem] bg-gradient-to-br from-zinc-700 via-zinc-900 to-zinc-950 p-[3px] shadow-2xl shadow-black/60">
+        {/* Inner bezel highlight */}
+        <div className="absolute inset-[3px] rounded-[2.9rem] bg-gradient-to-br from-white/10 via-transparent to-transparent pointer-events-none" />
+
         <div className="w-full h-full rounded-[2.85rem] bg-black overflow-hidden relative">
           {/* Dynamic Island */}
-          <div className="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-7 bg-black rounded-full z-20" />
+          <div className="absolute top-2 left-1/2 -translate-x-1/2 w-24 h-7 bg-black rounded-full z-20 border border-zinc-900/50">
+            {/* Camera dot */}
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-zinc-800 border border-zinc-700" />
+          </div>
 
           {/* Screen content */}
-          <div className="absolute inset-0 pt-8">
-            {children ?? <DefaultAppPreview />}
-          </div>
+          <div className="absolute inset-0 pt-8">{children ?? <DefaultAppPreview />}</div>
 
           {/* Glass reflection overlay */}
           <div
@@ -47,9 +71,12 @@ export default function PhoneMockup({ children, className = '', floating = true 
             className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 30%, transparent 70%, rgba(255,255,255,0.03) 100%)',
+                'linear-gradient(135deg, rgba(255,255,255,0.09) 0%, transparent 28%, transparent 72%, rgba(255,255,255,0.04) 100%)',
             }}
           />
+
+          {/* Bottom home indicator */}
+          <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-24 h-1 bg-white/30 rounded-full z-30" />
         </div>
       </div>
     </Wrapper>
