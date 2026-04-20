@@ -16,8 +16,8 @@ const rows: { feature: string; cb: Val; timeleft: Val; meetup: Val; tinder: Val 
   {
     feature: 'Ücretsiz (abonelik yok)',
     cb: { v: 'yes' },
-    timeleft: { v: 'no', label: '€12/ay' },
-    meetup: { v: 'partial', label: 'Organizer ücretli' },
+    timeleft: { v: 'no', label: 'Aylık ücret' },
+    meetup: { v: 'partial', label: 'Organizatör ücretli' },
     tinder: { v: 'no', label: 'Premium' },
   },
   {
@@ -92,11 +92,19 @@ function Cell({ val }: { val: Val }) {
   );
 }
 
-const cols: { key: string; name: string; highlight?: boolean }[] = [
+type Col = {
+  key: string;
+  name: string;
+  hint?: string;
+  highlight?: boolean;
+  redacted?: boolean;
+};
+
+const cols: Col[] = [
   { key: 'cb', name: 'ClubBeans', highlight: true },
-  { key: 'timeleft', name: 'Timeleft' },
-  { key: 'meetup', name: 'Meetup' },
-  { key: 'tinder', name: 'Tinder IRL' },
+  { key: 'timeleft', name: 'Abonelikli akşam yemeği', hint: 'Batılı rakip', redacted: true },
+  { key: 'meetup', name: 'Global meetup platformu', hint: 'Organizatör ücretli', redacted: true },
+  { key: 'tinder', name: 'Flört odaklı IRL', hint: 'Abonelikli', redacted: true },
 ];
 
 export default function Compare() {
@@ -154,13 +162,36 @@ export default function Compare() {
                   {cols.map((c) => (
                     <th
                       key={c.key}
-                      className={`px-3 py-5 text-center text-sm font-bold ${
+                      className={`px-3 py-5 text-center text-sm font-bold align-bottom ${
                         c.highlight ? 'text-acid' : 'text-zinc-400'
                       }`}
                     >
-                      <div className="flex flex-col items-center gap-1">
-                        {c.highlight && <span className="w-6 h-[2px] bg-acid rounded-full" />}
-                        {c.name}
+                      <div className="flex flex-col items-center gap-1.5">
+                        {c.highlight ? (
+                          <>
+                            <span className="w-6 h-[2px] bg-acid rounded-full" />
+                            <span>{c.name}</span>
+                          </>
+                        ) : (
+                          <>
+                            <span
+                              className="select-none text-zinc-400 tracking-wide"
+                              style={{
+                                filter: 'blur(5px)',
+                                textShadow: '0 0 8px rgba(255,255,255,0.1)',
+                              }}
+                              aria-hidden="true"
+                            >
+                              {c.name}
+                            </span>
+                            {c.hint && (
+                              <span className="text-[9px] font-mono uppercase tracking-wider text-zinc-600 not-italic">
+                                {c.hint}
+                              </span>
+                            )}
+                            <span className="sr-only">Anonim rakip</span>
+                          </>
+                        )}
                       </div>
                     </th>
                   ))}
@@ -195,9 +226,10 @@ export default function Compare() {
         </motion.div>
 
         <p className="mt-6 text-xs text-zinc-600 font-mono max-w-2xl">
-          * Rakip verileri Nisan 2026 itibariyle kamuya açık uygulama ve fiyatlandırma
-          sayfalarından alınmıştır. Timeleft Premium €11,99/ay, Meetup Pro
-          organizatör ücretlidir.
+          * Karşılaştırma, Nisan 2026 itibariyle aynı kategoride çalışan üç
+          uluslararası uygulamanın kamuya açık özellikleri ve fiyatlandırmaları
+          referans alınarak yapıldı. Markaları isimlendirmiyoruz;
+          konuşulması gereken özellikler, markalar değil.
         </p>
       </div>
     </section>
