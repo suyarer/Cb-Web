@@ -18,22 +18,20 @@ const positives = [
   'Başarımız, uygulamayı kapattığın an başlar.',
 ];
 
-const ending = 'Ekran süresi değil, yaşam süresi.';
-
 export default function Manifesto() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start end', 'end start'],
   });
-  const opacity = useTransform(scrollYProgress, [0, 0.25, 0.75, 1], [0, 1, 1, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   return (
     <section id="manifesto" ref={ref} className="relative py-40 md:py-56 overflow-hidden">
       <motion.div style={{ opacity }} className="container-x relative">
         <div className="max-w-5xl mx-auto">
           <div className="inline-block text-xs uppercase tracking-[0.3em] text-acid mb-8 font-mono">
-            Manifesto
+            Manifesto · yavaş oku
           </div>
 
           <motion.h2
@@ -65,16 +63,12 @@ export default function Manifesto() {
                 Yapmıyoruz
               </div>
               {negatives.map((s, i) => (
-                <motion.p
+                <WordReveal
                   key={s}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-15%' }}
-                  transition={{ duration: 0.7, delay: i * 0.1, ease: easeOutExpo }}
-                  className="text-xl md:text-2xl font-semibold text-zinc-600 leading-snug tracking-tight"
-                >
-                  {s}
-                </motion.p>
+                  text={s}
+                  delay={i * 0.1}
+                  tone="muted"
+                />
               ))}
             </div>
             <div className="space-y-3 md:space-y-4">
@@ -82,16 +76,12 @@ export default function Manifesto() {
                 Yapıyoruz
               </div>
               {positives.map((s, i) => (
-                <motion.p
+                <WordReveal
                   key={s}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-15%' }}
-                  transition={{ duration: 0.7, delay: 0.15 + i * 0.1, ease: easeOutExpo }}
-                  className="text-xl md:text-2xl font-semibold text-white leading-snug tracking-tight"
-                >
-                  {s}
-                </motion.p>
+                  text={s}
+                  delay={0.15 + i * 0.1}
+                  tone="bright"
+                />
               ))}
             </div>
           </div>
@@ -109,5 +99,42 @@ export default function Manifesto() {
         </div>
       </motion.div>
     </section>
+  );
+}
+
+function WordReveal({
+  text,
+  delay,
+  tone,
+}: {
+  text: string;
+  delay: number;
+  tone: 'muted' | 'bright';
+}) {
+  const words = text.split(' ');
+  return (
+    <motion.p
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-15%' }}
+      transition={{ staggerChildren: 0.05, delayChildren: delay }}
+      className={`text-xl md:text-2xl font-semibold leading-snug tracking-tight ${
+        tone === 'muted' ? 'text-zinc-600' : 'text-white'
+      }`}
+    >
+      {words.map((w, i) => (
+        <motion.span
+          key={`${w}-${i}`}
+          variants={{
+            hidden: { opacity: 0, y: 8, filter: 'blur(4px)' },
+            visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
+          }}
+          transition={{ duration: 0.55, ease: easeOutExpo }}
+          className="inline-block mr-[0.28em]"
+        >
+          {w}
+        </motion.span>
+      ))}
+    </motion.p>
   );
 }

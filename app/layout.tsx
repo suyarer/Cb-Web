@@ -1,3 +1,7 @@
+import { CompassProvider } from '@/components/compass/CompassContext';
+import CompassTint from '@/components/compass/CompassTint';
+import ExitIntent from '@/components/ExitIntent';
+import LiveTicker from '@/components/LiveTicker';
 import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
@@ -107,8 +111,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="tr" className={`${inter.variable} ${jetbrains.variable}`}>
       <body>
-        <div className="grain-overlay" aria-hidden />
-        {children}
+        <CompassProvider>
+          <div className="grain-overlay" aria-hidden />
+          <CompassTint />
+          <ExitIntent />
+          {children}
+          <LiveTicker />
+        </CompassProvider>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

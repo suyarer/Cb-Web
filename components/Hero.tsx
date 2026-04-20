@@ -1,6 +1,10 @@
 'use client';
 
 import AnimatedCounter from '@/components/AnimatedCounter';
+import AttentionCounter from '@/components/AttentionCounter';
+import CompassSwitcher from '@/components/compass/CompassSwitcher';
+import KineticHeadline from '@/components/KineticHeadline';
+import NextBeanCountdown from '@/components/NextBeanCountdown';
 import { easeOutExpo, fadeUpVariant } from '@/lib/motion';
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion';
 import { useEffect, useRef } from 'react';
@@ -82,17 +86,7 @@ export default function Hero() {
               2026 Q2 · Yakında App Store &amp; Google Play&apos;de
             </motion.div>
 
-            <motion.h1
-              variants={variants}
-              initial="hidden"
-              animate="visible"
-              custom={1}
-              className="text-hero font-bold tracking-tight leading-[0.95] mb-6"
-            >
-              Ekran süresi değil,
-              <br />
-              <span className="text-gradient-acid">yaşam süresi.</span>
-            </motion.h1>
+            <KineticHeadline />
 
             <motion.p
               variants={variants}
@@ -155,8 +149,30 @@ export default function Hero() {
               variants={variants}
               initial="hidden"
               animate="visible"
+              custom={3.5}
+              className="mt-10 flex flex-wrap items-center gap-4"
+            >
+              <AttentionCounter />
+              <span className="hidden md:block w-px h-4 bg-white/10" />
+              <NextBeanCountdown />
+            </motion.div>
+
+            <motion.div
+              variants={variants}
+              initial="hidden"
+              animate="visible"
               custom={4}
-              className="mt-16 grid grid-cols-3 gap-6 max-w-md"
+              className="mt-10"
+            >
+              <CompassSwitcher />
+            </motion.div>
+
+            <motion.div
+              variants={variants}
+              initial="hidden"
+              animate="visible"
+              custom={4.5}
+              className="mt-12 grid grid-cols-3 gap-6 max-w-md"
             >
               <Stat label="Bean süresi" value={4} suffix=" sa" />
               <Stat label="Dakika · Club kur" value={1} suffix=" dk" />
