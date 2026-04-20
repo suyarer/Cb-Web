@@ -99,14 +99,36 @@ export default function Hero() {
               initial="hidden"
               animate="visible"
               custom={2}
-              className="text-lg md:text-xl text-zinc-400 max-w-xl leading-relaxed mb-10"
+              className="text-lg md:text-xl text-zinc-400 max-w-xl leading-relaxed mb-8"
             >
-              ClubBeans, etkinlik odaklı anti-platform topluluk uygulamasıdır.
-              Yakınındaki <strong className="text-white">Bean</strong>&apos;leri keşfedersin,
-              ruhuna uyan <strong className="text-white">tribe</strong>&apos;lara
-              bir tık ile{' '}
+              Yakınındaki <strong className="text-white">Bean</strong>&apos;leri kendi
+              filtrelerinle görürsün, ruhuna uyan{' '}
+              <strong className="text-white">tribe</strong>&apos;lara bir tıkla{' '}
               <strong className="text-acid">Jump In</strong> edersin.
+              Algoritma değil, sen seçersin.
             </motion.p>
+
+            <motion.div
+              variants={variants}
+              initial="hidden"
+              animate="visible"
+              custom={2.5}
+              className="flex flex-wrap items-center gap-2 mb-10"
+            >
+              {[
+                'Konum odaklı Radar',
+                '4 saatlik Bean',
+                'Takip değil Tribe',
+              ].map((label) => (
+                <span
+                  key={label}
+                  className="inline-flex items-center gap-2 text-xs text-zinc-300 bg-white/[0.04] border border-white/10 rounded-full px-3 py-1.5"
+                >
+                  <span className="w-1 h-1 rounded-full bg-acid" />
+                  {label}
+                </span>
+              ))}
+            </motion.div>
 
             <motion.div
               variants={variants}

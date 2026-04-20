@@ -10,21 +10,21 @@ const screens = [
     id: 'akis',
     title: 'Ana akış',
     description:
-      'Prism V3 Diamond, 12 sinyali birleştirerek senin için akışını hazırlar. %70 kişisel, %30 keşif — konforun dışında kalmanı da isteriz.',
+      'İlgilerin ve yakınlığın akışı belirler; ama küçük bir pay konforun dışına ayrılır. Böylece her gün tanımadığın bir ortamı da görürsün.',
     mockup: <FeedScreen />,
   },
   {
     id: 'radar',
     title: 'Radar',
     description:
-      'Anatolia ile yakınındaki Bean\'leri haritada görürsün. Binlerce Bean olsa bile akıcı; mesafe, zaman ve vibe filtresi elinde.',
+      'Yakınındaki Bean\'leri haritada görürsün. Mesafe, zaman ve ortam filtresi tek elinin altında — seçim senin.',
     mockup: <RadarScreen />,
   },
   {
     id: 'bean',
     title: 'Bean detayı',
     description:
-      '4 saatlik bir buluşmanın tüm bilgisi tek ekranda: ev sahibi, mekan, vibe etiketleri, katılanlar. Jump In bir saniye.',
+      '4 saatlik buluşmanın bilmen gereken her şeyi tek ekranda: ev sahibi, mekan, ortam etiketleri, kimler geliyor. Jump In bir saniye.',
     mockup: <BeanDetailScreen />,
   },
 ];

@@ -8,22 +8,22 @@ const values = [
   {
     big: { value: 0, suffix: '', prefix: '' },
     title: 'algoritma',
-    text: 'Kime neyi göstereceğine karar veren bir kara kutu yok. Radar senin için çalışır — senin yerine değil.',
+    text: 'Ne göreceğine karar veren kara kutu yok. Sıralamayı ve filtreyi sen seçersin; ClubBeans senin için değil, seninle çalışır.',
   },
   {
     big: { value: 4, suffix: ' sa', prefix: '' },
-    title: 'sabit Bean süresi',
-    text: 'Her Bean 4 saat. Başı, sonu belli. Sonsuz scroll yok, yapay aciliyet yok — topluluk gerçek zamanda bir araya gelir.',
+    title: 'sabit buluşma süresi',
+    text: 'Her Bean 4 saat. Başı sonu belli, niyet açık. Sonsuz scroll yok, sanal aciliyet yok — buluştuğunda ortama tam girersin.',
   },
   {
     big: { value: 30, suffix: '%', prefix: '' },
-    title: 'zorunlu keşif',
-    text: 'Feed\'inin %30\'u filter bubble dışından gelir. Konforun dışında, yeni tribe\'larla karşılaşman için.',
+    title: 'konforun dışı keşif',
+    text: 'Akışının bir kısmını ilgilerinin dışından gelen buluşmalara ayırırız. Her hafta yeni bir ortam, yeni bir tribe fark edersin.',
   },
   {
     big: { value: 100, suffix: '%', prefix: '' },
-    title: 'verin sende',
-    text: 'Üçüncü taraf reklam ağı yok. Davranış verisi satmıyoruz. KVKK ve GDPR uyumlu — her an dışa aktarabilir, silebilirsin.',
+    title: 'verinin sahibi sensin',
+    text: 'Davranışını takip edip satmıyoruz. Üçüncü taraf reklam ağı yok. Verinle ilgili her kararı sen verirsin — ister indir, ister sil.',
   },
 ];
 

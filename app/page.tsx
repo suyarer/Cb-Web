@@ -5,6 +5,7 @@ import Launch from '@/components/Launch';
 import Lexicon from '@/components/Lexicon';
 import Manifesto from '@/components/Manifesto';
 import Nav from '@/components/Nav';
+import Problems from '@/components/Problems';
 import Showcase from '@/components/Showcase';
 import Values from '@/components/Values';
 
@@ -14,6 +15,7 @@ export default function HomePage() {
       <Nav />
       <main>
         <Hero />
+        <Problems />
         <Manifesto />
         <Values />
         <Features />

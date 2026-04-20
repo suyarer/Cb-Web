@@ -5,10 +5,10 @@ import { motion } from 'framer-motion';
 
 const features = [
   {
-    tag: 'Anatolia Engine',
+    tag: 'Konum odaklı keşif',
     title: 'Radar',
     description:
-      'Yakınındaki Bean\'ler gerçek zamanlı haritada. Mesafe, tarih ve vibe filtresiyle istediğin kadar daraltırsın — gerisi sende.',
+      'Yakınındaki buluşmaları tek ekranda gör. Mesafe, tarih ve ortam filtresi elinde — kalanını senin tercihin belirler.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <circle cx="12" cy="12" r="9" />
@@ -19,10 +19,10 @@ const features = [
     accent: 'from-acid/20 via-transparent to-transparent',
   },
   {
-    tag: '4 saat · sabit',
+    tag: '4 saat · sabit format',
     title: 'Bean',
     description:
-      'Etkinlik değil, Bean. 4 saatlik samimi buluşma formatı. Kontenjan belli, niyet belli; kalabalığın değil, topluluğun tarafında.',
+      'Her buluşma başı sonu belli 4 saatlik bir Bean. Kontenjan açık, niyet açık — gittiğinde ortama tam girersin, kayıp olmaz.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <path d="M12 2C7 7 7 12 12 17c5-5 5-10 0-15z" />
@@ -32,10 +32,10 @@ const features = [
     accent: 'from-purple-500/20 via-transparent to-transparent',
   },
   {
-    tag: 'Vibe Engine V2',
+    tag: 'Kendi tarzın',
     title: 'Vibe',
     description:
-      'Kendi vibe vektörünü kendin çizersin. Algoritma senin için seçmez — hangi tribe\'a yakın olduğunu sen görür, sen karar verirsin.',
+      'Ruhuna uyan ortamı sen seçersin. Bir buluşmanın tonu etiketlerde açıkça durur — nereye uyduğunu saniyede anlarsın.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <path d="M3 18c3-6 7-6 9 0 2 6 6 6 9 0" />
@@ -45,10 +45,10 @@ const features = [
     accent: 'from-pink-500/20 via-transparent to-transparent',
   },
   {
-    tag: 'Prism V3 Diamond',
-    title: 'Akıllı akış',
+    tag: 'Kişisel akış',
+    title: 'Akış',
     description:
-      '12 sinyalden örülen kişisel akış; ama filter bubble yok. Her akışta %30 keşif zorunlu — konfor alanını yumuşakça genişletiriz.',
+      'İlgilerin ve yakınlığın akışı şekillendirir; filtre balonu değil. Her akışta konforun dışından bir pay bırakırız — yeni şeyler görürsün.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <path d="M12 2l8 10-8 10-8-10z" />
@@ -58,10 +58,10 @@ const features = [
     accent: 'from-amber-500/20 via-transparent to-transparent',
   },
   {
-    tag: 'Synapse Signals',
-    title: 'Bildirim değil, Signal',
+    tag: 'Sessiz bildirim',
+    title: 'Signal',
     description:
-      'Sadece senin için anlamlı olan şeyler sinyale dönüşür. Yapay aciliyet yok, kırmızı nokta enflasyonu yok — her sinyal ayarlanabilir.',
+      'Sadece senin için anlamlı olan şey bildirim olur. Kırmızı nokta şişmesi yok, yapay aciliyet yok — her sinyali ayrı açıp kapatırsın.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <path d="M6 8a6 6 0 0112 0v5l2 3H4l2-3V8z" />
@@ -74,7 +74,7 @@ const features = [
     tag: 'Tribe & Jump In',
     title: 'Topluluk',
     description:
-      'Takip etmezsin — tribe\'a katılırsın. Kulüpler Bean organize eder, sen tek dokunuşla Jump In edip ortamın parçası olursun.',
+      'Takipçi sayısı değil, birlikte hareket. Kulüpler Bean düzenler, sen tribe\'ınla tek dokunuşla Jump In edip ortamın parçası olursun.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <circle cx="9" cy="8" r="3" />
@@ -99,7 +99,7 @@ export default function Features() {
             transition={{ duration: 0.6 }}
             className="text-xs uppercase tracking-[0.3em] text-acid mb-6 font-mono"
           >
-            Özellikler
+            Neler sunuyoruz
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
