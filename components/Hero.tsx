@@ -75,12 +75,12 @@ export default function Hero() {
 
       <div className="container-x relative">
         {/* Pre-hero statement + filizlenen Bean */}
-        <div className="mb-8 md:mb-16 flex items-start justify-between gap-6">
+        <div className="mb-8 md:mb-16 flex flex-col-reverse sm:flex-row items-start sm:items-start justify-between gap-6 sm:gap-6">
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: easeOutExpo }}
-            className="max-w-2xl"
+            className="max-w-2xl w-full sm:w-auto"
           >
             <div className="flex items-center gap-3 text-[10.5px] md:text-xs font-mono uppercase tracking-[0.2em] md:tracking-[0.25em] text-zinc-500">
               <span className="w-6 md:w-8 h-px bg-zinc-700 flex-shrink-0" />
@@ -114,11 +114,19 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.2, ease: easeOutExpo }}
-            className="relative flex-shrink-0"
+            className="relative flex-shrink-0 self-start"
           >
-            <div className="absolute -inset-6 bg-acid/20 blur-3xl rounded-full pointer-events-none" aria-hidden />
+            <div
+              className="absolute -inset-6 sm:-inset-8 bg-acid/20 blur-3xl rounded-full pointer-events-none"
+              aria-hidden
+            />
             <div className="relative">
-              <BeanSprout size={88} animated breathe />
+              <span className="block sm:hidden">
+                <BeanSprout size={96} animated breathe />
+              </span>
+              <span className="hidden sm:block">
+                <BeanSprout size={88} animated breathe />
+              </span>
             </div>
             <div className="mt-2 text-[9px] md:text-[10px] font-mono uppercase tracking-[0.2em] md:tracking-[0.25em] text-zinc-600 text-center whitespace-nowrap">
               Bean <span className="text-zinc-700">→</span> Club

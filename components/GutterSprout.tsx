@@ -33,15 +33,20 @@ export default function GutterSprout() {
   return (
     <div
       aria-hidden
-      className="hidden lg:block fixed top-0 right-6 h-screen w-4 z-[3] pointer-events-none"
+      className="block fixed top-0 right-1.5 md:right-4 lg:right-6 h-screen w-3 md:w-4 z-[3] pointer-events-none"
     >
       <div className="relative h-full w-full flex flex-col items-center justify-end">
         {/* Bean — sabit altta */}
         <motion.div
           style={{ opacity: beanOpacity }}
-          className="absolute bottom-10 -left-1.5"
+          className="absolute bottom-10 -left-1.5 md:-left-1.5"
         >
-          <svg width="28" height="20" viewBox="0 0 28 20" className="drop-shadow-[0_0_12px_rgba(168,230,0,0.35)]">
+          <svg
+            width="22"
+            height="16"
+            viewBox="0 0 28 20"
+            className="drop-shadow-[0_0_10px_rgba(168,230,0,0.35)] md:w-[28px] md:h-[20px]"
+          >
             <defs>
               <linearGradient id="gs-bean" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#7ED848" />
@@ -59,14 +64,14 @@ export default function GutterSprout() {
         {/* Dikey sap — bean'den yukarı çıkar, scroll ile uzar */}
         <motion.div
           style={{ scaleY: stemScaleY, transformOrigin: '50% 100%' }}
-          className="absolute bottom-[4rem] left-1/2 -translate-x-1/2 w-[2px] h-[70vh] bg-gradient-to-t from-acid via-acid/70 to-acid/10 rounded-full"
+          className="absolute bottom-[3.6rem] md:bottom-[4rem] left-1/2 -translate-x-1/2 w-[1.5px] md:w-[2px] h-[70vh] bg-gradient-to-t from-acid via-acid/70 to-acid/10 rounded-full"
         />
 
         {/* 4 yaprak, farklı yükseklik ve yön */}
-        <Leaf yTop="calc(4rem + 15%)" side="right" opacityMV={leaf1} />
-        <Leaf yTop="calc(4rem + 35%)" side="left" opacityMV={leaf2} darker />
-        <Leaf yTop="calc(4rem + 52%)" side="right" opacityMV={leaf3} />
-        <Leaf yTop="calc(4rem + 68%)" side="left" opacityMV={leaf4} darker />
+        <Leaf yTop="calc(3.6rem + 15%)" side="right" opacityMV={leaf1} />
+        <Leaf yTop="calc(3.6rem + 35%)" side="left" opacityMV={leaf2} darker />
+        <Leaf yTop="calc(3.6rem + 52%)" side="right" opacityMV={leaf3} />
+        <Leaf yTop="calc(3.6rem + 68%)" side="left" opacityMV={leaf4} darker />
       </div>
     </div>
   );
@@ -94,9 +99,10 @@ function Leaf({
       className={`absolute ${isLeft ? 'right-3' : 'left-3'}`}
     >
       <svg
-        width="22"
-        height="14"
+        width="18"
+        height="11"
         viewBox="0 0 22 14"
+        className="md:w-[22px] md:h-[14px]"
         style={{
           transform: isLeft ? 'scaleX(-1)' : undefined,
           filter: darker

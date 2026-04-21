@@ -62,22 +62,23 @@ export default function LiveTicker() {
       initial={{ y: 40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, delay: 2, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed bottom-4 left-4 z-30 hidden md:flex items-center gap-3 bg-midnight/80 backdrop-blur-xl border border-white/10 rounded-full pl-3 pr-4 py-2 text-[11px] font-mono"
+      className="fixed bottom-3 md:bottom-4 left-3 md:left-4 z-30 flex items-center gap-2 md:gap-3 bg-midnight/85 backdrop-blur-xl border border-white/10 rounded-full pl-2.5 md:pl-3 pr-3 md:pr-4 py-1.5 md:py-2 text-[10px] md:text-[11px] font-mono max-w-[calc(100vw-1.5rem)]"
       role="status"
       aria-label="İstanbul canlı durum"
     >
-      <span className="flex items-center gap-1.5 text-acid">
+      <span className="flex items-center gap-1.5 text-acid flex-shrink-0">
         <span className="w-1.5 h-1.5 rounded-full bg-acid brand-pulse" />
         Şimdi
       </span>
-      <span className="w-px h-3 bg-white/10" />
-      <span className="text-white tabular-nums">{formatTime(now)}</span>
-      <span className="w-px h-3 bg-white/10" />
-      <span className="text-zinc-400">
+      <span className="w-px h-3 bg-white/10 flex-shrink-0" />
+      <span className="text-white tabular-nums flex-shrink-0">{formatTime(now)}</span>
+      <span className="w-px h-3 bg-white/10 flex-shrink-0" />
+      <span className="text-zinc-400 truncate">
         {city}&apos;de <span className="text-white">{activeBeans}</span> Bean
       </span>
-      <span className="w-px h-3 bg-white/10" />
-      <span className="text-zinc-500">{sunLabel}</span>
+      {/* Güneş bilgisi sadece md+ ekranlarda — mobile'da yer yok */}
+      <span className="w-px h-3 bg-white/10 flex-shrink-0 hidden md:inline-block" />
+      <span className="text-zinc-500 hidden md:inline flex-shrink-0">{sunLabel}</span>
     </motion.div>
   );
 }
