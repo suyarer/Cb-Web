@@ -53,9 +53,9 @@ export default function SilentHour() {
 
   return (
     <>
-      {/* TOGGLE — 40×40 circle, çalışıyorken progress ring, hover'da tooltip */}
+      {/* TOGGLE — 40×40 circle, GutterSprout filizinin solunda */}
       <div
-        className="fixed bottom-[4.25rem] md:bottom-4 right-3 md:right-4 z-[45] flex items-center gap-2.5"
+        className="fixed bottom-[4.25rem] md:bottom-4 right-6 md:right-14 z-[45] flex items-center gap-2.5"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
