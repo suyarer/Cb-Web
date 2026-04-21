@@ -90,11 +90,13 @@ function Crown({
   return (
     <motion.div
       style={{
-        bottom: 'calc(3.6rem + 70vh)', // sap tepesinin yakınında
         opacity: opacityMV,
         scale: opacityMV,
+        // transform-origin alt-merkez → root noktasından büyür
+        transformOrigin: '50% 100%',
       }}
-      className="absolute left-1/2 -translate-x-1/2"
+      // bottom = sap bottom + stem height — sap tepesiyle tam hizalanır
+      className="absolute left-1/2 -translate-x-1/2 bottom-[calc(3.6rem+70vh)] md:bottom-[calc(4rem+70vh)]"
     >
       <div className="relative">
         {/* Parıltı (scroll sonunda "görev tamamlandı" hissi) */}
@@ -104,11 +106,16 @@ function Crown({
           aria-hidden
         />
 
+        {/*
+          viewBox 0 0 32 22 → SVG'nin ALT kenarı = yaprak kök noktası.
+          Böylece element'in CSS bottom'u = sap tepesi tam yaprak kökü
+          ile çakışır, gap kalmaz.
+        */}
         <svg
           width="32"
-          height="26"
-          viewBox="0 0 32 26"
-          className="relative drop-shadow-[0_0_10px_rgba(168,230,0,0.6)] md:w-[40px] md:h-[32px]"
+          height="22"
+          viewBox="0 0 32 22"
+          className="relative block drop-shadow-[0_0_10px_rgba(168,230,0,0.6)] md:w-[40px] md:h-[28px]"
         >
           <defs>
             <linearGradient id="gs-crown-l" x1="0" y1="0" x2="0" y2="1">
@@ -120,23 +127,18 @@ function Crown({
               <stop offset="100%" stopColor="#CBEC4A" />
             </linearGradient>
           </defs>
-          {/* Sol yaprak — merkez tabandan sol-üste açılır */}
+          {/* Sol yaprak — root (16,22) = SVG alt-merkez */}
           <path
             d="M 16 22 C 8 18 3 10 5 3 C 12 4 17 12 16 22 Z"
             fill="url(#gs-crown-l)"
           />
-          {/* Sağ yaprak — merkez tabandan sağ-üste açılır */}
+          {/* Sağ yaprak — root (16,22) = SVG alt-merkez */}
           <path
             d="M 16 22 C 24 18 29 10 27 3 C 20 4 15 12 16 22 Z"
             fill="url(#gs-crown-r)"
           />
-          {/* Merkez sap ucu */}
-          <path
-            d="M 16 22 L 16 18"
-            stroke="#3EA52A"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          />
+          {/* Merkez küçük parıltı — yaprak köküne vurgu */}
+          <circle cx="16" cy="21" r="1.2" fill="#A8E600" opacity="0.85" />
         </svg>
       </div>
     </motion.div>
