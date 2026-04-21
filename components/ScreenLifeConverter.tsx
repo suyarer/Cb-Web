@@ -45,7 +45,7 @@ export default function ScreenLifeConverter() {
           >
             Ekran saatlerin
             <br />
-            <span className="text-zinc-500">başka bir hayatı kurardı.</span>
+            <span className="text-zinc-500">başka bir hayat kurabilirdi.</span>
           </motion.h2>
 
           <motion.div

@@ -108,9 +108,9 @@ export default function Features() {
             transition={{ duration: 0.8, ease: easeOutExpo }}
             className="text-section font-bold tracking-tight text-white"
           >
-            Üç söz tutmak için,
+            Üç vaat,
             <br />
-            <span className="text-zinc-500">altı sessiz özellik.</span>
+            <span className="text-zinc-500">altı sessiz mekanizma.</span>
           </motion.h2>
         </div>
 

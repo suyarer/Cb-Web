@@ -103,8 +103,8 @@ export default function Hero() {
               ) : (
                 <>
                   Bir duyuru. Bir imza. Bir davet. &quot;Bu akşam ne yapsak?&quot;
-                  sorusunun cevabı artık 12 kişinin okuyup yanıt vermediği WhatsApp
-                  grubunda değil.
+                  sorusunun yanıtı, 12 kişinin okuyup geçtiği WhatsApp grubunda
+                  değil — aşağıda.
                 </>
               )}
             </div>
@@ -158,10 +158,10 @@ export default function Hero() {
               custom={2}
               className="text-lg md:text-xl text-zinc-400 max-w-xl leading-relaxed mb-8"
             >
-              ClubBeans iki tarafı birden kurar. Yakınındaki Bean&apos;e
-              katılırsın — ya da kendi Club&apos;ını bir dakikada açarsın. Masaya
-              oturmak ve masayı kurmak arasındaki fark, artık sadece bir dokunuş.
-              Cumartesi akşamı yine senin.
+              ClubBeans hem katılan hem kurucu için yazıldı. Yakınındaki
+              Bean&apos;e katılırsın — ya da kendi Club&apos;ını bir dakikada
+              açarsın. Masaya oturmak ve masayı kurmak arasındaki fark, artık
+              tek dokunuş. Cumartesi akşamı yine senin.
             </motion.p>
 
             <motion.div

@@ -12,7 +12,7 @@ const benefits = [
   {
     n: '02',
     title: 'Bir takvim, bir ekran.',
-    body: 'Bean açarsın, tarih verirsin, kapasite koyarsın. Kabilene tek tuşla duyurulur. WhatsApp grup, Instagram post, Eventbrite — hiçbirine ihtiyaç yok.',
+    body: 'Bean açarsın, tarih verirsin, kapasite koyarsın. Kabilene tek tuşla duyurursun. WhatsApp grup, Instagram post, Eventbrite — hiçbirine ihtiyaç yok.',
   },
   {
     n: '03',

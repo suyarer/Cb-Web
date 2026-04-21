@@ -23,7 +23,7 @@ const problems = [
     cta: 'Kolay Kur',
     pain: 'Kendi kulübünü açmak istedin: WhatsApp grup — 40 sessiz üye. Instagram hesap — 12 takipçi. Eventbrite denedin — biletsiz kaldı. Üç uygulama, hiçbir yere varamıyor.',
     solution:
-      'Club\'ını ClubBeans\'te bir dakikada kurarsın. Bean açar, davet eder, TrustScore ile güveni korursun. Üç uygulama yok; bir ekran, bir akış, bir topluluk.',
+      'Kendi Club\'ını bir dakikada kurarsın. Bean açar, davet eder, TrustScore ile güveni korursun. Üç uygulama yok; bir ekran, bir akış, bir topluluk.',
   },
 ];
 

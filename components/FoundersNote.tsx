@@ -91,17 +91,14 @@ export default function FoundersNote() {
             <div className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-midnight border border-acid/30 flex items-center justify-center flex-shrink-0 overflow-hidden">
               <BeanSprout size={32} />
             </div>
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               <div className="text-sm font-semibold text-white truncate">
                 ClubBeans kurucu ekibi
               </div>
               <div className="text-[11px] md:text-xs text-zinc-500 font-mono truncate">
-                İstanbul · Cumartesi 23:47
+                İstanbul · Cumartesi, gece 23:47
               </div>
             </div>
-            <span className="ml-auto text-zinc-700 text-2xl font-serif italic flex-shrink-0">
-              —
-            </span>
           </motion.div>
         </div>
       </div>

@@ -7,10 +7,10 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 
 const negatives = [
-  'Algoritma seni ekranda tutmak için yazılmaz.',
-  'Bildirim, yapay aciliyetle seni geri çağırmaz.',
-  'Davranışın izlenmez, verin satılmaz.',
-  'Dikkat ekonomisinin bir halkası değiliz.',
+  'Seni ekranda tutmak için algoritma yazmayız.',
+  'Yapay aciliyetle seni geri çağırmayız.',
+  'Davranışını izlemeyiz, verini satmayız.',
+  'Dikkat ekonomisinin bir halkası olmayız.',
 ];
 
 const positives = [

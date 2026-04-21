@@ -16,14 +16,14 @@ const steps = [
     key: 'Katıl',
     title: 'Tıkla. Yerin hazır.',
     body:
-      'Form yok. "Mail attık, cevap bekliyoruz" yok. Beğendiğin Bean\'e katılırsın — host TrustScore\'unu görür, sen de kimlerle oturacağını. Masa bağlanır.',
+      'Form yok. "Mail attık, cevap bekliyoruz" yok. Beğendiğin Bean\'e katılırsın — host TrustScore\'unu görür, sen de kimlerle oturacağını. Yerin ayrılır.',
   },
   {
     n: '03',
     key: 'Yaşa',
     title: 'Uygulamayı kapat.',
     body:
-      '4 saat, belli bir mekan, belli yüzler. Ne algoritma ne push bildirimi — bu aralıkta sen orada olacaksın, başka hiçbir yerde. Başarımız, senin uygulamayı unuttuğun dakikalar.',
+      '4 saat, belli bir mekan, belli yüzler. Ne algoritma ne push bildirimi — bu aralıkta sen orada olacaksın, başka hiçbir yerde. Başarımız, uygulamayı unuttuğun o dakikalardır.',
   },
 ];
 
