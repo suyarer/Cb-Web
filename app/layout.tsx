@@ -67,7 +67,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'ClubBeans — Ekran süresi değil, yaşam süresi.',
-    description: 'Anti-platform topluluk. Yakında Bul, Birlikte Yap, Kolay Kur.',
+    description:
+      'Anti-platform topluluk. Cumartesi akşamlarını geri al. Yakında Bul, Birlikte Yap, Kolay Kur.',
   },
   robots: { index: true, follow: true },
   manifest: '/manifest.json',

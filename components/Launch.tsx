@@ -17,12 +17,12 @@ export default function Launch() {
           className="max-w-3xl mx-auto text-center"
         >
           <div className="text-xs uppercase tracking-[0.3em] text-acid mb-6 font-mono">
-            2026 Q2 · Lansman yakın
+            2026 Q2 · Yolda
           </div>
 
           <h2 className="text-display font-bold tracking-tight mb-6">
             <span className="text-gradient-acid">Lansmanı</span>
-            <br className="md:hidden" /> ilk sen duy.
+            <br className="md:hidden" /> ilk sen öğren.
           </h2>
 
           <p className="text-lg text-zinc-400 max-w-xl mx-auto mb-12">

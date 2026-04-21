@@ -103,7 +103,7 @@ export default function LonelinessQuiz() {
             transition={{ duration: 0.8, ease: easeOutExpo }}
             className="text-section font-bold tracking-tight text-white text-center mb-12"
           >
-            Aynı masadan konuşalım.
+            Aynı masaya oturalım.
             <br />
             <span className="text-zinc-500">Kendini nerede hissediyorsun?</span>
           </motion.h2>

@@ -22,7 +22,7 @@ const benefits = [
   {
     n: '04',
     title: 'Sıfır abonelik, sıfır komisyon.',
-    body: 'Ücretsiz Club, ücretsiz Bean. Ücretli yaparsan da ClubBeans payı %0. Biz seni satmıyoruz — sen sohbet ediyorsun, biz masayı hazırlıyoruz.',
+    body: 'Ücretsiz Club, ücretsiz Bean. Ücretli yaparsan da ClubBeans payı %0. Ne veriyi ne dikkatini satıyoruz — sen sohbet ediyorsun, biz masayı hazırlıyoruz.',
   },
 ];
 

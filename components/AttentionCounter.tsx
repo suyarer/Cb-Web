@@ -45,7 +45,7 @@ export default function AttentionCounter() {
       <span className="w-px h-3 bg-white/10" />
       <span className="font-mono tabular-nums">
         ≈ {posts} post{' '}
-        <span className="text-zinc-500">· ortalama bir kullanıcı şu an kaydırdı</span>
+        <span className="text-zinc-500">· aynı sürede ortalama kullanıcı kaydırdı</span>
       </span>
     </div>
   );

@@ -26,13 +26,13 @@ export default function KabileTicker() {
         <div className="flex items-baseline justify-between gap-4 flex-wrap">
           <div>
             <div className="text-xs uppercase tracking-[0.3em] text-acid mb-2 font-mono">
-              Lansmana hazır kulüpler
+              Örnek kulüpler · seninki de olabilir
             </div>
             <div className="text-xl md:text-2xl font-bold tracking-tight text-white">
-              Cumartesilere şehrin kulüpleri hazırlanıyor.
+              Şehir böyle bir ClubBeans hayal ediyor.
             </div>
           </div>
-          <div className="text-xs text-zinc-500 font-mono">Örnektir · lansmandaki kulüpler farklı olabilir</div>
+          <div className="text-xs text-zinc-500 font-mono">Görseller örnektir — gerçek kulüpler lansmanda</div>
         </div>
       </div>
 

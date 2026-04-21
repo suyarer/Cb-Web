@@ -69,7 +69,7 @@ export default function Showcase() {
           >
             Dört ekran.
             <br />
-            <span className="text-zinc-500">Beşincisi zaten dışarıda.</span>
+            <span className="text-zinc-500">Gerisi senin hayatın.</span>
           </motion.h2>
         </div>
 

@@ -62,8 +62,8 @@ export default function FoundersNote() {
           >
             <p>
               Telefonunda onlarca uygulama var. Hepsi seni geri çağırıyor. Hepsi
-              &quot;yeni bildirim&quot; diyor. Cumartesi gelmeden yorgunsun. Planın
-              olsa bile gerçekleşmiyor. Olmadığında da kimse aramıyor.
+              &quot;yeni bildirim&quot; diyor. Cumartesi gelmeden yorgunsun. Plan
+              yapsan bile gerçekleşmiyor; yapmasan kimse aramıyor.
             </p>
             <p>
               Biz de bunun içinden geldik — girişimci, tasarımcı, kod yazan,
