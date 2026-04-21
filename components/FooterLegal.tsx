@@ -1,3 +1,4 @@
+import BeanSprout from '@/components/BeanSprout';
 import Link from 'next/link';
 
 export default function FooterLegal() {
@@ -17,10 +18,8 @@ export default function FooterLegal() {
       <div className="container-x py-12">
         <div className="grid md:grid-cols-4 gap-8 mb-12">
           <div className="md:col-span-2">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-7 h-7 rounded-lg bg-acid flex items-center justify-center">
-                <span className="text-midnight font-black text-xs">CB</span>
-              </div>
+            <div className="flex items-center gap-2.5 mb-4">
+              <BeanSprout size={32} />
               <span className="font-semibold tracking-tight">ClubBeans</span>
             </div>
             <p className="text-sm text-zinc-500 max-w-sm leading-relaxed">

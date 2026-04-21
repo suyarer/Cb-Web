@@ -1,5 +1,6 @@
 'use client';
 
+import BeanSprout from '@/components/BeanSprout';
 import { easeOutExpo } from '@/lib/motion';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
@@ -46,11 +47,11 @@ export default function Nav() {
         <div className="container-x py-4 flex items-center justify-between">
           <Link
             href="/"
-            className="flex items-center gap-2 no-underline group"
+            className="flex items-center gap-2.5 no-underline group"
             aria-label="ClubBeans ana sayfa"
           >
-            <div className="w-8 h-8 rounded-lg bg-acid flex items-center justify-center shadow-lg shadow-acid/20">
-              <span className="text-midnight font-black text-sm">CB</span>
+            <div className="w-9 h-9 flex items-center justify-center">
+              <BeanSprout size={34} />
             </div>
             <span className="font-semibold text-white tracking-tight group-hover:text-acid transition">
               ClubBeans

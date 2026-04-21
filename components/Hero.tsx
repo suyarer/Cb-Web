@@ -1,6 +1,7 @@
 'use client';
 
 import AttentionCounter from '@/components/AttentionCounter';
+import BeanSprout from '@/components/BeanSprout';
 import CompassSwitcher from '@/components/compass/CompassSwitcher';
 import KineticHeadline from '@/components/KineticHeadline';
 import NextBeanCountdown from '@/components/NextBeanCountdown';
@@ -71,23 +72,41 @@ export default function Hero() {
       />
 
       <div className="container-x relative">
-        {/* Pre-hero statement — giriş momentumu */}
-        <motion.div
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: easeOutExpo }}
-          className="mb-8 md:mb-16 max-w-2xl"
-        >
-          <div className="flex items-center gap-3 text-[10.5px] md:text-xs font-mono uppercase tracking-[0.2em] md:tracking-[0.25em] text-zinc-500">
-            <span className="w-6 md:w-8 h-px bg-zinc-700 flex-shrink-0" />
-            <span>Bu bir pazarlama sayfası değil.</span>
-          </div>
-          <div className="mt-3 text-sm text-zinc-400 max-w-lg leading-relaxed">
-            Bir duyuru. Bir imza. Bir davet. &quot;Bu akşam ne yapsak?&quot;
-            sorusunun cevabı artık 12 kişinin okuyup yanıt vermediği WhatsApp
-            grubunda değil.
-          </div>
-        </motion.div>
+        {/* Pre-hero statement + filizlenen Bean */}
+        <div className="mb-8 md:mb-16 flex items-start justify-between gap-6">
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: easeOutExpo }}
+            className="max-w-2xl"
+          >
+            <div className="flex items-center gap-3 text-[10.5px] md:text-xs font-mono uppercase tracking-[0.2em] md:tracking-[0.25em] text-zinc-500">
+              <span className="w-6 md:w-8 h-px bg-zinc-700 flex-shrink-0" />
+              <span>Bu bir pazarlama sayfası değil.</span>
+            </div>
+            <div className="mt-3 text-sm text-zinc-400 max-w-lg leading-relaxed">
+              Bir duyuru. Bir imza. Bir davet. &quot;Bu akşam ne yapsak?&quot;
+              sorusunun cevabı artık 12 kişinin okuyup yanıt vermediği WhatsApp
+              grubunda değil.
+            </div>
+          </motion.div>
+
+          {/* Filizlenen Bean — markanın metaforu, sayfaya girişte canlanır */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.9, delay: 0.2, ease: easeOutExpo }}
+            className="relative flex-shrink-0 hidden sm:block"
+          >
+            <div className="absolute inset-0 bg-acid/10 blur-2xl rounded-full" aria-hidden />
+            <div className="relative">
+              <BeanSprout size={72} animated breathe />
+            </div>
+            <div className="mt-2 text-[9px] md:text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-600 text-center">
+              Bean &nbsp;→&nbsp; Club
+            </div>
+          </motion.div>
+        </div>
 
         <div className="grid lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-20 items-center">
           {/* Sol: Metin */}

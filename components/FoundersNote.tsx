@@ -1,5 +1,6 @@
 'use client';
 
+import BeanSprout from '@/components/BeanSprout';
 import { easeOutExpo } from '@/lib/motion';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
@@ -87,8 +88,8 @@ export default function FoundersNote() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="mt-10 md:mt-12 flex items-center gap-3 md:gap-4"
           >
-            <div className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-acid to-emerald-500 flex items-center justify-center text-midnight font-black flex-shrink-0">
-              CB
+            <div className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-midnight border border-acid/30 flex items-center justify-center flex-shrink-0 overflow-hidden">
+              <BeanSprout size={32} />
             </div>
             <div className="min-w-0">
               <div className="text-sm font-semibold text-white truncate">
