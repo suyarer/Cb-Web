@@ -63,11 +63,15 @@ export default function GutterSprout() {
           </svg>
         </motion.div>
 
-        {/* Dikey sap — bean'den yukarı çıkar, scroll ile uzar */}
-        <motion.div
-          style={{ scaleY: stemScaleY, transformOrigin: '50% 100%' }}
-          className="absolute bottom-[3.6rem] md:bottom-[4rem] left-1/2 -translate-x-1/2 w-[1.5px] md:w-[2px] h-[70vh] bg-gradient-to-t from-acid via-acid/70 to-acid/10 rounded-full"
-        />
+        {/* Dikey sap — bean'den yukarı çıkar, scroll ile uzar.
+            Dış katman pozisyon, iç motion sadece scaleY (translate override
+            hatasını önlemek için iki katmanlı). */}
+        <div className="absolute bottom-[3.6rem] md:bottom-[4rem] left-1/2 -translate-x-1/2 w-[1.5px] md:w-[2px] h-[70vh]">
+          <motion.div
+            style={{ scaleY: stemScaleY, transformOrigin: '50% 100%' }}
+            className="w-full h-full bg-gradient-to-t from-acid via-acid/70 to-acid/10 rounded-full"
+          />
+        </div>
 
         {/* 4 yaprak, farklı yükseklik ve yön */}
         <Leaf yTop="calc(3.6rem + 15%)" side="right" opacityMV={leaf1} />
@@ -88,17 +92,21 @@ function Crown({
   opacityMV: ReturnType<typeof useTransform<number, number>>;
 }) {
   return (
-    <motion.div
-      style={{
-        opacity: opacityMV,
-        scale: opacityMV,
-        // transform-origin alt-merkez → root noktasından büyür
-        transformOrigin: '50% 100%',
-      }}
-      // bottom = sap bottom + stem height — sap tepesiyle tam hizalanır
+    // Dış katman: SADECE pozisyon (Tailwind translate'i burada).
+    // Motion'un scale transform'ı -translate-x-1/2'yi override etmesin diye
+    // ayrı katmanda tutuyoruz.
+    <div
       className="absolute left-1/2 -translate-x-1/2 bottom-[calc(3.6rem+70vh)] md:bottom-[calc(4rem+70vh)]"
     >
-      <div className="relative">
+      {/* İç katman: opacity + scale animasyonu, alt-merkezden büyür */}
+      <motion.div
+        style={{
+          opacity: opacityMV,
+          scale: opacityMV,
+          transformOrigin: '50% 100%',
+        }}
+        className="relative"
+      >
         {/* Parıltı (scroll sonunda "görev tamamlandı" hissi) */}
         <motion.div
           style={{ opacity: opacityMV }}
@@ -108,8 +116,7 @@ function Crown({
 
         {/*
           viewBox 0 0 32 22 → SVG'nin ALT kenarı = yaprak kök noktası.
-          Böylece element'in CSS bottom'u = sap tepesi tam yaprak kökü
-          ile çakışır, gap kalmaz.
+          display:block inline baseline gap'ını kaldırır.
         */}
         <svg
           width="32"
@@ -140,8 +147,8 @@ function Crown({
           {/* Merkez küçük parıltı — yaprak köküne vurgu */}
           <circle cx="16" cy="21" r="1.2" fill="#A8E600" opacity="0.85" />
         </svg>
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }
 
