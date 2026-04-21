@@ -3,6 +3,7 @@
 import AttentionCounter from '@/components/AttentionCounter';
 import BeanSprout from '@/components/BeanSprout';
 import CompassSwitcher from '@/components/compass/CompassSwitcher';
+import KabileLivePulse from '@/components/KabileLivePulse';
 import KineticHeadline from '@/components/KineticHeadline';
 import NextBeanCountdown from '@/components/NextBeanCountdown';
 import { easeOutExpo, fadeUpVariant } from '@/lib/motion';
@@ -212,11 +213,21 @@ export default function Hero() {
               initial="hidden"
               animate="visible"
               custom={3.5}
-              className="mt-10 flex flex-wrap items-center gap-4"
+              className="mt-10 flex flex-wrap items-center gap-3"
             >
               <AttentionCounter />
               <span className="hidden md:block w-px h-4 bg-white/10" />
               <NextBeanCountdown />
+            </motion.div>
+
+            <motion.div
+              variants={variants}
+              initial="hidden"
+              animate="visible"
+              custom={3.75}
+              className="mt-4"
+            >
+              <KabileLivePulse />
             </motion.div>
 
             <motion.div

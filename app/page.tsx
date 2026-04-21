@@ -8,9 +8,11 @@ import HowItWorks from '@/components/HowItWorks';
 import KabileTicker from '@/components/KabileTicker';
 import Launch from '@/components/Launch';
 import Lexicon from '@/components/Lexicon';
+import LonelinessQuiz from '@/components/LonelinessQuiz';
 import Manifesto from '@/components/Manifesto';
 import Nav from '@/components/Nav';
 import Problems from '@/components/Problems';
+import ScreenLifeConverter from '@/components/ScreenLifeConverter';
 import Showcase from '@/components/Showcase';
 import TrustScore from '@/components/TrustScore';
 
@@ -21,9 +23,11 @@ export default function HomePage() {
       <main>
         <Hero />
         <Problems />
+        <LonelinessQuiz />
         <HowItWorks />
         <ForHosts />
         <Manifesto />
+        <ScreenLifeConverter />
         <TrustScore />
         <Showcase />
         <Features />
