@@ -74,18 +74,14 @@ export default function ScreenLifeConverter() {
                   <span className="text-sm text-zinc-500 font-mono">saat</span>
                 </div>
               </div>
-              <input
+              <CustomSlider
                 id="hours-slider"
-                type="range"
+                value={hours}
                 min={1}
                 max={12}
-                step={1}
-                value={hours}
-                onChange={(e) => setHours(Number(e.target.value))}
-                className="w-full cursor-pointer cb-slider"
-                aria-label="Ekran saati seçici"
+                onChange={setHours}
               />
-              <div className="flex justify-between mt-2 text-[10px] font-mono text-zinc-600">
+              <div className="flex justify-between mt-3 text-[10px] font-mono text-zinc-600">
                 <span>1 sa</span>
                 <span>6 sa</span>
                 <span>12 sa</span>
@@ -116,58 +112,67 @@ export default function ScreenLifeConverter() {
         </div>
       </div>
 
-      {/* Custom slider styling */}
-      <style jsx global>{`
-        .cb-slider {
-          -webkit-appearance: none;
-          appearance: none;
-          background: transparent;
-          height: 32px;
-        }
-        .cb-slider::-webkit-slider-runnable-track {
-          height: 4px;
-          background: linear-gradient(
-            to right,
-            #A8E600 0%,
-            #A8E600 var(--fill, 40%),
-            rgba(255, 255, 255, 0.08) var(--fill, 40%),
-            rgba(255, 255, 255, 0.08) 100%
-          );
-          border-radius: 999px;
-        }
-        .cb-slider::-moz-range-track {
-          height: 4px;
-          background: rgba(255, 255, 255, 0.08);
-          border-radius: 999px;
-        }
-        .cb-slider::-moz-range-progress {
-          height: 4px;
-          background: #A8E600;
-          border-radius: 999px;
-        }
-        .cb-slider::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          appearance: none;
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          background: #A8E600;
-          border: 3px solid #050505;
-          margin-top: -8px;
-          cursor: pointer;
-          box-shadow: 0 0 0 1px rgba(168, 230, 0, 0.5), 0 0 20px rgba(168, 230, 0, 0.4);
-        }
-        .cb-slider::-moz-range-thumb {
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          background: #A8E600;
-          border: 3px solid #050505;
-          cursor: pointer;
-          box-shadow: 0 0 0 1px rgba(168, 230, 0, 0.5), 0 0 20px rgba(168, 230, 0, 0.4);
-        }
-      `}</style>
     </section>
+  );
+}
+
+// Custom slider — native input'u görünmez yapıp üstte custom track/thumb çizer.
+// Track fill SVG/div ile, thumb glow'lu dairedir. Cross-browser 1:1 görünüm.
+function CustomSlider({
+  id,
+  value,
+  min,
+  max,
+  onChange,
+}: {
+  id: string;
+  value: number;
+  min: number;
+  max: number;
+  onChange: (v: number) => void;
+}) {
+  const percent = ((value - min) / (max - min)) * 100;
+
+  return (
+    <div className="relative h-6 flex items-center">
+      {/* Track arkaplanı */}
+      <div className="absolute left-0 right-0 h-[5px] bg-white/[0.06] rounded-full" />
+
+      {/* Dolu kısım — acid gradient */}
+      <motion.div
+        animate={{ width: `${percent}%` }}
+        transition={{ type: 'spring', stiffness: 260, damping: 28 }}
+        className="absolute left-0 h-[5px] bg-gradient-to-r from-acid-600 via-acid to-acid-400 rounded-full shadow-[0_0_16px_rgba(168,230,0,0.45)]"
+      />
+
+      {/* Thumb — glow'lu daire */}
+      <motion.div
+        animate={{ left: `${percent}%` }}
+        transition={{ type: 'spring', stiffness: 260, damping: 28 }}
+        className="absolute w-5 h-5 -translate-x-1/2 rounded-full bg-acid border-[3px] border-midnight pointer-events-none"
+        style={{
+          boxShadow:
+            '0 0 0 1px rgba(168,230,0,0.5), 0 0 24px rgba(168,230,0,0.55)',
+        }}
+      />
+
+      {/* Native input — görünmez ama tıklanabilir (erişilebilirlik + touch) */}
+      <input
+        id={id}
+        type="range"
+        min={min}
+        max={max}
+        step={1}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        aria-label="Ekran saati seçici"
+        aria-valuemin={min}
+        aria-valuemax={max}
+        aria-valuenow={value}
+        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+        style={{ WebkitAppearance: 'none' }}
+      />
+    </div>
   );
 }
 
