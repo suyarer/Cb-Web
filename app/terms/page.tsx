@@ -26,10 +26,10 @@ export default function TermsPage() {
           <h2>1. Tanımlar</h2>
           <ul>
             <li><strong>Bean:</strong> Uygulamada oluşturulan 4 saatlik etkinlik</li>
-            <li><strong>Tribe:</strong> Takipçi kitlesi</li>
-            <li><strong>Jump In:</strong> Bean&apos;e katılma aksiyonu</li>
+            <li><strong>Kabile:</strong> Bir Club&apos;ın üye topluluğu</li>
+            <li><strong>Katıl:</strong> Bean&apos;e dahil olma aksiyonu</li>
             <li><strong>Signal:</strong> Uygulama içi ve push bildirimler</li>
-            <li><strong>Kulüp:</strong> Bean oluşturabilen topluluk sahibi hesap</li>
+            <li><strong>Club (Kulüp):</strong> Bean oluşturabilen topluluk sahibi hesap</li>
           </ul>
 
           <h2>2. Hesap Açma</h2>

@@ -12,7 +12,7 @@ const benefits = [
   {
     n: '02',
     title: 'Bir takvim, bir ekran.',
-    body: 'Bean açarsın, tarih verirsin, kapasite koyarsın. Tribe\'ına tek tuşla duyurulur. WhatsApp grup, Instagram post, Eventbrite — hiçbirine ihtiyaç yok.',
+    body: 'Bean açarsın, tarih verirsin, kapasite koyarsın. Kabilene tek tuşla duyurulur. WhatsApp grup, Instagram post, Eventbrite — hiçbirine ihtiyaç yok.',
   },
   {
     n: '03',
@@ -154,7 +154,7 @@ function ClubDashboard() {
                 AI Girişimcileri İstanbul
               </div>
               <div className="text-[10.5px] text-zinc-500 font-mono truncate">
-                247 tribe · 1 dk önce
+                247 kişilik kabile · 1 dk önce
               </div>
             </div>
           </div>
@@ -200,7 +200,7 @@ function ClubDashboard() {
                   ))}
                 </div>
                 <span className="text-[11px] text-zinc-400">
-                  <span className="text-white font-semibold">8</span>/12 Jump In
+                  <span className="text-white font-semibold">8</span>/12 katıldı
                 </span>
               </div>
               <div className="h-1.5 w-20 bg-white/[0.06] rounded-full overflow-hidden">
@@ -230,7 +230,7 @@ function ClubDashboard() {
 
         {/* Stats strip */}
         <div className="grid grid-cols-3 gap-3 pt-2">
-          <MiniStat value="247" label="tribe" />
+          <MiniStat value="247" label="kabile" />
           <MiniStat value="14" label="bu ay Bean" />
           <MiniStat value="%92" label="doluluk" />
         </div>

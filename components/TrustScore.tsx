@@ -5,9 +5,9 @@ import { motion, useInView } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 
 const rules = [
-  { delta: '+1', label: 'Jump In ettiğin, gittiğin her Bean', tone: 'acid' },
+  { delta: '+1', label: 'Katıldığın, masaya oturduğun her Bean', tone: 'acid' },
   { delta: '+5', label: 'Host olduğun, söz verdiğin Bean bittiğinde', tone: 'acid' },
-  { delta: '+3', label: 'Bir tribe üyesi seni adıyla referans verdiğinde', tone: 'acid' },
+  { delta: '+3', label: 'Bir kabile üyesi seni adıyla referans verdiğinde', tone: 'acid' },
   { delta: '−5', label: 'Son dakika iptal, no-show, masayı yarım bırakmak', tone: 'red' },
 ];
 
@@ -172,7 +172,7 @@ export default function TrustScore() {
             >
               Herkes <span className="text-white">75</span>&apos;ten başlar. &quot;Gelirim&quot;
               dediğin Bean&apos;e gittiğinde, düzenlediğin masa tam olduğunda, bir
-              tribe üyesi seni adıyla referans verdiğinde puanın yükselir. Son
+              kabile üyesi seni adıyla referans verdiğinde puanın yükselir. Son
               dakika iptalde düşer. Masaya oturan herkesin izi şeffaftır.
             </motion.p>
 

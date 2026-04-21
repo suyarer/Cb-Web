@@ -56,7 +56,7 @@ export default function DeleteAccountPage() {
             <li>Profil bilgileri (isim, biyografi, avatar)</li>
             <li>E-posta ve telefon numarası</li>
             <li>Oluşturduğunuz Bean&apos;ler ve postlar</li>
-            <li>Takip ilişkileri (tribe)</li>
+            <li>Kabile (topluluk üyelik) ilişkileri</li>
             <li>Bildirim ve uygulama tercihleri</li>
             <li>Konum geçmişi</li>
             <li>Kimlik doğrulama kayıtları</li>

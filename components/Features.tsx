@@ -61,9 +61,9 @@ const features = [
   },
   {
     tag: 'Tek dokunuş',
-    title: 'Jump In',
+    title: 'Katıl',
     description:
-      '"Katıl" değil, Jump In. Form yok, mail beklemek yok, onay sıran yok — beğenirsin, tıklarsın, Cumartesi yerin hazır.',
+      'Tek kelime, tek tıklama. Form yok, mail beklemek yok, onay sıran yok — beğenirsin, katılırsın, Cumartesi yerin hazır.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <path d="M5 12h14" />

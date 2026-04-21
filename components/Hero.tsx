@@ -112,9 +112,9 @@ export default function Hero() {
               custom={2}
               className="text-lg md:text-xl text-zinc-400 max-w-xl leading-relaxed mb-8"
             >
-              ClubBeans iki tarafı birden kurar. Yakınındaki Bean&apos;e Jump In
-              dersin — ya da kendi Club&apos;ını bir dakikada açarsın. Masaya oturmak
-              ve masayı kurmak arasındaki fark, artık sadece bir dokunuş.
+              ClubBeans iki tarafı birden kurar. Yakınındaki Bean&apos;e
+              katılırsın — ya da kendi Club&apos;ını bir dakikada açarsın. Masaya
+              oturmak ve masayı kurmak arasındaki fark, artık sadece bir dokunuş.
               Cumartesi akşamı yine senin.
             </motion.p>
 
@@ -193,13 +193,13 @@ export default function Hero() {
             >
               <PersonaCard
                 kicker="Bean'e otur"
-                title="Keşfet, Jump In et"
+                title="Keşfet, Katıl"
                 meta="Yakında ne varsa, 3 dokunuş uzakta"
                 href="#nasil-calisir"
               />
               <PersonaCard
                 kicker="Masayı sen kur"
-                title="Club aç, tribe büyüt"
+                title="Club aç, kabile büyüt"
                 meta="Bir dakikada kulüp, bir ekranda yönetim"
                 href="#club-kur"
               />

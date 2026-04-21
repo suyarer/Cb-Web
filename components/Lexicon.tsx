@@ -26,11 +26,18 @@ const terms = [
     ex: '"TrustScore\'u 84, üç farklı Club\'da aktif."',
   },
   {
-    term: 'Jump In',
-    pron: '/dʒʌmp ɪn/',
+    term: 'Katıl',
+    pron: '/kaˈtɯl/',
     kind: 'fiil',
-    def: 'Bean\'e katılma aksiyonu. "Katıl" yerine kullanılır; anındalığın, kararlılığın ifadesi.',
-    ex: '"34 kişi Jump In etti."',
+    def: 'Bean\'e dahil olma aksiyonu. Tek kelime, tek dokunuş — form yok, onay sırası yok. Anındalığın, kararlılığın ifadesi.',
+    ex: '"34 kişi katıldı. Masa dolu."',
+  },
+  {
+    term: 'Kabile',
+    pron: '/kaˈbile/',
+    kind: 'isim',
+    def: 'Bir Club\'ın üye topluluğu. Takipçi değil, aynı kulübe ait kimlik. Seninle aynı ilgi etrafında toplanmış insanlar.',
+    ex: '"Moda Koşu Club\'ının 247 kişilik kabilesi."',
   },
   {
     term: 'Signal',

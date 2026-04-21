@@ -170,7 +170,7 @@ function FeedCard({
           ))}
         </div>
         <div className="text-[10px] bg-acid text-midnight font-bold px-2.5 py-1 rounded-full">
-          Jump In
+          Katıl
         </div>
       </div>
     </div>

@@ -18,7 +18,7 @@ const faqs = [
   },
   {
     q: 'Neden "anti-platform"?',
-    a: 'Büyük sosyal platformlar kullanıcıyı ürün olarak görür: veriyi satar, algoritma manipüle eder, dikkat ekonomisi kurar. ClubBeans topluluğun kendisini merkeze koyar. Veri satmıyoruz, davranış takip etmiyoruz, algoritma yönlendirmiyor — sen tribe\'ını seçersin.',
+    a: 'Büyük sosyal platformlar kullanıcıyı ürün olarak görür: veriyi satar, algoritma manipüle eder, dikkat ekonomisi kurar. ClubBeans topluluğun kendisini merkeze koyar. Veri satmıyoruz, davranış takip etmiyoruz, algoritma yönlendirmiyor — sen kabileni seçersin.',
   },
   {
     q: 'Kulüp kurmak için ne gerekli?',

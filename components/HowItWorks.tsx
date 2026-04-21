@@ -13,10 +13,10 @@ const steps = [
   },
   {
     n: '02',
-    key: 'Jump In',
+    key: 'Katıl',
     title: 'Tıkla. Yerin hazır.',
     body:
-      'Form yok. "Mail attık, cevap bekliyoruz" yok. Beğendiğin Bean\'e Jump In dersin — host TrustScore\'unu görür, sen de kimlerle oturacağını. Masa bağlanır.',
+      'Form yok. "Mail attık, cevap bekliyoruz" yok. Beğendiğin Bean\'e katılırsın — host TrustScore\'unu görür, sen de kimlerle oturacağını. Masa bağlanır.',
   },
   {
     n: '03',
@@ -59,7 +59,7 @@ export default function HowItWorks() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mt-6 text-zinc-400 max-w-2xl"
           >
-            Bir dakikan yeter. Radar&apos;a bak, Jump In de, telefonu masanın yanına
+            Bir dakikan yeter. Radar&apos;a bak, katıl de, telefonu masanın yanına
             koy. Dördüncü adım zaten uygulamanın dışında: kendi akşamın.
           </motion.p>
         </div>

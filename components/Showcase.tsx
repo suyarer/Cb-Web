@@ -31,7 +31,7 @@ const screens = [
     id: 'bean',
     title: 'Bean detayı',
     description:
-      'Kim, nerede, saat kaçta, kimler geliyor, TrustScore kaç — karar verecek her şey tek ekranda. Jump In, masa senin. Arkası yok, formülü yok.',
+      'Kim, nerede, saat kaçta, kimler geliyor, TrustScore kaç — karar verecek her şey tek ekranda. Katıl, masa senin. Arkası yok, formülü yok.',
     mockup: <BeanDetailScreen />,
   },
 ];
@@ -342,7 +342,7 @@ function BeanDetailScreen() {
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-500" />
           <div className="flex-1">
             <div className="text-xs font-semibold">@kulturevi</div>
-            <div className="text-[10px] text-zinc-500">Verified tribe · 2.4K tribe</div>
+            <div className="text-[10px] text-zinc-500">Doğrulanmış · 2.4K üye</div>
           </div>
           <div className="text-[10px] bg-white/10 rounded-full px-2 py-1">Takip</div>
         </div>
@@ -355,12 +355,12 @@ function BeanDetailScreen() {
               />
             ))}
           </div>
-          <span className="text-[10px] text-zinc-400">34 kişi Jump In etti</span>
+          <span className="text-[10px] text-zinc-400">34 kişi katıldı</span>
         </div>
       </div>
       <div className="absolute bottom-4 left-4 right-4">
         <div className="bg-acid text-midnight font-bold text-center py-3 rounded-2xl text-sm">
-          Jump In →
+          Katıl →
         </div>
       </div>
     </div>

@@ -59,7 +59,7 @@ export default function PrivacyPage() {
           <h3>2.3. Etkinlik Verileri</h3>
           <ul>
             <li>Katıldığınız Bean&apos;ler, oluşturduğunuz içerikler, yorumlar</li>
-            <li>Takip ilişkileri (tribe)</li>
+            <li>Kabile (topluluk üyelik) ilişkileri</li>
             <li>Bildirim (Signal) tercihleri</li>
           </ul>
 
