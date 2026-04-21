@@ -11,26 +11,26 @@ export const COMPASS_MODES: Record<
   NEUTRAL: {
     glow: '168, 230, 0',
     accent: '#A8E600',
-    label: 'NEUTRAL',
-    hint: 'Dengeli keşif',
+    label: 'DENGE',
+    hint: 'Dengeli keşif · her şeyden biraz',
   },
   HYPE: {
     glow: '244, 114, 82',
     accent: '#F47252',
-    label: 'HYPE',
-    hint: 'Enerji · kalabalık',
+    label: 'COŞKU',
+    hint: 'Enerji · kalabalık masa',
   },
   CHILL: {
     glow: '94, 194, 210',
     accent: '#5EC2D2',
-    label: 'CHILL',
-    hint: 'Sakin · küçük masa',
+    label: 'SAKİN',
+    hint: 'Sakin · yavaş sohbet',
   },
   TRIBE: {
     glow: '134, 222, 134',
     accent: '#86DE86',
-    label: 'TRIBE',
-    hint: 'Yakın çevre',
+    label: 'YAKIN',
+    hint: 'Yakın çevre · bildiğin yüzler',
   },
 };
 

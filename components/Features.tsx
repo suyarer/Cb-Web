@@ -50,7 +50,7 @@ const features = [
     tag: 'Ruh halin',
     title: 'Compass Mode',
     description:
-      'Bu akşam HYPE mı, CHILL mi, TRIBE mı? Seçersin — keşif o ruh haline hizalanır. Kategori değil, atmosfer. Sadece bu gece için.',
+      'Bu akşam DENGE mi, COŞKU mu, SAKİN mi, YAKIN mı? Seçersin — keşif o ruh haline hizalanır, uygulama tonu değişir. Kategori değil, atmosfer. Sadece bu gece için.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <circle cx="12" cy="12" r="9" />

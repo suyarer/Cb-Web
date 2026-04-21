@@ -24,7 +24,7 @@ const screens = [
     id: 'compass',
     title: 'Compass',
     description:
-      'Bugün nasıl hissediyorsun? HYPE, CHILL, TRIBE, NEUTRAL. Seçersin — keşif sana göre hizalanır. Kategori değil, atmosfer. Bu gece sadece bu gece için.',
+      'Bugün nasıl hissediyorsun? DENGE, COŞKU, SAKİN, YAKIN. Seçersin — keşif o ruh haline hizalanır, tüm uygulamanın tonu değişir. Kategori değil, atmosfer. Bu gece sadece bu gece için.',
     mockup: <CompassScreen />,
   },
   {
@@ -256,10 +256,10 @@ function RadarScreen() {
 
 function CompassScreen() {
   const modes = [
-    { key: 'NEUTRAL', desc: 'Dengeli keşif', hue: 'from-zinc-400/30 to-zinc-600/10', dot: 'bg-zinc-300' },
-    { key: 'HYPE', desc: 'Enerji · kalabalık', hue: 'from-rose-500/40 to-amber-500/20', dot: 'bg-rose-400' },
-    { key: 'CHILL', desc: 'Sakin · küçük masa', hue: 'from-teal-500/30 to-blue-500/20', dot: 'bg-teal-300' },
-    { key: 'TRIBE', desc: 'Yakın çevre', hue: 'from-acid/40 to-emerald-500/20', dot: 'bg-acid' },
+    { key: 'DENGE', desc: 'Dengeli keşif', hue: 'from-zinc-400/30 to-zinc-600/10', dot: 'bg-zinc-300' },
+    { key: 'COŞKU', desc: 'Enerji · kalabalık', hue: 'from-rose-500/40 to-amber-500/20', dot: 'bg-rose-400' },
+    { key: 'SAKİN', desc: 'Sakin · yavaş sohbet', hue: 'from-teal-500/30 to-blue-500/20', dot: 'bg-teal-300' },
+    { key: 'YAKIN', desc: 'Bildiğin yüzler', hue: 'from-acid/40 to-emerald-500/20', dot: 'bg-acid' },
   ];
   return (
     <div className="h-full bg-midnight overflow-hidden relative px-4 py-4">
