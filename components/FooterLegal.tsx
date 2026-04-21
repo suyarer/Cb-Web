@@ -2,7 +2,18 @@ import Link from 'next/link';
 
 export default function FooterLegal() {
   return (
-    <footer className="border-t border-border">
+    <footer className="relative border-t border-border overflow-hidden">
+      {/* Kapanış satırı */}
+      <div className="container-x pt-20 pb-16 border-b border-border">
+        <p className="text-3xl md:text-5xl font-bold tracking-tight text-white leading-tight max-w-3xl">
+          Bu sayfayı şimdi kapat.
+          <br />
+          <span className="text-zinc-500">
+            En iyi test: önümüzdeki Cumartesi.
+          </span>
+        </p>
+      </div>
+
       <div className="container-x py-12">
         <div className="grid md:grid-cols-4 gap-8 mb-12">
           <div className="md:col-span-2">
@@ -17,6 +28,10 @@ export default function FooterLegal() {
               <br />
               Türkiye&apos;de yapıldı — Cumartesi akşamlarını geri vermek için.
             </p>
+            <div className="mt-6 inline-flex items-center gap-2 bg-white/[0.03] border border-white/10 rounded-full pl-3 pr-4 py-1.5 text-[11px] font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-acid animate-pulse" />
+              <span className="text-zinc-400">2026 Q2 — lansman yaklaşıyor</span>
+            </div>
           </div>
 
           <div>
@@ -72,9 +87,13 @@ export default function FooterLegal() {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pt-8 border-t border-border text-xs text-zinc-600">
-          <div>© {new Date().getFullYear()} ClubBeans. Tüm hakları saklıdır.</div>
-          <div className="font-mono">v1.0.0 · 🇹🇷 Türkiye</div>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pt-8 border-t border-border">
+          <div className="text-xs text-zinc-600">
+            © {new Date().getFullYear()} ClubBeans · dikkatini çalmadan.
+          </div>
+          <div className="text-[10px] font-mono text-zinc-700 italic">
+            &quot;Ekran süresi değil, yaşam süresi.&quot;
+          </div>
         </div>
       </div>
     </footer>

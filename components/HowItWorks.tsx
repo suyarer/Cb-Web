@@ -85,13 +85,9 @@ export default function HowItWorks() {
                   <div className="w-14 h-14 rounded-2xl bg-midnight border border-white/10 flex items-center justify-center">
                     <span className="text-xl font-mono font-bold text-acid">{s.n}</span>
                   </div>
-                  <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
-                    Adım {i + 1}
+                  <div className="text-xs uppercase tracking-[0.25em] text-acid font-mono">
+                    {s.key}
                   </div>
-                </div>
-
-                <div className="text-xs uppercase tracking-[0.25em] text-acid mb-3 font-mono">
-                  {s.key}
                 </div>
                 <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight mb-4 leading-tight">
                   {s.title}

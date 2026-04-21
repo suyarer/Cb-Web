@@ -43,9 +43,9 @@ export default function TrustScore() {
 
       <div className="container-x relative">
         <div className="grid lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-20 items-center">
-          {/* Sol: ring viz */}
-          <div ref={ref} className="relative flex justify-center lg:justify-start">
-            <div className="relative w-[300px] h-[300px] md:w-[380px] md:h-[380px]">
+          {/* Sol: ring viz + örnek profil */}
+          <div ref={ref} className="relative flex flex-col items-center lg:items-start gap-8">
+            <div className="relative w-[280px] h-[280px] md:w-[340px] md:h-[340px]">
               <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
                 <circle
                   cx="50"
@@ -107,6 +107,38 @@ export default function TrustScore() {
                 />
               ))}
             </div>
+
+            {/* Örnek profil + activity */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.5, ease: easeOutExpo }}
+              className="w-full max-w-[340px] bg-elevated/80 backdrop-blur-xl border border-border rounded-2xl p-4 space-y-3"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-semibold text-white truncate">
+                    Ayşe K. <span className="text-zinc-500 font-normal">· Kadıköy</span>
+                  </div>
+                  <div className="text-[10px] text-zinc-500 font-mono">
+                    3 Club üyesi · 12 Bean
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 bg-acid/10 border border-acid/30 px-2 py-1 rounded-full">
+                  <span className="w-1 h-1 rounded-full bg-acid" />
+                  <span className="text-[10px] font-mono font-bold text-acid">84</span>
+                </div>
+              </div>
+
+              <div className="space-y-1.5 pl-1">
+                <ActivityLine delta="+5" text="Pitch Night · Moda · host" tone="acid" />
+                <ActivityLine delta="+3" text="Ahmet E. referans verdi" tone="acid" />
+                <ActivityLine delta="+1" text="Cumartesi Koşu Bean · katıldı" tone="acid" />
+                <ActivityLine delta="−5" text="Film Kulübü · 2 saat önce iptal" tone="red" />
+              </div>
+            </motion.div>
           </div>
 
           {/* Sağ: açıklama */}
@@ -187,5 +219,28 @@ export default function TrustScore() {
         </div>
       </div>
     </section>
+  );
+}
+
+function ActivityLine({
+  delta,
+  text,
+  tone,
+}: {
+  delta: string;
+  text: string;
+  tone: 'acid' | 'red';
+}) {
+  return (
+    <div className="flex items-center gap-2.5 text-xs">
+      <span
+        className={`font-mono font-bold tabular-nums ${
+          tone === 'acid' ? 'text-acid' : 'text-red-400'
+        } w-8`}
+      >
+        {delta}
+      </span>
+      <span className="text-zinc-400 truncate">{text}</span>
+    </div>
   );
 }

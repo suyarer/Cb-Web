@@ -71,6 +71,24 @@ export default function Hero() {
       />
 
       <div className="container-x relative">
+        {/* Pre-hero statement — giriş momentumu */}
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: easeOutExpo }}
+          className="mb-12 md:mb-16 max-w-2xl"
+        >
+          <div className="flex items-center gap-3 text-xs font-mono uppercase tracking-[0.25em] text-zinc-500">
+            <span className="w-8 h-px bg-zinc-700" />
+            <span>Bu bir pazarlama sayfası değil.</span>
+          </div>
+          <div className="mt-3 text-sm text-zinc-400 max-w-lg">
+            Bir duyuru. Bir imza. Bir davet. &quot;Bu akşam ne yapsak?&quot;
+            sorusunun cevabı artık 12 kişinin okuyup yanıt vermediği WhatsApp
+            grubunda değil.
+          </div>
+        </motion.div>
+
         <div className="grid lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-20 items-center">
           {/* Sol: Metin */}
           <div>
