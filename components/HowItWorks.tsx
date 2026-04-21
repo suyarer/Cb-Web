@@ -7,23 +7,23 @@ const steps = [
   {
     n: '01',
     key: 'Keşfet',
-    title: 'Radar\'ı aç, yakınını gör.',
+    title: 'Radar\'ı aç. Yakınını gör.',
     body:
-      'Şehrinde, yürüyüş mesafende, ilgi alanına uyan Beans\'ler listelenir. Algoritma değil; konum, saat, vibe — filtreyi sen kurarsın.',
+      'Yürüme mesafende ne oluyor? Saat, yer, vibe — filtreyi sen kurarsın. Algoritma seni beslemez; şehir sana konuşur.',
   },
   {
     n: '02',
     key: 'Jump In',
-    title: 'Tek dokunuşla masaya otur.',
+    title: 'Tek dokunuş. Yer senin.',
     body:
-      'Form yok, mail beklemek yok. Beğendiğin Bean\'e tıkla; TrustScore\'un host tarafından görülür, sen de kimlerin geleceğini görürsün.',
+      'Form yok. Mail beklemek yok. Beğendiğin Bean\'e Jump In dersin — host TrustScore\'unu görür, sen de kimlerin masaya oturduğunu.',
   },
   {
     n: '03',
     key: 'Yaşa',
-    title: 'Ekranı bırak, sohbete başla.',
+    title: 'Ekranı bırak. Sohbete geç.',
     body:
-      '4 saatlik fiziksel buluşma. Bean biter, TrustScore güncellenir, bir sonraki davet daha iyi eşleşir. Kullanımdan hayata akış.',
+      '4 saat. Bir masa. Gerçek yüzler. Bean biter, TrustScore güncellenir, bir sonraki davet daha yakın gelir. Uygulamadan hayata.',
   },
 ];
 
@@ -59,8 +59,8 @@ export default function HowItWorks() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mt-6 text-zinc-400 max-w-2xl"
           >
-            Üç adım. Her biri ortalama yarım dakika. Dördüncü adım zaten ekran dışında —
-            masanda, parkta, stüdyoda.
+            Üç adım. Toplam bir dakika. Dördüncü adım zaten uygulamanın dışında —
+            masan, parkın, stüdyon.
           </motion.p>
         </div>
 

@@ -46,7 +46,7 @@ export default function NextBeanCountdown() {
           </span>
         ))}
       </span>
-      <span className="text-zinc-500">içinde, İstanbul</span>
+      <span className="text-zinc-500">sonra başlıyor</span>
     </div>
   );
 }

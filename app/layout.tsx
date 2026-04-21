@@ -21,7 +21,7 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   title: 'ClubBeans — Ekran süresi değil, yaşam süresi.',
   description:
-    'ClubBeans bir anti-platformdur: seni ekranda tutmak için değil, sokağa çıkarmak için çalışır. Yakınındaki Beans\'leri keşfet, ruhuna uyan Clubs\'a Jump In et, kendi Club\'ını dakikalar içinde kur. Sosyal Obezite\'ye karşı, TrustScore ile curated network.',
+    'ClubBeans bir anti-platformdur. Seni ekranda tutmak için değil, masaya çağırmak için çalışır. Yakınındaki Beans\'leri keşfet, ruhuna uyan Club\'a Jump In et, kendi kulübünü bir dakikada kur. Algoritma değil senin filtrelerin. TrustScore ile curated network. Sosyal Obezite\'ye karşı dalgakıran.',
   metadataBase: new URL('https://clubbeans.com'),
   keywords: [
     'ClubBeans',
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'ClubBeans — Ekran süresi değil, yaşam süresi.',
     description:
-      'Anti-platform topluluk. Yakında Bul, Birlikte Yap, Kolay Kur. Sosyal Obezite\'ye karşı dalgakıran.',
+      'Anti-platform topluluk. Cumartesi akşamlarını geri al. Yakında Bul, Birlikte Yap, Kolay Kur.',
     url: 'https://clubbeans.com',
     siteName: 'ClubBeans',
     locale: 'tr_TR',

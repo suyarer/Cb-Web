@@ -8,22 +8,22 @@ const values = [
   {
     big: { value: 0, suffix: '', text: null },
     title: 'dikkat algoritması',
-    text: 'Seni ekranda tutmak için hiçbir satır kod yazmıyoruz. Sıralama senin filtrelerinle çalışır; kararı kara kutu değil, sen verirsin.',
+    text: 'Seni ekranda tutmak için tek satır kod yazmıyoruz. Sıralamayı kara kutu değil, senin filtren belirler. Kullandıkça fazlalaşmayan, azalan bir uygulama.',
   },
   {
     big: { value: 1, suffix: ' dk', text: null },
-    title: "Club'ını kur",
-    text: 'Topluluk kurmak artık formlar, WhatsApp grupları ve Instagram postları arasında dolaşmak değil. Dakikalar içinde Club aç, Bean düzenle, davet et.',
+    title: 'Club açmak yeter',
+    text: 'Form, WhatsApp grubu, Instagram hesabı, Eventbrite sayfası — hiçbiri değil. Bir dakikada kulübünü kur, Bean aç, davet et. Tek ekran, sürtünmesiz.',
   },
   {
     big: { value: 4, suffix: ' sa', text: null },
-    title: 'sabit buluşma süresi',
-    text: 'Her Bean 4 saatlik, başı sonu belli bir fiziksel buluşma. Ekrana değil masaya otururuz; sohbete değil yaşamaya zaman ayırırız.',
+    title: 'bir Bean sürer',
+    text: 'Başı belli, sonu belli. 4 saat; parkta koşu, masada sohbet, sahnede pitch. Ekrana değil masaya, yorum yapmaya değil yaşamaya zaman.',
   },
   {
     big: { value: 0, suffix: '', text: 'Trust' },
-    title: 'Score ile kaliteli çevre',
-    text: 'Herkesin herkese ulaştığı kaotik bir yer değiliz. TrustScore referansı ve güveni ölçer — curated network bir vaadimiz değil, mekanizmamız.',
+    title: 'Score ile gerçek çevre',
+    text: 'Herkesin herkese ulaştığı kaotik bir yer değil. TrustScore tuttuğun sözleri ölçer. Curated network bir vaadimiz değil — mekanizmamız.',
   },
 ];
 

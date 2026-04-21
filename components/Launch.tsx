@@ -26,8 +26,9 @@ export default function Launch() {
           </h2>
 
           <p className="text-lg text-zinc-400 max-w-xl mx-auto mb-12">
-            Pazarlama sosu yok, spam yok — dikkatini çalmayacağımıza söz verdik.
-            Sadece lansman günü tek bir mail, tek bir link, tek bir davet kodu.
+            Pazarlama sosu yok. Spam yok. Dikkatini çalmayacağımıza söz verdik —
+            ve manifestodan başka söze inanmıyoruz. Lansman günü tek mail,
+            tek link, tek davet kodu. Sonra sus.
           </p>
 
           {/* Store badges — disabled */}
@@ -48,7 +49,7 @@ export default function Launch() {
               </span>
             </a>
             <p className="mt-5 text-xs text-zinc-600">
-              Maili gönderirsin, seni listemize ekleriz. Başka bir şey istemeyiz.
+              Mail gönderirsin, listeye alırız. Tek istediğimiz bu.
             </p>
           </div>
         </motion.div>

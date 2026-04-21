@@ -57,8 +57,8 @@ const terms = [
     term: 'Sosyal Obezite',
     pron: '/sosˈjal obeˈzite/',
     kind: 'isim',
-    def: 'Dijital çağın hastalığı: çok kaydırma, az yaşama. ClubBeans\'in karşıya aldığı sorunun adı.',
-    ex: '"Bugün ekran süreden 6 saat, buluşma 0 — Sosyal Obezite."',
+    def: 'Dijital çağın hastalığı: çok tanıdık, az yakın; çok kaydırma, az yaşama; çok like, az masa. ClubBeans\'in karşısına dikildiği şey.',
+    ex: '"Bugün ekranda 6 saat, masada 0 saat — Sosyal Obezite."',
   },
 ];
 
@@ -95,7 +95,8 @@ export default function Lexicon() {
             className="text-zinc-400 mt-6 max-w-2xl"
           >
             Kullanıcı, takipçi, etkinlik, bildirim — bunlar dikkat ekonomisinin
-            kelimeleri. Biz yeni bir sözlükle konuşuyoruz.
+            kelimeleri. Yeni davranış yeni kelime ister. ClubBeans farklı bir
+            sözlükle konuşur.
           </motion.p>
         </div>
 

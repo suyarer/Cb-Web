@@ -139,9 +139,9 @@ export default function Compare() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mt-6 text-zinc-400 max-w-2xl"
           >
-            Başkalarıyla aynı rafa koyulmak istemiyoruz. Çünkü onlar bağ kurma
-            uygulaması, biz anti-platformuz — ücretsiz, ücretsiz kalacak, algoritma
-            dayatmıyoruz, güveni ölçebiliyoruz.
+            Aynı rafa koyulmayı reddediyoruz. Onlar bağ kurma uygulaması; biz
+            anti-platformuz. Abonelik yok, algoritma dayatmıyoruz, güveni
+            ölçebiliyoruz, Türkiye&apos;yi biliyoruz.
           </motion.p>
         </div>
 

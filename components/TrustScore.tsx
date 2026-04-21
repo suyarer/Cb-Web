@@ -5,10 +5,10 @@ import { motion, useInView } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 
 const rules = [
-  { delta: '+1', label: 'Jump In ettiğin her Bean', tone: 'acid' },
-  { delta: '+5', label: 'Host olduğun, başarıyla biten Bean', tone: 'acid' },
-  { delta: '−5', label: 'Son dakika iptal / no-show', tone: 'red' },
-  { delta: '+3', label: 'Bir tribe üyesi seni referans verir', tone: 'acid' },
+  { delta: '+1', label: 'Jump In ettiğin, gittiğin her Bean', tone: 'acid' },
+  { delta: '+5', label: 'Host olduğun, söz verdiğin Bean bittiğinde', tone: 'acid' },
+  { delta: '+3', label: 'Bir tribe üyesi seni adıyla referans verdiğinde', tone: 'acid' },
+  { delta: '−5', label: 'Son dakika iptal, no-show, masayı yarım bırakmak', tone: 'red' },
 ];
 
 function useAnimatedScore(target: number, active: boolean) {
@@ -118,7 +118,7 @@ export default function TrustScore() {
               transition={{ duration: 0.6 }}
               className="text-xs uppercase tracking-[0.3em] text-acid mb-6 font-mono"
             >
-              Curated network — gerçek karşılık
+              TrustScore · güveni ölçen sessiz sistem
             </motion.div>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -127,9 +127,9 @@ export default function TrustScore() {
               transition={{ duration: 0.8, ease: easeOutExpo }}
               className="text-section font-bold tracking-tight text-white mb-6"
             >
-              Güven takipçi değildir.
+              Güven, takipçi sayısı değildir.
               <br />
-              <span className="text-zinc-500">TrustScore ile ölçülür.</span>
+              <span className="text-zinc-500">Tuttuğun sözlerin toplamıdır.</span>
             </motion.h2>
             <motion.p
               initial={{ opacity: 0 }}
@@ -138,9 +138,9 @@ export default function TrustScore() {
               transition={{ duration: 0.8, delay: 0.1 }}
               className="text-lg text-zinc-400 leading-relaxed mb-10 max-w-xl"
             >
-              Herkes <span className="text-white">75</span> puanla başlar. Buluştuğun,
-              düzenlediğin, sözünü tuttuğun Bean&apos;lerle puanın artar; iptal ettiğinde
-              azalır. Kim kiminle ne yaptı — şeffaf ve karşılıklı.
+              Herkes <span className="text-white">75</span>&apos;ten başlar. Gittiğin her
+              Bean, düzenlediğin her masa, tuttuğun her söz puanına eklenir. Yarım
+              bıraktığında düşer. Kim kiminle ne yaptı — şeffaf, karşılıklı, gerçek.
             </motion.p>
 
             <div className="space-y-2 mb-10">
@@ -177,8 +177,8 @@ export default function TrustScore() {
               </div>
               <p className="text-white leading-relaxed">
                 Rastgele tanışma değil, <span className="text-acid">curated network</span>.
-                Masana oturan insanın geçmişi bellidir — bu yüzden Bean sohbetten
-                ilişkiye, ilişkiden işe dönüşür.
+                Masana oturan insanın izi bellidir — bu yüzden Bean sohbete,
+                sohbet ilişkiye, ilişki ortak işe dönüşebilir.
               </p>
             </motion.div>
           </div>

@@ -7,23 +7,23 @@ const problems = [
   {
     n: '01',
     cta: 'Yakında Bul',
-    pain: 'Aynı şehirde yaşayan yüzlerce insan var; ortak ilgi alanlarına göre buluşanlar da. Ama sen hiçbirinden haberdar olamıyorsun.',
+    pain: 'İki sokak ötende aynı kitabı okuyan biri var. Aynı saatte koşuyor, aynı pitch\'i dinliyor. Haberin olmuyor.',
     solution:
-      'Yakınındaki Beans tek ekranda listelenir. Konum, saat ve ilgi filtresi senin; sıralamayı algoritma değil, sen belirlersin.',
+      'Senin yürüme mesafende şehir ne yapıyor — tek ekranda. Saat, yer, vibe; filtreyi sen kurarsın. Algoritma değil.',
   },
   {
     n: '02',
     cta: 'Birlikte Yap',
-    pain: 'Sosyal medyaların dünyası bireysel: like\'larsın, kaydırırsın, yorum yaparsın — ama kimseyle aslında buluşmazsın.',
+    pain: 'Tüm gün sosyal medyadaydın. 284 like, 43 yorum, 0 insan. Dijital kalabalık, fiziksel yalnızlık — çağın hastalığı.',
     solution:
-      'Bean, dijital bir aktivite değil, fiziksel bir buluşmadır. Ekrana değil masaya otururuz; sohbete değil yaşama zaman ayırırız.',
+      'Bean dijital değil, fiziksel. Ekrana değil masaya otururuz. 4 saat, belli bir yer, belli insanlar — başı sonu belli bir buluşma.',
   },
   {
     n: '03',
     cta: 'Kolay Kur',
-    pain: 'Bir topluluk kurmak, onu duyurmak, katılımcıları toparlamak ayrı ayrı uygulamalarda dağılıyor. Kulüp kurmak işkenceye dönüyor.',
+    pain: 'Kendi kulübünü açmak için bir WhatsApp grup, bir Instagram hesap, bir Eventbrite sayfa. Üçü de yarım, hiçbiri bağlı değil.',
     solution:
-      'Club\'ını dakikalar içinde kurarsın. Bean düzenle, davet et, TrustScore ile güveni koru — hepsi aynı ekranda, sürtünmesiz.',
+      'Club\'ı bir dakikada kurarsın. Bean açarsın, davet edersin, TrustScore güveni korur. Üç uygulama değil — bir ekran.',
   },
 ];
 
@@ -59,8 +59,9 @@ export default function Problems() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mt-6 text-zinc-400 max-w-2xl"
           >
-            Girişimciler, beyaz yakalılar, freelancerlar — modern şehir insanının
-            ortak derdi aynı: çok çevre, niteliksiz temas. ClubBeans üç net derdin peşinde.
+            Şehirde çalışan, işini kendi yürüten, geceleri yorgun dönen herkesin
+            derdi aynı: çok tanıdık, az yakın. Cumartesi boş. ClubBeans bu üç şeyi
+            konu ediyor — hepsi birden.
           </motion.p>
         </div>
 

@@ -83,7 +83,7 @@ export default function Hero() {
               className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 mb-8 text-xs font-medium text-zinc-300 backdrop-blur"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-acid animate-glow-pulse" />
-              2026 Q2 · Yakında App Store &amp; Google Play&apos;de
+              2026 Q2 · Lansmandan önce ilk sen haber al
             </motion.div>
 
             <KineticHeadline />
@@ -95,10 +95,10 @@ export default function Hero() {
               custom={2}
               className="text-lg md:text-xl text-zinc-400 max-w-xl leading-relaxed mb-8"
             >
-              ClubBeans bir uygulama değil, bir anti-platformdur. Diğer platformlar
-              seni ekranda tutmak için algoritma yazar; biz seni sokağa çıkarmak için
-              yazarız. <strong className="text-white">Sosyal Obezite</strong>&apos;ye karşı,
-              kodla inşa edilmiş bir dalgakıran.
+              ClubBeans bir uygulama değil, bir anti-platformdur. Diğerleri
+              dikkatini çalar; biz Cumartesi akşamını geri veririz. Ekrandan
+              masaya, kaydırmadan sohbete — <strong className="text-white">Sosyal Obezite</strong>
+              &apos;ye karşı senin tarafındayız.
             </motion.p>
 
             <motion.div
@@ -174,9 +174,9 @@ export default function Hero() {
               custom={4.5}
               className="mt-12 grid grid-cols-3 gap-6 max-w-md"
             >
-              <Stat label="Bean süresi" value={4} suffix=" sa" />
-              <Stat label="Dakika · Club kur" value={1} suffix=" dk" />
-              <Stat label="Dikkat algoritması" value={0} accent />
+              <Stat label="bir Bean sürer" value={4} suffix=" sa" />
+              <Stat label="Club açmak yeter" value={1} suffix=" dk" />
+              <Stat label="dikkat algoritması" value={0} accent />
             </motion.div>
           </div>
 

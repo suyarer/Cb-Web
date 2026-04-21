@@ -13,9 +13,9 @@ export default function FooterLegal() {
               <span className="font-semibold tracking-tight">ClubBeans</span>
             </div>
             <p className="text-sm text-zinc-500 max-w-sm leading-relaxed">
-              Etkinlik odaklı anti-platform topluluk.
+              Anti-platform topluluk uygulaması.
               <br />
-              Türkiye&apos;de tasarlandı, dünyada kullanılır.
+              Türkiye&apos;den dünyaya — Cumartesi akşamlarını geri vermek için.
             </p>
           </div>
 

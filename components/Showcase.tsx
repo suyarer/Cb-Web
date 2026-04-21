@@ -10,28 +10,28 @@ const screens = [
     id: 'akis',
     title: 'Akış',
     description:
-      'Yakında olan ve ilgine uyan Beans senin ekranında. Ama akışın bir bölümü her zaman konforun dışına ayrılır — yeni Club\'ları, yeni vibe\'ları orada fark edersin.',
+      'Sana gelecek Beans burada. Ama akışın bir bölümü daima konforunun dışında — yeni Club\'ları, tanımadığın vibe\'ları orada yakalarsın. Balon yok.',
     mockup: <FeedScreen />,
   },
   {
     id: 'radar',
     title: 'Radar',
     description:
-      'Şehrinde ne dönüyor? Tek ekranda: harita, mesafe, saat, ilgi. Sıralamayı algoritma değil, senin filtrelerin belirler.',
+      'Şehrin bu akşam ne yapıyor? Harita, mesafe, saat, vibe — tek ekran. Sıralamayı algoritma değil, filtrelerin belirler. Görünmeyen bir zemin var: sen.',
     mockup: <RadarScreen />,
   },
   {
     id: 'compass',
     title: 'Compass',
     description:
-      'Bugün nasıl hissediyorsun? Ruh halini seç — keşif sana göre yeniden hizalanır. HYPE enerjiye, CHILL sakinliğe, TRIBE yakın çevrene açılır.',
+      'Bugün nasıl hissediyorsun? HYPE, CHILL, TRIBE, NEUTRAL. Seçersin — keşif sana göre hizalanır. Kategori değil, atmosfer. Bu gece sadece bu gece için.',
     mockup: <CompassScreen />,
   },
   {
     id: 'bean',
     title: 'Bean detayı',
     description:
-      'Ev sahibi, mekan, saat, TrustScore, kimler geliyor — bilmen gereken her şey tek ekranda. Karar ver, Jump In et, masaya otur.',
+      'Kim, nerede, saat kaçta, kimler geliyor, TrustScore kaç — karar verecek her şey tek ekranda. Jump In, masa senin. Arkası yok, formülü yok.',
     mockup: <BeanDetailScreen />,
   },
 ];
@@ -67,9 +67,9 @@ export default function Showcase() {
             transition={{ duration: 0.8 }}
             className="text-section font-bold tracking-tight"
           >
-            Minimal arayüz,
+            Az ekran,
             <br />
-            <span className="text-zinc-500">maksimum odaklanma.</span>
+            <span className="text-zinc-500">çok hayat.</span>
           </motion.h2>
         </div>
 

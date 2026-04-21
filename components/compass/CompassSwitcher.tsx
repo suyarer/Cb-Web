@@ -10,7 +10,7 @@ export default function CompassSwitcher() {
   return (
     <div className="inline-flex flex-col gap-2">
       <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-500">
-        Compass · sayfa ruhunu değiştirir
+        Compass · bu akşam nasıl hissediyorsun?
       </span>
       <div className="inline-flex items-center gap-1 p-1 bg-white/[0.03] border border-white/10 rounded-full">
         {keys.map((k) => {

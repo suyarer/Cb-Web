@@ -8,7 +8,7 @@ const features = [
     tag: 'Yakında Bul',
     title: 'Radar',
     description:
-      'Yakınındaki Beans haritada ve listede. Konum, saat, ilgi filtresiyle şehrinde ne dönüyor — hepsini tek ekranda görürsün.',
+      'Bu akşam şehrin ne yapıyor? Harita, mesafe, saat, vibe — tek ekran. Algoritma yok; filtreyi sen kurarsın, şehir sana konuşur.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <circle cx="12" cy="12" r="9" />
@@ -22,7 +22,7 @@ const features = [
     tag: 'Birlikte Yap',
     title: 'Bean',
     description:
-      'Her Bean 4 saatlik fiziksel bir buluşma. Kahve, koşu, pitch night, kitap sohbeti — başı sonu belli bir aktiviteye dahil olursun.',
+      '4 saat, başı sonu belli. Kahve, koşu, pitch night, kitap sohbeti — dijital etkinlik değil, fiziksel masa. Ekran değil, yüz yüze.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <path d="M12 2C7 7 7 12 12 17c5-5 5-10 0-15z" />
@@ -35,7 +35,7 @@ const features = [
     tag: 'Kolay Kur',
     title: 'Club',
     description:
-      'Topluluğunu dakikalar içinde aç. "AI Girişimcileri", "Kadıköy Koşu Kulübü" — dikeyini seç, Bean düzenle, üyeni yönet. Tek ekrandan.',
+      'Kendi kulübünü bir dakikada kurarsın. "AI Girişimcileri", "Moda Koşu Kulübü" — dikey seç, Bean aç, davet et. Üç uygulama yok; bir ekran var.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <circle cx="9" cy="8" r="3" />
@@ -50,7 +50,7 @@ const features = [
     tag: 'Ruh halin',
     title: 'Compass Mode',
     description:
-      'Enerjik mi, sakin mi, yakın çevreyle mi? Ruh halini seçersin — keşfin bugünkü seninle hizalanır. Kategori değil, atmosfer.',
+      'Bu akşam HYPE mı, CHILL mi, TRIBE mı? Seçersin — keşif o ruh haline hizalanır. Kategori değil, atmosfer. Sadece bu gece için.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <circle cx="12" cy="12" r="9" />
@@ -63,7 +63,7 @@ const features = [
     tag: 'Tek dokunuş',
     title: 'Jump In',
     description:
-      '"Katıl" değil, Jump In. Kalabalık bir formu doldurmak, mail beklemek yok — uyuyorsun, tıklıyorsun, masaya oturuyorsun.',
+      '"Katıl" değil, Jump In. Form yok, mail beklemek yok, onay sıran yok — beğenirsin, tıklarsın, Cumartesi yerin hazır.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <path d="M5 12h14" />
@@ -76,7 +76,7 @@ const features = [
     tag: 'Sessiz bildirim',
     title: 'Signal',
     description:
-      'Sadece senin için gerçekten anlamlı olan şey bildirim olur. Kırmızı nokta enflasyonu yok, yapay aciliyet yok — her sinyal ayarlanabilir.',
+      'Kırmızı nokta enflasyonu yok. Yapay aciliyet yok. Sadece gerçekten anlamı olan şey sinyal olur — her bildirim ayarlanabilir, hiçbiri pazarlık değil.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <path d="M6 8a6 6 0 0112 0v5l2 3H4l2-3V8z" />
@@ -108,9 +108,9 @@ export default function Features() {
             transition={{ duration: 0.8, ease: easeOutExpo }}
             className="text-section font-bold tracking-tight text-white"
           >
-            Üç ana söz,
+            Üç söz,
             <br />
-            <span className="text-zinc-500">altı mekanizma.</span>
+            <span className="text-zinc-500">altı sessiz mekanizma.</span>
           </motion.h2>
         </div>
 
