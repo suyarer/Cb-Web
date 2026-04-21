@@ -7,9 +7,9 @@ import { useEffect, useState } from 'react';
 
 const LINKS = [
   { href: '/#sorunlar', label: 'Ne çözüyor' },
-  { href: '/#nasil-calisir', label: 'Nasıl çalışır' },
+  { href: '/#nasil-calisir', label: 'Bean bul' },
+  { href: '/#club-kur', label: 'Club aç' },
   { href: '/#trustscore', label: 'TrustScore' },
-  { href: '/#uygulamada', label: 'Uygulamada' },
   { href: '/#karsilastirma', label: 'Fark' },
 ];
 

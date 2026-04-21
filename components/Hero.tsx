@@ -1,6 +1,5 @@
 'use client';
 
-import AnimatedCounter from '@/components/AnimatedCounter';
 import AttentionCounter from '@/components/AttentionCounter';
 import CompassSwitcher from '@/components/compass/CompassSwitcher';
 import KineticHeadline from '@/components/KineticHeadline';
@@ -95,10 +94,10 @@ export default function Hero() {
               custom={2}
               className="text-lg md:text-xl text-zinc-400 max-w-xl leading-relaxed mb-8"
             >
-              &quot;Bu akşam n&apos;aparız?&quot; sorusunun boşa düştüğü, planların WhatsApp&apos;ta
-              sönüp gittiği şehirde — ClubBeans bir uygulama değil, bir anti-platform.
-              Dikkatini çalmaz; Cumartesi akşamını sana geri getirir. Ekrandan masaya,
-              kaydırmadan sohbete.
+              ClubBeans iki tarafı birden kurar. Yakınındaki Bean&apos;e Jump In
+              dersin — ya da kendi Club&apos;ını bir dakikada açarsın. Masaya oturmak
+              ve masayı kurmak arasındaki fark, artık sadece bir dokunuş.
+              Cumartesi akşamı yine senin.
             </motion.p>
 
             <motion.div
@@ -172,11 +171,20 @@ export default function Hero() {
               initial="hidden"
               animate="visible"
               custom={4.5}
-              className="mt-12 grid grid-cols-3 gap-6 max-w-md"
+              className="mt-12 grid sm:grid-cols-2 gap-3 max-w-lg"
             >
-              <Stat label="bir Bean sürer" value={4} suffix=" sa" />
-              <Stat label="Club açmak yeter" value={1} suffix=" dk" />
-              <Stat label="dikkat algoritması" value={0} accent />
+              <PersonaCard
+                kicker="Bean'e otur"
+                title="Keşfet, Jump In et"
+                meta="Yakında ne varsa, 3 dokunuş uzakta"
+                href="#nasil-calisir"
+              />
+              <PersonaCard
+                kicker="Masayı sen kur"
+                title="Club aç, tribe büyüt"
+                meta="Bir dakikada kulüp, bir ekranda yönetim"
+                href="#club-kur"
+              />
             </motion.div>
           </div>
 
@@ -196,23 +204,37 @@ export default function Hero() {
   );
 }
 
-function Stat({
-  label,
-  value,
-  suffix = '',
-  accent = false,
+function PersonaCard({
+  kicker,
+  title,
+  meta,
+  href,
 }: {
-  label: string;
-  value: number;
-  suffix?: string;
-  accent?: boolean;
+  kicker: string;
+  title: string;
+  meta: string;
+  href: string;
 }) {
   return (
-    <div>
-      <div className={`text-2xl md:text-3xl font-bold ${accent ? 'text-acid' : 'text-white'}`}>
-        <AnimatedCounter value={value} suffix={suffix} duration={1.8} />
+    <a
+      href={href}
+      className="group relative bg-white/[0.02] border border-white/10 hover:border-acid/40 hover:bg-acid/[0.04] rounded-2xl p-5 no-underline transition overflow-hidden"
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-acid/10 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none" />
+      <div className="relative">
+        <div className="text-[10px] text-zinc-500 font-mono uppercase tracking-wider mb-2">
+          {kicker}
+        </div>
+        <div className="flex items-center justify-between gap-2 mb-1">
+          <div className="text-base font-bold text-white group-hover:text-acid transition">
+            {title}
+          </div>
+          <span className="text-zinc-600 group-hover:text-acid group-hover:translate-x-0.5 transition">
+            →
+          </span>
+        </div>
+        <div className="text-xs text-zinc-500">{meta}</div>
       </div>
-      <div className="text-xs text-zinc-500 mt-1 uppercase tracking-wider">{label}</div>
-    </div>
+    </a>
   );
 }

@@ -1,6 +1,7 @@
 import Compare from '@/components/Compare';
 import Features from '@/components/Features';
 import FooterLegal from '@/components/FooterLegal';
+import ForHosts from '@/components/ForHosts';
 import Hero from '@/components/Hero';
 import HowItWorks from '@/components/HowItWorks';
 import Launch from '@/components/Launch';
@@ -20,6 +21,7 @@ export default function HomePage() {
         <Hero />
         <Problems />
         <HowItWorks />
+        <ForHosts />
         <Manifesto />
         <TrustScore />
         <Showcase />

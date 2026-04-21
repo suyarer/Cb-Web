@@ -59,10 +59,10 @@ export default function Problems() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mt-6 text-zinc-400 max-w-2xl"
           >
-            Plan yapamadığın Cumartesiler. 12 kişiye yazılıp yanıt gelmeyen
-            WhatsApp mesajları. 284 like&apos;la biten, 0 insanla süren günler.
-            Aşağıdaki üç sahne sana tanıdık geliyorsa ClubBeans tam da sana
-            yazıldı.
+            Plan yapamadığın Cumartesiler. 284 like ile 0 insanla süren günler.
+            Bir türlü toparlanamayan kulüp denemeleri. Aşağıdaki üç sahne —
+            ister katılan ister kurucu olsun — herkese tanıdık geliyorsa,
+            ClubBeans tam da sana yazıldı.
           </motion.p>
         </div>
 
