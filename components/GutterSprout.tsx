@@ -19,13 +19,16 @@ export default function GutterSprout() {
   // Sap: 0→1 progress ile tam ölçek
   const stemScaleY = useTransform(progress, [0, 1], [0.02, 1]);
 
-  // Yapraklar: belirli eşiklerde açılır
-  const leaf1 = useTransform(progress, [0.08, 0.18], [0, 1]);
-  const leaf2 = useTransform(progress, [0.28, 0.4], [0, 1]);
-  const leaf3 = useTransform(progress, [0.5, 0.62], [0, 1]);
-  const leaf4 = useTransform(progress, [0.72, 0.84], [0, 1]);
-  // Taç yapraklar — sap'ın tepesinde, scroll sonunda açılır
-  const crown = useTransform(progress, [0.88, 1], [0, 1]);
+  // Yapraklar: sap'ın o noktaya ulaştığında açılır.
+  // Sap height 70vh, scaleY = progress. Sap scroll %20'de 14vh'ya ulaşır.
+  // Her yaprak sap'ın kendi seviyesinden biraz ÖNCE fade başlar,
+  // sap o noktadayken yaprak tam açıktır.
+  const leaf1 = useTransform(progress, [0.18, 0.24], [0, 1]); // pozisyon 14vh
+  const leaf2 = useTransform(progress, [0.38, 0.44], [0, 1]); // pozisyon 28vh
+  const leaf3 = useTransform(progress, [0.58, 0.64], [0, 1]); // pozisyon 42vh
+  const leaf4 = useTransform(progress, [0.78, 0.84], [0, 1]); // pozisyon 56vh
+  // Taç — sap'ın tepe noktası (70vh)
+  const crown = useTransform(progress, [0.94, 1], [0, 1]);
 
   // Bean alt kısmı progress'e göre doygunluk
   const beanOpacity = useTransform(progress, [0, 0.1], [0.35, 1]);
@@ -73,11 +76,30 @@ export default function GutterSprout() {
           />
         </div>
 
-        {/* 4 yaprak, farklı yükseklik ve yön */}
-        <Leaf yTop="calc(3.6rem + 15%)" side="right" opacityMV={leaf1} />
-        <Leaf yTop="calc(3.6rem + 35%)" side="left" opacityMV={leaf2} darker />
-        <Leaf yTop="calc(3.6rem + 52%)" side="right" opacityMV={leaf3} />
-        <Leaf yTop="calc(3.6rem + 68%)" side="left" opacityMV={leaf4} darker />
+        {/* 4 yaprak — her biri sap'ın %20/40/60/80 noktasında,
+            responsive bottom (mobile 3.6rem, md+ 4rem) */}
+        <Leaf
+          posClass="bottom-[calc(3.6rem+14vh)] md:bottom-[calc(4rem+14vh)]"
+          side="right"
+          opacityMV={leaf1}
+        />
+        <Leaf
+          posClass="bottom-[calc(3.6rem+28vh)] md:bottom-[calc(4rem+28vh)]"
+          side="left"
+          opacityMV={leaf2}
+          darker
+        />
+        <Leaf
+          posClass="bottom-[calc(3.6rem+42vh)] md:bottom-[calc(4rem+42vh)]"
+          side="right"
+          opacityMV={leaf3}
+        />
+        <Leaf
+          posClass="bottom-[calc(3.6rem+56vh)] md:bottom-[calc(4rem+56vh)]"
+          side="left"
+          opacityMV={leaf4}
+          darker
+        />
 
         {/* Tepede taç filizi — scroll %88+ olunca iki simetrik yaprak açılır */}
         <Crown opacityMV={crown} />
@@ -153,12 +175,12 @@ function Crown({
 }
 
 function Leaf({
-  yTop,
+  posClass,
   side,
   opacityMV,
   darker = false,
 }: {
-  yTop: string;
+  posClass: string;
   side: 'left' | 'right';
   opacityMV: ReturnType<typeof useTransform<number, number>>;
   darker?: boolean;
@@ -167,11 +189,10 @@ function Leaf({
   return (
     <motion.div
       style={{
-        bottom: yTop,
         opacity: opacityMV,
         scale: opacityMV,
       }}
-      className={`absolute ${isLeft ? 'right-3' : 'left-3'}`}
+      className={`absolute ${posClass} ${isLeft ? 'right-3' : 'left-3'}`}
     >
       <svg
         width="18"

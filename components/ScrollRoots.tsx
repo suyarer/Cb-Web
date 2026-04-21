@@ -17,11 +17,13 @@ export default function ScrollRoots() {
   // Ana kök uzaması — scroll 0→1 arası
   const rootScale = useTransform(progress, [0, 1], [0.02, 1]);
 
-  // Yan kökler belirli eşiklerde
-  const side1 = useTransform(progress, [0.12, 0.22], [0, 1]);
-  const side2 = useTransform(progress, [0.32, 0.44], [0, 1]);
-  const side3 = useTransform(progress, [0.54, 0.66], [0, 1]);
-  const side4 = useTransform(progress, [0.76, 0.88], [0, 1]);
+  // Yan kökler: ana kök o seviyeye ulaştığında açılır.
+  // Ana kök height 70vh, scaleY = progress. Kök scroll %20'de 14vh'ya iner.
+  // Her yan kök, ana kökün o noktaya vardığında görünür olur.
+  const side1 = useTransform(progress, [0.18, 0.24], [0, 1]); // pozisyon 14vh
+  const side2 = useTransform(progress, [0.38, 0.44], [0, 1]); // pozisyon 28vh
+  const side3 = useTransform(progress, [0.58, 0.64], [0, 1]); // pozisyon 42vh
+  const side4 = useTransform(progress, [0.78, 0.84], [0, 1]); // pozisyon 56vh
 
   // Tohum noktası opacity (üstte)
   const seedOpacity = useTransform(progress, [0, 0.08], [0.3, 1]);
@@ -59,22 +61,39 @@ export default function ScrollRoots() {
           />
         </div>
 
-        {/* 4 yan kök — farklı yükseklik, sağa/sola çıkan */}
-        <SideRoot yTop="calc(3rem + 15%)" side="right" opacityMV={side1} />
-        <SideRoot yTop="calc(3rem + 32%)" side="left" opacityMV={side2} />
-        <SideRoot yTop="calc(3rem + 50%)" side="right" opacityMV={side3} />
-        <SideRoot yTop="calc(3rem + 68%)" side="left" opacityMV={side4} />
+        {/* 4 yan kök — ana kökün %20/40/60/80 noktalarında,
+            responsive top (mobile 3rem, md+ 3.2rem) */}
+        <SideRoot
+          posClass="top-[calc(3rem+14vh)] md:top-[calc(3.2rem+14vh)]"
+          side="right"
+          opacityMV={side1}
+        />
+        <SideRoot
+          posClass="top-[calc(3rem+28vh)] md:top-[calc(3.2rem+28vh)]"
+          side="left"
+          opacityMV={side2}
+        />
+        <SideRoot
+          posClass="top-[calc(3rem+42vh)] md:top-[calc(3.2rem+42vh)]"
+          side="right"
+          opacityMV={side3}
+        />
+        <SideRoot
+          posClass="top-[calc(3rem+56vh)] md:top-[calc(3.2rem+56vh)]"
+          side="left"
+          opacityMV={side4}
+        />
       </div>
     </div>
   );
 }
 
 function SideRoot({
-  yTop,
+  posClass,
   side,
   opacityMV,
 }: {
-  yTop: string;
+  posClass: string;
   side: 'left' | 'right';
   opacityMV: ReturnType<typeof useTransform<number, number>>;
 }) {
@@ -82,11 +101,10 @@ function SideRoot({
   return (
     <motion.div
       style={{
-        top: yTop,
         opacity: opacityMV,
         scale: opacityMV,
       }}
-      className={`absolute ${isLeft ? 'right-2' : 'left-2'}`}
+      className={`absolute ${posClass} ${isLeft ? 'right-2' : 'left-2'}`}
     >
       <svg
         width="14"
