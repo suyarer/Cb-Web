@@ -105,4 +105,50 @@
   .prose-legal strong {
     @apply text-white;
   }
+
+  /* Brand harmonic heartbeat — site-wide synchronized pulse */
+  .brand-pulse {
+    animation: brandPulse 2.4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+
+  /* Brand term entrance glow — fired once when BrandTerm enters viewport */
+  .brand-term-glow {
+    position: relative;
+    animation: brandTermGlow 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .brand-pulse,
+    .brand-term-glow {
+      animation: none !important;
+    }
+  }
+}
+
+@keyframes brandPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(1.25);
+  }
+}
+
+@keyframes brandTermGlow {
+  0% {
+    color: inherit;
+    text-shadow: 0 0 0 rgba(168, 230, 0, 0);
+    letter-spacing: normal;
+  }
+  40% {
+    color: #A8E600;
+    text-shadow: 0 0 18px rgba(168, 230, 0, 0.55);
+    letter-spacing: 0.02em;
+  }
+  100% {
+    text-shadow: 0 0 0 rgba(168, 230, 0, 0);
+    letter-spacing: normal;
+  }
 }

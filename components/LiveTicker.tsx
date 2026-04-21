@@ -67,7 +67,7 @@ export default function LiveTicker() {
       aria-label="İstanbul canlı durum"
     >
       <span className="flex items-center gap-1.5 text-acid">
-        <span className="w-1.5 h-1.5 rounded-full bg-acid animate-pulse" />
+        <span className="w-1.5 h-1.5 rounded-full bg-acid brand-pulse" />
         Şimdi
       </span>
       <span className="w-px h-3 bg-white/10" />

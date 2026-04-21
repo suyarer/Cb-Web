@@ -1,7 +1,9 @@
 import { CompassProvider } from '@/components/compass/CompassContext';
 import CompassTint from '@/components/compass/CompassTint';
 import ExitIntent from '@/components/ExitIntent';
+import GutterSprout from '@/components/GutterSprout';
 import LiveTicker from '@/components/LiveTicker';
+import SerendipityBean from '@/components/SerendipityBean';
 import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
@@ -114,9 +116,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CompassProvider>
           <div className="grain-overlay" aria-hidden />
           <CompassTint />
+          <GutterSprout />
           <ExitIntent />
           {children}
           <LiveTicker />
+          <SerendipityBean />
         </CompassProvider>
         <script
           type="application/ld+json"

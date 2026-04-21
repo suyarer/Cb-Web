@@ -87,7 +87,7 @@ export default function CompassTint() {
               style={{ borderColor: `${color.accent}55` }}
             >
               <span
-                className="w-2 h-2 rounded-full animate-pulse flex-shrink-0"
+                className="w-2 h-2 rounded-full brand-pulse flex-shrink-0"
                 style={{ backgroundColor: color.accent }}
               />
               <span className="text-[10.5px] md:text-[11px] font-mono">

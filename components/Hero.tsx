@@ -6,6 +6,7 @@ import CompassSwitcher from '@/components/compass/CompassSwitcher';
 import KineticHeadline from '@/components/KineticHeadline';
 import NextBeanCountdown from '@/components/NextBeanCountdown';
 import { easeOutExpo, fadeUpVariant } from '@/lib/motion';
+import { useTimeGreeting } from '@/lib/useTimeGreeting';
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import PhoneMockup from './PhoneMockup';
@@ -14,6 +15,7 @@ export default function Hero() {
   const reduced = useReducedMotion() ?? false;
   const variants = fadeUpVariant(reduced);
   const sectionRef = useRef<HTMLElement>(null);
+  const greeting = useTimeGreeting();
 
   // Mouse parallax (phone mockup)
   const mouseX = useMotionValue(0);
@@ -82,12 +84,28 @@ export default function Hero() {
           >
             <div className="flex items-center gap-3 text-[10.5px] md:text-xs font-mono uppercase tracking-[0.2em] md:tracking-[0.25em] text-zinc-500">
               <span className="w-6 md:w-8 h-px bg-zinc-700 flex-shrink-0" />
-              <span>Bu bir pazarlama sayfası değil.</span>
+              <span className="flex items-center gap-2">
+                {greeting ? (
+                  <>
+                    <span className="text-acid">{greeting.kicker}</span>
+                    <span className="text-zinc-700">·</span>
+                    <span>Bu bir pazarlama sayfası değil.</span>
+                  </>
+                ) : (
+                  <span>Bu bir pazarlama sayfası değil.</span>
+                )}
+              </span>
             </div>
             <div className="mt-3 text-sm text-zinc-400 max-w-lg leading-relaxed">
-              Bir duyuru. Bir imza. Bir davet. &quot;Bu akşam ne yapsak?&quot;
-              sorusunun cevabı artık 12 kişinin okuyup yanıt vermediği WhatsApp
-              grubunda değil.
+              {greeting ? (
+                <span dangerouslySetInnerHTML={{ __html: greeting.message }} />
+              ) : (
+                <>
+                  Bir duyuru. Bir imza. Bir davet. &quot;Bu akşam ne yapsak?&quot;
+                  sorusunun cevabı artık 12 kişinin okuyup yanıt vermediği WhatsApp
+                  grubunda değil.
+                </>
+              )}
             </div>
           </motion.div>
 
@@ -118,7 +136,7 @@ export default function Hero() {
               custom={0}
               className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 mb-8 text-xs font-medium text-zinc-300 backdrop-blur"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-acid animate-glow-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-acid brand-pulse" />
               2026 Q2 · Lansmandan önce ilk sen haber al
             </motion.div>
 

@@ -39,7 +39,7 @@ export default function AttentionCounter() {
       aria-live="polite"
     >
       <span className="inline-flex items-center gap-1.5 font-mono text-acid">
-        <span className="w-1.5 h-1.5 rounded-full bg-acid animate-pulse" />
+        <span className="w-1.5 h-1.5 rounded-full bg-acid brand-pulse" />
         {timeLabel}
       </span>
       <span className="w-px h-3 bg-white/10" />

@@ -137,7 +137,7 @@ function ClubDashboard() {
           <span className="sm:hidden">clubbeans.com/host/…</span>
         </div>
         <span className="text-[10px] font-mono text-acid flex items-center gap-1 flex-shrink-0">
-          <span className="w-1.5 h-1.5 rounded-full bg-acid animate-pulse" />
+          <span className="w-1.5 h-1.5 rounded-full bg-acid brand-pulse" />
           CANLI
         </span>
       </div>
