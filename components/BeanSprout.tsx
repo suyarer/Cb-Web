@@ -39,24 +39,31 @@ export default function BeanSprout({
       if (inView) setPlaying(true);
       return;
     }
-    // Mount sonrası 120ms'lik küçük gecikme — css/font stabilize olsun
-    const id = setTimeout(() => setPlaying(true), 120);
-    return () => clearTimeout(id);
+    // Mount sonrası iki frame sonra başlat (ilk paint'i atla, animasyon görünür olsun)
+    const id = requestAnimationFrame(() =>
+      requestAnimationFrame(() => setPlaying(true))
+    );
+    return () => cancelAnimationFrame(id);
   }, [doAnimate, inView, onScrollOnly]);
+
+  // SVG path animasyonları için tarayıcı-güvenli basit transform + opacity
+  // (transformBox: fill-box her path için style'da set edilir)
+  const EASE = [0.22, 1, 0.36, 1] as const;
 
   const containerVariants = {
     hidden: {},
     visible: {
-      transition: { staggerChildren: 0.18, delayChildren: 0.1 },
+      transition: { staggerChildren: 0.2, delayChildren: 0.05 },
     },
   };
 
   const beanVariants = {
-    hidden: { scaleY: 0, opacity: 0 },
+    hidden: { opacity: 0, y: 14, scale: 0.7 },
     visible: {
-      scaleY: 1,
       opacity: 1,
-      transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.7, ease: EASE },
     },
   };
 
@@ -65,29 +72,21 @@ export default function BeanSprout({
     visible: {
       pathLength: 1,
       opacity: 1,
-      transition: { duration: 0.55, ease: 'easeOut' as const },
+      transition: { duration: 0.6, ease: 'easeOut' as const },
     },
   };
 
-  const leftLeafVariants = {
-    hidden: { scale: 0, opacity: 0, rotate: -30 },
+  const leafVariants = {
+    hidden: { opacity: 0, scale: 0.3, rotate: 0 },
     visible: {
-      scale: 1,
       opacity: 1,
+      scale: 1,
       rotate: 0,
-      transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
+      transition: { duration: 0.6, ease: EASE },
     },
   };
 
-  const rightLeafVariants = {
-    hidden: { scale: 0, opacity: 0, rotate: 30 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      rotate: 0,
-      transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
-    },
-  };
+  const pathStyle = { transformBox: 'fill-box' as const, transformOrigin: 'center' };
 
   return (
     <motion.svg
@@ -119,12 +118,12 @@ export default function BeanSprout({
         </linearGradient>
       </defs>
 
-      {/* Bean — altta fasulye gövdesi (origin bottom, yukarı doğru büyür) */}
+      {/* Bean — altta fasulye gövdesi */}
       <motion.path
         d="M 12 78 C 12 92 26 102 50 102 C 74 102 88 92 88 78 C 88 72 85 66 78 66 L 22 66 C 15 66 12 72 12 78 Z"
         fill="url(#cb-bean-grad)"
         variants={beanVariants}
-        style={{ transformOrigin: '50% 100%' }}
+        style={pathStyle}
       />
       {/* Bean içi ışık — minimal 3D hissi */}
       <motion.path
@@ -134,6 +133,7 @@ export default function BeanSprout({
         fill="none"
         strokeLinecap="round"
         variants={beanVariants}
+        style={pathStyle}
       />
 
       {/* Sap — bean'den yukarı çıkar */}
@@ -146,38 +146,40 @@ export default function BeanSprout({
         variants={stemVariants}
       />
 
-      {/* Sol yaprak (koyu teal, önce küçük, yukarı-sola) */}
+      {/* Sol yaprak (koyu teal) */}
       <motion.path
         d="M 50 44 C 36 40 24 30 22 18 C 36 18 48 30 50 44 Z"
         fill="url(#cb-leaf-left)"
-        variants={leftLeafVariants}
-        style={{ transformOrigin: '50% 44px' }}
+        variants={leafVariants}
+        style={pathStyle}
       />
       {/* Sol yaprak damar çizgisi */}
       <motion.path
         d="M 50 44 C 40 36 30 28 24 20"
-        stroke="rgba(0,0,0,0.18)"
+        stroke="rgba(0,0,0,0.22)"
         strokeWidth="0.8"
         fill="none"
         strokeLinecap="round"
-        variants={leftLeafVariants}
+        variants={leafVariants}
+        style={pathStyle}
       />
 
-      {/* Sağ yaprak (acid-lime, daha büyük, yukarı-sağa) */}
+      {/* Sağ yaprak (acid-lime) */}
       <motion.path
         d="M 50 44 C 66 38 80 26 82 12 C 68 13 54 26 50 44 Z"
         fill="url(#cb-leaf-right)"
-        variants={rightLeafVariants}
-        style={{ transformOrigin: '50% 44px' }}
+        variants={leafVariants}
+        style={pathStyle}
       />
       {/* Sağ yaprak damar çizgisi */}
       <motion.path
         d="M 50 44 C 60 36 72 26 80 14"
-        stroke="rgba(0,0,0,0.18)"
+        stroke="rgba(0,0,0,0.22)"
         strokeWidth="0.8"
         fill="none"
         strokeLinecap="round"
-        variants={rightLeafVariants}
+        variants={leafVariants}
+        style={pathStyle}
       />
 
       {/* Nefes pulse — breathe=true ise */}
