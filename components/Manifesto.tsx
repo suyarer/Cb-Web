@@ -1,5 +1,6 @@
 'use client';
 
+import BeanSprout from '@/components/BeanSprout';
 import { easeOutExpo } from '@/lib/motion';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
@@ -87,6 +88,22 @@ export default function Manifesto() {
               ))}
             </div>
           </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-10%' }}
+            transition={{ duration: 1, delay: 0.3, ease: easeOutExpo }}
+            className="flex justify-center mb-8 md:mb-10"
+          >
+            <div className="relative">
+              <div
+                className="absolute -inset-10 bg-acid/15 blur-3xl rounded-full pointer-events-none"
+                aria-hidden
+              />
+              <BeanSprout size={96} animated onScrollOnly breathe />
+            </div>
+          </motion.div>
 
           <motion.p
             initial={{ opacity: 0, y: 30 }}

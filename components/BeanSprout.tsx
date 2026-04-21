@@ -1,13 +1,16 @@
 'use client';
 
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useInView, useReducedMotion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 
 type Props = {
   size?: number;
-  /** Görünür olunca filizlenme animasyonunu oynatır (Hero/vurgular için) */
+  /** Filizlenme animasyonu — mount sonrası kısa bir gecikmeyle otomatik oynar */
   animated?: boolean;
   /** Sürekli hafif nefes (pulse) — marka vurgu noktalarında */
   breathe?: boolean;
+  /** Sadece scroll ile görünür olunca tetikle (default: mount sonrası hemen) */
+  onScrollOnly?: boolean;
   className?: string;
   ariaLabel?: string;
 };
@@ -16,11 +19,30 @@ export default function BeanSprout({
   size = 40,
   animated = false,
   breathe = false,
+  onScrollOnly = false,
   className,
   ariaLabel = 'ClubBeans — filizlenen topluluk',
 }: Props) {
   const reduced = useReducedMotion() ?? false;
   const doAnimate = animated && !reduced;
+
+  const ref = useRef<SVGSVGElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.1 });
+  const [playing, setPlaying] = useState(!doAnimate);
+
+  useEffect(() => {
+    if (!doAnimate) {
+      setPlaying(true);
+      return;
+    }
+    if (onScrollOnly) {
+      if (inView) setPlaying(true);
+      return;
+    }
+    // Mount sonrası 120ms'lik küçük gecikme — css/font stabilize olsun
+    const id = setTimeout(() => setPlaying(true), 120);
+    return () => clearTimeout(id);
+  }, [doAnimate, inView, onScrollOnly]);
 
   const containerVariants = {
     hidden: {},
@@ -69,6 +91,7 @@ export default function BeanSprout({
 
   return (
     <motion.svg
+      ref={ref}
       width={size}
       height={size}
       viewBox="0 0 100 120"
@@ -77,14 +100,8 @@ export default function BeanSprout({
       className={className}
       variants={containerVariants}
       initial={doAnimate ? 'hidden' : 'visible'}
-      whileInView={doAnimate ? 'visible' : undefined}
-      animate={doAnimate ? undefined : 'visible'}
-      viewport={{ once: true, margin: '-15%' }}
-      {...(breathe && !reduced
-        ? {
-            whileHover: { scale: 1.06 },
-          }
-        : {})}
+      animate={playing ? 'visible' : 'hidden'}
+      {...(breathe && !reduced ? { whileHover: { scale: 1.06 } } : {})}
     >
       <defs>
         <linearGradient id="cb-bean-grad" x1="0" y1="0" x2="0" y2="1">

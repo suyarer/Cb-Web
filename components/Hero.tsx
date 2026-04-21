@@ -96,14 +96,14 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.2, ease: easeOutExpo }}
-            className="relative flex-shrink-0 hidden sm:block"
+            className="relative flex-shrink-0"
           >
-            <div className="absolute inset-0 bg-acid/10 blur-2xl rounded-full" aria-hidden />
+            <div className="absolute -inset-6 bg-acid/20 blur-3xl rounded-full pointer-events-none" aria-hidden />
             <div className="relative">
-              <BeanSprout size={72} animated breathe />
+              <BeanSprout size={88} animated breathe />
             </div>
-            <div className="mt-2 text-[9px] md:text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-600 text-center">
-              Bean &nbsp;→&nbsp; Club
+            <div className="mt-2 text-[9px] md:text-[10px] font-mono uppercase tracking-[0.2em] md:tracking-[0.25em] text-zinc-600 text-center whitespace-nowrap">
+              Bean <span className="text-zinc-700">→</span> Club
             </div>
           </motion.div>
         </div>
