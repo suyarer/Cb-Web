@@ -139,7 +139,7 @@ export default function Compare() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mt-6 text-zinc-400 max-w-2xl"
           >
-            Batılı uygulamalar abonelik satar, global platformlar organizatör
+            Yurt dışı uygulamalar abonelik satar, global platformlar organizatör
             ücreti ister, flört uygulamaları eşleştirir. Biz ücretsiz kalırız,
             algoritmayı sana bırakırız, güveni TrustScore ile ölçeriz. Türkiye için
             tasarlandık — aynı raf değiliz.

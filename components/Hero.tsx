@@ -130,7 +130,7 @@ export default function Hero() {
               </span>
             </div>
             <div className="mt-2 text-[9px] md:text-[10px] font-mono uppercase tracking-[0.2em] md:tracking-[0.25em] text-zinc-600 text-center whitespace-nowrap">
-              Bean <span className="text-zinc-700">→</span> Club
+              Tohumdan <span className="text-zinc-700">·</span> Topluluğa
             </div>
           </motion.div>
         </div>
@@ -161,7 +161,7 @@ export default function Hero() {
               ClubBeans hem katılan hem kurucu için yazıldı. Yakınındaki
               Bean&apos;e katılırsın — ya da kendi Club&apos;ını bir dakikada
               açarsın. Masaya oturmak ve masayı kurmak arasındaki fark, artık
-              tek dokunuş. Cumartesi akşamı yine senin.
+              tek dokunuş. Cumartesi akşamı artık senin.
             </motion.p>
 
             <motion.div

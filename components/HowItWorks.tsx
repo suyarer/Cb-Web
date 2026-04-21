@@ -16,7 +16,7 @@ const steps = [
     key: 'Katıl',
     title: 'Tıkla. Yerin hazır.',
     body:
-      'Form yok. "Mail attık, cevap bekliyoruz" yok. Beğendiğin Bean\'e katılırsın — host TrustScore\'unu görür, sen de kimlerle oturacağını. Yerin ayrılır.',
+      'Form yok. "Mail attık, cevap bekliyoruz" yok. Beğendiğin Bean\'e katılırsın — host TrustScore\'unu görür, sen de masadaki yüzleri görürsün. Yerin ayrılır.',
   },
   {
     n: '03',
@@ -60,7 +60,8 @@ export default function HowItWorks() {
             className="mt-6 text-zinc-400 max-w-2xl"
           >
             Bir dakikan yeter. Radar&apos;a bak, katıl de, telefonu masanın yanına
-            koy. Dördüncü adım zaten uygulamanın dışında: kendi akşamın.
+            koy. Dördüncü adım zaten uygulamanın dışında — kendi akşamın orada
+            başlar.
           </motion.p>
         </div>
 

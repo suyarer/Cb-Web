@@ -7,7 +7,7 @@ const benefits = [
   {
     n: '01',
     title: 'Bir dakikada kulüp.',
-    body: 'Dikey seç — AI, koşu, film, kitap, yoga. İsmini koy, logo at. Form doldurmak yok; Club\'ın yayında.',
+    body: 'Alan seç — AI, koşu, film, kitap, yoga. İsmini koy, logo at. Form doldurmak yok; Club\'ın yayında.',
   },
   {
     n: '02',
@@ -22,7 +22,7 @@ const benefits = [
   {
     n: '04',
     title: 'Sıfır abonelik, sıfır komisyon.',
-    body: 'Ücretsiz Club, ücretsiz Bean. Ücretli yaparsan da ClubBeans payı %0. Biz satmıyoruz — sen sohbet ediyorsun, biz masayı hazırlıyoruz.',
+    body: 'Ücretsiz Club, ücretsiz Bean. Ücretli yaparsan da ClubBeans payı %0. Biz seni satmıyoruz — sen sohbet ediyorsun, biz masayı hazırlıyoruz.',
   },
 ];
 
@@ -67,7 +67,7 @@ export default function ForHosts() {
               Bir topluluk kurmak isteyenin kafasında üç uygulama vardır: WhatsApp
               grup, Instagram hesap, Eventbrite sayfa. Hiçbiri tam değil, hiçbiri
               birbirine bağlı değil. ClubBeans tek ekranda açar, davet eder, korur —
-              topluluk yönetmek artık dağıtıcı değil, kurucu bir iş.
+              topluluk yönetmek artık parçalı değil, bütünsel bir iş.
             </motion.p>
 
             <div className="space-y-6 mb-10">

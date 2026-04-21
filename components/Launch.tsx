@@ -26,8 +26,8 @@ export default function Launch() {
           </h2>
 
           <p className="text-lg text-zinc-400 max-w-xl mx-auto mb-12">
-            Haftalık newsletter yok. Pazarlama dizisi yok. Spam yok. Dikkatini
-            çalmayacağımıza söz verdik — ve söz vermeyi ciddiye alıyoruz.
+            Haftalık newsletter yok. Pazarlama e-postaları yok. Spam yok.
+            Dikkatini çalmayacağımıza söz verdik — ve sözümüzü tutuyoruz.
             Lansman günü tek mail, tek link, tek davet kodu. Gerisi senin
             akşamın.
           </p>

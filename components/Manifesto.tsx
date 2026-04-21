@@ -58,8 +58,8 @@ export default function Manifesto() {
             Elinde telefon, içinde bir boşluk. &quot;Bir şey eksik&quot; hissi — adını
             koyamadığın o eksik. Biz buna{' '}
             <BrandTerm className="text-white font-semibold">Sosyal Obezite</BrandTerm>{' '}
-            diyoruz: çok like, az masa. ClubBeans bu hissin karşısına dikilmiş bir
-            dalgakıran.
+            diyoruz: çok beğeni, az masa. ClubBeans bu hissin karşısına dikilmiş
+            bir dalgakıran.
           </motion.p>
 
           <div className="grid md:grid-cols-2 gap-8 md:gap-16 mb-20">

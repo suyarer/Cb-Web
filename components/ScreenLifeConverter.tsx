@@ -107,7 +107,7 @@ export default function ScreenLifeConverter() {
               <p className="text-sm text-zinc-500 mt-2 max-w-md mx-auto">
                 Yılın{' '}
                 <span className="text-zinc-300">
-                  {Math.round((hours * 365 / 24 / 365) * 100)}&apos;ini
+                  %{Math.round((hours * 365 / 24 / 365) * 100)}&apos;ini
                 </span>{' '}
                 ekrana verdin. ClubBeans onun bir bölümünü geri almaya geldi.
               </p>
