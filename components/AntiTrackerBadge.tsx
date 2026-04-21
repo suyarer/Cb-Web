@@ -43,7 +43,7 @@ export default function AntiTrackerBadge({ inline = false }: { inline?: boolean 
         </span>
       ))}
 
-      <span className="text-zinc-600 italic">· söz verdik, tutuyoruz</span>
+      <span className="text-zinc-600 italic">· sözümüzü tutuyoruz</span>
     </motion.div>
   );
 }

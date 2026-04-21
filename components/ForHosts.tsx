@@ -17,7 +17,7 @@ const benefits = [
   {
     n: '03',
     title: 'Masana kim oturur, sen seç.',
-    body: 'TrustScore filter. 80 üstü yalnız kabul. Misafir limit. Kapalı Bean. Kararı sen verirsin — biz sadece sessiz altyapıyı tutarız.',
+    body: 'TrustScore filtresi — sadece 80 ve üstü kabul. Misafir limiti. Kapalı Bean. Kararı sen verirsin; biz sadece sessiz altyapıyı tutarız.',
   },
   {
     n: '04',
@@ -213,7 +213,7 @@ function ClubDashboard() {
         {/* Filters */}
         <div className="bg-midnight/50 border border-white/[0.04] rounded-xl p-3">
           <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-600 mb-2">
-            TrustScore filter · masayı koru
+            TrustScore filtresi · masayı koru
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-[10px] bg-acid/10 border border-acid/30 text-acid font-mono px-2 py-1 rounded-full">

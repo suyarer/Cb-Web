@@ -105,7 +105,11 @@ export default function ScreenLifeConverter() {
                 <span className="text-acid">{Math.round(hours * 365 / 24).toLocaleString('tr-TR')} gün</span>
               </div>
               <p className="text-sm text-zinc-500 mt-2 max-w-md mx-auto">
-                Bir yılın yarısını ekrana verdin. ClubBeans onun bir bölümünü geri almaya geldi.
+                Yılın{' '}
+                <span className="text-zinc-300">
+                  {Math.round((hours * 365 / 24 / 365) * 100)}&apos;ini
+                </span>{' '}
+                ekrana verdin. ClubBeans onun bir bölümünü geri almaya geldi.
               </p>
             </div>
           </motion.div>

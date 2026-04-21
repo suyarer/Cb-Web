@@ -50,7 +50,7 @@ export default function Launch() {
               </span>
             </a>
             <p className="mt-5 text-xs text-zinc-600">
-              Mail gönderirsin, listeye alırız. Sözümüz bu kadar.
+              Mail gönderirsin, listeye alırız. Söz bu kadar.
             </p>
           </div>
         </motion.div>

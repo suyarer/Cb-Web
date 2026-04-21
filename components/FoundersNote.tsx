@@ -96,7 +96,7 @@ export default function FoundersNote() {
                 ClubBeans kurucu ekibi
               </div>
               <div className="text-[11px] md:text-xs text-zinc-500 font-mono truncate">
-                İstanbul · Cumartesi, gece 23:47
+                İstanbul · Cumartesi · 23:47
               </div>
             </div>
           </motion.div>

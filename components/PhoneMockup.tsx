@@ -95,7 +95,7 @@ function DefaultAppPreview() {
       {/* Header */}
       <div className="flex items-center justify-between mb-4 px-1">
         <div>
-          <div className="text-xs text-zinc-500">Merhaba</div>
+          <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Bu akşam</div>
           <div className="text-base font-bold">Keşfet</div>
         </div>
         <div className="w-7 h-7 rounded-full bg-acid/20 border border-acid/40" />
@@ -104,7 +104,7 @@ function DefaultAppPreview() {
       {/* Tabs */}
       <div className="flex gap-4 mb-4 px-1 text-xs">
         <span className="text-white font-semibold border-b-2 border-acid pb-1">Sana Özel</span>
-        <span className="text-zinc-500">Takip</span>
+        <span className="text-zinc-500">Kabile</span>
       </div>
 
       {/* Fake feed cards */}

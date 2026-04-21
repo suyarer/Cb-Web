@@ -344,7 +344,7 @@ function BeanDetailScreen() {
             <div className="text-xs font-semibold">@kulturevi</div>
             <div className="text-[10px] text-zinc-500">Doğrulanmış · 2.4K üye</div>
           </div>
-          <div className="text-[10px] bg-white/10 rounded-full px-2 py-1">Takip</div>
+          <div className="text-[10px] bg-acid/20 border border-acid/40 text-acid rounded-full px-2 py-1 font-semibold">+ Kabile</div>
         </div>
         <div className="flex items-center gap-2">
           <div className="flex -space-x-2">
