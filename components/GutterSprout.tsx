@@ -24,6 +24,8 @@ export default function GutterSprout() {
   const leaf2 = useTransform(progress, [0.28, 0.4], [0, 1]);
   const leaf3 = useTransform(progress, [0.5, 0.62], [0, 1]);
   const leaf4 = useTransform(progress, [0.72, 0.84], [0, 1]);
+  // Taç yapraklar — sap'ın tepesinde, scroll sonunda açılır
+  const crown = useTransform(progress, [0.88, 1], [0, 1]);
 
   // Bean alt kısmı progress'e göre doygunluk
   const beanOpacity = useTransform(progress, [0, 0.1], [0.35, 1]);
@@ -72,8 +74,72 @@ export default function GutterSprout() {
         <Leaf yTop="calc(3.6rem + 35%)" side="left" opacityMV={leaf2} darker />
         <Leaf yTop="calc(3.6rem + 52%)" side="right" opacityMV={leaf3} />
         <Leaf yTop="calc(3.6rem + 68%)" side="left" opacityMV={leaf4} darker />
+
+        {/* Tepede taç filizi — scroll %88+ olunca iki simetrik yaprak açılır */}
+        <Crown opacityMV={crown} />
       </div>
     </div>
+  );
+}
+
+function Crown({
+  opacityMV,
+}: {
+  opacityMV: ReturnType<typeof useTransform<number, number>>;
+}) {
+  return (
+    <motion.div
+      style={{
+        bottom: 'calc(3.6rem + 70vh)', // sap tepesinin yakınında
+        opacity: opacityMV,
+        scale: opacityMV,
+      }}
+      className="absolute left-1/2 -translate-x-1/2"
+    >
+      <div className="relative">
+        {/* Parıltı (scroll sonunda "görev tamamlandı" hissi) */}
+        <motion.div
+          style={{ opacity: opacityMV }}
+          className="absolute inset-0 -m-6 bg-acid/25 blur-2xl rounded-full pointer-events-none"
+          aria-hidden
+        />
+
+        <svg
+          width="32"
+          height="26"
+          viewBox="0 0 32 26"
+          className="relative drop-shadow-[0_0_10px_rgba(168,230,0,0.6)] md:w-[40px] md:h-[32px]"
+        >
+          <defs>
+            <linearGradient id="gs-crown-l" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#1E5E4E" />
+              <stop offset="100%" stopColor="#0E3A2E" />
+            </linearGradient>
+            <linearGradient id="gs-crown-r" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stopColor="#6BB01E" />
+              <stop offset="100%" stopColor="#CBEC4A" />
+            </linearGradient>
+          </defs>
+          {/* Sol yaprak — merkez tabandan sol-üste açılır */}
+          <path
+            d="M 16 22 C 8 18 3 10 5 3 C 12 4 17 12 16 22 Z"
+            fill="url(#gs-crown-l)"
+          />
+          {/* Sağ yaprak — merkez tabandan sağ-üste açılır */}
+          <path
+            d="M 16 22 C 24 18 29 10 27 3 C 20 4 15 12 16 22 Z"
+            fill="url(#gs-crown-r)"
+          />
+          {/* Merkez sap ucu */}
+          <path
+            d="M 16 22 L 16 18"
+            stroke="#3EA52A"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+        </svg>
+      </div>
+    </motion.div>
   );
 }
 
