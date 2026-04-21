@@ -43,7 +43,7 @@ export default function SilentHour() {
         onClick={() => setActive((v) => !v)}
         aria-pressed={active}
         aria-label={active ? 'Sessiz saati kapat' : 'Sessiz saati başlat'}
-        className={`fixed bottom-3 md:bottom-4 right-3 md:right-4 z-[45] flex items-center gap-2 rounded-full pl-2.5 pr-3.5 py-1.5 md:py-2 text-[10px] md:text-[11px] font-mono transition border ${
+        className={`fixed bottom-[4.25rem] md:bottom-4 right-3 md:right-4 z-[45] flex items-center gap-2 rounded-full pl-2.5 pr-3.5 py-1.5 md:py-2 text-[10px] md:text-[11px] font-mono transition border ${
           active
             ? 'bg-acid text-midnight border-acid shadow-[0_0_30px_rgba(168,230,0,0.35)]'
             : 'bg-midnight/85 backdrop-blur-xl text-zinc-300 border-white/10 hover:border-acid/40 hover:text-white'
