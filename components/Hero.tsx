@@ -48,13 +48,13 @@ export default function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden pt-32 md:pt-40 pb-20 md:pb-32"
+      className="relative overflow-hidden pt-28 md:pt-40 pb-16 md:pb-32"
     >
       {/* Arka plan — çoklu glow katmanı */}
       <div className="absolute inset-0 bg-radial-glow pointer-events-none" />
       <div
         aria-hidden
-        className="absolute left-1/2 -top-40 -translate-x-1/2 w-[720px] h-[720px] rounded-full opacity-40 blur-[140px] pointer-events-none"
+        className="absolute left-1/2 -top-40 -translate-x-1/2 w-[min(720px,120vw)] h-[min(720px,120vw)] rounded-full opacity-40 blur-[80px] md:blur-[140px] pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(168,230,0,0.35), transparent 60%)' }}
       />
 
@@ -76,13 +76,13 @@ export default function Hero() {
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: easeOutExpo }}
-          className="mb-12 md:mb-16 max-w-2xl"
+          className="mb-8 md:mb-16 max-w-2xl"
         >
-          <div className="flex items-center gap-3 text-xs font-mono uppercase tracking-[0.25em] text-zinc-500">
-            <span className="w-8 h-px bg-zinc-700" />
+          <div className="flex items-center gap-3 text-[10.5px] md:text-xs font-mono uppercase tracking-[0.2em] md:tracking-[0.25em] text-zinc-500">
+            <span className="w-6 md:w-8 h-px bg-zinc-700 flex-shrink-0" />
             <span>Bu bir pazarlama sayfası değil.</span>
           </div>
-          <div className="mt-3 text-sm text-zinc-400 max-w-lg">
+          <div className="mt-3 text-sm text-zinc-400 max-w-lg leading-relaxed">
             Bir duyuru. Bir imza. Bir davet. &quot;Bu akşam ne yapsak?&quot;
             sorusunun cevabı artık 12 kişinin okuyup yanıt vermediği WhatsApp
             grubunda değil.

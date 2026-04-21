@@ -4,8 +4,8 @@ export default function FooterLegal() {
   return (
     <footer className="relative border-t border-border overflow-hidden">
       {/* Kapanış satırı */}
-      <div className="container-x pt-20 pb-16 border-b border-border">
-        <p className="text-3xl md:text-5xl font-bold tracking-tight text-white leading-tight max-w-3xl">
+      <div className="container-x pt-16 md:pt-20 pb-12 md:pb-16 border-b border-border">
+        <p className="text-2xl md:text-5xl font-bold tracking-tight text-white leading-tight max-w-3xl">
           Bu sayfayı şimdi kapat.
           <br />
           <span className="text-zinc-500">

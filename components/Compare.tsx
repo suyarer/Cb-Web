@@ -146,12 +146,43 @@ export default function Compare() {
           </motion.p>
         </div>
 
+        {/* Mobil: kart görünümü */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10%' }}
           transition={{ duration: 0.8, ease: easeOutExpo }}
-          className="bg-elevated border border-border rounded-3xl overflow-hidden"
+          className="md:hidden space-y-2.5"
+        >
+          {rows.map((row) => (
+            <div
+              key={row.feature}
+              className="bg-elevated border border-border rounded-2xl p-4"
+            >
+              <div className="text-sm font-semibold text-white mb-3.5">
+                {row.feature}
+              </div>
+              <div className="space-y-2">
+                <MobileRow
+                  cell={row.cb}
+                  label="ClubBeans"
+                  highlight
+                />
+                <MobileRow cell={row.timeleft} label="Abonelikli akşam yemeği" blurred />
+                <MobileRow cell={row.meetup} label="Global meetup platformu" blurred />
+                <MobileRow cell={row.tinder} label="Flört odaklı IRL" blurred />
+              </div>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Tablet+: tam tablo */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-10%' }}
+          transition={{ duration: 0.8, ease: easeOutExpo }}
+          className="hidden md:block bg-elevated border border-border rounded-3xl overflow-hidden"
         >
           <div className="overflow-x-auto">
             <table className="w-full min-w-[640px]">
@@ -234,5 +265,45 @@ export default function Compare() {
         </p>
       </div>
     </section>
+  );
+}
+
+function MobileRow({
+  cell,
+  label,
+  highlight = false,
+  blurred = false,
+}: {
+  cell: Val;
+  label: string;
+  highlight?: boolean;
+  blurred?: boolean;
+}) {
+  return (
+    <div
+      className={`flex items-center justify-between gap-3 py-1.5 px-2 rounded-lg ${
+        highlight ? 'bg-acid/[0.04] border border-acid/20' : ''
+      }`}
+    >
+      <span
+        className={`text-xs truncate ${
+          highlight ? 'text-acid font-semibold' : 'text-zinc-400'
+        }`}
+        style={
+          blurred
+            ? {
+                filter: 'blur(3.5px)',
+                textShadow: '0 0 6px rgba(255,255,255,0.08)',
+              }
+            : undefined
+        }
+        aria-hidden={blurred ? 'true' : undefined}
+      >
+        {label}
+      </span>
+      <span className="flex-shrink-0">
+        <Cell val={cell} />
+      </span>
+    </div>
   );
 }

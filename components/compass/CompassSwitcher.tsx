@@ -13,7 +13,7 @@ export default function CompassSwitcher() {
         Bu akşam nasıl hissediyorsun? <span className="text-zinc-700">· Compass</span>
       </span>
       <div
-        className="inline-flex items-center gap-1 p-1 bg-white/[0.03] border rounded-full transition-colors duration-500"
+        className="inline-flex items-center gap-0.5 p-1 bg-white/[0.03] border rounded-full transition-colors duration-500 self-start max-w-full"
         style={{ borderColor: `${color.accent}30` }}
       >
         {keys.map((k) => {
@@ -25,7 +25,7 @@ export default function CompassSwitcher() {
               type="button"
               onClick={() => setMode(k)}
               aria-pressed={active}
-              className={`relative px-3.5 py-2 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider transition ${
+              className={`relative px-2.5 md:px-3.5 py-1.5 md:py-2 rounded-full text-[10.5px] md:text-[11px] font-mono font-bold uppercase tracking-wider transition whitespace-nowrap ${
                 active ? 'text-midnight' : 'text-zinc-400 hover:text-white'
               }`}
               title={c.hint}
@@ -38,9 +38,9 @@ export default function CompassSwitcher() {
                   transition={{ type: 'spring', stiffness: 340, damping: 28 }}
                 />
               )}
-              <span className="relative flex items-center gap-1.5">
+              <span className="relative flex items-center gap-1 md:gap-1.5">
                 <span
-                  className="w-1.5 h-1.5 rounded-full transition-transform"
+                  className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full transition-transform"
                   style={{
                     backgroundColor: active ? 'rgba(5,5,5,0.7)' : c.accent,
                     transform: active ? 'scale(1.3)' : 'scale(1)',

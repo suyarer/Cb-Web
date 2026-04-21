@@ -57,7 +57,7 @@ export default function FoundersNote() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.9, delay: 0.15 }}
-            className="prose-like space-y-6 text-lg md:text-xl text-zinc-300 leading-relaxed"
+            className="prose-like space-y-5 md:space-y-6 text-base md:text-xl text-zinc-300 leading-relaxed"
           >
             <p>
               Telefonunda onlarca uygulama var. Hepsi seni geri çağırıyor. Hepsi
@@ -85,20 +85,22 @@ export default function FoundersNote() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="mt-12 flex items-center gap-4"
+            className="mt-10 md:mt-12 flex items-center gap-3 md:gap-4"
           >
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-acid to-emerald-500 flex items-center justify-center text-midnight font-black">
+            <div className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-acid to-emerald-500 flex items-center justify-center text-midnight font-black flex-shrink-0">
               CB
             </div>
-            <div>
-              <div className="text-sm font-semibold text-white">
+            <div className="min-w-0">
+              <div className="text-sm font-semibold text-white truncate">
                 ClubBeans kurucu ekibi
               </div>
-              <div className="text-xs text-zinc-500 font-mono">
+              <div className="text-[11px] md:text-xs text-zinc-500 font-mono truncate">
                 İstanbul · Cumartesi 23:47
               </div>
             </div>
-            <span className="ml-auto text-zinc-700 text-2xl font-serif italic">—</span>
+            <span className="ml-auto text-zinc-700 text-2xl font-serif italic flex-shrink-0">
+              —
+            </span>
           </motion.div>
         </div>
       </div>

@@ -126,46 +126,49 @@ function ClubDashboard() {
   return (
     <div className="relative bg-elevated border border-border rounded-3xl overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)]">
       {/* Toolbar */}
-      <div className="flex items-center gap-2 px-4 py-3 bg-midnight/60 border-b border-white/[0.06]">
-        <div className="flex gap-1.5">
+      <div className="flex items-center gap-2 px-3 md:px-4 py-3 bg-midnight/60 border-b border-white/[0.06]">
+        <div className="flex gap-1.5 flex-shrink-0">
           <span className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
           <span className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
           <span className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
         </div>
-        <div className="flex-1 text-center text-[10px] font-mono text-zinc-600">
-          clubbeans.com/host/ai-girisimcileri
+        <div className="flex-1 text-center text-[9.5px] md:text-[10px] font-mono text-zinc-600 truncate">
+          <span className="hidden sm:inline">clubbeans.com/host/ai-girisimcileri</span>
+          <span className="sm:hidden">clubbeans.com/host/…</span>
         </div>
-        <span className="text-[10px] font-mono text-acid flex items-center gap-1">
+        <span className="text-[10px] font-mono text-acid flex items-center gap-1 flex-shrink-0">
           <span className="w-1.5 h-1.5 rounded-full bg-acid animate-pulse" />
           CANLI
         </span>
       </div>
 
       {/* Header */}
-      <div className="p-6 md:p-7 border-b border-white/[0.05]">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-acid to-emerald-400 flex items-center justify-center text-midnight font-black text-sm">
+      <div className="p-5 md:p-7 border-b border-white/[0.05]">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-gradient-to-br from-acid to-emerald-400 flex items-center justify-center text-midnight font-black text-sm flex-shrink-0">
               AG
             </div>
-            <div>
-              <div className="text-sm font-bold text-white">AI Girişimcileri İstanbul</div>
-              <div className="text-[11px] text-zinc-500 font-mono">
-                247 tribe · kuruldu: 1 dk önce
+            <div className="min-w-0">
+              <div className="text-sm font-bold text-white truncate">
+                AI Girişimcileri İstanbul
+              </div>
+              <div className="text-[10.5px] text-zinc-500 font-mono truncate">
+                247 tribe · 1 dk önce
               </div>
             </div>
           </div>
           <button
             type="button"
-            className="text-[11px] bg-acid text-midnight font-bold px-3 py-1.5 rounded-full"
+            className="text-[10.5px] md:text-[11px] bg-acid text-midnight font-bold px-2.5 md:px-3 py-1.5 rounded-full whitespace-nowrap flex-shrink-0"
           >
-            + Yeni Bean
+            + Bean
           </button>
         </div>
       </div>
 
       {/* Upcoming Bean */}
-      <div className="p-6 md:p-7 space-y-4">
+      <div className="p-5 md:p-7 space-y-4">
         <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">
           Sıradaki Bean
         </div>
