@@ -15,7 +15,7 @@ export default function FooterLegal() {
             <p className="text-sm text-zinc-500 max-w-sm leading-relaxed">
               Anti-platform topluluk uygulaması.
               <br />
-              Türkiye&apos;den dünyaya — Cumartesi akşamlarını geri vermek için.
+              Türkiye&apos;de yapıldı — Cumartesi akşamlarını geri vermek için.
             </p>
           </div>
 

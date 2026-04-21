@@ -118,7 +118,7 @@ export default function TrustScore() {
               transition={{ duration: 0.6 }}
               className="text-xs uppercase tracking-[0.3em] text-acid mb-6 font-mono"
             >
-              TrustScore · güveni ölçen sessiz sistem
+              TrustScore · masaya oturan kim
             </motion.div>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -127,9 +127,9 @@ export default function TrustScore() {
               transition={{ duration: 0.8, ease: easeOutExpo }}
               className="text-section font-bold tracking-tight text-white mb-6"
             >
-              Güven, takipçi sayısı değildir.
+              Güven, takipçi sayısıyla ölçülmez.
               <br />
-              <span className="text-zinc-500">Tuttuğun sözlerin toplamıdır.</span>
+              <span className="text-zinc-500">Geldiğin masaların sayısıyla ölçülür.</span>
             </motion.h2>
             <motion.p
               initial={{ opacity: 0 }}
@@ -138,9 +138,10 @@ export default function TrustScore() {
               transition={{ duration: 0.8, delay: 0.1 }}
               className="text-lg text-zinc-400 leading-relaxed mb-10 max-w-xl"
             >
-              Herkes <span className="text-white">75</span>&apos;ten başlar. Gittiğin her
-              Bean, düzenlediğin her masa, tuttuğun her söz puanına eklenir. Yarım
-              bıraktığında düşer. Kim kiminle ne yaptı — şeffaf, karşılıklı, gerçek.
+              Herkes <span className="text-white">75</span>&apos;ten başlar. &quot;Gelirim&quot;
+              dediğin Bean&apos;e gittiğinde, düzenlediğin masa tam olduğunda, bir
+              tribe üyesi seni adıyla referans verdiğinde puanın yükselir. Son
+              dakika iptalde düşer. Masaya oturan herkesin izi şeffaftır.
             </motion.p>
 
             <div className="space-y-2 mb-10">
@@ -173,12 +174,13 @@ export default function TrustScore() {
               className="bg-elevated border border-border rounded-2xl p-6"
             >
               <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 mb-2">
-                Sonuç
+                Neden önemli
               </div>
               <p className="text-white leading-relaxed">
                 Rastgele tanışma değil, <span className="text-acid">curated network</span>.
-                Masana oturan insanın izi bellidir — bu yüzden Bean sohbete,
-                sohbet ilişkiye, ilişki ortak işe dönüşebilir.
+                Karşındaki sandalyeye oturan insan tesadüf değil — bu yüzden Bean
+                sohbete, sohbet dostluğa, bazen ortak işe dönüşür. Randevusu tutulan
+                insanlarla masadasın.
               </p>
             </motion.div>
           </div>

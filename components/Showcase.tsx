@@ -58,7 +58,7 @@ export default function Showcase() {
             viewport={{ once: true }}
             className="text-xs uppercase tracking-[0.3em] text-acid mb-6 font-mono"
           >
-            Uygulamada
+            İçinde neler var
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -67,9 +67,9 @@ export default function Showcase() {
             transition={{ duration: 0.8 }}
             className="text-section font-bold tracking-tight"
           >
-            Az ekran,
+            Dört ekran.
             <br />
-            <span className="text-zinc-500">çok hayat.</span>
+            <span className="text-zinc-500">Beşincisi zaten dışarıda.</span>
           </motion.h2>
         </div>
 

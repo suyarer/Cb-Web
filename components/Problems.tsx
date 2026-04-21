@@ -7,23 +7,23 @@ const problems = [
   {
     n: '01',
     cta: 'Yakında Bul',
-    pain: 'İki sokak ötende aynı kitabı okuyan biri var. Aynı saatte koşuyor, aynı pitch\'i dinliyor. Haberin olmuyor.',
+    pain: '"Bu akşam n\'aparız?" — WhatsApp\'a yazdın. 12 kişi okudu. Kimse yazmadı. Cumartesi yine boş geçti. Oysa iki sokak ötende aynı kahveyi içen, aynı kitabı okuyan biri vardı.',
     solution:
-      'Senin yürüme mesafende şehir ne yapıyor — tek ekranda. Saat, yer, vibe; filtreyi sen kurarsın. Algoritma değil.',
+      'Radar\'ı aç — yürüme mesafendeki Beans\'ler tek ekranda. Saat, yer, vibe; filtreyi sen kurarsın. Algoritma seni beslemez; şehir sana el uzatır.',
   },
   {
     n: '02',
     cta: 'Birlikte Yap',
-    pain: 'Tüm gün sosyal medyadaydın. 284 like, 43 yorum, 0 insan. Dijital kalabalık, fiziksel yalnızlık — çağın hastalığı.',
+    pain: 'Bugün 284 like aldın. 43 yorum yazdın. Hikaye attın, story\'ye cevap verdin. 0 kişiyle masaya oturmadın. Ekranda kalabalık, hayatta yalnız — işte Sosyal Obezite.',
     solution:
-      'Bean dijital değil, fiziksel. Ekrana değil masaya otururuz. 4 saat, belli bir yer, belli insanlar — başı sonu belli bir buluşma.',
+      'Bean dijital bir "etkinlik" değil; 4 saat, belli bir masa, belli yüzler. Jump In dersin, ekrandan inersin, sohbete oturursun. Uygulama kapanır, akşam başlar.',
   },
   {
     n: '03',
     cta: 'Kolay Kur',
-    pain: 'Kendi kulübünü açmak için bir WhatsApp grup, bir Instagram hesap, bir Eventbrite sayfa. Üçü de yarım, hiçbiri bağlı değil.',
+    pain: 'Kendi kulübünü açmak istedin: WhatsApp grup — 40 sessiz üye. Instagram hesap — 12 takipçi. Eventbrite denedin — biletsiz kaldı. Üç uygulama, hiçbir yere varamıyor.',
     solution:
-      'Club\'ı bir dakikada kurarsın. Bean açarsın, davet edersin, TrustScore güveni korur. Üç uygulama değil — bir ekran.',
+      'Club\'ını ClubBeans\'te bir dakikada kurarsın. Bean açar, davet eder, TrustScore ile güveni korursun. Üç uygulama yok; bir ekran, bir akış, bir topluluk.',
   },
 ];
 
@@ -39,7 +39,7 @@ export default function Problems() {
             transition={{ duration: 0.6 }}
             className="text-xs uppercase tracking-[0.3em] text-acid mb-6 font-mono"
           >
-            Çözdüğümüz üç şey
+            Tanıdık mı geliyor?
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -48,9 +48,9 @@ export default function Problems() {
             transition={{ duration: 0.8, ease: easeOutExpo }}
             className="text-section font-bold tracking-tight text-white"
           >
-            Şehirli yalnızlığın
+            Aynı dert,
             <br />
-            <span className="text-zinc-500">üç somut belirtisi var.</span>
+            <span className="text-zinc-500">üç farklı sahne.</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
@@ -59,9 +59,10 @@ export default function Problems() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mt-6 text-zinc-400 max-w-2xl"
           >
-            Şehirde çalışan, işini kendi yürüten, geceleri yorgun dönen herkesin
-            derdi aynı: çok tanıdık, az yakın. Cumartesi boş. ClubBeans bu üç şeyi
-            konu ediyor — hepsi birden.
+            Plan yapamadığın Cumartesiler. 12 kişiye yazılıp yanıt gelmeyen
+            WhatsApp mesajları. 284 like&apos;la biten, 0 insanla süren günler.
+            Aşağıdaki üç sahne sana tanıdık geliyorsa ClubBeans tam da sana
+            yazıldı.
           </motion.p>
         </div>
 
@@ -81,13 +82,13 @@ export default function Problems() {
                 </div>
                 <div>
                   <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 mb-3">
-                    Sorun
+                    Bu sahne
                   </div>
                   <p className="text-lg md:text-xl text-zinc-400 leading-snug">{p.pain}</p>
                 </div>
                 <div className="relative md:border-l md:border-white/[0.06] md:pl-10">
                   <div className="text-[10px] font-mono uppercase tracking-wider text-acid mb-3">
-                    Bizim çözümümüz
+                    ClubBeans nasıl değiştirir
                   </div>
                   <p className="text-lg md:text-xl text-white leading-snug mb-4">{p.solution}</p>
                   <span className="inline-flex items-center gap-2 bg-acid/10 border border-acid/30 text-acid text-xs font-semibold rounded-full px-3 py-1">

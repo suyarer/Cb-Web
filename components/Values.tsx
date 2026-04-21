@@ -39,7 +39,7 @@ export default function Values() {
             transition={{ duration: 0.6 }}
             className="text-xs uppercase tracking-[0.3em] text-acid mb-6 font-mono"
           >
-            İlkelerimiz
+            Söz verdiklerimiz
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -48,9 +48,9 @@ export default function Values() {
             transition={{ duration: 0.8, ease: easeOutExpo }}
             className="text-section font-bold tracking-tight text-white"
           >
-            Dört ilke,
+            Dört söz,
             <br />
-            <span className="text-zinc-500">tek bir yön.</span>
+            <span className="text-zinc-500">Cumartesinde karşılığı var.</span>
           </motion.h2>
         </div>
 

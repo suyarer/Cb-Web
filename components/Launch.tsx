@@ -17,18 +17,19 @@ export default function Launch() {
           className="max-w-3xl mx-auto text-center"
         >
           <div className="text-xs uppercase tracking-[0.3em] text-acid mb-6 font-mono">
-            2026 Q2 · Yakında
+            2026 Q2 · Lansman yakın
           </div>
 
           <h2 className="text-display font-bold tracking-tight mb-6">
-            <span className="text-gradient-acid">Lansman</span>
-            <br className="md:hidden" /> ilk senden haberdar olsun.
+            <span className="text-gradient-acid">Lansmanı</span>
+            <br className="md:hidden" /> ilk sen duy.
           </h2>
 
           <p className="text-lg text-zinc-400 max-w-xl mx-auto mb-12">
-            Pazarlama sosu yok. Spam yok. Dikkatini çalmayacağımıza söz verdik —
-            ve manifestodan başka söze inanmıyoruz. Lansman günü tek mail,
-            tek link, tek davet kodu. Sonra sus.
+            Haftalık newsletter yok. Pazarlama dizisi yok. Spam yok. Dikkatini
+            çalmayacağımıza söz verdik — ve söz vermeyi ciddiye alıyoruz.
+            Lansman günü tek mail, tek link, tek davet kodu. Gerisi senin
+            akşamın.
           </p>
 
           {/* Store badges — disabled */}
@@ -49,7 +50,7 @@ export default function Launch() {
               </span>
             </a>
             <p className="mt-5 text-xs text-zinc-600">
-              Mail gönderirsin, listeye alırız. Tek istediğimiz bu.
+              Mail gönderirsin, listeye alırız. Sözümüz bu kadar.
             </p>
           </div>
         </motion.div>

@@ -99,7 +99,7 @@ export default function Features() {
             transition={{ duration: 0.6 }}
             className="text-xs uppercase tracking-[0.3em] text-acid mb-6 font-mono"
           >
-            Neler sunuyoruz
+            Cumartesi akşamını geri vermenin yolları
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -108,9 +108,9 @@ export default function Features() {
             transition={{ duration: 0.8, ease: easeOutExpo }}
             className="text-section font-bold tracking-tight text-white"
           >
-            Üç söz,
+            Üç söz tutmak için,
             <br />
-            <span className="text-zinc-500">altı sessiz mekanizma.</span>
+            <span className="text-zinc-500">altı sessiz özellik.</span>
           </motion.h2>
         </div>
 

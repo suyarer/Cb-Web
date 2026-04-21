@@ -7,23 +7,23 @@ const steps = [
   {
     n: '01',
     key: 'Keşfet',
-    title: 'Radar\'ı aç. Yakınını gör.',
+    title: 'Aç. Yakının görsün.',
     body:
-      'Yürüme mesafende ne oluyor? Saat, yer, vibe — filtreyi sen kurarsın. Algoritma seni beslemez; şehir sana konuşur.',
+      '"Nerede n\'apılır?" sorusunu algoritmaya değil, kendi filtrene sorarsın. Saat, mesafe, vibe — neyi arıyorsan onu, gerçekten yakınında, gerçekten bu akşam.',
   },
   {
     n: '02',
     key: 'Jump In',
-    title: 'Tek dokunuş. Yer senin.',
+    title: 'Tıkla. Yerin hazır.',
     body:
-      'Form yok. Mail beklemek yok. Beğendiğin Bean\'e Jump In dersin — host TrustScore\'unu görür, sen de kimlerin masaya oturduğunu.',
+      'Form yok. "Mail attık, cevap bekliyoruz" yok. Beğendiğin Bean\'e Jump In dersin — host TrustScore\'unu görür, sen de kimlerle oturacağını. Masa bağlanır.',
   },
   {
     n: '03',
     key: 'Yaşa',
-    title: 'Ekranı bırak. Sohbete geç.',
+    title: 'Uygulamayı kapat.',
     body:
-      '4 saat. Bir masa. Gerçek yüzler. Bean biter, TrustScore güncellenir, bir sonraki davet daha yakın gelir. Uygulamadan hayata.',
+      '4 saat, belli bir mekan, belli yüzler. Ne algoritma ne push bildirimi — bu aralıkta sen orada olacaksın, başka hiçbir yerde. Başarımız, senin uygulamayı unuttuğun dakikalar.',
   },
 ];
 
@@ -39,7 +39,7 @@ export default function HowItWorks() {
             transition={{ duration: 0.6 }}
             className="text-xs uppercase tracking-[0.3em] text-acid mb-6 font-mono"
           >
-            Nasıl çalışır
+            Üç dokunuş, tek akşam
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -48,9 +48,9 @@ export default function HowItWorks() {
             transition={{ duration: 0.8, ease: easeOutExpo }}
             className="text-section font-bold tracking-tight text-white"
           >
-            Keşfet, Jump In,
+            Uygulamayı kapatana kadar,
             <br />
-            <span className="text-zinc-500">sonra yaşa.</span>
+            <span className="text-zinc-500">üç adım.</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
@@ -59,8 +59,8 @@ export default function HowItWorks() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mt-6 text-zinc-400 max-w-2xl"
           >
-            Üç adım. Toplam bir dakika. Dördüncü adım zaten uygulamanın dışında —
-            masan, parkın, stüdyon.
+            Bir dakikan yeter. Radar&apos;a bak, Jump In de, telefonu masanın yanına
+            koy. Dördüncü adım zaten uygulamanın dışında: kendi akşamın.
           </motion.p>
         </div>
 

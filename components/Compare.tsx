@@ -119,7 +119,7 @@ export default function Compare() {
             transition={{ duration: 0.6 }}
             className="text-xs uppercase tracking-[0.3em] text-acid mb-6 font-mono"
           >
-            Farkı nerede yatar
+            Neden başka bir uygulamaya daha ihtiyacın var?
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -128,9 +128,9 @@ export default function Compare() {
             transition={{ duration: 0.8, ease: easeOutExpo }}
             className="text-section font-bold tracking-tight text-white"
           >
-            Benzer değiliz,
+            Yok, yok.
             <br />
-            <span className="text-zinc-500">karşıt kategoriyiz.</span>
+            <span className="text-zinc-500">Aynı raf değiliz.</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
@@ -139,9 +139,10 @@ export default function Compare() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mt-6 text-zinc-400 max-w-2xl"
           >
-            Aynı rafa koyulmayı reddediyoruz. Onlar bağ kurma uygulaması; biz
-            anti-platformuz. Abonelik yok, algoritma dayatmıyoruz, güveni
-            ölçebiliyoruz, Türkiye&apos;yi biliyoruz.
+            Batılı uygulamalar abonelik satar, global platformlar organizatör
+            ücreti ister, flört uygulamaları eşleştirir. Biz ücretsiz kalırız,
+            algoritmayı sana bırakırız, güveni TrustScore ile ölçeriz. Türkiye için
+            tasarlandık — aynı raf değiliz.
           </motion.p>
         </div>
 

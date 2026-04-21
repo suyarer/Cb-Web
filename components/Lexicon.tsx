@@ -83,9 +83,9 @@ export default function Lexicon() {
             transition={{ duration: 0.8, ease: easeOutExpo }}
             className="text-section font-bold tracking-tight"
           >
-            Yeni dil,
+            Yeni davranış,
             <br />
-            <span className="text-zinc-500">yeni topluluk kodları.</span>
+            <span className="text-zinc-500">yeni kelime getirir.</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
@@ -94,9 +94,9 @@ export default function Lexicon() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-zinc-400 mt-6 max-w-2xl"
           >
-            Kullanıcı, takipçi, etkinlik, bildirim — bunlar dikkat ekonomisinin
-            kelimeleri. Yeni davranış yeni kelime ister. ClubBeans farklı bir
-            sözlükle konuşur.
+            &quot;Kullanıcı&quot;, &quot;takipçi&quot;, &quot;etkinlik&quot;, &quot;bildirim&quot; — bunlar Silikon
+            Vadisi sözlüğü, dikkat ekonomisinin kelimeleri. Farklı davranmak
+            istiyorsak farklı konuşmamız gerek.
           </motion.p>
         </div>
 

@@ -95,10 +95,10 @@ export default function Hero() {
               custom={2}
               className="text-lg md:text-xl text-zinc-400 max-w-xl leading-relaxed mb-8"
             >
-              ClubBeans bir uygulama değil, bir anti-platformdur. Diğerleri
-              dikkatini çalar; biz Cumartesi akşamını geri veririz. Ekrandan
-              masaya, kaydırmadan sohbete — <strong className="text-white">Sosyal Obezite</strong>
-              &apos;ye karşı senin tarafındayız.
+              &quot;Bu akşam n&apos;aparız?&quot; sorusunun boşa düştüğü, planların WhatsApp&apos;ta
+              sönüp gittiği şehirde — ClubBeans bir uygulama değil, bir anti-platform.
+              Dikkatini çalmaz; Cumartesi akşamını sana geri getirir. Ekrandan masaya,
+              kaydırmadan sohbete.
             </motion.p>
 
             <motion.div

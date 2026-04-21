@@ -53,8 +53,10 @@ export default function Manifesto() {
             transition={{ duration: 0.8, delay: 0.15, ease: easeOutExpo }}
             className="text-lg md:text-xl text-zinc-400 max-w-3xl leading-relaxed mb-20"
           >
-            Dijital çağın getirdiği <strong className="text-white">Sosyal Obezite</strong>&apos;ye
-            — çok kaydırma, az yaşama — karşı, kodla inşa edilmiş bir dalgakıran.
+            Elinde telefon, içinde bir boşluk. &quot;Bir şey eksik&quot; hissi — adını
+            koyamadığın o eksik. Biz buna{' '}
+            <strong className="text-white">Sosyal Obezite</strong> diyoruz: çok like,
+            az masa. ClubBeans bu hissin karşısına dikilmiş bir dalgakıran.
           </motion.p>
 
           <div className="grid md:grid-cols-2 gap-8 md:gap-16 mb-20">
