@@ -25,7 +25,7 @@ export default function TermsPage() {
 
           <h2>1. Tanımlar</h2>
           <ul>
-            <li><strong>Bean:</strong> Uygulamada oluşturulan 4 saatlik etkinlik</li>
+            <li><strong>Bean:</strong> Uygulamada oluşturulan, başı sonu belli fiziksel buluşma</li>
             <li><strong>Kabile:</strong> Bir Club&apos;ın üye topluluğu</li>
             <li><strong>Katıl:</strong> Bean&apos;e dahil olma aksiyonu</li>
             <li><strong>Signal:</strong> Uygulama içi ve push bildirimler</li>
@@ -58,7 +58,9 @@ export default function TermsPage() {
           <h2>4. Bean ve Bilet Kuralları</h2>
           <ul>
             <li>
-              <strong>Bean süresi:</strong> Tüm Bean&apos;ler 4 saat sabittir.
+              <strong>Bean süresi:</strong> Host tarafından belirlenir. Çakışmasız
+              tasarım ve katılımcı deneyimi için ortalama 3-4 saat önerilir; gerekli
+              durumlarda daha kısa veya uzun aralıklar tanımlanabilir.
             </li>
             <li>
               <strong>Kapasite:</strong> Her Bean&apos;in sınırlı katılımcı kapasitesi vardır. Dolduğunda

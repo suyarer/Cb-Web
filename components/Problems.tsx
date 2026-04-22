@@ -16,7 +16,7 @@ const problems = [
     cta: 'Birlikte Yap',
     pain: 'Bugün 284 like aldın. 43 yorum yazdın. Hikaye attın, story\'ye cevap verdin. 0 kişiyle masaya oturmadın. Ekranda kalabalık, hayatta yalnız — işte Sosyal Obezite.',
     solution:
-      'Bean dijital bir "etkinlik" değil; 4 saat, belli bir masa, belli yüzler. Katılırsın, ekrandan inersin, sohbete oturursun. Uygulama kapanır, akşam başlar.',
+      'Bean dijital bir "etkinlik" değil; başı sonu belli bir buluşma, belli bir masa, belli yüzler. Katılırsın, ekrandan inersin, sohbete oturursun. Uygulama kapanır, akşam başlar.',
   },
   {
     n: '03',

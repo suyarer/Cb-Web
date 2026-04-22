@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const faqs = [
   {
     q: 'ClubBeans nedir?',
-    a: 'ClubBeans, etkinlik odaklı anti-platform topluluk uygulamasıdır. Yakınındaki 4 saatlik samimi buluşmaları (Bean) keşfedebilir, kendi kulübünü kurabilir veya mevcut topluluklara katılabilirsin.',
+    a: 'ClubBeans, etkinlik odaklı anti-platform topluluk uygulamasıdır. Yakınındaki başı sonu belli, samimi buluşmaları (Bean) keşfedebilir, kendi kulübünü kurabilir veya mevcut topluluklara katılabilirsin.',
   },
   {
     q: 'App Store ve Google Play\'de mi?',

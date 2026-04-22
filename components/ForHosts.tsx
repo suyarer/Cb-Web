@@ -184,7 +184,7 @@ function ClubDashboard() {
               Seed Round Pitching · Moda
             </div>
             <div className="text-xs text-zinc-500 mb-3">
-              Moda Sahnesi · 4 saat · Kapasite 12
+              Moda Sahnesi · 20:00 — 23:30 · Kapasite 12
             </div>
 
             <div className="flex items-center justify-between">

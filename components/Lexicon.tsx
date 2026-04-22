@@ -8,7 +8,7 @@ const terms = [
     term: 'Bean',
     pron: '/biːn/',
     kind: 'isim',
-    def: '4 saatlik, başı sonu belli fiziksel buluşma. ClubBeans\'in kalbindeki aktivite birimi — kahve, koşu, pitch night, kitap sohbeti.',
+    def: 'Başı sonu belli fiziksel buluşma. ClubBeans\'in kalbindeki aktivite birimi — kahve, koşu, pitch night, kitap sohbeti. Süreyi host belirler; çakışmasız tasarım için ortalama birkaç saat önerilir.',
     ex: '"Cumartesi Kadıköy\'de bir Vinyl Night Bean\'i var."',
   },
   {

@@ -18,7 +18,7 @@ const values = [
   {
     big: { value: 4, suffix: ' sa', text: null },
     title: 'bir Bean sürer',
-    text: 'Başı belli, sonu belli. 4 saat; parkta koşu, masada sohbet, sahnede pitch. Ekrana değil masaya, yorum yapmaya değil yaşamaya zaman.',
+    text: 'Başı belli, sonu belli. Parkta koşu, masada sohbet, sahnede pitch. Ekrana değil masaya, yorum yapmaya değil yaşamaya zaman.',
   },
   {
     big: { value: 0, suffix: '', text: 'Trust' },

@@ -8,7 +8,7 @@ const features = [
     tag: 'Birlikte Yap',
     title: 'Bean',
     description:
-      '4 saat, başı sonu belli. Kahve, koşu, pitch night, kitap sohbeti — dijital etkinlik değil, fiziksel masa. Ekran değil, yüz yüze.',
+      'Başı sonu belli bir buluşma. Kahve, koşu, pitch night, kitap sohbeti — dijital etkinlik değil, fiziksel masa. Ekran değil, yüz yüze.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <path d="M12 2C7 7 7 12 12 17c5-5 5-10 0-15z" />

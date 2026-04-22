@@ -23,7 +23,7 @@ const steps = [
     key: 'Yaşa',
     title: 'Uygulamayı kapat.',
     body:
-      '4 saat, belli bir mekan, belli yüzler. Ne algoritma ne push bildirimi — bu aralıkta sen orada olacaksın, başka hiçbir yerde. Başarımız, uygulamayı unuttuğun o dakikalardır.',
+      'Belli bir saat, belli bir mekan, belli yüzler. Ne algoritma ne push bildirimi — bu aralıkta sen orada olacaksın, başka hiçbir yerde. Başarımız, uygulamayı unuttuğun o dakikalardır.',
   },
 ];
 

@@ -6,12 +6,12 @@ import { useState } from 'react';
 
 // Dönüşüm mantığı — ortalama rakamlar:
 // Ortalama post tarama: 1 dakikada ~12 post (feed scroll)
-// 1 Bean = 4 saat fiziksel zaman
+// 1 Bean ≈ ortalama 3-4 saatlik fiziksel zaman (çakışmasız tasarım)
 // 1 yürüyüş = 45 dk, ~3km
 // 1 sohbet = 20-40 dk
 function conversions(hours: number) {
   const postsScrolled = Math.round(hours * 60 * 12);
-  const beans = Math.round((hours / 4) * 10) / 10; // 1 ondalık
+  const beans = Math.round((hours / 3.5) * 10) / 10; // 1 ondalık (ortalama 3.5 saat)
   const walks = Math.round((hours * 60) / 45);
   const talks = Math.round((hours * 60) / 30);
 
