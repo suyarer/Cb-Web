@@ -11,7 +11,8 @@ const LINKS = [
   { href: '/#nasil-calisir', label: 'Bean bul' },
   { href: '/#club-kur', label: 'Club aç' },
   { href: '/#trustscore', label: 'TrustScore' },
-  { href: '/#karsilastirma', label: 'Fark' },
+  { href: '/#yol-haritasi', label: 'Yol haritası' },
+  { href: '/#sss', label: 'SSS' },
 ];
 
 export default function Nav() {

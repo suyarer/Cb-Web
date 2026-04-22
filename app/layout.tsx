@@ -4,6 +4,7 @@ import CompassTint from '@/components/compass/CompassTint';
 import CosyMode from '@/components/CosyMode';
 import CursorBean from '@/components/CursorBean';
 import ExitIntent from '@/components/ExitIntent';
+import { FAQS } from '@/lib/faqs';
 import GutterSprout from '@/components/GutterSprout';
 import LiveTicker from '@/components/LiveTicker';
 import ScrollRoots from '@/components/ScrollRoots';
@@ -103,6 +104,18 @@ const jsonLd = {
         'ClubBeans, şehrinde yakında olan fiziksel buluşmaları (Beans) keşfetmeni ve kendi Club\'ını kurmanı sağlar. TrustScore ile curated network.',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'TRY' },
       publisher: { '@id': 'https://clubbeans.com/#org' },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://clubbeans.com/#faq',
+      mainEntity: FAQS.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: f.a,
+        },
+      })),
     },
     {
       '@type': 'WebSite',
