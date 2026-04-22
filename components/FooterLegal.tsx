@@ -92,15 +92,39 @@ export default function FooterLegal() {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pt-8 border-t border-border">
+        {/* Sosyal medya — lansmanda açılacak */}
+        <div className="flex flex-wrap items-center gap-3 pt-8 pb-6 border-t border-border">
+          <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-600 mr-2">
+            Sosyal · yakında
+          </span>
+          <SocialIcon label="X (Twitter)" path="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+          <SocialIcon label="Instagram" path="M12 2.2c3.2 0 3.6 0 4.8.1 1.2 0 1.8.3 2.2.5.6.2 1 .5 1.4 1 .4.4.7.8 1 1.4.2.4.4 1 .5 2.2 0 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c0 1.2-.3 1.8-.5 2.2-.2.6-.5 1-1 1.4-.4.4-.8.7-1.4 1-.4.2-1 .4-2.2.5-1.2 0-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2 0-1.8-.3-2.2-.5-.6-.2-1-.5-1.4-1-.4-.4-.7-.8-1-1.4-.2-.4-.4-1-.5-2.2 0-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c0-1.2.3-1.8.5-2.2.2-.6.5-1 1-1.4.4-.4.8-.7 1.4-1 .4-.2 1-.4 2.2-.5 1.2 0 1.6-.1 4.8-.1zm0 2c-3.2 0-3.5 0-4.7.1-1.1 0-1.7.2-2.1.4-.5.2-.9.5-1.3.8-.3.4-.6.8-.8 1.3-.1.4-.3 1-.4 2.1 0 1.2-.1 1.5-.1 4.7s0 3.5.1 4.7c0 1.1.2 1.7.4 2.1.2.5.5.9.8 1.3.4.3.8.6 1.3.8.4.1 1 .3 2.1.4 1.2 0 1.5.1 4.7.1s3.5 0 4.7-.1c1.1 0 1.7-.2 2.1-.4.5-.2.9-.5 1.3-.8.3-.4.6-.8.8-1.3.1-.4.3-1 .4-2.1 0-1.2.1-1.5.1-4.7s0-3.5-.1-4.7c0-1.1-.2-1.7-.4-2.1-.2-.5-.5-.9-.8-1.3-.4-.3-.8-.6-1.3-.8-.4-.1-1-.3-2.1-.4-1.2 0-1.5-.1-4.7-.1zm0 3.4a5.4 5.4 0 110 10.8 5.4 5.4 0 010-10.8zm0 2a3.4 3.4 0 100 6.8 3.4 3.4 0 000-6.8zm6.9-2.3a1.3 1.3 0 11-2.6 0 1.3 1.3 0 012.6 0z" />
+          <SocialIcon label="LinkedIn" path="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.56V9h3.56z" />
+        </div>
+
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pt-6 border-t border-border">
           <div className="text-xs text-zinc-600">
             © {new Date().getFullYear()} ClubBeans · dikkatini çalmadan.
           </div>
-          <div className="text-[10px] font-mono text-zinc-700 italic">
+          <div className="text-[10px] font-mono text-zinc-500 italic">
             &quot;Ekran süresi değil, yaşam süresi.&quot;
           </div>
         </div>
       </div>
     </footer>
+  );
+}
+
+function SocialIcon({ label, path }: { label: string; path: string }) {
+  return (
+    <span
+      aria-label={`${label} · yakında`}
+      title={`${label} — lansman ile birlikte aktif`}
+      className="w-9 h-9 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center text-zinc-500 hover:text-zinc-300 hover:border-white/20 transition cursor-not-allowed"
+    >
+      <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4" aria-hidden>
+        <path d={path} />
+      </svg>
+    </span>
   );
 }

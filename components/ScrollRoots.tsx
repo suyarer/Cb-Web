@@ -33,7 +33,7 @@ export default function ScrollRoots() {
   return (
     <div
       aria-hidden
-      className="block fixed top-0 left-1.5 md:left-4 lg:left-6 h-screen w-3 md:w-4 z-[3] pointer-events-none"
+      className="hidden md:block fixed top-0 left-4 lg:left-6 h-screen w-4 z-[3] pointer-events-none"
     >
       <div className="relative h-full w-full flex flex-col items-center justify-start">
         {/* Tohum — üstte */}

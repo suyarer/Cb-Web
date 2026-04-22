@@ -11,7 +11,7 @@ export default function CompassSwitcher() {
     <div className="inline-flex flex-col gap-2.5">
       <span className="text-[10px] font-mono uppercase tracking-[0.2em] md:tracking-[0.25em] text-zinc-500">
         Bu akşam nasıl hissediyorsun?{' '}
-        <span className="text-zinc-700">· Compass</span>
+        <span className="text-zinc-600">· Compass</span>
       </span>
       <div
         className="inline-flex items-center p-1 bg-white/[0.03] border rounded-full transition-colors duration-500 self-start"
@@ -26,7 +26,7 @@ export default function CompassSwitcher() {
               type="button"
               onClick={() => setMode(k)}
               aria-pressed={active}
-              className={`relative px-3 py-2 min-h-[36px] rounded-full text-[10.5px] font-mono font-bold uppercase tracking-wider transition-colors whitespace-nowrap ${
+              className={`relative px-3 py-2 min-h-[44px] rounded-full text-[10.5px] font-mono font-bold uppercase tracking-wider transition-colors whitespace-nowrap ${
                 active ? 'text-midnight' : 'text-zinc-400 hover:text-white'
               }`}
               title={c.hint}

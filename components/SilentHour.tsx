@@ -187,7 +187,7 @@ export default function SilentHour() {
               </div>
 
               {/* Kapanış ipucu — minimal alt bilgi */}
-              <div className="mt-16 md:mt-20 text-[10px] font-mono text-zinc-700 tracking-wider">
+              <div className="mt-16 md:mt-20 text-[10px] font-mono text-zinc-500 tracking-wider">
                 tıkla · veya · esc
               </div>
             </div>

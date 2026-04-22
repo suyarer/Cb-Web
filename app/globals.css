@@ -47,12 +47,12 @@
 @layer components {
   .container-x {
     @apply max-w-7xl mx-auto px-5 md:px-10;
-    /* Yan şeritler (GutterSprout sağda, ScrollRoots solda) için ek nefes */
-    padding-left: calc(1.25rem + 0.75rem);
+    /* Mobil'de sadece sağ kenarda GutterSprout var — sol full padding */
     padding-right: calc(1.25rem + 0.75rem);
   }
   @media (min-width: 768px) {
     .container-x {
+      /* Desktop: iki tarafta yan şerit — her ikisine ek nefes */
       padding-left: 2.5rem;
       padding-right: 2.5rem;
     }
