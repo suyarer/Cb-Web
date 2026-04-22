@@ -36,17 +36,8 @@ export default function KabileTicker() {
         </div>
       </div>
 
-      {/* Üst satır — soldan sağa */}
-      <TickerRow items={CLUBS} direction="ltr" duration={reduced ? 0 : 42} />
-
-      {/* Alt satır — sağdan sola (ters) — offset ile farklı kulüp başlar */}
-      <div className="mt-4">
-        <TickerRow
-          items={[...CLUBS.slice(4), ...CLUBS.slice(0, 4)]}
-          direction="rtl"
-          duration={reduced ? 0 : 48}
-        />
-      </div>
+      {/* Tek satır — soldan sağa, sonsuz kaydırma */}
+      <TickerRow items={CLUBS} direction="ltr" duration={reduced ? 0 : 44} />
     </section>
   );
 }

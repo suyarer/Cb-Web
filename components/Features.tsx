@@ -5,20 +5,6 @@ import { motion } from 'framer-motion';
 
 const features = [
   {
-    tag: 'Yakında Bul',
-    title: 'Radar',
-    description:
-      'Bu akşam şehrin ne yapıyor? Harita, mesafe, saat, vibe — tek ekran. Algoritma yok; filtreyi sen kurarsın, şehir sana konuşur.',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
-        <circle cx="12" cy="12" r="9" />
-        <circle cx="12" cy="12" r="5" />
-        <circle cx="12" cy="12" r="1.5" fill="currentColor" />
-      </svg>
-    ),
-    accent: 'from-acid/20 via-transparent to-transparent',
-  },
-  {
     tag: 'Birlikte Yap',
     title: 'Bean',
     description:
@@ -35,7 +21,7 @@ const features = [
     tag: 'Kolay Kur',
     title: 'Club',
     description:
-      'Kendi kulübünü bir dakikada kurarsın. "AI Girişimcileri", "Moda Koşu Kulübü" — dikey seç, Bean aç, davet et. Üç uygulama yok; bir ekran var.',
+      '"AI Girişimcileri", "Moda Koşu Kulübü" — dikey seç, isim ver, kabilen dolsun. Kurmak bir dakika; yönetmek bir ekran.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <circle cx="9" cy="8" r="3" />
@@ -47,23 +33,10 @@ const features = [
     accent: 'from-pink-500/20 via-transparent to-transparent',
   },
   {
-    tag: 'Ruh halin',
-    title: 'Compass Mode',
-    description:
-      'Bu akşam DENGE mi, COŞKU mu, SAKİN mi, YAKIN mı? Seçersin — keşif o ruh haline hizalanır, uygulama tonu değişir. Kategori değil, atmosfer. Sadece bu gece için.',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
-        <circle cx="12" cy="12" r="9" />
-        <path d="M12 7l3 5-3 5-3-5 3-5z" />
-      </svg>
-    ),
-    accent: 'from-amber-500/20 via-transparent to-transparent',
-  },
-  {
     tag: 'Tek dokunuş',
     title: 'Katıl',
     description:
-      'Tek kelime, tek tıklama. Form yok, mail beklemek yok, onay sıran yok — beğenirsin, katılırsın, Cumartesi yerin hazır.',
+      'Bir ikonun rengi değiştiğinde yerin ayrılır. Sıralama yok, onay sayfası yok. Beğenirsin, katılırsın, Cumartesi masan hazır.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
         <path d="M5 12h14" />
@@ -108,9 +81,9 @@ export default function Features() {
             transition={{ duration: 0.8, ease: easeOutExpo }}
             className="text-section font-bold tracking-tight text-white"
           >
-            Üç vaat,
+            Dört mekanizma,
             <br />
-            <span className="text-zinc-500">altı sessiz mekanizma.</span>
+            <span className="text-zinc-500">tek söz: sessiz durur.</span>
           </motion.h2>
         </div>
 

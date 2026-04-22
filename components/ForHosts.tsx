@@ -64,10 +64,8 @@ export default function ForHosts() {
               transition={{ duration: 0.8, delay: 0.15 }}
               className="text-lg text-zinc-400 leading-relaxed mb-10 max-w-xl"
             >
-              Bir topluluk kurmak isteyenin kafasında üç uygulama vardır: WhatsApp
-              grup, Instagram hesap, Eventbrite sayfa. Hiçbiri tam değil, hiçbiri
-              birbirine bağlı değil. ClubBeans tek ekranda açar, davet eder, korur —
-              topluluk yönetmek artık parçalı değil, bütünsel bir iş.
+              Topluluk yönetmenin dağıtıcı yüzüne son. ClubBeans tek ekranda açar,
+              davet eder, korur. Artık yorucu bir proje değil — kurucu bir iş.
             </motion.p>
 
             <div className="space-y-6 mb-10">

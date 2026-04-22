@@ -8,7 +8,6 @@ import Hero from '@/components/Hero';
 import HowItWorks from '@/components/HowItWorks';
 import KabileTicker from '@/components/KabileTicker';
 import Launch from '@/components/Launch';
-import Lexicon from '@/components/Lexicon';
 import LonelinessQuiz from '@/components/LonelinessQuiz';
 import Manifesto from '@/components/Manifesto';
 import Nav from '@/components/Nav';
@@ -37,7 +36,6 @@ export default function HomePage() {
         <Compare />
         <Roadmap />
         <FAQ />
-        <Lexicon />
         <FoundersNote />
         <Launch />
       </main>
