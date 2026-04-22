@@ -48,7 +48,7 @@ export default function Nav() {
         <div className="container-x py-4 flex items-center justify-between">
           <Link
             href="/"
-            className="flex items-center gap-2.5 no-underline group"
+            className="flex items-center gap-2.5 no-underline group min-h-[44px]"
             aria-label="ClubBeans ana sayfa"
           >
             <div className="w-9 h-9 flex items-center justify-center">
@@ -60,12 +60,12 @@ export default function Nav() {
           </Link>
 
           {/* Desktop menü */}
-          <nav className="hidden md:flex items-center gap-8 text-sm">
+          <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-sm">
             {LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-zinc-400 hover:text-white transition no-underline"
+                className="text-zinc-400 hover:text-white transition no-underline inline-flex items-center min-h-[44px] px-1"
               >
                 {link.label}
               </Link>
@@ -84,7 +84,7 @@ export default function Nav() {
             aria-label={open ? 'Menüyü kapat' : 'Menüyü aç'}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="md:hidden relative w-10 h-10 flex items-center justify-center rounded-full bg-white/[0.04] border border-white/10"
+            className="md:hidden relative w-11 h-11 flex items-center justify-center rounded-full bg-white/[0.04] border border-white/10"
           >
             <span className="sr-only">{open ? 'Kapat' : 'Menü'}</span>
             <motion.span

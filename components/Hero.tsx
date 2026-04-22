@@ -202,7 +202,7 @@ export default function Hero() {
               </a>
               <a
                 href="#manifesto"
-                className="text-zinc-400 hover:text-white text-sm font-medium no-underline transition"
+                className="inline-flex items-center min-h-[44px] px-1 text-zinc-400 hover:text-white text-sm font-medium no-underline transition"
               >
                 Manifesto oku →
               </a>

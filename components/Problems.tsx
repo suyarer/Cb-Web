@@ -77,7 +77,10 @@ export default function Problems() {
               className="group relative bg-elevated border border-border rounded-3xl overflow-hidden hover:border-acid/30 transition"
             >
               <div className="grid md:grid-cols-[auto_1fr_1fr] gap-6 md:gap-10 p-8 md:p-12 items-start">
-                <div className="text-5xl md:text-6xl font-black text-zinc-800 font-mono leading-none">
+                <div
+                  aria-hidden="true"
+                  className="text-5xl md:text-6xl font-black text-zinc-600 font-mono leading-none"
+                >
                   {p.n}
                 </div>
                 <div>

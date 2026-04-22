@@ -78,7 +78,7 @@ export default function SilentHour() {
           onClick={() => setActive((v) => !v)}
           aria-pressed={active}
           aria-label={active ? 'Sessiz saati kapat' : '15 dakika sessiz saat başlat'}
-          className="relative w-10 h-10 rounded-full flex items-center justify-center transition-colors bg-midnight/80 backdrop-blur-xl border border-white/10 hover:border-acid/40"
+          className="relative w-11 h-11 rounded-full flex items-center justify-center transition-colors bg-midnight/80 backdrop-blur-xl border border-white/10 hover:border-acid/40"
         >
           {/* Progress ring — sadece aktifken */}
           {active && (

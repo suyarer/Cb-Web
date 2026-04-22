@@ -156,12 +156,12 @@ function ClubDashboard() {
               </div>
             </div>
           </div>
-          <button
-            type="button"
-            className="text-[10.5px] md:text-[11px] bg-acid text-midnight font-bold px-2.5 md:px-3 py-1.5 rounded-full whitespace-nowrap flex-shrink-0"
+          <span
+            aria-hidden="true"
+            className="text-[10.5px] md:text-[11px] bg-acid text-midnight font-bold px-2.5 md:px-3 py-1.5 rounded-full whitespace-nowrap flex-shrink-0 pointer-events-none"
           >
             + Bean
-          </button>
+          </span>
         </div>
       </div>
 

@@ -45,17 +45,17 @@ export default function FooterLegal() {
             </div>
             <ul className="space-y-3 text-sm list-none pl-0">
               <li>
-                <Link href="/privacy" className="text-zinc-400 hover:text-white transition no-underline">
+                <Link href="/privacy" className="inline-flex items-center min-h-[36px] text-zinc-400 hover:text-white transition no-underline">
                   Gizlilik Politikası
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-zinc-400 hover:text-white transition no-underline">
+                <Link href="/terms" className="inline-flex items-center min-h-[36px] text-zinc-400 hover:text-white transition no-underline">
                   Kullanım Şartları
                 </Link>
               </li>
               <li>
-                <Link href="/delete-account" className="text-zinc-400 hover:text-white transition no-underline">
+                <Link href="/delete-account" className="inline-flex items-center min-h-[36px] text-zinc-400 hover:text-white transition no-underline">
                   Hesap Silme
                 </Link>
               </li>
@@ -68,14 +68,14 @@ export default function FooterLegal() {
             </div>
             <ul className="space-y-3 text-sm list-none pl-0">
               <li>
-                <Link href="/support" className="text-zinc-400 hover:text-white transition no-underline">
+                <Link href="/support" className="inline-flex items-center min-h-[36px] text-zinc-400 hover:text-white transition no-underline">
                   Destek
                 </Link>
               </li>
               <li>
                 <a
                   href="mailto:hello@clubbeans.com"
-                  className="text-zinc-400 hover:text-white transition no-underline"
+                  className="inline-flex items-center min-h-[36px] text-zinc-400 hover:text-white transition no-underline"
                 >
                   hello@clubbeans.com
                 </a>
@@ -83,7 +83,7 @@ export default function FooterLegal() {
               <li>
                 <a
                   href="mailto:privacy@clubbeans.com"
-                  className="text-zinc-400 hover:text-white transition no-underline"
+                  className="inline-flex items-center min-h-[36px] text-zinc-400 hover:text-white transition no-underline"
                 >
                   privacy@clubbeans.com
                 </a>
@@ -118,9 +118,10 @@ export default function FooterLegal() {
 function SocialIcon({ label, path }: { label: string; path: string }) {
   return (
     <span
+      role="img"
       aria-label={`${label} · yakında`}
       title={`${label} — lansman ile birlikte aktif`}
-      className="w-9 h-9 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center text-zinc-500 hover:text-zinc-300 hover:border-white/20 transition cursor-not-allowed"
+      className="w-11 h-11 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center text-zinc-500 hover:text-zinc-300 hover:border-white/20 transition cursor-not-allowed"
     >
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4" aria-hidden>
         <path d={path} />
