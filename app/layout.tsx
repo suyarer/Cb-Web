@@ -1,15 +1,11 @@
-import CityEasterEgg from '@/components/CityEasterEgg';
+import ClientExtras from '@/components/ClientExtras';
 import { CompassProvider } from '@/components/compass/CompassContext';
 import CompassTint from '@/components/compass/CompassTint';
 import CosyMode from '@/components/CosyMode';
-import CursorBean from '@/components/CursorBean';
-import ExitIntent from '@/components/ExitIntent';
 import { FAQS } from '@/lib/faqs';
 import GutterSprout from '@/components/GutterSprout';
 import LiveTicker from '@/components/LiveTicker';
 import ScrollRoots from '@/components/ScrollRoots';
-import SerendipityBean from '@/components/SerendipityBean';
-import SilentHour from '@/components/SilentHour';
 import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
@@ -134,17 +130,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <CompassProvider>
           <CosyMode />
-          <CityEasterEgg />
           <div className="grain-overlay" aria-hidden />
           <CompassTint />
           <ScrollRoots />
           <GutterSprout />
-          <ExitIntent />
           {children}
           <LiveTicker />
-          <SilentHour />
-          <SerendipityBean />
-          <CursorBean />
+          <ClientExtras />
         </CompassProvider>
         <script
           type="application/ld+json"

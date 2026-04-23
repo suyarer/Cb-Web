@@ -205,7 +205,7 @@ export default function Hero() {
               className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm"
             >
               <a
-                href="#manifesto"
+                href="/manifesto"
                 className="inline-flex items-center min-h-[44px] text-zinc-400 hover:text-white font-medium no-underline transition"
               >
                 Manifesto oku →

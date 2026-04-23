@@ -23,12 +23,16 @@ export default function SubscribeForm({
     e.preventDefault();
     if (!email || status === 'loading') return;
 
+    // Honeypot field — JS ile gizlenmiş input'u gerçek kullanıcı doldurmaz
+    const form = e.currentTarget as HTMLFormElement;
+    const honeypot = (form.elements.namedItem('website') as HTMLInputElement | null)?.value || '';
+
     setStatus('loading');
     try {
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, source }),
+        body: JSON.stringify({ email, source, website: honeypot }),
       });
       const data = await res.json();
       if (!res.ok || !data.ok) {
@@ -79,12 +83,32 @@ export default function SubscribeForm({
     );
   }
 
+  const inputId = `subscribe-email-${source}`;
+
   return (
     <form
       onSubmit={submit}
       className={`${compact ? '' : 'max-w-md'} w-full`}
       noValidate
     >
+      <label htmlFor={inputId} className="sr-only">
+        E-posta adresin
+      </label>
+      {/* Honeypot — botlar görür, insan göremez */}
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          left: '-9999px',
+          width: '1px',
+          height: '1px',
+          opacity: 0,
+        }}
+      />
       <div
         className={`flex items-stretch gap-2 rounded-full p-1.5 border transition ${
           accent
@@ -93,12 +117,14 @@ export default function SubscribeForm({
         }`}
       >
         <input
+          id={inputId}
           type="email"
           inputMode="email"
           autoComplete="email"
           required
           placeholder="sen@e-posta.com"
           aria-label="E-posta adresin"
+          aria-describedby={status === 'error' ? `${inputId}-error` : undefined}
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
@@ -119,6 +145,7 @@ export default function SubscribeForm({
       <AnimatePresence>
         {status === 'error' && (
           <motion.div
+            id={`${inputId}-error`}
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
