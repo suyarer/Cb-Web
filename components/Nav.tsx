@@ -7,12 +7,11 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 const LINKS = [
-  { href: '/#sorunlar', label: 'Ne çözüyor' },
-  { href: '/#nasil-calisir', label: 'Bean bul' },
-  { href: '/#club-kur', label: 'Club aç' },
-  { href: '/#trustscore', label: 'TrustScore' },
-  { href: '/#yol-haritasi', label: 'Yol haritası' },
-  { href: '/#sss', label: 'SSS' },
+  { href: '/manifesto', label: 'Manifesto' },
+  { href: '/club-kur', label: 'Club aç' },
+  { href: '/urun', label: 'Ürün' },
+  { href: '/fark', label: 'Fark' },
+  { href: '/sss', label: 'SSS' },
 ];
 
 export default function Nav() {
@@ -71,7 +70,7 @@ export default function Nav() {
               </Link>
             ))}
             <a
-              href="#launch"
+              href="/#launch"
               className="bg-white/5 border border-white/10 hover:bg-white/10 hover:border-acid/50 transition px-4 py-2 rounded-full text-white text-xs font-medium no-underline"
             >
               Lansman listesi →
@@ -140,7 +139,7 @@ export default function Nav() {
                 initial={{ y: 16, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.4, duration: 0.5, ease: easeOutExpo }}
-                href="#launch"
+                href="/#launch"
                 onClick={() => setOpen(false)}
                 className="mt-8 bg-acid text-midnight font-bold text-center py-4 rounded-full no-underline"
               >

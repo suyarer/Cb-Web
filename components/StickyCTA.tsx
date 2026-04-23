@@ -4,37 +4,50 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
 // Mobil'de sayfa scroll edildikten sonra alt kenarda beliren sticky CTA.
-// Launch section görünürse gizlenir (orada zaten form var).
+// - Ana sayfada: Launch görünürse gizlenir (orada form var).
+// - Alt sayfada: her zaman scroll sonrası görünür; /#launch'a yönlendirir.
 export default function StickyCTA() {
   const [visible, setVisible] = useState(false);
+  const [onHome, setOnHome] = useState(false);
 
   useEffect(() => {
-    const launchEl = document.getElementById('launch');
-    let nearLaunch = false;
+    // Ana sayfada mı kontrol et
+    if (typeof window !== 'undefined') {
+      setOnHome(window.location.pathname === '/' || window.location.pathname === '');
+    }
 
     const onScroll = () => {
       const y = window.scrollY;
       const viewportH = window.innerHeight;
-      const showAfter = viewportH * 1.2; // Hero'yu geçtikten sonra
+      const showAfter = viewportH * 1.0;
 
-      if (launchEl) {
-        const rect = launchEl.getBoundingClientRect();
-        nearLaunch = rect.top < viewportH * 0.9;
+      // Ana sayfadaysak Launch görünürlüğünü de kontrol et
+      if (onHome) {
+        const launchEl = document.getElementById('launch');
+        if (launchEl) {
+          const rect = launchEl.getBoundingClientRect();
+          if (rect.top < viewportH * 0.9) {
+            setVisible(false);
+            return;
+          }
+        }
       }
 
-      setVisible(y > showAfter && !nearLaunch);
+      setVisible(y > showAfter);
     };
 
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [onHome]);
+
+  const href = onHome ? '#launch' : '/#launch';
 
   return (
     <AnimatePresence>
       {visible && (
         <motion.a
-          href="#launch"
+          href={href}
           initial={{ y: 80, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
