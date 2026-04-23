@@ -26,9 +26,9 @@ export default function GutterSprout() {
   const leaf1 = useTransform(progress, [0.18, 0.24], [0, 1]); // pozisyon 14vh
   const leaf2 = useTransform(progress, [0.38, 0.44], [0, 1]); // pozisyon 28vh
   const leaf3 = useTransform(progress, [0.58, 0.64], [0, 1]); // pozisyon 42vh
-  const leaf4 = useTransform(progress, [0.78, 0.84], [0, 1]); // pozisyon 56vh
-  // Taç — sap'ın tepe noktası (70vh)
-  const crown = useTransform(progress, [0.94, 1], [0, 1]);
+  const leaf4 = useTransform(progress, [0.74, 0.80], [0, 1]); // pozisyon 56vh
+  // Taç — scroll %85'te tam açılır, kullanıcı Launch'a varmadan filizlenme biter
+  const crown = useTransform(progress, [0.78, 0.86], [0, 1]);
 
   // Bean alt kısmı progress'e göre doygunluk
   const beanOpacity = useTransform(progress, [0, 0.1], [0.35, 1]);
