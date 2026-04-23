@@ -10,8 +10,8 @@ export default function CompassSwitcher() {
   return (
     <div className="inline-flex flex-col gap-2.5">
       <span className="text-[10px] font-mono uppercase tracking-[0.2em] md:tracking-[0.25em] text-zinc-500">
-        Bu akşam nasıl hissediyorsun?{' '}
-        <span className="text-zinc-600">· Compass</span>
+        Bu akşam hangi modundasın?{' '}
+        <span className="text-zinc-600">· sayfanın tonu değişsin</span>
       </span>
       <div
         className="inline-flex items-center p-1 bg-white/[0.03] border rounded-full transition-colors duration-500 self-start"

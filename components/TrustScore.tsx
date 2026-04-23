@@ -5,10 +5,10 @@ import { motion, useInView } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 
 const rules = [
-  { delta: '+1', label: 'Katıldığın, masaya oturduğun her Bean', tone: 'acid' },
-  { delta: '+5', label: 'Host olduğun, söz verdiğin Bean bittiğinde', tone: 'acid' },
-  { delta: '+3', label: 'Bir kabile üyesi seni adıyla referans verdiğinde', tone: 'acid' },
-  { delta: '−5', label: 'Son dakika iptal, no-show, masayı yarım bırakmak', tone: 'red' },
+  { delta: '+1', label: 'Katıldığın her etkinlik (Bean)', tone: 'acid' },
+  { delta: '+5', label: 'Kurucu olduğun, sözünü tuttuğun etkinlik bittiğinde', tone: 'acid' },
+  { delta: '+3', label: 'Bir kulüp üyesi seni adıyla referans verdiğinde', tone: 'acid' },
+  { delta: '−5', label: 'Son dakika iptal · gelmeme · etkinliği yarım bırakma', tone: 'red' },
 ];
 
 function useAnimatedScore(target: number, active: boolean) {
@@ -133,9 +133,9 @@ export default function TrustScore() {
               </div>
 
               <div className="space-y-1.5 pl-1">
-                <ActivityLine delta="+5" text="Pitch Night · Moda · host" tone="acid" />
+                <ActivityLine delta="+5" text="Pitch Night · Moda · kurucu" tone="acid" />
                 <ActivityLine delta="+3" text="Ahmet E. referans verdi" tone="acid" />
-                <ActivityLine delta="+1" text="Cumartesi Koşu Bean · katıldı" tone="acid" />
+                <ActivityLine delta="+1" text="Cumartesi Koşusu · katıldı" tone="acid" />
                 <ActivityLine delta="−5" text="Film Kulübü · 2 saat önce iptal" tone="red" />
               </div>
             </motion.div>
@@ -150,7 +150,7 @@ export default function TrustScore() {
               transition={{ duration: 0.6 }}
               className="text-xs uppercase tracking-[0.3em] text-acid mb-6 font-mono"
             >
-              TrustScore · masaya oturan kim
+              TrustScore · kimin katılacağını gör
             </motion.div>
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
@@ -212,10 +212,10 @@ export default function TrustScore() {
                 Neden önemli
               </div>
               <p className="text-white leading-relaxed">
-                Rastgele tanışma değil, <span className="text-acid">curated network</span>.
-                Karşındaki sandalyeye oturan insan tesadüf değil — bu yüzden Bean
-                sohbete, sohbet dostluğa, bazen ortak işe dönüşür. Randevusu tutulan
-                insanlarla masadasın.
+                Rastgele tanışma değil, <span className="text-acid">filtrelenmiş
+                topluluk</span>. Karşındaki insan tesadüf değil — bu yüzden
+                buluşma sohbete, sohbet dostluğa, bazen ortak işe dönüşür. Sözünü
+                tutan insanlarla aynı masadasın.
               </p>
             </motion.div>
           </div>

@@ -147,7 +147,7 @@ function ClubDashboard() {
                 AI Girişimcileri İstanbul
               </div>
               <div className="text-[10.5px] text-zinc-500 font-mono truncate">
-                247 kişilik kabile · 1 dk önce
+                247 üye · 1 dk önce
               </div>
             </div>
           </div>
@@ -223,7 +223,7 @@ function ClubDashboard() {
 
         {/* Stats strip */}
         <div className="grid grid-cols-3 gap-3 pt-2">
-          <MiniStat value="247" label="kabile" />
+          <MiniStat value="247" label="üye" />
           <MiniStat value="14" label="bu ay Bean" />
           <MiniStat value="%92" label="doluluk" />
         </div>

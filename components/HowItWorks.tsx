@@ -59,9 +59,9 @@ export default function HowItWorks() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mt-6 text-zinc-400 max-w-2xl"
           >
-            Bir dakikan yeter. Radar&apos;a bak, katıl de, telefonu masanın yanına
-            koy. Dördüncü adım zaten uygulamanın dışında — kendi akşamın orada
-            başlar.
+            Bir dakikan yeter. Yakındakilere bak, katıl de, telefonu masanın
+            yanına koy. Dördüncü adım zaten uygulamanın dışında — kendi akşamın
+            orada başlar.
           </motion.p>
         </div>
 
