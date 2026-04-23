@@ -1,5 +1,6 @@
 import FAQ from '@/components/FAQ';
 import FooterLegal from '@/components/FooterLegal';
+import GlossaryBox from '@/components/GlossaryBox';
 import Nav from '@/components/Nav';
 import StickyCTA from '@/components/StickyCTA';
 import SubPageCTA from '@/components/subpage/SubPageCTA';
@@ -28,6 +29,7 @@ export default function SSSPage() {
           title="Aklındakini sor."
           subtitle="Bahaneye yer bırakmıyoruz. 12 kritik soru + metinlerde bağlantılar."
         />
+        <GlossaryBox />
         <FAQ />
         <SubPageCTA
           source="sss"

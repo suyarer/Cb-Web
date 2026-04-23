@@ -123,7 +123,7 @@ export default function TrustScore() {
                     Ayşe K. <span className="text-zinc-500 font-normal">· Kadıköy</span>
                   </div>
                   <div className="text-[10px] text-zinc-500 font-mono">
-                    3 Club&apos;da üye · 12 Bean&apos;de masada
+                    3 kulübe üye · 12 etkinliğe katıldı
                   </div>
                 </div>
                 <div className="flex items-center gap-1 bg-acid/10 border border-acid/30 px-2 py-1 rounded-full">

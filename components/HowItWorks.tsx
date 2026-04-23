@@ -16,7 +16,7 @@ const steps = [
     key: 'Katıl',
     title: 'Tıkla. Yerin hazır.',
     body:
-      'Form yok. "Mail attık, cevap bekliyoruz" yok. Beğendiğin Bean\'e katılırsın — host TrustScore\'unu görür, sen de masadaki yüzleri görürsün. Yerin ayrılır.',
+      'Form yok. "Mail attık, cevap bekliyoruz" yok. Beğendiğin etkinliğe katılırsın — kurucu senin güven puanını görür, sen de kimlerle buluşacağını. Yerin anında ayrılır.',
   },
   {
     n: '03',

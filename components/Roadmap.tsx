@@ -13,8 +13,8 @@ type Stage = {
 const STAGES: Stage[] = [
   {
     when: 'Nisan 2026',
-    title: 'Kapalı alfa',
-    body: '50 kişilik davetli çekirdek. İstanbul Kadıköy + Moda ilk Bean\'ler.',
+    title: 'Kapalı alfa · ilk test grubu',
+    body: '50 kişilik davetli çekirdek uygulamayı deniyor. İstanbul Kadıköy + Moda\'da ilk etkinlikler düzenlendi.',
     state: 'done',
   },
   {

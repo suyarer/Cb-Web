@@ -74,7 +74,7 @@ export default function LiveTicker() {
       <span className="text-white tabular-nums flex-shrink-0">{formatTime(now)}</span>
       <span className="w-px h-3 bg-white/10 flex-shrink-0" />
       <span className="text-zinc-400 truncate">
-        {city}&apos;de <span className="text-white">{activeBeans}</span> Bean
+        {city}&apos;de <span className="text-white">{activeBeans}</span> etkinlik
       </span>
       {/* Güneş bilgisi sadece md+ ekranlarda — mobile'da yer yok */}
       <span className="w-px h-3 bg-white/10 flex-shrink-0 hidden md:inline-block" />

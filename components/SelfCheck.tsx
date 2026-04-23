@@ -41,18 +41,18 @@ function verdict(score: number): { label: string; hint: string; tone: string } {
   if (score >= 75)
     return {
       label: 'Kırmızı',
-      hint: 'Sosyal Obezite eşiğini geçtin. Bu hafta bir Bean tam sana yazıldı.',
+      hint: 'Sosyal Obezite eşiğini geçtin — dijital kalabalık, fiziksel yalnızlık. Bu hafta gerçek bir buluşma tam sana yazıldı.',
       tone: 'text-rose-300',
     };
   if (score >= 40)
     return {
       label: 'Turuncu',
-      hint: 'Düşüş başlamış. Bir Club bulup Cumartesiyi işaretlemek iyi fikir.',
+      hint: 'Düşüş başlamış. Bir kulüp bulup Cumartesiyi işaretlemek iyi fikir.',
       tone: 'text-amber-300',
     };
   return {
     label: 'Yeşil',
-    hint: 'İyi dengedesin. ClubBeans çeşitlendirmek istersen buradayız.',
+    hint: 'İyi dengedesin. ClubBeans çevreni çeşitlendirmek istersen buradayız.',
     tone: 'text-acid',
   };
 }

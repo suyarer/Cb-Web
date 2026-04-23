@@ -11,7 +11,7 @@ type Position = {
 
 const MESSAGES = [
   'Merhaba. Sen bizi gördün. Biz de seni görüyoruz.',
-  'Bu, tesadüf değil. Belki bir Bean seni çağırıyor.',
+  'Bu, tesadüf değil. Gerçek bir buluşma seni çağırıyor olabilir.',
   'Az rastlanır bir an. Cumartesine iyi yansır.',
 ];
 

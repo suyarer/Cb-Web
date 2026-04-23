@@ -68,7 +68,7 @@ export default function SilentHour() {
               transition={{ duration: 0.25 }}
               className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400 whitespace-nowrap pointer-events-none hidden md:inline"
             >
-              15 dk sessiz
+              15 dk ekrandan uzaklaş
             </motion.span>
           )}
         </AnimatePresence>

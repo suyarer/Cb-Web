@@ -9,21 +9,21 @@ const problems = [
     cta: 'Yakında Bul',
     pain: '"Bu akşam n\'aparız?" — WhatsApp\'a yazdın. 12 kişi okudu. Kimse yazmadı. Cumartesi yine boş geçti. Oysa iki sokak ötende aynı kahveyi içen, aynı kitabı okuyan biri vardı.',
     solution:
-      'Radar\'ı aç — yürüme mesafendeki Beans\'ler tek ekranda. Saat, yer, vibe; filtreyi sen kurarsın. Algoritma seni beslemez; şehir sana el uzatır.',
+      'Uygulamayı aç — yakındaki etkinlikler tek ekranda. Saat, yer, tür; filtreyi sen kurarsın. Algoritma seni beslemez; şehir sana el uzatır.',
   },
   {
     n: '02',
     cta: 'Birlikte Yap',
     pain: 'Bugün 284 like aldın. 43 yorum yazdın. Hikaye attın, story\'ye cevap verdin. 0 kişiyle masaya oturmadın. Ekranda kalabalık, hayatta yalnız — işte Sosyal Obezite.',
     solution:
-      'Bean dijital bir "etkinlik" değil; başı sonu belli bir buluşma, belli bir masa, belli yüzler. Katılırsın, ekrandan inersin, sohbete oturursun. Uygulama kapanır, akşam başlar.',
+      'ClubBeans\'teki bir etkinlik (Bean) dijital değil — başı sonu belli gerçek bir buluşma. Belli bir masa, belli yüzler. Katılırsın, ekrandan inersin, sohbete oturursun. Uygulama kapanır, akşam başlar.',
   },
   {
     n: '03',
     cta: 'Kolay Kur',
     pain: 'Kendi kulübünü açmak istedin: WhatsApp grup — 40 sessiz üye. Instagram hesap — 12 takipçi. Eventbrite denedin — biletsiz kaldı. Üç uygulama, hiçbir yere varamıyor.',
     solution:
-      'Kendi Club\'ını bir dakikada kurarsın. Bean açar, davet eder, TrustScore ile güveni korursun. Üç uygulama yok; bir ekran, bir akış, bir topluluk.',
+      'Kendi kulübünü ClubBeans\'te bir dakikada kurarsın. Etkinlik açarsın, üyelerini davet edersin, güven puanıyla (TrustScore) kimi kabul edeceğini sen seçersin. Üç uygulama yok; bir ekran, bir akış, bir topluluk.',
   },
 ];
 

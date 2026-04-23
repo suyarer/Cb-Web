@@ -234,16 +234,16 @@ export default function Hero() {
               className="mt-10 grid sm:grid-cols-2 gap-3 max-w-lg"
             >
               <PersonaCard
-                kicker="Bean'e otur"
+                kicker="Etkinliğe katıl"
                 title="Keşfet, Katıl"
-                meta="Yakında ne varsa, 3 dokunuş uzakta"
+                meta="Yakındaki buluşmalar, 3 dokunuş uzakta"
                 href="#nasil-calisir"
               />
               <PersonaCard
                 kicker="Masayı sen kur"
-                title="Club aç, kabile büyüt"
-                meta="Bir dakikada kulüp, bir ekranda yönetim"
-                href="#club-kur"
+                title="Kulüp aç, topluluğunu büyüt"
+                meta="Bir dakikada kurulum, bir ekranda yönetim"
+                href="/club-kur"
               />
             </motion.div>
           </div>

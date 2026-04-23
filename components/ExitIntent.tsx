@@ -8,7 +8,7 @@ const MESSAGES = [
   'Sekmeyi kapat, dışarı çık. Biz bunun için yazıyoruz.',
   'Aferin. Doğru şey, bu sayfayı kapatmak.',
   'Durma, çık. Bir yerde seninle oturmak isteyen biri var.',
-  'Kapat. Bir Bean bundan daha iyi açıklar bizi.',
+  'Kapat. Gerçek bir buluşma bizi daha iyi anlatır.',
 ];
 
 const STORAGE_KEY = 'cb_exit_intent_shown';

@@ -111,7 +111,7 @@ export default function SubscribeForm({
           disabled={status === 'loading'}
           className="bg-acid text-midnight font-semibold text-sm px-5 py-2.5 rounded-full transition hover:bg-acid-400 disabled:opacity-70 disabled:cursor-wait whitespace-nowrap"
         >
-          {status === 'loading' ? '...' : 'Haber ver →'}
+          {status === 'loading' ? '...' : 'Beni listeye al →'}
         </button>
       </div>
 

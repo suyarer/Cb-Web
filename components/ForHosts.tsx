@@ -7,12 +7,12 @@ const benefits = [
   {
     n: '01',
     title: 'Bir dakikada kulüp, tek ekranda yönetim.',
-    body: 'Alan seç, isim ver, logo at — Club\'ın yayında. Bean aç, tarih ver, kabilene tek tuşla duyur. WhatsApp grup, Instagram, Eventbrite gerekmez.',
+    body: 'Konu seç (AI, koşu, film, kitap, yoga...), isim ver, logo ekle — kulübün yayında. Etkinlik aç, tarih ver, üyelerine tek tuşla duyur. WhatsApp grup, Instagram, Eventbrite gerekmez.',
   },
   {
     n: '02',
-    title: 'Masana kim oturur, sen seçersin.',
-    body: 'TrustScore filtresi — sadece 80 ve üstü kabul. Misafir limiti. Kapalı Bean. Kararı sen verirsin; biz sessiz altyapıyı tutarız.',
+    title: 'Kimin katılacağını sen seçersin.',
+    body: 'TrustScore filtresi (0-100 güven puanı): yalnız 80 üzerini kabul et. Misafir limiti koy. Özel etkinlikler aç. Kararı sen verirsin; biz sessiz altyapıyı tutarız.',
   },
   {
     n: '03',

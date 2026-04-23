@@ -33,7 +33,7 @@ const TEASERS: Teaser[] = [
   {
     kicker: 'Fark',
     title: 'Rakiplerden farkı?',
-    sub: '5 kritik POD, dürüst kıyas.',
+    sub: '5 kritik fark, dürüst kıyas.',
     href: '/fark',
   },
   {
