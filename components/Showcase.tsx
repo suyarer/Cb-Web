@@ -10,7 +10,7 @@ const screens = [
     id: 'akis',
     title: 'Akış',
     description:
-      'Sana gelecek Beans burada. Ama akışın bir bölümü daima konforunun dışında — yeni Club\'ları, tanımadığın vibe\'ları orada yakalarsın. Balon yok.',
+      'Yakındaki etkinlikler burada listelenir. Ama akışın bir bölümü daima konforunun dışındadır — yeni kulüpleri, farklı tarzları burada keşfedersin. Filtre balonu yok.',
     mockup: <FeedScreen />,
   },
   {
@@ -31,7 +31,7 @@ const screens = [
     id: 'bean',
     title: 'Bean detayı',
     description:
-      'Kim, nerede, saat kaçta, kimler geliyor, TrustScore kaç — karar verecek her şey tek ekranda. Katıl, masa senin. Arkası yok, formülü yok.',
+      'Kim, nerede, saat kaçta, kimler geliyor, güven puanı (TrustScore) ne — karar verecek her şey tek ekranda. Katıl, yerin senin. Arkası yok, formülü yok.',
     mockup: <BeanDetailScreen />,
   },
 ];

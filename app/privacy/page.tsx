@@ -46,21 +46,21 @@ export default function PrivacyPage() {
           <h3>2.2. Konum Verisi</h3>
           <ul>
             <li>
-              <strong>Yaklaşık konum:</strong> Yakındaki Bean&apos;leri listelemek için — yalnızca
-              uygulama açıkken.
+              <strong>Yaklaşık konum:</strong> Yakındaki etkinlikleri (Bean) listelemek için —
+              yalnızca uygulama açıkken.
             </li>
             <li>
-              <strong>Tam konum (opsiyonel):</strong> Radar özelliği için — sadece siz aktif olarak
-              kullandığınızda. Arka planda toplanmaz.
+              <strong>Tam konum (opsiyonel):</strong> Harita keşif özelliği için — sadece siz aktif
+              olarak kullandığınızda. Arka planda toplanmaz.
             </li>
             <li>Konum verisi üçüncü taraflarla paylaşılmaz.</li>
           </ul>
 
           <h3>2.3. Etkinlik Verileri</h3>
           <ul>
-            <li>Katıldığınız Bean&apos;ler, oluşturduğunuz içerikler, yorumlar</li>
-            <li>Kabile (topluluk üyelik) ilişkileri</li>
-            <li>Bildirim (Signal) tercihleri</li>
+            <li>Katıldığınız etkinlikler, oluşturduğunuz içerikler, yorumlar</li>
+            <li>Kulüp üyelikleri</li>
+            <li>Bildirim tercihleri</li>
           </ul>
 
           <h3>2.4. Cihaz ve Teknik Veriler</h3>

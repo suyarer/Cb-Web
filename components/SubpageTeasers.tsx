@@ -19,7 +19,7 @@ const TEASERS: Teaser[] = [
     href: '/manifesto',
   },
   {
-    kicker: 'Club aç',
+    kicker: 'Kulüp aç',
     title: 'Kulüp kurmak için?',
     sub: 'Kurucular için tam rehber.',
     href: '/club-kur',
@@ -27,7 +27,7 @@ const TEASERS: Teaser[] = [
   {
     kicker: 'Ürün',
     title: 'Ekranları gör.',
-    sub: 'Akış, Radar, Compass, Bean.',
+    sub: 'Keşif · harita · ruh hali · buluşma detayı.',
     href: '/urun',
   },
   {

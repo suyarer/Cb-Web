@@ -21,7 +21,7 @@ const rows: { feature: string; cb: Val; timeleft: Val; meetup: Val; tinder: Val 
     tinder: { v: 'no' },
   },
   {
-    feature: 'Kendi Club\'ını 1 dk\'da kur',
+    feature: 'Kendi kulübünü 1 dakikada kur',
     cb: { v: 'yes' },
     timeleft: { v: 'no' },
     meetup: { v: 'partial', label: 'Ücretli' },

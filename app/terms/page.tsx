@@ -48,7 +48,7 @@ export default function TermsPage() {
             <li>Yanıltıcı bilgi, dolandırıcılık, spam</li>
             <li>Telif hakkı ihlali</li>
             <li>Yasadışı faaliyet teşviki</li>
-            <li>Sahte etkinlik / hayalet Bean oluşturma</li>
+            <li>Sahte etkinlik veya hayalet kayıt oluşturma</li>
           </ul>
           <p>
             Kurallara uymayan içerikler kaldırılır, tekrar eden ihlallerde hesap askıya alınır veya
@@ -67,11 +67,12 @@ export default function TermsPage() {
               bekleme listesi (waitlist) devreye girer.
             </li>
             <li>
-              <strong>İptal:</strong> Bean&apos;e katılımınızı iptal edebilirsiniz. İptal zamanına göre
-              güven puanı (trust score) etkilenebilir.
+              <strong>İptal:</strong> Bir etkinliğe katılımınızı iptal edebilirsiniz. İptal zamanına
+              göre TrustScore (güven puanı) etkilenebilir.
             </li>
             <li>
-              <strong>No-show:</strong> Katıldığınızı belirtip gelmemeniz durumunda trust score düşer.
+              <strong>Gelmeme (no-show):</strong> &quot;Katılıyorum&quot; dediğiniz halde gelmemeniz
+              durumunda TrustScore&apos;unuz düşer.
             </li>
             <li>
               <strong>Haftalık limit:</strong> Her kulüp haftada en fazla 5 Bean oluşturabilir.

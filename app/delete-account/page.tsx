@@ -27,7 +27,7 @@ export default function DeleteAccountPage() {
             <li>ClubBeans uygulamasını aç</li>
             <li>Profil sekmesine git</li>
             <li>
-              <strong>Settings → Privacy → Delete Account</strong>
+              <strong>Ayarlar → Gizlilik → Hesap Silme</strong>
             </li>
             <li>Şifreni girerek onayla</li>
             <li>Hesap 30 gün içinde tamamen silinir</li>
@@ -55,7 +55,7 @@ export default function DeleteAccountPage() {
           <ul>
             <li>Profil bilgileri (isim, biyografi, avatar)</li>
             <li>E-posta ve telefon numarası</li>
-            <li>Oluşturduğunuz Bean&apos;ler ve postlar</li>
+            <li>Oluşturduğunuz etkinlikler ve gönderiler</li>
             <li>Kabile (topluluk üyelik) ilişkileri</li>
             <li>Bildirim ve uygulama tercihleri</li>
             <li>Konum geçmişi</li>
@@ -79,7 +79,7 @@ export default function DeleteAccountPage() {
             <strong>geri dönüşü olmayacak şekilde</strong> silinir.
           </p>
 
-          <h2>Geri Alma (Undo)</h2>
+          <h2>Geri Alma (30 günlük pencere)</h2>
           <p>
             Hesap silme talebinden sonra <strong>30 gün</strong> içinde uygulamaya aynı e-posta ile
             giriş yapılırsa silme iptal edilebilir. 30. günden sonra tüm veriler kalıcı olarak

@@ -14,19 +14,19 @@ const faqs = [
   },
   {
     q: 'App Store ve Google Play\'de mi?',
-    a: 'Şu an beta aşamasındayız. 2026 Q2\'de App Store ve Google Play Internal Testing üzerinden erişilebilir olacak. Lansman listesine katılıp ilk senden haberdar olalım.',
+    a: 'Şu an lansman öncesi hazırlık aşamasındayız. 2026 Q2 (Mayıs/Haziran) — beta erken erişim → genel lansman. Lansman listesine katıl, tek mail ile haberin olsun.',
   },
   {
     q: 'Neden "anti-platform"?',
-    a: 'Büyük sosyal platformlar kullanıcıyı ürün olarak görür: veriyi satar, algoritma manipüle eder, dikkat ekonomisi kurar. ClubBeans topluluğun kendisini merkeze koyar. Veri satmıyoruz, davranış takip etmiyoruz, algoritma yönlendirmiyor — sen kabileni seçersin.',
+    a: 'Büyük sosyal platformlar kullanıcıyı ürün olarak görür: veriyi satar, algoritma manipüle eder, dikkat ekonomisi kurar. ClubBeans topluluğun kendisini merkeze koyar. Veri satmıyoruz, davranış takip etmiyoruz, algoritma yönlendirmiyor — kiminle buluşacağını sen seçersin.',
   },
   {
     q: 'Kulüp kurmak için ne gerekli?',
-    a: 'Hesap doğrulaması tamamlandıktan sonra uygulamadan tek tıkla kulüp oluşturabilirsin. Her kullanıcı yalnızca 1 kulüp kurabilir. Kulüp owner\'ı haftada en fazla 5 Bean organize edebilir.',
+    a: 'Hesap doğrulaması tamamlandıktan sonra uygulamadan tek tıkla kulüp oluşturabilirsin. Her kullanıcı yalnızca 1 kulüp kurabilir. Kulüp sahibi haftada en fazla 5 etkinlik düzenleyebilir.',
   },
   {
-    q: 'Bean iptal ettim, trust score\'uma etkisi olur mu?',
-    a: 'İptal zamanına göre değişir. Erken iptalde (72 saat öncesinde) etki yok. Son 24 saatte iptal trust score\'unu hafif etkiler. No-show (geleceğini söyleyip gelmeme) ise belirgin düşüş yaratır.',
+    q: 'Etkinliği iptal ettim, TrustScore\'uma etkisi olur mu?',
+    a: 'İptal zamanına göre değişir. Erken iptalde (72 saat öncesinde) etki yok. Son 24 saatte iptal TrustScore\'unu hafif etkiler. Gelmeme (no-show) — yani "geleceğim" dediğin halde gelmemek — belirgin puan düşüşü yaratır.',
   },
   {
     q: 'Verilerim güvende mi?',
@@ -34,11 +34,11 @@ const faqs = [
   },
   {
     q: 'Kimlik doğrulama zorunlu mu?',
-    a: 'Hayır. Temel kullanım için zorunlu değil. Bazı güvenlik gerektiren özelliklerde (yüksek kontenjanlı Bean\'ler, kulüp kurma) opsiyonel KYC doğrulaması istenir. Kimlik belgesi bizde saklanmaz, sadece doğrulama durumu (verified/unverified) tutulur.',
+    a: 'Hayır. Temel kullanım için zorunlu değil. Bazı güvenlik gerektiren özelliklerde (yüksek kontenjanlı etkinlikler, kulüp kurma) opsiyonel kimlik doğrulaması (KYC) istenir. Kimlik belgesi bizde saklanmaz; sadece doğrulama durumu (doğrulandı / doğrulanmadı) tutulur.',
   },
   {
     q: 'Hesabımı nasıl silerim?',
-    a: 'Uygulama içinden Settings → Privacy → Delete Account adımından. Veya /delete-account sayfasından manuel talep gönderebilirsin. 30 gün içinde tüm veriler silinir.',
+    a: 'Uygulama içinden Ayarlar → Gizlilik → Hesap Silme adımından. Veya /delete-account sayfasından manuel talep gönderebilirsin. 30 gün içinde tüm veriler silinir.',
   },
 ];
 
