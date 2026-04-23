@@ -221,7 +221,7 @@ export default function Compare() {
                     key={row.feature}
                     className={`${
                       i % 2 === 0 ? 'bg-white/[0.015]' : ''
-                    } border-b border-white/[0.03] hover:bg-acid/[0.02] transition`}
+                    } border-b border-white/[0.03] hover:bg-acid/[0.02] transition-colors duration-200`}
                   >
                     <td className="px-5 md:px-8 py-4 text-sm text-white">{row.feature}</td>
                     <td className="px-3 py-4">

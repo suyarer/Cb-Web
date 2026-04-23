@@ -161,7 +161,7 @@ export default function SelfCheck() {
                         key={o.label}
                         type="button"
                         onClick={() => pick(o.score)}
-                        className="w-full group text-left bg-white/[0.02] hover:bg-acid/5 border border-white/[0.06] hover:border-acid/40 rounded-2xl px-4 md:px-5 py-3.5 transition min-h-[48px]"
+                        className="w-full group text-left bg-white/[0.02] hover:bg-acid/5 border border-white/[0.06] hover:border-acid/40 rounded-2xl px-4 md:px-5 py-3.5 transition-colors duration-300 min-h-[48px]"
                       >
                         <div className="flex items-center justify-between gap-3">
                           <span className="text-sm md:text-base text-zinc-200 group-hover:text-white">

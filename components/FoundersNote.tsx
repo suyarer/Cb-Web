@@ -2,16 +2,17 @@
 
 import BeanSprout from '@/components/BeanSprout';
 import { easeOutExpo } from '@/lib/motion';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 
 export default function FoundersNote() {
   const ref = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion() ?? false;
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start end', 'end start'],
   });
-  const y = useTransform(scrollYProgress, [0, 1], [40, -40]);
+  const y = useTransform(scrollYProgress, [0, 1], reduced ? [0, 0] : [40, -40]);
 
   return (
     <section

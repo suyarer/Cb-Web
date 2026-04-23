@@ -80,7 +80,7 @@ export default function HowItWorks() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-10%' }}
                 transition={{ duration: 0.7, delay: i * 0.12, ease: easeOutExpo }}
-                className="relative bg-elevated border border-border rounded-3xl p-8 md:p-10 hover:border-acid/30 transition"
+                className="relative bg-elevated border border-border rounded-3xl p-8 md:p-10 hover:border-acid/30 transition-colors duration-300"
               >
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-14 h-14 rounded-2xl bg-midnight border border-white/10 flex items-center justify-center">

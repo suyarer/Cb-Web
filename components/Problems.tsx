@@ -29,7 +29,7 @@ const problems = [
 
 export default function Problems() {
   return (
-    <section id="sorunlar" className="relative py-20 md:py-28 overflow-hidden">
+    <section id="sorunlar" className="relative py-24 md:py-36 overflow-hidden">
       <div className="container-x relative">
         <div className="max-w-3xl mb-16 md:mb-20">
           <motion.div
@@ -74,7 +74,7 @@ export default function Problems() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-10%' }}
               transition={{ duration: 0.8, delay: i * 0.1, ease: easeOutExpo }}
-              className="group relative bg-elevated border border-border rounded-3xl overflow-hidden hover:border-acid/30 transition"
+              className="group relative bg-elevated border border-border rounded-3xl overflow-hidden hover:border-acid/30 transition-colors duration-300"
             >
               <div className="grid md:grid-cols-[auto_1fr_1fr] gap-5 md:gap-8 p-6 md:p-8 items-start">
                 <div

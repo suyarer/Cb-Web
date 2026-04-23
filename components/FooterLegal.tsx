@@ -45,17 +45,17 @@ export default function FooterLegal() {
             </div>
             <ul className="space-y-3 text-sm list-none pl-0">
               <li>
-                <Link href="/privacy" className="inline-flex items-center min-h-[36px] text-zinc-400 hover:text-white transition no-underline">
+                <Link href="/privacy" className="inline-flex items-center min-h-[44px] text-zinc-400 hover:text-white transition no-underline">
                   Gizlilik Politikası
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="inline-flex items-center min-h-[36px] text-zinc-400 hover:text-white transition no-underline">
+                <Link href="/terms" className="inline-flex items-center min-h-[44px] text-zinc-400 hover:text-white transition no-underline">
                   Kullanım Şartları
                 </Link>
               </li>
               <li>
-                <Link href="/delete-account" className="inline-flex items-center min-h-[36px] text-zinc-400 hover:text-white transition no-underline">
+                <Link href="/delete-account" className="inline-flex items-center min-h-[44px] text-zinc-400 hover:text-white transition no-underline">
                   Hesap Silme
                 </Link>
               </li>
@@ -68,14 +68,14 @@ export default function FooterLegal() {
             </div>
             <ul className="space-y-3 text-sm list-none pl-0">
               <li>
-                <Link href="/support" className="inline-flex items-center min-h-[36px] text-zinc-400 hover:text-white transition no-underline">
+                <Link href="/support" className="inline-flex items-center min-h-[44px] text-zinc-400 hover:text-white transition no-underline">
                   Destek
                 </Link>
               </li>
               <li>
                 <a
                   href="mailto:hello@clubbeans.com"
-                  className="inline-flex items-center min-h-[36px] text-zinc-400 hover:text-white transition no-underline"
+                  className="inline-flex items-center min-h-[44px] text-zinc-400 hover:text-white transition no-underline"
                 >
                   hello@clubbeans.com
                 </a>
@@ -83,7 +83,7 @@ export default function FooterLegal() {
               <li>
                 <a
                   href="mailto:privacy@clubbeans.com"
-                  className="inline-flex items-center min-h-[36px] text-zinc-400 hover:text-white transition no-underline"
+                  className="inline-flex items-center min-h-[44px] text-zinc-400 hover:text-white transition no-underline"
                 >
                   privacy@clubbeans.com
                 </a>

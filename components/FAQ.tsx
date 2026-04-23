@@ -122,7 +122,7 @@ export default function FAQ() {
               Başka bir şey mi merak ediyorsun?{' '}
               <a
                 href="mailto:hello@clubbeans.com?subject=Soru"
-                className="inline-flex items-center min-h-[36px] text-acid hover:underline"
+                className="inline-flex items-center min-h-[44px] text-acid hover:underline"
               >
                 hello@clubbeans.com
               </a>

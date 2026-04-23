@@ -3,7 +3,7 @@
 import BeanSprout from '@/components/BeanSprout';
 import BrandTerm from '@/components/BrandTerm';
 import { easeOutExpo } from '@/lib/motion';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 
 const negatives = [
@@ -22,11 +22,16 @@ const positives = [
 
 export default function Manifesto() {
   const ref = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion() ?? false;
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start end', 'end start'],
   });
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+  const opacity = useTransform(
+    scrollYProgress,
+    [0, 0.2, 0.8, 1],
+    reduced ? [1, 1, 1, 1] : [0, 1, 1, 0]
+  );
 
   return (
     <section id="manifesto" ref={ref} className="relative py-40 md:py-56 overflow-hidden">

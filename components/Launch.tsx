@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 
 export default function Launch() {
   return (
-    <section id="launch" className="relative py-24 md:py-40 overflow-hidden">
+    <section id="launch" className="relative py-28 md:py-40 overflow-hidden">
       <div className="absolute inset-0 bg-radial-glow pointer-events-none" />
 
       <div className="container-x relative">
@@ -52,7 +52,7 @@ function StoreBadge({ platform }: { platform: 'apple' | 'google' }) {
     <a
       href="#launch"
       aria-label={`${isApple ? 'App Store' : 'Google Play'} · Mayıs 2026`}
-      className="group relative inline-flex items-center gap-3 bg-white/[0.03] border border-white/10 rounded-2xl px-5 py-3 no-underline hover:border-acid/30 transition"
+      className="group relative inline-flex items-center gap-3 bg-white/[0.03] border border-white/10 rounded-2xl px-5 py-3 no-underline hover:border-acid/30 transition-colors duration-300"
     >
       <div className="text-white">
         {isApple ? (

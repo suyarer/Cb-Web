@@ -278,7 +278,7 @@ function PersonaCard({
   return (
     <a
       href={href}
-      className="group relative bg-white/[0.02] border border-white/10 hover:border-acid/40 hover:bg-acid/[0.04] rounded-2xl p-5 no-underline transition overflow-hidden"
+      className="group relative bg-white/[0.02] border border-white/10 hover:border-acid/40 hover:bg-acid/[0.04] rounded-2xl p-5 no-underline transition-colors duration-300 overflow-hidden"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-acid/10 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none" />
       <div className="relative">

@@ -33,7 +33,7 @@ const STAGES: Stage[] = [
 
 export default function Roadmap() {
   return (
-    <section id="yol-haritasi" className="relative py-24 md:py-32 overflow-hidden">
+    <section id="yol-haritasi" className="relative py-24 md:py-36 overflow-hidden">
       <div className="container-x">
         <div className="max-w-3xl mb-12 md:mb-16">
           <motion.div

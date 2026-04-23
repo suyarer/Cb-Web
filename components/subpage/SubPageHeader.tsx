@@ -21,7 +21,7 @@ export default function SubPageHeader({
       <div className="container-x relative">
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-500 hover:text-acid transition no-underline mb-8 min-h-[36px]"
+          className="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-500 hover:text-acid transition no-underline mb-8 min-h-[44px]"
         >
           <span>←</span>
           <span>Ana sayfa</span>

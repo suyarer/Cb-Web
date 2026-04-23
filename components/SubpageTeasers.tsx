@@ -82,7 +82,7 @@ export default function SubpageTeasers() {
             >
               <Link
                 href={t.href}
-                className="group relative block bg-elevated border border-border hover:border-acid/30 rounded-2xl p-5 md:p-6 transition no-underline h-full"
+                className="group relative block bg-elevated border border-border hover:border-acid/30 rounded-2xl p-5 md:p-6 transition-colors duration-300 no-underline h-full"
               >
                 <div className="text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-500 group-hover:text-acid transition mb-2">
                   {t.kicker}
