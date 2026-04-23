@@ -80,7 +80,7 @@ export default function TrustScore() {
                 </div>
                 <div className="text-xs text-zinc-600 font-mono mt-1">/ 100</div>
                 <div className="mt-5 flex items-center gap-2 bg-acid/10 border border-acid/30 rounded-full px-3 py-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-acid brand-pulse" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-acid" />
                   <span className="text-[10px] text-acid font-mono uppercase tracking-wider">
                     Verified
                   </span>

@@ -138,6 +138,7 @@ export default function Nav() {
               <motion.a
                 initial={{ y: 16, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
+                whileTap={{ scale: 0.97 }}
                 transition={{ delay: 0.4, duration: 0.5, ease: easeOutExpo }}
                 href="/#launch"
                 onClick={() => setOpen(false)}

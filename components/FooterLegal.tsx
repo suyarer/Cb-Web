@@ -34,7 +34,7 @@ export default function FooterLegal() {
               Türkiye&apos;de yapıldı — Cumartesi akşamlarını geri vermek için.
             </p>
             <div className="mt-6 inline-flex items-center gap-2 bg-white/[0.03] border border-white/10 rounded-full pl-3 pr-4 py-1.5 text-[11px] font-mono">
-              <span className="w-1.5 h-1.5 rounded-full bg-acid brand-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-acid" />
               <span className="text-zinc-400">2026 Q2 — lansman yaklaşıyor</span>
             </div>
           </div>

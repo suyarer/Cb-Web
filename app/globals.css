@@ -24,6 +24,24 @@
   body {
     @apply bg-midnight text-white;
     font-feature-settings: 'ss01', 'cv11';
+    background-color: #050505; /* Loading fallback — flash önler */
+  }
+
+  /* Global focus-visible — klavye navigasyonu için WCAG 2.1 AA */
+  :focus {
+    outline: none;
+  }
+  :focus-visible {
+    outline: 2px solid #A8E600;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  /* Button/link focus-visible'i aynı tonla hafifletilmiş */
+  button:focus-visible,
+  a:focus-visible {
+    outline: 2px solid #A8E600;
+    outline-offset: 3px;
+    border-radius: 6px;
   }
 
   ::selection {

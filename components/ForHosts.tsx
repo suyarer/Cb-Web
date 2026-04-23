@@ -90,6 +90,7 @@ export default function ForHosts() {
               initial={{ opacity: 0, y: 8 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
+              whileTap={{ scale: 0.97 }}
               transition={{ duration: 0.6, delay: 0.5 }}
               href="#launch"
               className="inline-flex items-center gap-2 bg-white/[0.04] hover:bg-acid hover:text-midnight border border-white/10 hover:border-acid text-white font-semibold px-5 py-3 rounded-full text-sm no-underline transition"
@@ -130,7 +131,7 @@ function ClubDashboard() {
           <span className="sm:hidden">clubbeans.com/host/…</span>
         </div>
         <span className="text-[10px] font-mono text-acid flex items-center gap-1 flex-shrink-0">
-          <span className="w-1.5 h-1.5 rounded-full bg-acid brand-pulse" />
+          <span className="w-1.5 h-1.5 rounded-full bg-acid" />
           CANLI
         </span>
       </div>

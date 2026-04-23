@@ -51,6 +51,7 @@ export default function StickyCTA() {
           initial={{ y: 80, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
+          whileTap={{ scale: 0.97 }}
           transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
           className="fixed md:hidden bottom-0 inset-x-0 z-[44] pointer-events-auto no-underline"
         >

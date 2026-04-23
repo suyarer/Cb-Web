@@ -34,24 +34,24 @@ export default function CompassTint() {
         className="fixed inset-0 pointer-events-none z-[1] mix-blend-screen"
       />
 
-      {/* Katman 2 — sol-alt blob (sadece md+) */}
+      {/* Katman 2 — sol-alt blob (sadece lg+ — mobil+tablet'te atla, GPU) */}
       <motion.div
         aria-hidden
         animate={{
           background: `radial-gradient(ellipse 55% 55% at 15% 100%, rgba(${color.glow}, 0.18), transparent 65%)`,
         }}
         transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
-        className="hidden md:block fixed inset-0 pointer-events-none z-[1] mix-blend-screen"
+        className="hidden lg:block fixed inset-0 pointer-events-none z-[1] mix-blend-screen"
       />
 
-      {/* Katman 3 — sağ-orta blob (sadece md+) */}
+      {/* Katman 3 — sağ-orta blob (sadece lg+) */}
       <motion.div
         aria-hidden
         animate={{
           background: `radial-gradient(ellipse 40% 50% at 92% 55%, rgba(${color.glow}, 0.14), transparent 60%)`,
         }}
         transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
-        className="hidden md:block fixed inset-0 pointer-events-none z-[1] mix-blend-screen"
+        className="hidden lg:block fixed inset-0 pointer-events-none z-[1] mix-blend-screen"
       />
 
       {/* Wash — mod değiştiğinde tek seferlik ekran dalgası (reduced-motion'da pas) */}
@@ -87,7 +87,7 @@ export default function CompassTint() {
               style={{ borderColor: `${color.accent}55` }}
             >
               <span
-                className="w-2 h-2 rounded-full brand-pulse flex-shrink-0"
+                className="w-2 h-2 rounded-full flex-shrink-0"
                 style={{ backgroundColor: color.accent }}
               />
               <span className="text-[10.5px] md:text-[11px] font-mono">

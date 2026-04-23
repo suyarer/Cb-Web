@@ -144,7 +144,7 @@ export default function Hero() {
               custom={0}
               className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 mb-8 text-xs font-medium text-zinc-300 backdrop-blur"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-acid brand-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-acid" />
               2026 Q2 · Lansmandan önce ilk sen haber al
             </motion.div>
 
