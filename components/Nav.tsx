@@ -8,9 +8,9 @@ import { useEffect, useState } from 'react';
 
 const LINKS = [
   { href: '/manifesto', label: 'Manifesto' },
-  { href: '/club-kur', label: 'Club aç' },
+  { href: '/club-kur', label: 'Kulüp aç' },
   { href: '/urun', label: 'Ürün' },
-  { href: '/fark', label: 'Fark' },
+  { href: '/fark', label: 'Neden farklı' },
   { href: '/sss', label: 'SSS' },
 ];
 

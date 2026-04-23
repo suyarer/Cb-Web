@@ -159,9 +159,11 @@ export default function TrustScore() {
               transition={{ duration: 0.8, ease: easeOutExpo }}
               className="text-section font-bold tracking-tight text-white mb-6"
             >
-              Güven, takipçi sayısıyla ölçülmez.
+              Güven, takipçi sayısı değildir.
               <br />
-              <span className="text-zinc-500">Geldiğin masaların sayısıyla ölçülür.</span>
+              <span className="text-zinc-500">
+                Söz verip geldiğin buluşmaların toplamıdır.
+              </span>
             </motion.h2>
             <motion.p
               initial={{ opacity: 0 }}
@@ -170,10 +172,11 @@ export default function TrustScore() {
               transition={{ duration: 0.8, delay: 0.1 }}
               className="text-lg text-zinc-400 leading-relaxed mb-10 max-w-xl"
             >
-              Herkes <span className="text-white">75</span>&apos;ten başlar. &quot;Gelirim&quot;
-              dediğin Bean&apos;e gittiğinde, düzenlediğin masa tam olduğunda, bir
-              kabile üyesi seni adıyla referans verdiğinde puanın yükselir. Son
-              dakika iptalde düşer. Masaya oturan herkesin izi şeffaftır.
+              Her kullanıcı <span className="text-white">75</span> puanla başlar.
+              Katıldığın her etkinlik, düzenlediğin her buluşma, aldığın her
+              referans puanını yükseltir. Son dakika iptal ettiğinde düşer. Kimin
+              hangi etkinliğe geldiği şeffaf — güven rastgele değil, biriken bir
+              şey.
             </motion.p>
 
             <div className="space-y-2 mb-10">

@@ -65,9 +65,9 @@ export default function SubpageTeasers() {
             Derine in
           </div>
           <h2 className="text-section font-bold tracking-tight text-white leading-tight">
-            Daha fazlasını merak ediyorsan,
+            Merak ettiğini öğren.
             <br />
-            <span className="text-zinc-500">taviz vermeden burada.</span>
+            <span className="text-zinc-500">Her konu kendi sayfasında.</span>
           </h2>
         </motion.div>
 

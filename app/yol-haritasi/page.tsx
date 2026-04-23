@@ -24,9 +24,9 @@ export default function YolHaritasiPage() {
       <Nav />
       <main>
         <SubPageHeader
-          kicker="Yol haritası · ne olacak, ne zaman"
-          title="Gizli tutmuyoruz."
-          subtitle="Takvim şeffaf, söz şeffaf. 2026 Q2'de İstanbul-Ankara-İzmir ile başlarız; Q3'te Türkiye, 2027'de yurt dışı."
+          kicker="Yol haritası"
+          title="Açık takvim — ne zaman, nerede?"
+          subtitle="Gizli söz, gizli tarih yok. 2026 Q2'de İstanbul-Ankara-İzmir ile başlıyoruz, Q3'te Türkiye'ye yayılıyor, 2027'de yurt dışı. Her aşama şeffaf."
         />
         <Roadmap />
         <SubPageCTA

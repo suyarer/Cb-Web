@@ -27,7 +27,7 @@ export default function ManifestoPage() {
         <SubPageHeader
           kicker="Manifesto · yavaş oku"
           title="Bir uygulama değil, anti-platform."
-          subtitle="Dikkat ekonomisinin karşısına dikilmiş bir dalgakıran. Neden yaptık, neye karşıyız, ne söz veriyoruz."
+          subtitle="Seni ekranda tutmak için tasarlanmış sosyal medyaların tersine — ClubBeans seni ekrandan kaldırmak için tasarlandı. Neden böyle yapıyoruz, nasıl yapıyoruz, ne söz veriyoruz."
         />
         <Manifesto />
         <SubPageCTA

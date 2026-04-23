@@ -25,9 +25,9 @@ export default function FarkPage() {
       <Nav />
       <main>
         <SubPageHeader
-          kicker="Neden başka bir uygulama değil?"
-          title="Yok, yok. Aynı raf değiliz."
-          subtitle="Batılı abonelik modelleri, global meetup platformları, flört odaklı IRL — beşikleri ayrı. ClubBeans hangi beş kritik alanda onlardan uzağa oturuyor."
+          kicker="ClubBeans vs. diğerleri"
+          title="Neden başka bir app değil."
+          subtitle="Abonelikli akşam yemeği uygulamaları, global meetup platformları, flört odaklı IRL app'leri — beşikleri ayrı. ClubBeans'in onlardan ayrıştığı 5 kritik alan."
         />
         <Compare />
         <SubPageCTA

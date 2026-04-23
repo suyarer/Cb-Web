@@ -25,8 +25,8 @@ export default function UrunPage() {
       <main>
         <SubPageHeader
           kicker="Ürün"
-          title="Dört ekran. Gerisi senin hayatın."
-          subtitle="Akış, Radar, Compass Mode, Bean detayı — yakındaki gerçeği senin eline bırakır. Sıralama algoritmanın değil, senin filtrelerinin."
+          title="ClubBeans'i içeriden gör."
+          subtitle="Dört ana ekran: yakındaki etkinlikleri (Bean) keşfet, haritada gör, ruh haline göre filtrele, katılmadan önce kimin geleceğini öğren. Algoritma yerine senin filtrelerin."
         />
         <Showcase />
         <SubPageCTA

@@ -157,10 +157,11 @@ export default function Hero() {
               custom={2}
               className="text-lg md:text-xl text-zinc-400 max-w-xl leading-relaxed mb-8"
             >
-              ClubBeans hem katılan hem kurucu için yazıldı. Yakınındaki
-              Bean&apos;e katılırsın — ya da kendi Club&apos;ını bir dakikada
-              açarsın. Masaya oturmak ve masayı kurmak arasındaki fark, artık
-              tek dokunuş. Cumartesi akşamı artık senin.
+              İki seçenek: yakındaki bir etkinliğe katıl{' '}
+              <span className="text-zinc-500">(Bean)</span> ya da kendi kulübünü
+              bir dakikada kur <span className="text-zinc-500">(Club)</span>.
+              Bekleyen form yok, abonelik yok, algoritma yok. Cumartesi akşamı
+              artık senin.
             </motion.p>
 
             <motion.div

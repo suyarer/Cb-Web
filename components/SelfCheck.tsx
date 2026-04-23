@@ -117,9 +117,9 @@ export default function SelfCheck() {
             transition={{ duration: 0.8, ease: easeOutExpo }}
             className="text-section font-bold tracking-tight text-white"
           >
-            Aynı masaya oturalım.
+            Kendini tart.
             <br />
-            <span className="text-zinc-500">Sen neredesin şu an?</span>
+            <span className="text-zinc-500">30 saniye yeter.</span>
           </motion.h2>
         </div>
 

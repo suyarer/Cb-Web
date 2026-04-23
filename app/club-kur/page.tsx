@@ -25,9 +25,9 @@ export default function ClubKurPage() {
       <Nav />
       <main>
         <SubPageHeader
-          kicker="Club kurucular için"
-          title="Masaya oturmak kadar, masayı kurmak da kolay."
-          subtitle="Topluluk yönetmenin dağıtıcı yüzüne son. ClubBeans tek ekranda açar, davet eder, korur — artık yorucu bir proje değil, kurucu bir iş."
+          kicker="Kulüp kurucular için"
+          title="Kendi kulübünü bir dakikada kur."
+          subtitle="WhatsApp grup, Instagram hesap, Eventbrite — hepsi tek ekranda. Etkinlik aç, üyeni yönet, kiminle buluştuğunu sen seç. Ücretsiz, komisyonsuz, sürtünmesiz."
         />
         <ForHosts />
         <SubPageCTA
