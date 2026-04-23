@@ -5,6 +5,13 @@ import Nav from '@/components/Nav';
 export const metadata: Metadata = {
   title: 'Gizlilik Politikası — ClubBeans',
   description: 'ClubBeans gizlilik politikası — KVKK ve GDPR uyumlu.',
+  alternates: { canonical: 'https://clubbeans.com/privacy' },
+  openGraph: {
+    title: 'Gizlilik Politikası — ClubBeans',
+    description: 'KVKK ve GDPR uyumlu gizlilik politikası.',
+    url: 'https://clubbeans.com/privacy',
+    type: 'article',
+  },
 };
 
 export default function PrivacyPage() {

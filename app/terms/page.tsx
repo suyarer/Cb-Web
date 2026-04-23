@@ -5,6 +5,13 @@ import Nav from '@/components/Nav';
 export const metadata: Metadata = {
   title: 'Kullanım Şartları — ClubBeans',
   description: 'ClubBeans kullanım şartları ve hizmet sözleşmesi.',
+  alternates: { canonical: 'https://clubbeans.com/terms' },
+  openGraph: {
+    title: 'Kullanım Şartları — ClubBeans',
+    description: 'ClubBeans kullanım şartları ve hizmet sözleşmesi.',
+    url: 'https://clubbeans.com/terms',
+    type: 'article',
+  },
 };
 
 export default function TermsPage() {

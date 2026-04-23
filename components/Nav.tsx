@@ -4,7 +4,7 @@ import BeanSprout from '@/components/BeanSprout';
 import { easeOutExpo } from '@/lib/motion';
 import { AnimatePresence, motion } from 'framer-motion';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const LINKS = [
   { href: '/manifesto', label: 'Manifesto' },
@@ -17,6 +17,9 @@ const LINKS = [
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
+  const firstLinkRef = useRef<HTMLAnchorElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -29,6 +32,43 @@ export default function Nav() {
     document.body.style.overflow = open ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
+    };
+  }, [open]);
+
+  // A11y: ESC kapatır, focus trap + açıldığında ilk linke focus
+  useEffect(() => {
+    if (!open) return;
+
+    const timeout = setTimeout(() => firstLinkRef.current?.focus(), 50);
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        hamburgerRef.current?.focus();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+
+      const focusables = overlayRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled])'
+      );
+      if (!focusables || focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement as HTMLElement | null;
+      if (e.shiftKey && active === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', onKey);
+    return () => {
+      clearTimeout(timeout);
+      document.removeEventListener('keydown', onKey);
     };
   }, [open]);
 
@@ -79,9 +119,11 @@ export default function Nav() {
 
           {/* Mobil hamburger */}
           <button
+            ref={hamburgerRef}
             type="button"
             aria-label={open ? 'Menüyü kapat' : 'Menüyü aç'}
             aria-expanded={open}
+            aria-controls="mobile-menu"
             onClick={() => setOpen((v) => !v)}
             className="md:hidden relative w-11 h-11 flex items-center justify-center rounded-full bg-white/[0.04] border border-white/10"
           >
@@ -104,6 +146,11 @@ export default function Nav() {
       <AnimatePresence>
         {open && (
           <motion.div
+            ref={overlayRef}
+            id="mobile-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Ana menü"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -127,6 +174,7 @@ export default function Nav() {
                   transition={{ delay: 0.1 + i * 0.05, duration: 0.5, ease: easeOutExpo }}
                 >
                   <Link
+                    ref={i === 0 ? firstLinkRef : undefined}
                     href={link.href}
                     onClick={() => setOpen(false)}
                     className="block text-3xl font-bold text-white tracking-tight py-3 border-b border-white/[0.05] no-underline"

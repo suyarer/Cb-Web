@@ -5,6 +5,13 @@ import Nav from '@/components/Nav';
 export const metadata: Metadata = {
   title: 'Hesap Silme — ClubBeans',
   description: 'ClubBeans hesabınızı ve tüm verilerinizi nasıl silersiniz.',
+  alternates: { canonical: 'https://clubbeans.com/delete-account' },
+  openGraph: {
+    title: 'Hesap Silme — ClubBeans',
+    description: 'Hesabını ve tüm verilerini nasıl silersin.',
+    url: 'https://clubbeans.com/delete-account',
+    type: 'article',
+  },
 };
 
 export default function DeleteAccountPage() {

@@ -45,6 +45,8 @@ const config: Config = {
         'shimmer': 'shimmer 3s linear infinite',
         'float': 'float 6s ease-in-out infinite',
         'glow-pulse': 'glowPulse 4s ease-in-out infinite',
+        'fade-up': 'fadeUp 0.8s cubic-bezier(0.19, 1, 0.22, 1) both',
+        'fade-in': 'fadeIn 0.6s cubic-bezier(0.19, 1, 0.22, 1) both',
       },
       keyframes: {
         shimmer: {
@@ -58,6 +60,14 @@ const config: Config = {
         glowPulse: {
           '0%, 100%': { opacity: '0.4' },
           '50%': { opacity: '0.8' },
+        },
+        fadeUp: {
+          'from': { opacity: '0', transform: 'translateY(20px)' },
+          'to': { opacity: '1', transform: 'translateY(0)' },
+        },
+        fadeIn: {
+          'from': { opacity: '0' },
+          'to': { opacity: '1' },
         },
       },
     },

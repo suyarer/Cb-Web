@@ -5,6 +5,13 @@ import Nav from '@/components/Nav';
 export const metadata: Metadata = {
   title: 'Destek — ClubBeans',
   description: 'ClubBeans destek merkezi. Sıkça sorulan sorular ve iletişim kanalları.',
+  alternates: { canonical: 'https://clubbeans.com/support' },
+  openGraph: {
+    title: 'Destek — ClubBeans',
+    description: 'ClubBeans destek merkezi.',
+    url: 'https://clubbeans.com/support',
+    type: 'article',
+  },
 };
 
 const faqs = [
