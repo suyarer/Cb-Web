@@ -109,7 +109,7 @@ export default function FAQ() {
             className="mt-10 space-y-3 text-center text-xs text-zinc-500 font-mono"
           >
             <p>
-              İptal kuralları, ücretli Bean, KVKK detayı —{' '}
+              İptal kuralları, ücretli etkinlik, KVKK detayı —{' '}
               <a href="/terms" className="text-zinc-300 hover:text-acid underline underline-offset-2">
                 Kullanım Şartları
               </a>

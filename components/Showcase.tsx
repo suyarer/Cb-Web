@@ -17,7 +17,7 @@ const screens = [
     id: 'radar',
     title: 'Radar',
     description:
-      'Şehrin bu akşam ne yapıyor? Harita, mesafe, saat, vibe — tek ekran. Sıralamayı algoritma değil, filtrelerin belirler. Görünmeyen bir zemin var: sen.',
+      'Şehrin bu akşam ne yapıyor? Harita, mesafe, saat, tarz — tek ekran. Sıralamayı algoritma değil, senin filtrelerin belirler. Görünmeyen bir zemin var: sen.',
     mockup: <RadarScreen />,
   },
   {

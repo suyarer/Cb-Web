@@ -9,7 +9,7 @@ const steps = [
     key: 'Keşfet',
     title: 'Aç. Yakının görsün.',
     body:
-      '"Nerede n\'apılır?" sorusunu algoritmaya değil, kendi filtrene sorarsın. Saat, mesafe, vibe — neyi arıyorsan onu, gerçekten yakınında, gerçekten bu akşam.',
+      '"Nerede n\'apılır?" sorusunu algoritmaya değil, kendi filtrene sorarsın. Saat, mesafe, tarz — neyi arıyorsan onu, gerçekten yakınında, gerçekten bu akşam.',
   },
   {
     n: '02',
