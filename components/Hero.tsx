@@ -3,9 +3,8 @@
 import AttentionCounter from '@/components/AttentionCounter';
 import BeanSprout from '@/components/BeanSprout';
 import CompassSwitcher from '@/components/compass/CompassSwitcher';
-import KabileLivePulse from '@/components/KabileLivePulse';
 import KineticHeadline from '@/components/KineticHeadline';
-import NextBeanCountdown from '@/components/NextBeanCountdown';
+import SubscribeForm from '@/components/SubscribeForm';
 import { easeOutExpo, fadeUpVariant } from '@/lib/motion';
 import { useTimeGreeting } from '@/lib/useTimeGreeting';
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion';
@@ -186,66 +185,52 @@ export default function Hero() {
               ))}
             </motion.div>
 
+            {/* PRIMARY — inline mail form (conversion #1) */}
             <motion.div
               variants={variants}
               initial="hidden"
               animate="visible"
               custom={3}
-              className="flex flex-col sm:flex-row items-start sm:items-center gap-4"
             >
-              <a
-                href="#launch"
-                className="group inline-flex items-center gap-2 bg-acid text-midnight font-semibold px-6 py-3.5 rounded-full text-sm no-underline hover:bg-acid-400 transition hover:shadow-[0_0_40px_rgba(168,230,0,0.35)]"
-              >
-                Lansman listesine katıl
-                <span className="group-hover:translate-x-0.5 transition">→</span>
-              </a>
-              <a
-                href="#manifesto"
-                className="inline-flex items-center min-h-[44px] px-1 text-zinc-400 hover:text-white text-sm font-medium no-underline transition"
-              >
-                Manifesto oku →
-              </a>
+              <SubscribeForm source="hero" />
             </motion.div>
 
+            {/* SECONDARY — manifesto + küçük counter */}
             <motion.div
               variants={variants}
               initial="hidden"
               animate="visible"
               custom={3.5}
-              className="mt-10 flex flex-wrap items-center gap-3"
+              className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm"
             >
+              <a
+                href="#manifesto"
+                className="inline-flex items-center min-h-[44px] text-zinc-400 hover:text-white font-medium no-underline transition"
+              >
+                Manifesto oku →
+              </a>
+              <span className="hidden md:inline-block w-px h-4 bg-white/10" />
               <AttentionCounter />
-              <span className="hidden md:block w-px h-4 bg-white/10" />
-              <NextBeanCountdown />
             </motion.div>
 
-            <motion.div
-              variants={variants}
-              initial="hidden"
-              animate="visible"
-              custom={3.75}
-              className="mt-4"
-            >
-              <KabileLivePulse />
-            </motion.div>
-
+            {/* Compass Mode — hero altı (sağa zoom eşlik eder) */}
             <motion.div
               variants={variants}
               initial="hidden"
               animate="visible"
               custom={4}
-              className="mt-10"
+              className="mt-12"
             >
               <CompassSwitcher />
             </motion.div>
 
+            {/* İki persona — her ikisine de yol aç */}
             <motion.div
               variants={variants}
               initial="hidden"
               animate="visible"
               custom={4.5}
-              className="mt-12 grid sm:grid-cols-2 gap-3 max-w-lg"
+              className="mt-10 grid sm:grid-cols-2 gap-3 max-w-lg"
             >
               <PersonaCard
                 kicker="Bean'e otur"

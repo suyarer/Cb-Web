@@ -6,23 +6,18 @@ import { motion } from 'framer-motion';
 const benefits = [
   {
     n: '01',
-    title: 'Bir dakikada kulüp.',
-    body: 'Alan seç — AI, koşu, film, kitap, yoga. İsmini koy, logo at. Form doldurmak yok; Club\'ın yayında.',
+    title: 'Bir dakikada kulüp, tek ekranda yönetim.',
+    body: 'Alan seç, isim ver, logo at — Club\'ın yayında. Bean aç, tarih ver, kabilene tek tuşla duyur. WhatsApp grup, Instagram, Eventbrite gerekmez.',
   },
   {
     n: '02',
-    title: 'Bir takvim, bir ekran.',
-    body: 'Bean açarsın, tarih verirsin, kapasite koyarsın. Kabilene tek tuşla duyurursun. WhatsApp grup, Instagram post, Eventbrite — hiçbirine ihtiyaç yok.',
+    title: 'Masana kim oturur, sen seçersin.',
+    body: 'TrustScore filtresi — sadece 80 ve üstü kabul. Misafir limiti. Kapalı Bean. Kararı sen verirsin; biz sessiz altyapıyı tutarız.',
   },
   {
     n: '03',
-    title: 'Masana kim oturur, sen seç.',
-    body: 'TrustScore filtresi — sadece 80 ve üstü kabul. Misafir limiti. Kapalı Bean. Kararı sen verirsin; biz sadece sessiz altyapıyı tutarız.',
-  },
-  {
-    n: '04',
     title: 'Sıfır abonelik, sıfır komisyon.',
-    body: 'Ücretsiz Club, ücretsiz Bean. Ücretli yaparsan da ClubBeans payı %0. Ne veriyi ne dikkatini satıyoruz — sen sohbet ediyorsun, biz masayı hazırlıyoruz.',
+    body: 'Ücretsiz Club, ücretsiz Bean. Ücretli Bean yaparsan bile ClubBeans payı %0. Ne veriyi ne dikkatini satıyoruz — sen sohbet edersin, biz masayı hazırlarız.',
   },
 ];
 

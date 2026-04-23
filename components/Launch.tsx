@@ -1,5 +1,6 @@
 'use client';
 
+import SubscribeForm from '@/components/SubscribeForm';
 import { easeOutExpo } from '@/lib/motion';
 import { motion } from 'framer-motion';
 
@@ -25,33 +26,19 @@ export default function Launch() {
             <br className="md:hidden" /> ilk sen öğren.
           </h2>
 
-          <p className="text-lg text-zinc-400 max-w-xl mx-auto mb-12">
+          <p className="text-lg text-zinc-400 max-w-xl mx-auto mb-10">
             Haftalık newsletter yok. Pazarlama e-postaları yok. Spam yok.
-            Dikkatini çalmayacağımıza söz verdik — ve sözümüzü tutuyoruz.
             Lansman günü tek mail, tek link, tek davet kodu. Gerisi senin
             akşamın.
           </p>
 
-          {/* Store badges — disabled */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-            <StoreBadge platform="apple" />
-            <StoreBadge platform="google" />
+          <div className="flex justify-center mb-10">
+            <SubscribeForm source="launch" />
           </div>
 
-          {/* Email CTA */}
-          <div className="max-w-md mx-auto">
-            <a
-              href="mailto:hello@clubbeans.com?subject=ClubBeans%20Lansman%20Listesi&body=Beni%20lansman%20listesine%20ekleyin."
-              className="group flex items-center justify-between bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 hover:border-acid/40 rounded-full pl-6 pr-2 py-2 transition no-underline"
-            >
-              <span className="text-sm text-zinc-400 font-mono">hello@clubbeans.com</span>
-              <span className="bg-acid text-midnight font-bold text-xs px-5 py-2.5 rounded-full group-hover:bg-acid-400 transition">
-                Bana haber ver →
-              </span>
-            </a>
-            <p className="mt-5 text-xs text-zinc-600">
-              Mail gönderirsin, listeye alırız. Söz bu kadar.
-            </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <StoreBadge platform="apple" />
+            <StoreBadge platform="google" />
           </div>
         </motion.div>
       </div>
@@ -62,7 +49,11 @@ export default function Launch() {
 function StoreBadge({ platform }: { platform: 'apple' | 'google' }) {
   const isApple = platform === 'apple';
   return (
-    <div className="group relative inline-flex items-center gap-3 bg-white/[0.03] border border-white/10 rounded-2xl px-5 py-3 cursor-not-allowed opacity-60">
+    <a
+      href="#launch"
+      aria-label={`${isApple ? 'App Store' : 'Google Play'} · Mayıs 2026`}
+      className="group relative inline-flex items-center gap-3 bg-white/[0.03] border border-white/10 rounded-2xl px-5 py-3 no-underline hover:border-acid/30 transition"
+    >
       <div className="text-white">
         {isApple ? (
           <svg viewBox="0 0 24 24" className="w-7 h-7" fill="currentColor">
@@ -75,11 +66,13 @@ function StoreBadge({ platform }: { platform: 'apple' | 'google' }) {
         )}
       </div>
       <div className="text-left">
-        <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Yakında</div>
+        <div className="text-[10px] text-acid uppercase tracking-wider font-mono">
+          Mayıs 2026
+        </div>
         <div className="text-sm font-semibold text-white">
           {isApple ? 'App Store' : 'Google Play'}
         </div>
       </div>
-    </div>
+    </a>
   );
 }

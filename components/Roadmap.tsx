@@ -29,18 +29,6 @@ const STAGES: Stage[] = [
     body: 'App Store + Google Play yayında. İstanbul, Ankara, İzmir herkese açık.',
     state: 'next',
   },
-  {
-    when: '2026 Q3',
-    title: 'Türkiye geneli',
-    body: 'Bursa, Antalya, Eskişehir, Trabzon, Konya. Şehrin seninkini dahil etmesi için mail yeter.',
-    state: 'future',
-  },
-  {
-    when: '2027',
-    title: 'Yurt dışı',
-    body: 'Berlin, Amsterdam, Londra — Türkiye diyasporası için önce, sonra yerel halk için.',
-    state: 'future',
-  },
 ];
 
 export default function Roadmap() {
@@ -83,6 +71,17 @@ export default function Roadmap() {
               <StageRow key={s.when} stage={s} index={i} />
             ))}
           </div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="mt-10 md:mt-12 text-center text-xs md:text-sm text-zinc-500 font-mono"
+          >
+            Sonrası · <span className="text-zinc-400">2026 Q3 Türkiye geneli</span> ·{' '}
+            <span className="text-zinc-400">2027 yurt dışı</span>
+          </motion.div>
         </div>
       </div>
     </section>

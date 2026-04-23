@@ -19,7 +19,7 @@ export default function FAQ() {
             transition={{ duration: 0.6 }}
             className="text-xs uppercase tracking-[0.3em] text-acid mb-6 font-mono text-center"
           >
-            Merakını gideren 12 cevap
+            6 net cevap · kalanı metinlerde
           </motion.div>
 
           <motion.h2
@@ -106,9 +106,19 @@ export default function FAQ() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="mt-10 text-center"
+            className="mt-10 space-y-3 text-center text-xs text-zinc-500 font-mono"
           >
-            <p className="text-xs text-zinc-500 font-mono">
+            <p>
+              İptal kuralları, ücretli Bean, KVKK detayı —{' '}
+              <a href="/terms" className="text-zinc-300 hover:text-acid underline underline-offset-2">
+                Kullanım Şartları
+              </a>
+              {' · '}
+              <a href="/privacy" className="text-zinc-300 hover:text-acid underline underline-offset-2">
+                Gizlilik
+              </a>
+            </p>
+            <p>
               Başka bir şey mi merak ediyorsun?{' '}
               <a
                 href="mailto:hello@clubbeans.com?subject=Soru"
@@ -116,7 +126,6 @@ export default function FAQ() {
               >
                 hello@clubbeans.com
               </a>
-              &apos;a yaz — 48 saat içinde döneriz.
             </p>
           </motion.div>
         </div>

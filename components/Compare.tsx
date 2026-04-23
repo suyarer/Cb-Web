@@ -7,13 +7,6 @@ type Val = { v: 'yes' | 'no' | 'partial'; label?: string };
 
 const rows: { feature: string; cb: Val; timeleft: Val; meetup: Val; tinder: Val }[] = [
   {
-    feature: 'Fiziksel buluşma odaklı',
-    cb: { v: 'yes' },
-    timeleft: { v: 'yes' },
-    meetup: { v: 'partial', label: 'Karma' },
-    tinder: { v: 'partial', label: 'Flört' },
-  },
-  {
     feature: 'Ücretsiz (abonelik yok)',
     cb: { v: 'yes' },
     timeleft: { v: 'no', label: 'Aylık ücret' },
@@ -32,13 +25,6 @@ const rows: { feature: string; cb: Val; timeleft: Val; meetup: Val; tinder: Val 
     cb: { v: 'yes' },
     timeleft: { v: 'no' },
     meetup: { v: 'partial', label: 'Ücretli' },
-    tinder: { v: 'no' },
-  },
-  {
-    feature: 'Hiperlokal radar (konum + saat)',
-    cb: { v: 'yes' },
-    timeleft: { v: 'partial', label: 'Sadece yemek' },
-    meetup: { v: 'partial' },
     tinder: { v: 'no' },
   },
   {
