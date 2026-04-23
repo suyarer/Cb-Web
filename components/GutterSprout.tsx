@@ -16,19 +16,19 @@ export default function GutterSprout() {
     restDelta: 0.001,
   });
 
-  // Sap: 0→1 progress ile tam ölçek
-  const stemScaleY = useTransform(progress, [0, 1], [0.02, 1]);
+  // Sap: scroll %86'da tam yüksekliğe çıkar.
+  // Son %14 boyunca sap sabit durur — kullanıcı Launch'u okur, filiz görsel imza.
+  const stemScaleY = useTransform(progress, [0, 0.86], [0.02, 1]);
 
-  // Yapraklar: sap'ın o noktaya ulaştığında açılır.
-  // Sap height 70vh, scaleY = progress. Sap scroll %20'de 14vh'ya ulaşır.
-  // Her yaprak sap'ın kendi seviyesinden biraz ÖNCE fade başlar,
-  // sap o noktadayken yaprak tam açıktır.
-  const leaf1 = useTransform(progress, [0.18, 0.24], [0, 1]); // pozisyon 14vh
-  const leaf2 = useTransform(progress, [0.38, 0.44], [0, 1]); // pozisyon 28vh
-  const leaf3 = useTransform(progress, [0.58, 0.64], [0, 1]); // pozisyon 42vh
-  const leaf4 = useTransform(progress, [0.74, 0.80], [0, 1]); // pozisyon 56vh
-  // Taç — scroll %85'te tam açılır, kullanıcı Launch'a varmadan filizlenme biter
-  const crown = useTransform(progress, [0.78, 0.86], [0, 1]);
+  // Yapraklar: sap'ın o noktaya ulaştığı anda açılır — TAM senkron.
+  // Sap scroll %X'te 70vh * (X/0.86) yüksekliğe çıkar.
+  // Leaf N sap'ın %(N×20)'sinde = 0.86 × N × 0.20 progress'te.
+  const leaf1 = useTransform(progress, [0.13, 0.19], [0, 1]); // sap 14vh'da @ 0.172
+  const leaf2 = useTransform(progress, [0.29, 0.36], [0, 1]); // sap 28vh'da @ 0.344
+  const leaf3 = useTransform(progress, [0.46, 0.53], [0, 1]); // sap 42vh'da @ 0.516
+  const leaf4 = useTransform(progress, [0.63, 0.70], [0, 1]); // sap 56vh'da @ 0.688
+  // Taç — sap tam tepeye vardığında (70vh @ 0.86)
+  const crown = useTransform(progress, [0.80, 0.86], [0, 1]);
 
   // Bean alt kısmı progress'e göre doygunluk
   const beanOpacity = useTransform(progress, [0, 0.1], [0.35, 1]);
