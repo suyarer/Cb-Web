@@ -11,11 +11,10 @@ export function getResend(): Resend | null {
   return cached;
 }
 
-// Brand gönderici kimliği
+// Brand gönderici kimliği — root domain (Resend Cloudflare auto-setup ile doğrulanan)
 export const MAIL_FROM = {
   name: 'ClubBeans',
-  // send.clubbeans.com otomatik subdomain'de gönderim
-  email: 'lansman@send.clubbeans.com',
+  email: 'lansman@clubbeans.com',
 } as const;
 
 export const REPLY_TO = 'hello@clubbeans.com';
