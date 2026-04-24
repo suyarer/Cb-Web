@@ -106,9 +106,13 @@ export default function PrivacyPage() {
           <h2>5. Üçüncü Taraflar</h2>
           <p>Aşağıdaki hizmet sağlayıcılarla veri paylaşıyoruz:</p>
           <ul>
-            <li><strong>Supabase</strong> (veritabanı, auth) — AB/Frankfurt sunucuları</li>
-            <li><strong>Expo / EAS</strong> (push bildirimleri)</li>
-            <li><strong>Sentry</strong> (crash raporlama — anonim)</li>
+            <li><strong>Supabase</strong> (uygulama veritabanı + auth) — AB/Frankfurt sunucuları</li>
+            <li><strong>Upstash</strong> (lansman e-posta listesi + rate limit) — AB/Frankfurt</li>
+            <li><strong>Resend</strong> (lansman e-postası gönderimi) — AB sunucuları</li>
+            <li><strong>Vercel</strong> (barındırma + analytics + blob yedekleme) — global CDN</li>
+            <li><strong>Cloudflare</strong> (DNS + bot koruma — Turnstile)</li>
+            <li><strong>Sentry</strong> (hata raporlama — PII kapalı) — AB sunucuları</li>
+            <li><strong>Expo / EAS</strong> (mobil uygulama için push bildirimleri)</li>
             <li><strong>Mapbox</strong> (harita görselleri — konum paylaşılmaz)</li>
             <li><strong>Didit</strong> (KYC — opsiyonel, sadece kullanıcı tercihiyle)</li>
           </ul>

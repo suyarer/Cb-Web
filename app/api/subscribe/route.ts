@@ -3,6 +3,9 @@ import { Redis } from '@upstash/redis';
 import disposableDomains from 'disposable-email-domains';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { welcomeEmailHtml, welcomeEmailSubject, welcomeEmailText } from '@/lib/emails/welcome';
+import { MAIL_FROM, REPLY_TO, getResend } from '@/lib/resend';
+import { signUnsubscribeToken } from '@/lib/unsubscribeToken';
 
 // Storage keys
 const SUBSCRIBERS_SET = 'subscribers';
@@ -150,6 +153,39 @@ export async function POST(req: NextRequest) {
     }
 
     const position = await redis.scard(SUBSCRIBERS_SET);
+
+    // 8. Welcome mail — sadece YENİ aboneye (dedupe'da atla)
+    // Mail gönderim hatası cevabı blok etmesin (best-effort).
+    if (added === 1) {
+      const resend = getResend();
+      if (resend) {
+        try {
+          const baseUrl =
+            process.env.NEXT_PUBLIC_SITE_URL || `https://${host}` || 'https://www.clubbeans.com';
+          const token = signUnsubscribeToken(email);
+          const unsubscribeUrl = `${baseUrl}/api/unsubscribe?token=${token}`;
+
+          await resend.emails.send({
+            from: `${MAIL_FROM.name} <${MAIL_FROM.email}>`,
+            to: email,
+            replyTo: REPLY_TO,
+            subject: welcomeEmailSubject(),
+            html: welcomeEmailHtml({ email, position, unsubscribeUrl, baseUrl }),
+            text: welcomeEmailText({ email, position, unsubscribeUrl, baseUrl }),
+            headers: {
+              // RFC 8058 — Gmail/Outlook tek tıkla unsubscribe
+              'List-Unsubscribe': `<${unsubscribeUrl}>, <mailto:${REPLY_TO}?subject=unsubscribe>`,
+              'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+            },
+          });
+        } catch (mailErr) {
+          // Mail hatası, abonelik zaten kayıt edildi — sessiz geç
+          if (process.env.NODE_ENV !== 'production') {
+            console.error('[subscribe] welcome mail failed:', mailErr);
+          }
+        }
+      }
+    }
 
     return NextResponse.json({
       ok: true,
