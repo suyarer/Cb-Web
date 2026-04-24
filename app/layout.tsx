@@ -6,6 +6,8 @@ import { FAQS } from '@/lib/faqs';
 import GutterSprout from '@/components/GutterSprout';
 import LiveTicker from '@/components/LiveTicker';
 import ScrollRoots from '@/components/ScrollRoots';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
@@ -151,6 +153,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
