@@ -42,9 +42,9 @@ export async function GET(req: NextRequest) {
     const filename = `subscribers/backup-${timestamp}.json`;
 
     const blob = await put(filename, JSON.stringify(snapshot, null, 2), {
-      access: 'public', // Public = URL ile erişilebilir (dump için OK; PII olduğu için private da olabilir)
+      access: 'public', // PII olduğu için URL'i paylaşma; addRandomSuffix ile tahmin edilemez
       contentType: 'application/json',
-      addRandomSuffix: false,
+      addRandomSuffix: true,
     });
 
     return NextResponse.json({

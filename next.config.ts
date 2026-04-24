@@ -1,3 +1,4 @@
+import { withSentryConfig } from '@sentry/nextjs';
 import type { NextConfig } from 'next';
 
 const securityHeaders = [
@@ -26,16 +27,17 @@ const securityHeaders = [
     value: 'on',
   },
   // Next.js 16 + framer-motion inline style'lar gerektiriyor; JSON-LD inline script var.
-  // Third-party yok — sıkı CSP.
+  // Turnstile için challenges.cloudflare.com, Sentry için sentry.io izinli.
   {
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'", // Next runtime + JSON-LD
-      "style-src 'self' 'unsafe-inline'", // Tailwind + framer-motion inline
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com",
+      "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob:",
       "font-src 'self' data:",
-      "connect-src 'self'",
+      "connect-src 'self' https://*.ingest.sentry.io https://*.ingest.de.sentry.io https://challenges.cloudflare.com",
+      "frame-src 'self' https://challenges.cloudflare.com",
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'",
@@ -57,4 +59,21 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Sentry wrap — build-time'da source map upload + runtime error capture.
+// Auth token yoksa (preview/dev) build kırılmaz, sadece upload skip edilir.
+export default withSentryConfig(nextConfig, {
+  org: process.env.SENTRY_ORG || 'clubbeans',
+  project: process.env.SENTRY_PROJECT || 'cb-web',
+  // Auth token yoksa sessizce geç
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  // Source maps'i Sentry'ye yükle, sonra client bundle'dan sil (güvenlik)
+  sourcemaps: {
+    disable: !process.env.SENTRY_AUTH_TOKEN,
+  },
+  // Build çıktılarını sessiz tut
+  silent: !process.env.CI,
+  // Tree-shaking için kullanılmayan Sentry kodunu kaldır
+  disableLogger: true,
+  // Vercel Cron'ları Sentry telemetry ile entegre et
+  automaticVercelMonitors: true,
+});
