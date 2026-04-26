@@ -8,6 +8,10 @@
     {
       "path": "/api/cron/backup-subscribers",
       "schedule": "0 3 * * 1"
+    },
+    {
+      "path": "/api/cron/email-sequence",
+      "schedule": "0 9 * * *"
     }
   ]
 }

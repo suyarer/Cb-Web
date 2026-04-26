@@ -42,6 +42,8 @@ const subscribeSchema = z.object({
   website: z.string().max(0).optional(),
   // Cloudflare Turnstile token (user-action gerektirdiği için şimdilik opsiyonel)
   turnstileToken: z.string().max(2048).optional(),
+  // Referral kodu (?ref=XYZ) — kim getirdi
+  ref: z.string().max(32).optional(),
 });
 
 function getClientIp(req: NextRequest): string {
@@ -139,20 +141,68 @@ export async function POST(req: NextRequest) {
     // 7. Redis: set'e ekle + metadata yaz
     const added = await redis.sadd(SUBSCRIBERS_SET, email);
     if (added === 1) {
+      // Bu kişiye özel referral kodu üret (kısa hash)
+      const refCode = email.split('@')[0].slice(0, 8) + Date.now().toString(36).slice(-4);
+
       // Yeni abone — metadata kaydet
       const metadata: Record<string, string | number> = {
         source,
         ip: ip.slice(0, 16), // privacy: IP'yi kısalt (sadece abuse için)
         ts: Date.now(),
         consent_ts: Date.now(), // KVKK açık rıza zamanı
+        ref_code: refCode, // bu kişinin paylaşacağı kod
+        ref_count: 0, // bu kişi kaç kişi getirdi
       };
       if (parsed.data.utm?.source) metadata.utm_source = parsed.data.utm.source;
       if (parsed.data.utm?.medium) metadata.utm_medium = parsed.data.utm.medium;
       if (parsed.data.utm?.campaign) metadata.utm_campaign = parsed.data.utm.campaign;
+      if (parsed.data.ref) metadata.referred_by = parsed.data.ref;
       await redis.hset(SUBSCRIBER_META(email), metadata);
+
+      // Referrer'ın sayacını arttır (best-effort)
+      if (parsed.data.ref) {
+        try {
+          // ref_code'a göre referrer'ı bulmak için reverse lookup gerek.
+          // Basit yaklaşım: ref_code → email mapping (ayrı set)
+          const referrerEmail = await redis.get<string>(`refcode:${parsed.data.ref}`);
+          if (referrerEmail) {
+            await redis.hincrby(SUBSCRIBER_META(referrerEmail), 'ref_count', 1);
+          }
+        } catch {
+          // Referral sayım hatası abone kaydını blok etmesin
+        }
+      }
+
+      // Yeni kişinin ref_code'unu reverse lookup için kaydet
+      await redis.set(`refcode:${refCode}`, email);
+
+      // Resend Audience sync — broadcast için Resend'de de tut (best-effort)
+      const resend = getResend();
+      const audienceId = process.env.RESEND_AUDIENCE_ID;
+      if (resend && audienceId) {
+        try {
+          await resend.contacts.create({
+            email,
+            audienceId,
+            unsubscribed: false,
+          });
+        } catch {
+          // Audience sync hatası abone kaydını blok etmesin
+        }
+      }
     }
 
     const position = await redis.scard(SUBSCRIBERS_SET);
+
+    // Bu aboneye özel ref kodunu çek (yeni eklendiyse az önce yarattık,
+    // mevcutsa metadata'dan oku)
+    let userRefCode: string | null = null;
+    try {
+      const meta = await redis.hget<string>(SUBSCRIBER_META(email), 'ref_code');
+      userRefCode = meta || null;
+    } catch {
+      userRefCode = null;
+    }
 
     // 8. Welcome mail — sadece YENİ aboneye (dedupe'da atla)
     // Mail gönderim hatası cevabı blok etmesin (best-effort).
@@ -190,6 +240,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       ok: true,
       position,
+      refCode: userRefCode,
     });
   } catch (err) {
     if (process.env.NODE_ENV !== 'production') {

@@ -43,6 +43,7 @@ export default function SubscribeForm({
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState<string>('');
   const [position, setPosition] = useState<number | null>(null);
+  const [refCode, setRefCode] = useState<string | null>(null);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const turnstileWidgetId = useRef<string | null>(null);
   const turnstileContainerRef = useRef<HTMLDivElement>(null);
@@ -85,6 +86,9 @@ export default function SubscribeForm({
       campaign: searchParams?.get('utm_campaign') || undefined,
     };
 
+    // Referral kodu — ?ref=XYZ
+    const ref = searchParams?.get('ref') || undefined;
+
     setStatus('loading');
     try {
       const res = await fetch('/api/subscribe', {
@@ -95,6 +99,7 @@ export default function SubscribeForm({
           source,
           website: honeypot,
           utm,
+          ref,
           consent: true,
           turnstileToken: turnstileToken || undefined,
         }),
@@ -111,6 +116,7 @@ export default function SubscribeForm({
       } else {
         setStatus('success');
         setPosition(data.position ?? null);
+        setRefCode(data.refCode ?? null);
         setMessage('');
       }
     } catch {
@@ -133,7 +139,7 @@ export default function SubscribeForm({
           <span className="w-6 h-6 rounded-full bg-acid text-midnight flex items-center justify-center font-bold flex-shrink-0">
             ✓
           </span>
-          <div>
+          <div className="flex-1 min-w-0">
             <div className="text-white font-semibold mb-1">
               Listede yerin hazır.
             </div>
@@ -147,6 +153,9 @@ export default function SubscribeForm({
                 'Lansman günü tek mail gelir — spam yok, söz.'
               )}
             </div>
+            {refCode && (
+              <ReferralBlock refCode={refCode} />
+            )}
           </div>
         </div>
       </motion.div>
@@ -280,5 +289,41 @@ export default function SubscribeForm({
         </p>
       </form>
     </>
+  );
+}
+
+// ─── Referral block — abone olduktan sonra paylaşım çağrısı ───
+function ReferralBlock({ refCode }: { refCode: string }) {
+  const [copied, setCopied] = useState(false);
+  const link = typeof window !== 'undefined'
+    ? `${window.location.origin}/?ref=${refCode}`
+    : `https://www.clubbeans.com/?ref=${refCode}`;
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(link);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Fallback yok — clipboard API genelde çalışır
+    }
+  };
+
+  return (
+    <div className="mt-3 pt-3 border-t border-acid/20">
+      <div className="text-[11px] text-zinc-500 mb-1.5">
+        Bir arkadaşına ilet — ikinizin de listede yeri sağlam.
+      </div>
+      <div className="flex items-center gap-2 bg-midnight/40 border border-acid/20 rounded-lg px-3 py-1.5">
+        <code className="text-[11px] text-zinc-300 font-mono flex-1 truncate">{link}</code>
+        <button
+          type="button"
+          onClick={copy}
+          className="text-[10px] font-mono uppercase tracking-wider text-acid hover:text-white transition px-2 py-1 rounded bg-acid/10 hover:bg-acid/20 flex-shrink-0"
+        >
+          {copied ? '✓ kopyalandı' : 'kopyala'}
+        </button>
+      </div>
+    </div>
   );
 }
