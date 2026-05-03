@@ -35,7 +35,7 @@ export default function FooterLegal() {
             </p>
             <div className="mt-6 inline-flex items-center gap-2 bg-white/[0.03] border border-white/10 rounded-full pl-3 pr-4 py-1.5 text-[11px] font-mono">
               <span className="w-1.5 h-1.5 rounded-full bg-acid" />
-              <span className="text-zinc-400">2026 Q2 — lansman yaklaşıyor</span>
+              <span className="text-zinc-400">29 Mayıs 2026 — lansman yaklaşıyor</span>
             </div>
           </div>
 
@@ -74,10 +74,10 @@ export default function FooterLegal() {
               </li>
               <li>
                 <a
-                  href="mailto:hello@clubbeans.com"
+                  href="mailto:info@clubbeans.com"
                   className="inline-flex items-center min-h-[44px] text-zinc-400 hover:text-white transition no-underline"
                 >
-                  hello@clubbeans.com
+                  info@clubbeans.com
                 </a>
               </li>
               <li>

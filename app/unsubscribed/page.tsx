@@ -17,17 +17,17 @@ const COPY = {
   'not-found': {
     title: 'Zaten listede değildin.',
     sub: 'Belki başka bir mail adresi?',
-    body: 'Bu adres listemizde bulunamadı. Belki farklı bir e-posta ile kaydolmuştun. Sorumuz varsa hello@clubbeans.com.',
+    body: 'Bu adres listemizde bulunamadı. Belki farklı bir e-posta ile kaydolmuştun. Sorumuz varsa info@clubbeans.com.',
   },
   invalid: {
     title: 'Link geçersiz.',
     sub: 'Süresi dolmuş olabilir.',
-    body: 'Bu unsubscribe linki geçersiz veya bozuk. Manuel çıkmak için hello@clubbeans.com adresine "unsubscribe" yazabilirsin.',
+    body: 'Bu unsubscribe linki geçersiz veya bozuk. Manuel çıkmak için info@clubbeans.com adresine "unsubscribe" yazabilirsin.',
   },
   error: {
     title: 'Bir şey ters gitti.',
     sub: 'Biz halledeceğiz.',
-    body: 'Sunucu tarafında bir sorun oldu. Güvence için hello@clubbeans.com adresine yazabilirsin, biz manuel çıkaralım.',
+    body: 'Sunucu tarafında bir sorun oldu. Güvence için info@clubbeans.com adresine yazabilirsin, biz manuel çıkaralım.',
   },
 };
 

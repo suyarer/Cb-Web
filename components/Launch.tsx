@@ -18,7 +18,7 @@ export default function Launch() {
           className="max-w-3xl mx-auto text-center"
         >
           <div className="text-xs uppercase tracking-[0.3em] text-acid mb-6 font-mono">
-            2026 Q2 · Yolda
+            29 Mayıs 2026 · Cuma
           </div>
 
           <h2 className="text-display font-bold tracking-tight mb-6">
@@ -51,7 +51,7 @@ function StoreBadge({ platform }: { platform: 'apple' | 'google' }) {
   return (
     <a
       href="#launch"
-      aria-label={`${isApple ? 'App Store' : 'Google Play'} · Mayıs 2026`}
+      aria-label={`${isApple ? 'App Store' : 'Google Play'} · 29 Mayıs 2026`}
       className="group relative inline-flex items-center gap-3 bg-white/[0.03] border border-white/10 rounded-2xl px-5 py-3 no-underline hover:border-acid/30 transition-colors duration-300"
     >
       <div className="text-white">
@@ -67,7 +67,7 @@ function StoreBadge({ platform }: { platform: 'apple' | 'google' }) {
       </div>
       <div className="text-left">
         <div className="text-[10px] text-acid uppercase tracking-wider font-mono">
-          Mayıs 2026
+          29 Mayıs 2026
         </div>
         <div className="text-sm font-semibold text-white">
           {isApple ? 'App Store' : 'Google Play'}

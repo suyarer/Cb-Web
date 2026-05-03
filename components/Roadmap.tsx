@@ -19,14 +19,14 @@ const STAGES: Stage[] = [
   },
   {
     when: 'Mayıs 2026',
-    title: 'Beta · lansman listesi',
-    body: 'Listeye kayıtlılar için erken erişim. Her hafta yeni şehir mahalleleri açılır.',
+    title: 'Pre-launch sprint · lansman listesi',
+    body: 'Manifesto serisi, host onboarding ve Karaköy/Cihangir/Moda fiziksel buluşmalar. Listedekiler ilk davetiye için sıraya girer.',
     state: 'active',
   },
   {
-    when: 'Haziran 2026',
+    when: '29 Mayıs 2026 · Cuma',
     title: 'Genel lansman',
-    body: 'App Store + Google Play yayında. İstanbul, Ankara, İzmir herkese açık.',
+    body: 'App Store + Google Play yayında. İstanbul pilot — Karaköy, Cihangir, Moda. Lansman event 30 Mayıs Karaköy.',
     state: 'next',
   },
 ];

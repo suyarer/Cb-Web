@@ -21,7 +21,7 @@ const faqs = [
   },
   {
     q: 'App Store ve Google Play\'de mi?',
-    a: 'Şu an lansman öncesi hazırlık aşamasındayız. 2026 Q2 (Mayıs/Haziran) — beta erken erişim → genel lansman. Lansman listesine katıl, tek mail ile haberin olsun.',
+    a: 'Şu an lansman öncesi hazırlık aşamasındayız. 29 Mayıs 2026 Cuma — App Store + Google Play\'de yayında. Lansman listesine katıl, tek mail ile haberin olsun.',
   },
   {
     q: 'Neden "anti-platform"?',
@@ -93,7 +93,7 @@ export default function SupportPage() {
             </li>
             <li>
               <strong>İş birliği &amp; basın:</strong>{' '}
-              <a href="mailto:hello@clubbeans.com">hello@clubbeans.com</a>
+              <a href="mailto:info@clubbeans.com">info@clubbeans.com</a>
             </li>
           </ul>
 

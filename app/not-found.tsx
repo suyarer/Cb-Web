@@ -58,8 +58,8 @@ export default function NotFound() {
 
         <p className="mt-12 text-[11px] text-zinc-600 font-mono">
           Hâlâ sıkıntı mı var?{' '}
-          <a href="mailto:hello@clubbeans.com" className="text-zinc-400 hover:text-acid">
-            hello@clubbeans.com
+          <a href="mailto:info@clubbeans.com" className="text-zinc-400 hover:text-acid">
+            info@clubbeans.com
           </a>
         </p>
       </div>

@@ -71,8 +71,8 @@ export default function GlobalError({
         )}
 
         <p className="mt-4 text-[11px] text-zinc-600 font-mono">
-          <a href="mailto:hello@clubbeans.com?subject=Hata%20raporu" className="text-zinc-400 hover:text-acid">
-            hello@clubbeans.com
+          <a href="mailto:info@clubbeans.com?subject=Hata%20raporu" className="text-zinc-400 hover:text-acid">
+            info@clubbeans.com
           </a>
         </p>
       </div>

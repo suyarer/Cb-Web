@@ -121,10 +121,10 @@ export default function FAQ() {
             <p>
               Başka bir şey mi merak ediyorsun?{' '}
               <a
-                href="mailto:hello@clubbeans.com?subject=Soru"
+                href="mailto:info@clubbeans.com?subject=Soru"
                 className="inline-flex items-center min-h-[44px] text-acid hover:underline"
               >
-                hello@clubbeans.com
+                info@clubbeans.com
               </a>
             </p>
           </motion.div>
