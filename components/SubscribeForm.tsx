@@ -1,5 +1,6 @@
 'use client';
 
+import { trackLead } from '@/lib/metaPixel';
 import { AnimatePresence, motion } from 'framer-motion';
 import Script from 'next/script';
 import { useSearchParams } from 'next/navigation';
@@ -118,6 +119,11 @@ export default function SubscribeForm({
         setPosition(data.position ?? null);
         setRefCode(data.refCode ?? null);
         setMessage('');
+        // Meta Pixel — Lead event (consent verilmişse)
+        trackLead({
+          source,
+          campaign: utm.campaign,
+        });
       }
     } catch {
       setStatus('error');
