@@ -143,3 +143,37 @@ export function trackCustom(eventName: string, params: Record<string, unknown> =
     return null;
   }
 }
+
+/**
+ * CAPI — server-side event push.
+ *
+ * Pixel ile aynı event_id'yi kullanarak çift kanal gönderim yapar.
+ * Meta otomatik dedupe sayesinde çift sayım olmaz, ancak iOS 17+ ATT
+ * veya ad-blocker nedeniyle Pixel başarısız olduysa CAPI yedek olarak
+ * event'i Meta'ya iletir → attribution kaybı %30-50'den %10-15'e düşer.
+ *
+ * Hatalı durumda sessiz fail — site fonksiyonelliğini etkilemez.
+ */
+export async function sendCapi(payload: {
+  eventName: 'Lead' | 'ViewContent' | 'PageView' | 'Subscribe';
+  eventId: string;
+  email?: string;
+  customData?: Record<string, unknown>;
+}): Promise<void> {
+  if (typeof window === 'undefined') return;
+  if (getConsent() !== 'granted') return;
+  try {
+    await fetch('/api/meta-capi', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ...payload,
+        eventSourceUrl: window.location.href,
+      }),
+      // CAPI çağrısı kullanıcının akışını yavaşlatmasın; arka planda devam etsin
+      keepalive: true,
+    });
+  } catch {
+    // Sessiz — Pixel zaten ön kanaldan gönderdi
+  }
+}

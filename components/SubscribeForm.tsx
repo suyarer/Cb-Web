@@ -1,6 +1,6 @@
 'use client';
 
-import { trackLead } from '@/lib/metaPixel';
+import { sendCapi, trackLead } from '@/lib/metaPixel';
 import { AnimatePresence, motion } from 'framer-motion';
 import Script from 'next/script';
 import { useSearchParams } from 'next/navigation';
@@ -120,10 +120,26 @@ export default function SubscribeForm({
         setRefCode(data.refCode ?? null);
         setMessage('');
         // Meta Pixel — Lead event (consent verilmişse)
-        trackLead({
+        const eventId = trackLead({
           source,
           campaign: utm.campaign,
         });
+        // Conversion API — server-side paralel gönderim (iOS 17+ ATT için)
+        if (eventId) {
+          void sendCapi({
+            eventName: 'Lead',
+            eventId,
+            email,
+            customData: {
+              content_name: source,
+              content_category: 'launch-waitlist',
+              content_type: 'product_lead',
+              value: 50,
+              currency: 'TRY',
+              ...(utm.campaign ? { campaign: utm.campaign } : {}),
+            },
+          });
+        }
       }
     } catch {
       setStatus('error');
