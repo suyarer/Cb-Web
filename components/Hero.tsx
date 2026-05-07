@@ -211,6 +211,13 @@ export default function Hero() {
                 Manifesto oku →
               </a>
               <span className="hidden md:inline-block w-px h-4 bg-white/10" />
+              <a
+                href="/yol-haritasi"
+                className="inline-flex items-center min-h-[44px] text-zinc-400 hover:text-white font-medium no-underline transition"
+              >
+                Yol haritası →
+              </a>
+              <span className="hidden md:inline-block w-px h-4 bg-white/10" />
               <AttentionCounter />
             </motion.div>
 

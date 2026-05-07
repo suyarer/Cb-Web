@@ -82,6 +82,22 @@ export default function Roadmap() {
             Sonrası · <span className="text-zinc-400">2026 Q3 Türkiye geneli</span> ·{' '}
             <span className="text-zinc-400">2027 yurt dışı</span>
           </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4, ease: easeOutExpo }}
+            className="mt-10 md:mt-14 flex justify-center"
+          >
+            <a
+              href="/yol-haritasi"
+              className="group inline-flex items-center gap-2 rounded-full border border-acid/30 bg-acid/5 px-5 py-2.5 text-sm font-semibold text-acid no-underline transition hover:border-acid/60 hover:bg-acid/10"
+            >
+              Tüm tarihleri detaylı gör
+              <span className="transition-transform group-hover:translate-x-1">→</span>
+            </a>
+          </motion.div>
         </div>
       </div>
     </section>
