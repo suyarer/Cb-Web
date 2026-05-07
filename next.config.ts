@@ -28,15 +28,16 @@ const securityHeaders = [
   },
   // Next.js 16 + framer-motion inline style'lar gerektiriyor; JSON-LD inline script var.
   // Turnstile için challenges.cloudflare.com, Sentry için sentry.io izinli.
+  // Meta Pixel (consent verilirse) için connect.facebook.net + *.facebook.com izinli.
   {
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://connect.facebook.net",
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob:",
+      "img-src 'self' data: blob: https://*.facebook.com https://www.facebook.com",
       "font-src 'self' data:",
-      "connect-src 'self' https://*.ingest.sentry.io https://*.ingest.de.sentry.io https://challenges.cloudflare.com",
+      "connect-src 'self' https://*.ingest.sentry.io https://*.ingest.de.sentry.io https://challenges.cloudflare.com https://*.facebook.com https://www.facebook.com",
       "frame-src 'self' https://challenges.cloudflare.com",
       "frame-ancestors 'none'",
       "base-uri 'self'",
