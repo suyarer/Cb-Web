@@ -1,10 +1,12 @@
 import ClientExtras from '@/components/ClientExtras';
 import { CompassProvider } from '@/components/compass/CompassContext';
 import CompassTint from '@/components/compass/CompassTint';
+import CookieConsent from '@/components/CookieConsent';
 import CosyMode from '@/components/CosyMode';
 import { FAQS } from '@/lib/faqs';
 import GutterSprout from '@/components/GutterSprout';
 import LiveTicker from '@/components/LiveTicker';
+import MetaPixel from '@/components/MetaPixel';
 import ScrollRoots from '@/components/ScrollRoots';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -148,6 +150,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
           <LiveTicker />
           <ClientExtras />
+          <CookieConsent />
         </CompassProvider>
         <script
           type="application/ld+json"
@@ -155,6 +158,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <Analytics />
         <SpeedInsights />
+        <MetaPixel />
       </body>
     </html>
   );
