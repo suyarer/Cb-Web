@@ -25,16 +25,39 @@ type LeadParams = {
   source?: string;
   /** UTM kampanyası (varsa) */
   campaign?: string;
-  /** Aboneliğin TL cinsinden değeri — bekleme listesi için 0 */
+  /** Aboneliğin TL cinsinden tahmini değeri — Meta optimizasyonu için */
   value?: number;
   currency?: string;
 };
 
 type ViewContentParams = {
-  /** Sayfa kategorisi, örn: 'roadmap' | 'launch-event' | 'manifesto' */
+  /** İçerik adı, örn: 'yol-haritasi', 'manifesto', 'lansman-event' */
   contentName?: string;
+  /** İçerik kategorisi, örn: 'launch-roadmap', 'about-page' */
   contentCategory?: string;
+  /** Meta sınıflandırma için, varsayılan 'page' */
+  contentType?: string;
 };
+
+/**
+ * Tek olay için unique ID üret.
+ * Pixel + CAPI çift kanal gönderiminde Meta tarafında dedupe için.
+ * UUID v4 — crypto.randomUUID modern tarayıcılarda mevcut.
+ */
+function generateEventId(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  // Fallback — düşük olasılıklı kolizyon, eski tarayıcılar için yeterli
+  return `evt_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+}
+
+/**
+ * Bekleme listesi LTV tahmini — Meta optimizasyon algoritmasının
+ * "ne kadar değerli" sorusuna cevap. Türkiye dijital ürün ortalaması
+ * baz alındı: yaklaşık 50 TL net değer.
+ */
+const ESTIMATED_LEAD_VALUE_TRY = 50;
 
 /**
  * Pixel kullanıma hazır mı?
@@ -48,46 +71,75 @@ function canTrack(): boolean {
 }
 
 /**
- * Lead — bekleme listesine kayıt başarılı olduğunda
+ * Lead — bekleme listesine kayıt başarılı olduğunda.
+ *
+ * Standart Meta Lead olayı: "potansiyel müşteri iletişim bilgisini paylaştı".
+ * Bekleme listesi tam olarak bu — kişi e-posta veriyor, lansman günü geri dönüleceğini biliyor.
+ *
+ * Returns: event_id (CAPI server-side gönderiminde dedupe için kullanılır)
  */
-export function trackLead(params: LeadParams = {}): void {
-  if (!canTrack()) return;
+export function trackLead(params: LeadParams = {}): string | null {
+  if (!canTrack()) return null;
+  const eventId = generateEventId();
   try {
-    window.fbq?.('track', 'Lead', {
-      content_name: params.source ?? 'waitlist',
-      content_category: 'launch-waitlist',
-      value: params.value ?? 0,
-      currency: params.currency ?? 'TRY',
-      ...(params.campaign ? { campaign: params.campaign } : {}),
-    });
+    window.fbq?.(
+      'track',
+      'Lead',
+      {
+        content_name: params.source ?? 'waitlist',
+        content_category: 'launch-waitlist',
+        content_type: 'product_lead',
+        value: params.value ?? ESTIMATED_LEAD_VALUE_TRY,
+        currency: params.currency ?? 'TRY',
+        ...(params.campaign ? { campaign: params.campaign } : {}),
+      },
+      { eventID: eventId },
+    );
+    return eventId;
   } catch {
-    // Sessiz fail — analytics asla site fonksiyonelliğini etkilemesin
+    return null;
   }
 }
 
 /**
- * ViewContent — yüksek niyetli sayfaya girildi (yol-haritasi, manifesto vb.)
+ * ViewContent — yüksek niyetli sayfaya girildi (yol-haritasi, manifesto vb.).
+ *
+ * Standart Meta ViewContent olayı: "kullanıcı önemli bir landing page gördü".
+ * Custom Audience segmentasyonu için (örn. roadmap okuyucuları) kritik sinyal.
+ *
+ * Returns: event_id (CAPI dedupe için)
  */
-export function trackViewContent(params: ViewContentParams = {}): void {
-  if (!canTrack()) return;
+export function trackViewContent(params: ViewContentParams = {}): string | null {
+  if (!canTrack()) return null;
+  const eventId = generateEventId();
   try {
-    window.fbq?.('track', 'ViewContent', {
-      content_name: params.contentName ?? 'unknown',
-      content_category: params.contentCategory ?? 'page',
-    });
+    window.fbq?.(
+      'track',
+      'ViewContent',
+      {
+        content_name: params.contentName ?? 'unknown',
+        content_category: params.contentCategory ?? 'page',
+        content_type: params.contentType ?? 'page',
+      },
+      { eventID: eventId },
+    );
+    return eventId;
   } catch {
-    // sessiz
+    return null;
   }
 }
 
 /**
- * Custom — manifesto serisi gibi özel olaylar için
+ * Custom — manifesto serisi gibi marka-spesifik olaylar için.
+ * Standart Meta listesinde olmayan olaylar burada (trackCustom).
  */
-export function trackCustom(eventName: string, params: Record<string, unknown> = {}): void {
-  if (!canTrack()) return;
+export function trackCustom(eventName: string, params: Record<string, unknown> = {}): string | null {
+  if (!canTrack()) return null;
+  const eventId = generateEventId();
   try {
-    window.fbq?.('trackCustom', eventName, params);
+    window.fbq?.('trackCustom', eventName, params, { eventID: eventId });
+    return eventId;
   } catch {
-    // sessiz
+    return null;
   }
 }
