@@ -60,7 +60,7 @@ export default function CookieConsent() {
         id="consent-desc"
         className="mb-4 text-sm leading-relaxed text-zinc-200"
       >
-        Reklam ölçümü için Meta Pikseli kullanıyoruz. İzin verir misin?
+        Reklam ölçümü için izin verir misin?
         <Link
           href="/privacy"
           className="ml-1 text-zinc-500 underline-offset-2 hover:text-acid hover:underline"

@@ -22,7 +22,7 @@ export default function PrivacyPage() {
         <article className="prose-legal">
           <h1>Gizlilik Politikası</h1>
           <p className="text-sm text-zinc-500 font-mono">
-            Yürürlük tarihi: 17 Nisan 2026 · Son güncelleme: 17 Nisan 2026
+            Yürürlük tarihi: 17 Nisan 2026 · Son güncelleme: 7 Mayıs 2026
           </p>
 
           <p>
@@ -115,10 +115,41 @@ export default function PrivacyPage() {
             <li><strong>Expo / EAS</strong> (mobil uygulama için push bildirimleri)</li>
             <li><strong>Mapbox</strong> (harita görselleri — konum paylaşılmaz)</li>
             <li><strong>Didit</strong> (KYC — opsiyonel, sadece kullanıcı tercihiyle)</li>
+            <li>
+              <strong>Meta (Facebook / Instagram)</strong> — yalnızca clubbeans.com web sitesinde,
+              yalnızca açık onayınızla, yalnızca reklam ölçümü için (aşağıda detay).
+            </li>
           </ul>
           <p>Hiçbir üçüncü tarafa veri <strong>satılmaz</strong>.</p>
 
-          <h2>6. KVKK Haklarınız</h2>
+          <h2>6. Çerezler ve Reklam Ölçümü</h2>
+          <p>
+            ClubBeans mobil uygulaması hiçbir çerez veya pazarlama izleyicisi içermez. Web sitesinde
+            (clubbeans.com) ise yalnızca <strong>açık onay</strong>ınızla aktive olan tek bir izleyici
+            mevcuttur:
+          </p>
+          <ul>
+            <li>
+              <strong>Meta Pikseli (Facebook / Instagram):</strong> Lansman dönemindeki reklamlarımızın
+              hangi ziyaretçilere ulaştığını ölçmek için kullanılır.
+            </li>
+            <li>Sayfa açıldığında otomatik çalışmaz; site üzerinde gösterilen onay kutucuğuna
+              &quot;İzin ver&quot; tıklanırsa devreye girer.</li>
+            <li>Onay verdiğiniz takdirde sayfa görüntülemeniz Meta&apos;ya iletilir; konum, isim,
+              e-posta veya başka kişisel bilginiz aktarılmaz.</li>
+            <li>
+              Onayınızı istediğiniz zaman tarayıcı ayarlarından çerezleri silerek veya{' '}
+              <a href="mailto:privacy@clubbeans.com">privacy@clubbeans.com</a> adresine yazarak geri
+              alabilirsiniz.
+            </li>
+            <li>Onay vermezseniz site özelliklerinin tamamı sorunsuz çalışır.</li>
+          </ul>
+          <p>
+            ClubBeans mobil uygulaması içerisinde Meta Pikseli veya benzeri pazarlama izleyici
+            kullanılmaz.
+          </p>
+
+          <h2>7. KVKK Haklarınız</h2>
           <p>KVKK&apos;nın 11. maddesi uyarınca:</p>
           <ul>
             <li>Kişisel verilerinizin işlenip işlenmediğini öğrenme</li>
@@ -136,19 +167,19 @@ export default function PrivacyPage() {
             uygulama içinden &quot;Hesap Silme&quot; işlemini başlatabilirsiniz.
           </p>
 
-          <h2>7. Çocukların Gizliliği</h2>
+          <h2>8. Çocukların Gizliliği</h2>
           <p>
             ClubBeans 16 yaş altı kullanıcılara yönelik değildir. 16 yaş altı bir kullanıcının veri
             işlediğimizi fark edersek, ilgili verileri derhal sileriz.
           </p>
 
-          <h2>8. Değişiklikler</h2>
+          <h2>9. Değişiklikler</h2>
           <p>
             Bu politika güncellenebilir. Önemli değişikliklerde uygulama içi bildirim veya e-posta ile
             bilgilendirme yapılır.
           </p>
 
-          <h2>9. İletişim</h2>
+          <h2>10. İletişim</h2>
           <p>
             Soru ve talepleriniz için:{' '}
             <a href="mailto:privacy@clubbeans.com">privacy@clubbeans.com</a>
