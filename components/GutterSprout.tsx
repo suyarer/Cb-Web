@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useSpring, useTransform } from '@/lib/motion';
 
 // Scroll ile eş zamanlı büyüyen dikey filiz.
 // Sayfanın sağ kenarında küçük bir dikey kolon; aşağı kaydırdıkça sap uzar,

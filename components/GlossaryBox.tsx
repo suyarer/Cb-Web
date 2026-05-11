@@ -1,7 +1,7 @@
 'use client';
 
 import { easeOutExpo } from '@/lib/motion';
-import { motion } from 'framer-motion';
+import { motion } from '@/lib/motion';
 
 // SSS sayfasında üste yerleştirilen mini terim kutusu.
 // Sözlük sayfa kaldırıldığından, terimler ilk karşılaşmada burada toplu açıklanır.

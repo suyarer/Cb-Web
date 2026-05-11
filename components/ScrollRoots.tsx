@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useSpring, useTransform } from '@/lib/motion';
 
 // Sayfanın SOL kenarında scroll'a göre aşağı doğru uzayan kök sistemi.
 // GutterSprout (sağ) yukarı büyür; ScrollRoots (sol) aşağı derinleşir.

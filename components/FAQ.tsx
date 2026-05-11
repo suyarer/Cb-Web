@@ -2,7 +2,7 @@
 
 import { FAQS } from '@/lib/faqs';
 import { easeOutExpo } from '@/lib/motion';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from '@/lib/motion';
 import { useState } from 'react';
 
 export default function FAQ() {

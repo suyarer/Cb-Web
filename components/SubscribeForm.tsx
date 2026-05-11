@@ -1,7 +1,7 @@
 'use client';
 
 import { sendCapi, trackLead } from '@/lib/metaPixel';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from '@/lib/motion';
 import Script from 'next/script';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useId, useRef, useState } from 'react';

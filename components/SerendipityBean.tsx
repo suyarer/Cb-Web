@@ -1,7 +1,7 @@
 'use client';
 
 import BeanSprout from '@/components/BeanSprout';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from '@/lib/motion';
 import { useEffect, useState } from 'react';
 
 type Position = {

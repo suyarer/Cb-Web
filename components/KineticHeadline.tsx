@@ -1,7 +1,7 @@
 'use client';
 
 import { easeOutExpo } from '@/lib/motion';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion } from '@/lib/motion';
 
 const container = {
   hidden: { opacity: 1 },

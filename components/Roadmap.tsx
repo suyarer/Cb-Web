@@ -1,7 +1,7 @@
 'use client';
 
 import { easeOutExpo } from '@/lib/motion';
-import { motion } from 'framer-motion';
+import { motion } from '@/lib/motion';
 
 type Stage = {
   when: string;

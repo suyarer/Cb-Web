@@ -1,6 +1,6 @@
 'use client';
 
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from '@/lib/motion';
 import { useEffect, useState } from 'react';
 
 const DURATION_SEC = 15 * 60;

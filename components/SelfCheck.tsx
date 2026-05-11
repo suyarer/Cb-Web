@@ -1,7 +1,7 @@
 'use client';
 
 import { easeOutExpo } from '@/lib/motion';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from '@/lib/motion';
 import { useMemo, useState } from 'react';
 
 // Birleşik "Kendini Tart" — LonelinessQuiz + ScreenLifeConverter tek bölüm.

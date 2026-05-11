@@ -1,6 +1,6 @@
 'use client';
 
-import { useInView } from 'framer-motion';
+import { useInView } from '@/lib/motion';
 import { useEffect, useRef, useState } from 'react';
 
 // Kritik marka terimleri viewport'a girdiğinde tek seferlik acid glow

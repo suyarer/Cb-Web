@@ -2,7 +2,7 @@
 
 import BeanSprout from '@/components/BeanSprout';
 import { easeOutExpo } from '@/lib/motion';
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useTransform } from '@/lib/motion';
 import { useRef } from 'react';
 
 export default function FoundersNote() {

@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useInView, useReducedMotion } from 'framer-motion';
+import { motion, useInView, useReducedMotion } from '@/lib/motion';
 import { useEffect, useRef, useState } from 'react';
 
 type Props = {

@@ -1,7 +1,7 @@
 'use client';
 
 import { easeOutExpo } from '@/lib/motion';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView } from '@/lib/motion';
 import { useEffect, useRef, useState } from 'react';
 
 const rules = [

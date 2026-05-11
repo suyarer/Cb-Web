@@ -5,7 +5,7 @@ import KineticHeadline from '@/components/KineticHeadline';
 import SubscribeForm from '@/components/SubscribeForm';
 import { easeOutExpo, fadeUpVariant } from '@/lib/motion';
 import { useTimeGreeting } from '@/lib/useTimeGreeting';
-import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion';
+import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from '@/lib/motion';
 import { useEffect, useRef } from 'react';
 
 // Above-the-fold ama heavy — dynamic import ile kritik path'ten çıkar

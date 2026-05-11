@@ -1,7 +1,7 @@
 'use client';
 
 import { easeOutExpo } from '@/lib/motion';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from '@/lib/motion';
 import { useEffect, useState } from 'react';
 import PhoneMockup from './PhoneMockup';
 

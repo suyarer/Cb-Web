@@ -2,7 +2,7 @@
 
 import BeanSprout from '@/components/BeanSprout';
 import { easeOutExpo } from '@/lib/motion';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from '@/lib/motion';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 

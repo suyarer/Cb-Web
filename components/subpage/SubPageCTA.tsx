@@ -2,7 +2,7 @@
 
 import SubscribeForm from '@/components/SubscribeForm';
 import { easeOutExpo } from '@/lib/motion';
-import { motion } from 'framer-motion';
+import { motion } from '@/lib/motion';
 
 // Alt sayfa sonunda conversion CTA — mail formu + ana sayfaya dön.
 export default function SubPageCTA({

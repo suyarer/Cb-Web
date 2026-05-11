@@ -1,6 +1,6 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from '@/lib/motion';
 import { useEffect, useState } from 'react';
 
 // Mobil'de sayfa scroll edildikten sonra alt kenarda beliren sticky CTA.

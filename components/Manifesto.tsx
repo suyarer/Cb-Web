@@ -3,7 +3,7 @@
 import BeanSprout from '@/components/BeanSprout';
 import BrandTerm from '@/components/BrandTerm';
 import { easeOutExpo } from '@/lib/motion';
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useTransform } from '@/lib/motion';
 import { useRef } from 'react';
 
 const negatives = [

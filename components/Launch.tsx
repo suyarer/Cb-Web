@@ -2,7 +2,7 @@
 
 import SubscribeForm from '@/components/SubscribeForm';
 import { easeOutExpo } from '@/lib/motion';
-import { motion } from 'framer-motion';
+import { motion } from '@/lib/motion';
 
 export default function Launch() {
   return (

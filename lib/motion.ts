@@ -1,9 +1,42 @@
 /**
- * Ortak Framer Motion easing, transition & helper hook'ları.
- * Linear/Vercel/Apple tarzı yumuşak ama güçlü hareket için.
+ * Framer Motion wrapper — LazyMotion + m component pattern.
+ *
+ * Bundle optimization: `motion` → `m` proxy.
+ * Component'ler `from '@/lib/motion'` import ederek değişmez kalır,
+ * ama gerçekte `m` (4.6KB) component'i kullanılır.
+ *
+ * LazyMotion features={domAnimation} root layer'da MotionProvider'da sarılı.
+ *
+ * Tüm hook'lar + utilities buradan re-export edilir.
  */
-import { cubicBezier } from 'framer-motion';
+import {
+  animate,
+  AnimatePresence,
+  cubicBezier,
+  m,
+  useInView,
+  useMotionValue,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from 'framer-motion';
 
+// `motion` import edilince `m` döner — component body değişmez (motion.div hâlâ çalışır)
+export {
+  animate,
+  AnimatePresence,
+  cubicBezier,
+  m as motion,
+  useInView,
+  useMotionValue,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+};
+
+// ─── Mevcut helpers ─────────────────────────────────────────
 export const easeOutExpo = cubicBezier(0.22, 1, 0.36, 1);
 export const easeInOutSoft = cubicBezier(0.65, 0, 0.35, 1);
 

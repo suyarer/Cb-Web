@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useMotionValue, useReducedMotion, useSpring } from 'framer-motion';
+import { motion, useMotionValue, useReducedMotion, useSpring } from '@/lib/motion';
 import { useEffect, useState } from 'react';
 
 // Masaüstü: imleci takip eden küçük bir Bean filiz.
