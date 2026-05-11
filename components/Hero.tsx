@@ -157,11 +157,9 @@ export default function Hero() {
               custom={2}
               className="text-lg md:text-xl text-zinc-400 max-w-xl leading-relaxed mb-8"
             >
-              İki seçenek: yakındaki bir etkinliğe katıl{' '}
-              <span className="text-zinc-500">(Bean)</span> ya da kendi kulübünü
-              bir dakikada kur <span className="text-zinc-500">(Club)</span>.
-              Bekleyen form yok, abonelik yok, algoritma yok. Cumartesi akşamı
-              artık senin.
+              İki seçenek: yakındaki bir etkinliğe katıl ya da kendi
+              etkinliğini bir dakikada kur. Bekleyen form yok, abonelik yok,
+              algoritma yok. Cumartesi akşamı artık senin.
             </motion.p>
 
             <motion.div
@@ -184,6 +182,28 @@ export default function Hero() {
                   {label}
                 </span>
               ))}
+            </motion.div>
+
+            {/* Form Value Proposition — neden listeye katılmalı? */}
+            <motion.div
+              variants={variants}
+              initial="hidden"
+              animate="visible"
+              custom={2.8}
+              className="mb-5 max-w-md rounded-2xl border border-acid/30 bg-acid/[0.06] p-4"
+            >
+              <div className="flex items-start gap-3">
+                <span className="mt-0.5 text-lg" aria-hidden>🟢</span>
+                <div className="flex-1">
+                  <p className="text-sm md:text-base font-semibold text-acid mb-1.5 leading-snug">
+                    İlk 50 kişi → 29 Mayıs Moda lansman etkinliğine davetli
+                  </p>
+                  <p className="text-xs md:text-sm text-zinc-400 leading-relaxed">
+                    Tek mail var: lansman günü &quot;indir&quot; linki ve etkinlik
+                    davetiyen. Spam yok, söz.
+                  </p>
+                </div>
+              </div>
             </motion.div>
 
             {/* PRIMARY — inline mail form (conversion #1) */}
