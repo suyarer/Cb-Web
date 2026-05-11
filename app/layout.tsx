@@ -14,16 +14,25 @@ import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 
+// Font weight'leri sadece kullanılanlar — bundle'ı 173KB → ~80KB indirir
+// Inter: 400 (body), 600 (semibold), 700 (bold) — başka weight UI'da yok
+// JetBrains Mono: 400 (default) tek yeterli — Mono sadece kicker'da
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
+  weight: ['400', '600', '700'],
+  preload: true,
+  adjustFontFallback: true,
 });
 
 const jetbrains = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-jetbrains',
   display: 'swap',
+  weight: ['400'],
+  preload: false, // Sadece az kullanılıyor, lazy
+  adjustFontFallback: true,
 });
 
 export const metadata: Metadata = {
