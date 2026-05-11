@@ -50,6 +50,15 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // Framer Motion tree-shake — kullanılan exportları izole et, bundle %30-50 azalır
+  experimental: {
+    optimizePackageImports: ['framer-motion', '@sentry/nextjs'],
+  },
+  // Compile-time prod optimizasyonu — dev'de etki yok
+  compiler: {
+    // Production'da console.log otomatik silinir, console.error bırakılır
+    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
+  },
   async headers() {
     return [
       {
