@@ -1,15 +1,26 @@
 'use client';
 
-import AttentionCounter from '@/components/AttentionCounter';
-import BeanSprout from '@/components/BeanSprout';
-import CompassSwitcher from '@/components/compass/CompassSwitcher';
+import dynamic from 'next/dynamic';
 import KineticHeadline from '@/components/KineticHeadline';
 import SubscribeForm from '@/components/SubscribeForm';
 import { easeOutExpo, fadeUpVariant } from '@/lib/motion';
 import { useTimeGreeting } from '@/lib/useTimeGreeting';
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion';
 import { useEffect, useRef } from 'react';
-import PhoneMockup from './PhoneMockup';
+
+// Above-the-fold ama heavy — dynamic import ile kritik path'ten çıkar
+// PhoneMockup büyük (görseller), CompassSwitcher interactive component
+// BeanSprout + AttentionCounter küçük, eager kalır
+import AttentionCounter from '@/components/AttentionCounter';
+import BeanSprout from '@/components/BeanSprout';
+const CompassSwitcher = dynamic(() => import('@/components/compass/CompassSwitcher'), {
+  ssr: false,
+  loading: () => <div className="min-h-[200px]" aria-hidden />,
+});
+const PhoneMockup = dynamic(() => import('./PhoneMockup'), {
+  ssr: false,
+  loading: () => <div className="min-h-[400px] lg:min-h-[600px]" aria-hidden />,
+});
 
 export default function Hero() {
   const reduced = useReducedMotion() ?? false;

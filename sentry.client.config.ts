@@ -5,22 +5,17 @@ const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
 if (dsn) {
   Sentry.init({
     dsn,
-    // Performance izleme — pre-launch'ta %100, trafik arttıkça %10'a düşür
-    tracesSampleRate: 0.2,
-    // Replay sadece hatada tetiklenen oturum için
+    // Performance izleme MINIMAL — pre-launch landing için %2 yeterli, bundle aza indirgemek için
+    tracesSampleRate: 0.02,
+    // Replay KAPALI — 70-100KB bundle save (post-launch ihtiyaç olursa geri aç)
     replaysSessionSampleRate: 0,
-    replaysOnErrorSampleRate: 1.0,
+    replaysOnErrorSampleRate: 0,
     // PII'yi varsayılan olarak gönderme
     sendDefaultPii: false,
     // Debug kapalı (production)
     debug: false,
-    // Integrations
-    integrations: [
-      Sentry.replayIntegration({
-        maskAllText: true,
-        blockAllMedia: true,
-      }),
-    ],
+    // Integrations — minimal (Replay kaldırıldı performans için)
+    integrations: [],
     // Brand tutarlı
     environment: process.env.NODE_ENV,
   });
