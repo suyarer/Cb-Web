@@ -29,7 +29,7 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   title: 'ClubBeans — Ekran süresi değil, yaşam süresi.',
   description:
-    'ClubBeans bir anti-platformdur. Seni ekranda tutmak için değil, masaya çağırmak için çalışır. Yakınındaki Beans\'leri keşfet, ruhuna uyan Club\'a katıl, kendi kulübünü bir dakikada kur. Algoritma değil senin filtrelerin. TrustScore ile curated network. Sosyal Obezite\'ye karşı dalgakıran.',
+    'ClubBeans bir anti-platformdur. Seni ekranda tutmak için değil, masaya çağırmak için çalışır. Yakındaki etkinliklere katıl ya da kendi etkinliğini bir dakikada kur. Algoritma yok, sonsuz feed yok, bildirim yağmuru yok. 29 Mayıs 2026 İstanbul lansman.',
   metadataBase: new URL('https://clubbeans.com'),
   keywords: [
     'ClubBeans',
@@ -110,7 +110,7 @@ const jsonLd = {
       operatingSystem: 'iOS, Android',
       applicationCategory: 'SocialNetworkingApplication',
       description:
-        'ClubBeans, şehrinde yakında olan fiziksel buluşmaları (Beans) keşfetmeni ve kendi Club\'ını kurmanı sağlar. TrustScore ile curated network.',
+        'ClubBeans, şehrinde yakında olan fiziksel etkinliklere katılmanı ve kendi etkinliğini bir dakikada kurmanı sağlar. Anti-platform: algoritma değil sen seçersin.',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'TRY' },
       publisher: { '@id': 'https://clubbeans.com/#org' },
     },
