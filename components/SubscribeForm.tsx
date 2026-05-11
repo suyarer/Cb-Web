@@ -46,6 +46,9 @@ export default function SubscribeForm({
   const [position, setPosition] = useState<number | null>(null);
   const [refCode, setRefCode] = useState<string | null>(null);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  // Turnstile lazy load — sadece kullanıcı form ile etkileşime girince yükle (LCP optimization).
+  // İlk sayfa açılışında 875 KiB transfer eden Cloudflare Turnstile widget ertelenir.
+  const [turnstileNeeded, setTurnstileNeeded] = useState(false);
   const turnstileWidgetId = useRef<string | null>(null);
   const turnstileContainerRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
@@ -188,13 +191,15 @@ export default function SubscribeForm({
 
   return (
     <>
-      {TURNSTILE_SITE_KEY && (
+      {/* Turnstile lazy: sadece kullanıcı form'a focus olunca yüklenir.
+          LCP optimization — ilk sayfa açılışında 875 KiB transfer tetiklemez. */}
+      {TURNSTILE_SITE_KEY && turnstileNeeded && (
         <Script
           src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
           async
           defer
           onLoad={initTurnstile}
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
       )}
       <form
@@ -237,6 +242,10 @@ export default function SubscribeForm({
             aria-label="E-posta adresin"
             aria-describedby={status === 'error' ? `${inputId}-error` : undefined}
             value={email}
+            onFocus={() => {
+              // Turnstile lazy trigger — kullanıcı form ile etkileşime girdi
+              if (!turnstileNeeded) setTurnstileNeeded(true);
+            }}
             onChange={(e) => {
               setEmail(e.target.value);
               if (status === 'error') setStatus('idle');
