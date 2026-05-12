@@ -2,20 +2,24 @@
 
 import { getConsent, type ConsentValue } from '@/lib/consent';
 import Script from 'next/script';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 /**
- * Meta Pikseli — yalnızca açık onayla yüklenir.
+ * Meta Pikseli — onay sonrası yüklenir, ardından her route değişiminde PageView fire eder.
  *
- * Onay verilmediği sürece <Script> hiç DOM'a girmez,
- * dolayısıyla hiçbir tracking pikseli ateşlenmez.
+ * KRİTİK: fbq('init') tek başına EVENT GÖNDERMEZ — `fbq('track', 'PageView')` zorunlu.
+ * SPA navigation'da script yeniden çalışmaz → her pathname değişiminde manuel track.
  *
  * @governing_law clubbeans-privacy-v1
  */
 export default function MetaPixel() {
   const [consent, setConsentState] = useState<ConsentValue>('unset');
+  const [scriptLoaded, setScriptLoaded] = useState(false);
   const pixelId = process.env.NEXT_PUBLIC_FB_PIXEL_ID;
+  const pathname = usePathname();
 
+  // Consent state senkronizasyonu
   useEffect(() => {
     setConsentState(getConsent());
 
@@ -28,6 +32,18 @@ export default function MetaPixel() {
       window.removeEventListener('clubbeans:consent', handleConsentChange);
   }, []);
 
+  // SPA route değişimi → manuel PageView track
+  // Bu effect script yüklendikten sonra her pathname/searchParams değişiminde tetiklenir.
+  useEffect(() => {
+    if (consent !== 'granted') return;
+    if (!scriptLoaded) return;
+    if (typeof window === 'undefined') return;
+    if (typeof window.fbq !== 'function') return;
+
+    // Route değişimi PageView — Meta SPA için tavsiye edilen pattern
+    window.fbq('track', 'PageView');
+  }, [pathname, consent, scriptLoaded]);
+
   // Pixel ID ortam değişkeni yoksa hiç render etme (build-time guard)
   if (!pixelId) return null;
 
@@ -39,6 +55,8 @@ export default function MetaPixel() {
       <Script
         id="meta-pixel"
         strategy="afterInteractive"
+        onLoad={() => setScriptLoaded(true)}
+        onReady={() => setScriptLoaded(true)}
         dangerouslySetInnerHTML={{
           __html: `
             !function(f,b,e,v,n,t,s)
@@ -50,6 +68,7 @@ export default function MetaPixel() {
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
             fbq('init', '${pixelId}');
+            fbq('track', 'PageView');
           `,
         }}
       />
