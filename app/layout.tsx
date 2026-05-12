@@ -83,6 +83,15 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
   manifest: '/manifest.json',
+  // Meta domain verification — iOS 17+ AEM çalışması için zorunlu
+  // Token: business.facebook.com → Business Settings → Brand Safety → Domains → Verify
+  verification: {
+    other: {
+      ...(process.env.NEXT_PUBLIC_FB_DOMAIN_VERIFICATION
+        ? { 'facebook-domain-verification': process.env.NEXT_PUBLIC_FB_DOMAIN_VERIFICATION }
+        : {}),
+    },
+  },
   icons: {
     icon: [
       { url: '/icon.svg', type: 'image/svg+xml' },

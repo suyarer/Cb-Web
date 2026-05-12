@@ -4,6 +4,7 @@ import Showcase from '@/components/Showcase';
 import StickyCTA from '@/components/StickyCTA';
 import SubPageCTA from '@/components/subpage/SubPageCTA';
 import SubPageHeader from '@/components/subpage/SubPageHeader';
+import ViewContentTracker from '@/components/ViewContentTracker';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -21,6 +22,10 @@ export const metadata: Metadata = {
 export default function UrunPage() {
   return (
     <>
+      <ViewContentTracker
+        contentName="urun"
+        contentCategory="product-browse"
+      />
       <Nav />
       <main>
         <SubPageHeader

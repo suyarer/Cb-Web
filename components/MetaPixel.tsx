@@ -1,9 +1,21 @@
 'use client';
 
 import { getConsent, type ConsentValue } from '@/lib/consent';
+import { sendCapi } from '@/lib/metaPixel';
 import Script from 'next/script';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+
+/**
+ * Stable UUID v4 generator — same logic as metaPixel.generateEventId()
+ * Inline burada çünkü import circular dependency oluşturmasın
+ */
+function generateEventId(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  return `pv_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+}
 
 /**
  * Meta Pikseli — onay sonrası yüklenir, ardından her route değişiminde PageView fire eder.
@@ -32,16 +44,25 @@ export default function MetaPixel() {
       window.removeEventListener('clubbeans:consent', handleConsentChange);
   }, []);
 
-  // SPA route değişimi → manuel PageView track
-  // Bu effect script yüklendikten sonra her pathname/searchParams değişiminde tetiklenir.
+  // SPA route değişimi → Pixel + CAPI dual-channel PageView
+  // Aynı eventId ile çift kanal → Meta otomatik dedupe (iOS ATT %25 kazanç)
   useEffect(() => {
     if (consent !== 'granted') return;
     if (!scriptLoaded) return;
     if (typeof window === 'undefined') return;
     if (typeof window.fbq !== 'function') return;
 
-    // Route değişimi PageView — Meta SPA için tavsiye edilen pattern
-    window.fbq('track', 'PageView');
+    // Stable eventId — Pixel ve CAPI'ye paralel gönderilecek
+    const eventId = generateEventId();
+
+    // 1) Client-side Pixel track
+    window.fbq('track', 'PageView', {}, { eventID: eventId });
+
+    // 2) Server-side CAPI mirror — iOS Safari + ad blocker resilience
+    void sendCapi({
+      eventName: 'PageView',
+      eventId,
+    });
   }, [pathname, consent, scriptLoaded]);
 
   // Pixel ID ortam değişkeni yoksa hiç render etme (build-time guard)
@@ -68,7 +89,6 @@ export default function MetaPixel() {
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
             fbq('init', '${pixelId}');
-            fbq('track', 'PageView');
           `,
         }}
       />
