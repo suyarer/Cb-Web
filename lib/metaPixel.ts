@@ -152,12 +152,20 @@ export function trackCustom(eventName: string, params: Record<string, unknown> =
  * veya ad-blocker nedeniyle Pixel başarısız olduysa CAPI yedek olarak
  * event'i Meta'ya iletir → attribution kaybı %30-50'den %10-15'e düşer.
  *
+ * EMQ skoru artırma — opsiyonel parametreler:
+ * - phone: telefon (form collect ederse — şu an formda yok)
+ * - externalId: backend default = email'in normalize halini external_id yapar
+ *
  * Hatalı durumda sessiz fail — site fonksiyonelliğini etkilemez.
  */
 export async function sendCapi(payload: {
   eventName: 'Lead' | 'ViewContent' | 'PageView' | 'Subscribe';
   eventId: string;
   email?: string;
+  /** Opsiyonel — form telefon istemiyor şu an, gelecek için açık */
+  phone?: string;
+  /** Opsiyonel — backend boşsa otomatik email normalize edip external_id yapacak */
+  externalId?: string;
   customData?: Record<string, unknown>;
 }): Promise<void> {
   if (typeof window === 'undefined') return;

@@ -24,6 +24,10 @@ type ClientPayload = {
   eventId: string;
   eventSourceUrl: string;
   email?: string;
+  /** Phone — opsiyonel, form henüz collect etmiyor ama gelecek için açık */
+  phone?: string;
+  /** External user ID — Meta cross-device match için. Email normalize edilmiş halini öneriyoruz. */
+  externalId?: string;
   customData?: CapiEventInput['customData'];
 };
 
@@ -40,7 +44,12 @@ export async function POST(req: NextRequest) {
     }
 
     // Server tarafında otomatik çıkarılan kullanıcı verisi
-    const headerUserData = extractUserDataFromRequest(req);
+    // eventSourceUrl'i fallback olarak geçiyoruz — fbclid query param yakalanabilsin
+    const headerUserData = extractUserDataFromRequest(req, payload.eventSourceUrl);
+
+    // external_id öncelik: client'tan gelen > email fallback (cross-device match için stabil id)
+    const externalId =
+      payload.externalId || (payload.email ? payload.email.trim().toLowerCase() : undefined);
 
     const result = await sendCapiEvent({
       eventName: payload.eventName,
@@ -49,6 +58,8 @@ export async function POST(req: NextRequest) {
       actionSource: 'website',
       userData: {
         email: payload.email,
+        phone: payload.phone,
+        externalId,
         ...headerUserData,
       },
       customData: payload.customData,

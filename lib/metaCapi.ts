@@ -172,8 +172,19 @@ export async function sendCapiEvent(
 
 /**
  * NextRequest'ten user_data için gerekli alanları çıkar.
+ *
+ * fbc öncelik sırası:
+ * 1. _fbc cookie (Meta Pixel script set eder)
+ * 2. URL ?fbclid= query param (ilk visit fallback — cookie henüz set edilmemiş)
+ * 3. eventSourceUrl ?fbclid= (referrer chain)
+ *
+ * fbclid → fbc dönüşüm formatı: `fb.1.{timestampMs}.{fbclid}`
+ * Bu format Meta CAPI dokümante: https://developers.facebook.com/docs/marketing-api/conversions-api/parameters/fbp-and-fbc
  */
-export function extractUserDataFromRequest(req: Request): {
+export function extractUserDataFromRequest(
+  req: Request,
+  fallbackUrl?: string,
+): {
   clientIpAddress?: string;
   clientUserAgent?: string;
   fbp?: string;
@@ -198,7 +209,24 @@ export function extractUserDataFromRequest(req: Request): {
     }),
   );
   const fbp = cookies._fbp || undefined;
-  const fbc = cookies._fbc || undefined;
+  let fbc: string | undefined = cookies._fbc || undefined;
+
+  // fbc fallback — eventSourceUrl veya request URL'den fbclid çek
+  if (!fbc) {
+    try {
+      const urlToCheck = fallbackUrl || req.url;
+      if (urlToCheck) {
+        const url = new URL(urlToCheck);
+        const fbclid = url.searchParams.get('fbclid');
+        if (fbclid) {
+          // Meta CAPI standard fbc format: fb.1.{timestampMs}.{fbclid}
+          fbc = `fb.1.${Date.now()}.${fbclid}`;
+        }
+      }
+    } catch {
+      // URL parse hatası — sessiz geç
+    }
+  }
 
   return { clientIpAddress, clientUserAgent, fbp, fbc };
 }
