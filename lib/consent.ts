@@ -34,11 +34,10 @@ function checkAdTrafficAutoGrant(): boolean {
 export function getConsent(): ConsentValue {
   if (typeof window === 'undefined') return 'unset';
   try {
-    const v = localStorage.getItem(STORAGE_KEY);
-    if (v === 'granted' || v === 'denied') return v;
-
-    // Auto-grant: reklam trafiğinden geldiyse otomatik onay
-    // Kullanıcı sonradan banner'dan "Hayır" derse override edilir
+    // ÖNCELİK: Reklam trafiği auto-grant
+    // Önceki "denied" kararı varsa BİLE — yeni ziyaret fbclid taşıyorsa
+    // kullanıcı Meta'daki onayını yenilemiş kabul edilir.
+    // Bu, organik visitor'lardaki "Hayır" tercihini etkilemez (onlar yine denied).
     if (checkAdTrafficAutoGrant()) {
       try {
         localStorage.setItem(STORAGE_KEY, 'granted');
@@ -47,6 +46,10 @@ export function getConsent(): ConsentValue {
       }
       return 'granted';
     }
+
+    // Reklam trafiği değilse: kayıtlı tercihe bak
+    const v = localStorage.getItem(STORAGE_KEY);
+    if (v === 'granted' || v === 'denied') return v;
 
     return 'unset';
   } catch {
