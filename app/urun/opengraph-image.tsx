@@ -9,6 +9,6 @@ export default async function OG() {
   return createOgImage({
     kicker: 'Ürün',
     title: 'ClubBeans\'i içeriden gör.',
-    subtitle: 'Radar · TrustScore · Compass Mode · Signal',
+    subtitle: 'Radar · TrustScore · Compass Mode · Bildirim',
   });
 }

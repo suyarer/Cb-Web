@@ -32,11 +32,12 @@ export default function TermsPage() {
 
           <h2>1. Tanımlar</h2>
           <ul>
-            <li><strong>Bean:</strong> Uygulamada oluşturulan, başı sonu belli fiziksel buluşma</li>
-            <li><strong>Kabile:</strong> Bir Club&apos;ın üye topluluğu</li>
-            <li><strong>Katıl:</strong> Bean&apos;e dahil olma aksiyonu</li>
-            <li><strong>Signal:</strong> Uygulama içi ve push bildirimler</li>
-            <li><strong>Club (Kulüp):</strong> Bean oluşturabilen topluluk sahibi hesap</li>
+            <li><strong>Bean:</strong> Uygulamanın kullanıcısı (topluluğun her bir tek tek üyesi)</li>
+            <li><strong>Etkinlik:</strong> Başı sonu belli fiziksel buluşma</li>
+            <li><strong>Kulüp:</strong> Etkinlik oluşturabilen topluluk sahibi hesap</li>
+            <li><strong>Katıl:</strong> Etkinliğe dahil olma aksiyonu (ücretli ise &quot;biletini kap&quot;)</li>
+            <li><strong>Bildirim:</strong> Uygulama içi ve push bildirimler</li>
+            <li><strong>Topluluk:</strong> Bir kulübün üyeleri (Bean&apos;lerin oluşturduğu sosyal grup)</li>
           </ul>
 
           <h2>2. Hesap Açma</h2>

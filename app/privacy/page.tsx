@@ -91,7 +91,7 @@ export default function PrivacyPage() {
           <ul>
             <li>Hesap oluşturma ve kimlik doğrulama</li>
             <li>Yakın etkinlik ve topluluk önerisi</li>
-            <li>Bildirim gönderimi (Signal sistemi)</li>
+            <li>Bildirim gönderimi (push + in-app)</li>
             <li>Uygulama performans iyileştirmesi (anonim crash raporu)</li>
             <li>Yasal yükümlülüklerin yerine getirilmesi</li>
           </ul>
