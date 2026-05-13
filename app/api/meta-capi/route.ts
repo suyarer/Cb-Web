@@ -28,6 +28,12 @@ type ClientPayload = {
   phone?: string;
   /** External user ID — Meta cross-device match için. Email normalize edilmiş halini öneriyoruz. */
   externalId?: string;
+  /**
+   * Click timestamp (ms) — kullanıcı fbclid ile siteye iniş anı.
+   * Server Date.now() yerine bu kullanılır — Meta ClickID "modified value"
+   * uyarısını engeller.
+   */
+  clickTimestamp?: number;
   customData?: CapiEventInput['customData'];
 };
 
@@ -44,8 +50,12 @@ export async function POST(req: NextRequest) {
     }
 
     // Server tarafında otomatik çıkarılan kullanıcı verisi
-    // eventSourceUrl'i fallback olarak geçiyoruz — fbclid query param yakalanabilsin
-    const headerUserData = extractUserDataFromRequest(req, payload.eventSourceUrl);
+    // eventSourceUrl + clickTimestamp ile fbc synthesis için gerçek landing time
+    const headerUserData = extractUserDataFromRequest(
+      req,
+      payload.eventSourceUrl,
+      payload.clickTimestamp,
+    );
 
     // external_id öncelik: client'tan gelen > email fallback (cross-device match için stabil id)
     const externalId =

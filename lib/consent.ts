@@ -25,7 +25,22 @@ function checkAdTrafficAutoGrant(): boolean {
     const url = new URL(window.location.href);
     // Meta (fbclid), Google (gclid), TikTok (ttclid) reklam trafiği işaretleri
     const adClickIds = ['fbclid', 'gclid', 'ttclid', 'utm_source'];
-    return adClickIds.some((param) => url.searchParams.has(param));
+    const hasAdClick = adClickIds.some((param) => url.searchParams.has(param));
+
+    // fbclid varsa landing timestamp'i sessionStorage'a kaydet (Meta fbc synthesis için)
+    // Server Date.now() yerine gerçek click anı kullanılacak
+    if (hasAdClick && url.searchParams.has('fbclid')) {
+      try {
+        const existing = sessionStorage.getItem('cb-fbclid-ts');
+        if (!existing) {
+          sessionStorage.setItem('cb-fbclid-ts', String(Date.now()));
+        }
+      } catch {
+        // sessionStorage erişilemez (incognito vb.) — sessiz fail
+      }
+    }
+
+    return hasAdClick;
   } catch {
     return false;
   }

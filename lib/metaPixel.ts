@@ -170,6 +170,20 @@ export async function sendCapi(payload: {
 }): Promise<void> {
   if (typeof window === 'undefined') return;
   if (getConsent() !== 'granted') return;
+
+  // fbclid landing timestamp — server-side fbc synthesis için gerçek click anı
+  // Meta "ClickID modified value" warning'ini engeller
+  let clickTimestamp: number | undefined;
+  try {
+    const stored = sessionStorage.getItem('cb-fbclid-ts');
+    if (stored) {
+      const parsed = Number(stored);
+      if (Number.isFinite(parsed)) clickTimestamp = parsed;
+    }
+  } catch {
+    // sessionStorage erişilemez — sessiz geç
+  }
+
   try {
     await fetch('/api/meta-capi', {
       method: 'POST',
@@ -177,6 +191,7 @@ export async function sendCapi(payload: {
       body: JSON.stringify({
         ...payload,
         eventSourceUrl: window.location.href,
+        ...(clickTimestamp ? { clickTimestamp } : {}),
       }),
       // CAPI çağrısı kullanıcının akışını yavaşlatmasın; arka planda devam etsin
       keepalive: true,

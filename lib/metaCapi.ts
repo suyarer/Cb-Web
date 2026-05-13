@@ -184,6 +184,7 @@ export async function sendCapiEvent(
 export function extractUserDataFromRequest(
   req: Request,
   fallbackUrl?: string,
+  clickTimestamp?: number,
 ): {
   clientIpAddress?: string;
   clientUserAgent?: string;
@@ -201,17 +202,20 @@ export function extractUserDataFromRequest(
 
   const clientUserAgent = headers.get('user-agent') ?? undefined;
 
-  // _fbp ve _fbc cookie'lerini parse et
+  // _fbp ve _fbc cookie'lerini parse et — RAW değer, decodeURIComponent YOK
+  // (decodeURIComponent fbc/fbp değerlerini kıramaz ama Meta ham bekler)
   const cookies = Object.fromEntries(
     cookieHeader.split(';').map((c) => {
       const [k, ...v] = c.trim().split('=');
-      return [k, decodeURIComponent(v.join('='))];
+      return [k, v.join('=')];
     }),
   );
   const fbp = cookies._fbp || undefined;
   let fbc: string | undefined = cookies._fbc || undefined;
 
   // fbc fallback — eventSourceUrl veya request URL'den fbclid çek
+  // KRİTİK: Timestamp client'ın landing time'ı olmalı (server time DEĞİL).
+  // Meta "modified value" warning'inin sebebi: server Date.now() ≠ click anı.
   if (!fbc) {
     try {
       const urlToCheck = fallbackUrl || req.url;
@@ -219,8 +223,10 @@ export function extractUserDataFromRequest(
         const url = new URL(urlToCheck);
         const fbclid = url.searchParams.get('fbclid');
         if (fbclid) {
+          // Client'tan gelen click timestamp > server fallback
           // Meta CAPI standard fbc format: fb.1.{timestampMs}.{fbclid}
-          fbc = `fb.1.${Date.now()}.${fbclid}`;
+          const ts = clickTimestamp || Date.now();
+          fbc = `fb.1.${ts}.${fbclid}`;
         }
       }
     } catch {
