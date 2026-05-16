@@ -159,9 +159,9 @@ export default function Hero() {
               custom={2}
               className="text-lg md:text-xl text-zinc-400 max-w-xl leading-relaxed mb-8"
             >
-              Telefonu bırak, yan masandaki yabancıyla aynı sofrada buluş.
-              Yakındaki etkinliğe katıl ya da kendi etkinliğini bir dakikada kur.
-              Algoritma yok, sonsuz feed yok, bildirim yağmuru yok.
+              Telefonun bittiği yerde başlar.
+              Mahallendeki Cumartesi geceleri, yan masadaki yabancılarla
+              paylaşılan sofralar için. Anti-platform topluluk.
             </motion.p>
 
             <motion.div
