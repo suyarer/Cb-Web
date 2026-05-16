@@ -96,27 +96,18 @@ export default function Hero() {
             <div className="flex items-center gap-3 text-[10.5px] md:text-xs font-mono uppercase tracking-[0.2em] md:tracking-[0.25em] text-zinc-500">
               <span className="w-6 md:w-8 h-px bg-zinc-700 flex-shrink-0" />
               <span className="flex items-center gap-2">
-                {greeting ? (
+                <span className="text-acid font-semibold">Bin takipçi. Sıfır masa.</span>
+                {greeting && (
                   <>
-                    <span className="text-acid">{greeting.kicker}</span>
                     <span className="text-zinc-700">·</span>
-                    <span>Bu bir pazarlama sayfası değil.</span>
+                    <span>{greeting.kicker}</span>
                   </>
-                ) : (
-                  <span>Bu bir pazarlama sayfası değil.</span>
                 )}
               </span>
             </div>
             <div className="mt-3 text-sm text-zinc-400 max-w-lg leading-relaxed">
-              {greeting ? (
-                <span dangerouslySetInnerHTML={{ __html: greeting.message }} />
-              ) : (
-                <>
-                  Bir duyuru. Bir imza. Bir davet. &quot;Bu akşam ne yapsak?&quot;
-                  sorusunun yanıtı, 12 kişinin okuyup geçtiği WhatsApp grubunda
-                  değil — aşağıda.
-                </>
-              )}
+              Sosyal Obezite çağında, gerçek Cumartesileri geri alıyoruz.
+              ClubBeans — anti-platform topluluk uygulaması. Türkiye&apos;de yapıldı.
             </div>
           </motion.div>
 
@@ -168,9 +159,9 @@ export default function Hero() {
               custom={2}
               className="text-lg md:text-xl text-zinc-400 max-w-xl leading-relaxed mb-8"
             >
-              İki seçenek: yakındaki bir etkinliğe katıl ya da kendi
-              etkinliğini bir dakikada kur. Bekleyen form yok, abonelik yok,
-              algoritma yok. Cumartesi akşamı artık senin.
+              Telefonu bırak, yan masandaki yabancıyla aynı sofrada buluş.
+              Yakındaki etkinliğe katıl ya da kendi etkinliğini bir dakikada kur.
+              Algoritma yok, sonsuz feed yok, bildirim yağmuru yok.
             </motion.p>
 
             <motion.div
@@ -207,11 +198,11 @@ export default function Hero() {
                 <span className="mt-0.5 text-lg" aria-hidden>🟢</span>
                 <div className="flex-1">
                   <p className="text-sm md:text-base font-semibold text-acid mb-1.5 leading-snug">
-                    İlk 50 kişi → 29 Mayıs Moda lansman etkinliğine davetli
+                    İlk 1.000 Bean → 29 Mayıs lansman + 30 Mayıs Moda buluşması davetiyesi
                   </p>
                   <p className="text-xs md:text-sm text-zinc-400 leading-relaxed">
-                    Tek mail var: lansman günü &quot;indir&quot; linki ve etkinlik
-                    davetiyen. Spam yok, söz.
+                    Lansman günü &quot;indir&quot; linkin ve Moda buluşma davetin
+                    tek mailde gelir. Spam yok, söz.
                   </p>
                 </div>
               </div>

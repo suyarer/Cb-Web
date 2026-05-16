@@ -26,9 +26,9 @@ export default function KineticHeadline() {
   if (reduced) {
     return (
       <h1 className="text-hero font-bold tracking-tight leading-[0.95] mb-6">
-        Ekran süresi değil,
+        Cumartesileri
         <br />
-        <span className="text-gradient-acid">yaşam süresi.</span>
+        <span className="text-gradient-acid">geri al.</span>
       </h1>
     );
   }
@@ -39,23 +39,11 @@ export default function KineticHeadline() {
       initial="hidden"
       animate="visible"
       className="text-hero font-bold tracking-tight leading-[0.95] mb-6"
-      aria-label="Ekran süresi değil, yaşam süresi."
+      aria-label="Cumartesileri geri al."
     >
       <span className="block overflow-hidden">
         <motion.span variants={word} className="inline-block relative">
-          <span className="relative text-zinc-400">
-            Ekran süresi
-            {/* üzerini çizen animasyonlu şerit */}
-            <motion.span
-              aria-hidden
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.8, delay: 1.4, ease: easeOutExpo }}
-              className="absolute left-0 right-0 top-[58%] h-[0.08em] origin-left bg-zinc-400"
-              style={{ transformOrigin: '0% 50%' }}
-            />
-          </span>{' '}
-          <span className="text-zinc-500">değil,</span>
+          <span className="relative text-white">Cumartesileri</span>
         </motion.span>
       </span>
 
@@ -65,7 +53,7 @@ export default function KineticHeadline() {
           className="inline-block text-gradient-acid"
           style={{ paddingRight: '0.1em' }}
         >
-          yaşam süresi.
+          geri al.
         </motion.span>
       </span>
     </motion.h1>

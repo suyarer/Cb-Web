@@ -258,7 +258,7 @@ export default function SubscribeForm({
             whileTap={{ scale: 0.97 }}
             className="bg-acid text-midnight font-semibold text-sm px-5 py-2.5 rounded-full transition hover:bg-acid-400 disabled:opacity-70 disabled:cursor-wait whitespace-nowrap"
           >
-            {status === 'loading' ? '...' : 'Davetiyemi al →'}
+            {status === 'loading' ? '...' : 'Listeye katıl →'}
           </motion.button>
         </div>
 
