@@ -99,7 +99,14 @@ export default function SubscribeForm({
 
     setStatus('loading');
     try {
-      const res = await fetch('/api/subscribe', {
+      // Apex (clubbeans.com) → www (www.clubbeans.com) Vercel 307 redirect
+      // browser POST'u cross-origin redirect sonrası DROP ediyor → silent fail.
+      // Çözüm: apex'te isek absolute www URL kullan, yoksa relative path.
+      const apiUrl =
+        typeof window !== 'undefined' && window.location.hostname === 'clubbeans.com'
+          ? 'https://www.clubbeans.com/api/subscribe'
+          : '/api/subscribe';
+      const res = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

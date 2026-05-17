@@ -65,6 +65,19 @@ const nextConfig: NextConfig = {
         source: '/:path*',
         headers: securityHeaders,
       },
+      // /api/* için CORS — apex (clubbeans.com) → www (www.clubbeans.com)
+      // cross-origin POST'larda browser preflight bekliyor. Bu olmadan
+      // reklam linkindeki clubbeans.com form submit'leri silent fail.
+      // Sentinel: lansman -12 gün, conversion %0.12 felaketi sonrası ekledi.
+      {
+        source: '/api/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Origin', value: 'https://clubbeans.com' },
+          { key: 'Access-Control-Allow-Methods', value: 'POST, OPTIONS' },
+          { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
+          { key: 'Access-Control-Max-Age', value: '86400' },
+        ],
+      },
     ];
   },
 };
