@@ -8,7 +8,11 @@ import { useCallback, useId, useRef, useState } from 'react';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
-const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+// TEMP: Turnstile disabled until launch (29 May) — conversion fix.
+// 2.890 click → 0 signup tespiti sonrası, CAPTCHA friction kaldırıldı.
+// Bot riski var ama mevcut conversion %0 olduğundan ANY signup iyileştirme.
+// Lansman sonrası tekrar aç: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+const TURNSTILE_SITE_KEY = undefined;
 
 // Global Turnstile tipi (Cloudflare script yüklenince window'a eklenir)
 declare global {
