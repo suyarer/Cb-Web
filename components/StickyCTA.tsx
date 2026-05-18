@@ -19,11 +19,24 @@ export default function StickyCTA() {
     const onScroll = () => {
       const y = window.scrollY;
       const viewportH = window.innerHeight;
-      const showAfter = viewportH * 1.0;
+      // Conversion fix: erken görünür (200px scroll) → form fold-altındaysa
+      // bile kullanıcı sticky CTA ile direkt erişebilsin.
+      const showAfter = 200;
 
-      // Ana sayfadaysak Launch görünürlüğünü de kontrol et
+      // Ana sayfadaysak hero form'u veya Launch görünürlüğünü kontrol et
+      // (form görünür ise zaten erişilebilir, sticky'e gerek yok)
       if (onHome) {
+        const formEl = document.getElementById('subscribe-form');
         const launchEl = document.getElementById('launch');
+        // Hero form ekrandaysa sticky gizle
+        if (formEl) {
+          const rect = formEl.getBoundingClientRect();
+          if (rect.top > 0 && rect.bottom < viewportH) {
+            setVisible(false);
+            return;
+          }
+        }
+        // Launch ekrandaysa sticky gizle
         if (launchEl) {
           const rect = launchEl.getBoundingClientRect();
           if (rect.top < viewportH * 0.9) {
@@ -41,7 +54,9 @@ export default function StickyCTA() {
     return () => window.removeEventListener('scroll', onScroll);
   }, [onHome]);
 
-  const href = onHome ? '#launch' : '/#launch';
+  // Hero'daki form'a anchor — Launch section'a değil
+  // (Launch sayfa derinlerinde, sticky bunu beklemez)
+  const href = onHome ? '#subscribe-form' : '/#subscribe-form';
 
   return (
     <AnimatePresence>

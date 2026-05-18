@@ -152,12 +152,48 @@ export default function Hero() {
 
             <KineticHeadline />
 
+            {/* Form Value Proposition — H1'in HEMEN ALTI (mobile above-the-fold için kritik).
+                4.500+ LPV / 4 signup tespiti sonrası form yukarı taşındı:
+                kullanıcı H1 → değer önerisi → email input akışını kesintisiz görsün. */}
+            <motion.div
+              variants={variants}
+              initial="hidden"
+              animate="visible"
+              custom={2.8}
+              className="mb-5 max-w-md rounded-2xl border border-acid/30 bg-acid/[0.06] p-4"
+            >
+              <div className="flex items-start gap-3">
+                <span className="mt-0.5 text-lg" aria-hidden>🟢</span>
+                <div className="flex-1">
+                  <p className="text-sm md:text-base font-semibold text-acid mb-1.5 leading-snug">
+                    İlk 1.000 Bean → 29 Mayıs lansman + 30 Mayıs Moda buluşması davetiyesi
+                  </p>
+                  <p className="text-xs md:text-sm text-zinc-400 leading-relaxed">
+                    Lansman günü &quot;indir&quot; linkin ve Moda buluşma davetin
+                    tek mailde gelir. Spam yok, söz.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* PRIMARY — inline mail form (conversion #1) */}
+            <motion.div
+              id="subscribe-form"
+              variants={variants}
+              initial="hidden"
+              animate="visible"
+              custom={3}
+              className="scroll-mt-24"
+            >
+              <SubscribeForm source="hero" />
+            </motion.div>
+
             <motion.p
               variants={variants}
               initial="hidden"
               animate="visible"
               custom={2}
-              className="text-lg md:text-xl text-zinc-400 max-w-xl leading-relaxed mb-8"
+              className="text-lg md:text-xl text-zinc-400 max-w-xl leading-relaxed mt-10 mb-8"
             >
               Telefonun bittiği yerde başlar.
               Mahallendeki Cumartesi geceleri, yan masadaki yabancılarla
@@ -184,38 +220,6 @@ export default function Hero() {
                   {label}
                 </span>
               ))}
-            </motion.div>
-
-            {/* Form Value Proposition — neden listeye katılmalı? */}
-            <motion.div
-              variants={variants}
-              initial="hidden"
-              animate="visible"
-              custom={2.8}
-              className="mb-5 max-w-md rounded-2xl border border-acid/30 bg-acid/[0.06] p-4"
-            >
-              <div className="flex items-start gap-3">
-                <span className="mt-0.5 text-lg" aria-hidden>🟢</span>
-                <div className="flex-1">
-                  <p className="text-sm md:text-base font-semibold text-acid mb-1.5 leading-snug">
-                    İlk 1.000 Bean → 29 Mayıs lansman + 30 Mayıs Moda buluşması davetiyesi
-                  </p>
-                  <p className="text-xs md:text-sm text-zinc-400 leading-relaxed">
-                    Lansman günü &quot;indir&quot; linkin ve Moda buluşma davetin
-                    tek mailde gelir. Spam yok, söz.
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* PRIMARY — inline mail form (conversion #1) */}
-            <motion.div
-              variants={variants}
-              initial="hidden"
-              animate="visible"
-              custom={3}
-            >
-              <SubscribeForm source="hero" />
             </motion.div>
 
             {/* SECONDARY — manifesto + küçük counter */}
