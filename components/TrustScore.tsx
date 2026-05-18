@@ -5,7 +5,7 @@ import { motion, useInView } from '@/lib/motion';
 import { useEffect, useRef, useState } from 'react';
 
 const rules = [
-  { delta: '+1', label: 'Katıldığın her etkinlik (Bean)', tone: 'acid' },
+  { delta: '+1', label: 'Katıldığın her etkinlik', tone: 'acid' },
   { delta: '+5', label: 'Kurucu olduğun, sözünü tuttuğun etkinlik bittiğinde', tone: 'acid' },
   { delta: '+3', label: 'Bir kulüp üyesi seni adıyla referans verdiğinde', tone: 'acid' },
   { delta: '−5', label: 'Son dakika iptal · gelmeme · etkinliği yarım bırakma', tone: 'red' },

@@ -31,7 +31,7 @@ export default function UrunPage() {
         <SubPageHeader
           kicker="Ürün"
           title="ClubBeans'i içeriden gör."
-          subtitle="Dört ana ekran: yakındaki etkinlikleri (Bean) keşfet, haritada gör, ruh haline göre filtrele, katılmadan önce kimin geleceğini öğren. Algoritma yerine senin filtrelerin."
+          subtitle="Dört ana ekran: yakındaki etkinlikleri keşfet, haritada gör, ruh haline göre filtrele, katılmadan önce kimin geleceğini öğren. Algoritma yerine senin filtrelerin."
         />
         <Showcase />
         <SubPageCTA

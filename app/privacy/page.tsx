@@ -53,7 +53,7 @@ export default function PrivacyPage() {
           <h3>2.2. Konum Verisi</h3>
           <ul>
             <li>
-              <strong>Yaklaşık konum:</strong> Yakındaki etkinlikleri (Bean) listelemek için —
+              <strong>Yaklaşık konum:</strong> Yakındaki etkinlikleri listelemek için —
               yalnızca uygulama açıkken.
             </li>
             <li>

@@ -257,7 +257,7 @@ export default function SelfCheck() {
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-5">
               <Card icon="📱" value={c.postsScrolled.toLocaleString('tr-TR')} label="post kaydırma" muted />
-              <Card icon="☕" value={c.beans.toString()} label="Bean" />
+              <Card icon="☕" value={c.beans.toString()} label="buluşma" />
               <Card icon="🚶" value={c.walks.toString()} label="45 dk yürüyüş" />
               <Card icon="💬" value={c.talks.toString()} label="gerçek sohbet" />
             </div>
