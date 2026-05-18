@@ -63,15 +63,15 @@ export default function TermsPage() {
             silinir.
           </p>
 
-          <h2>4. Bean ve Bilet Kuralları</h2>
+          <h2>4. Etkinlik ve Bilet Kuralları</h2>
           <ul>
             <li>
-              <strong>Bean süresi:</strong> Host tarafından belirlenir. Çakışmasız
+              <strong>Etkinlik süresi:</strong> Host tarafından belirlenir. Çakışmasız
               tasarım ve katılımcı deneyimi için ortalama 3-4 saat önerilir; gerekli
               durumlarda daha kısa veya uzun aralıklar tanımlanabilir.
             </li>
             <li>
-              <strong>Kapasite:</strong> Her Bean&apos;in sınırlı katılımcı kapasitesi vardır. Dolduğunda
+              <strong>Kapasite:</strong> Her etkinliğin sınırlı katılımcı kapasitesi vardır. Dolduğunda
               bekleme listesi (waitlist) devreye girer.
             </li>
             <li>
@@ -83,18 +83,18 @@ export default function TermsPage() {
               durumunda TrustScore&apos;unuz düşer.
             </li>
             <li>
-              <strong>Haftalık limit:</strong> Her kulüp haftada en fazla 5 Bean oluşturabilir.
+              <strong>Haftalık limit:</strong> Her kulüp haftada en fazla 5 etkinlik oluşturabilir.
             </li>
           </ul>
 
           <h2>5. Ödeme ve Ücretler</h2>
           <ul>
             <li>
-              Uygulamaya katılım şu an ücretsizdir. Gelecekte bazı Bean&apos;ler ücretli olabilir;
-              bu durumda fiyat Bean sayfasında açıkça gösterilir.
+              Uygulamaya katılım şu an ücretsizdir. Gelecekte bazı etkinlikler ücretli olabilir;
+              bu durumda fiyat etkinlik sayfasında açıkça gösterilir.
             </li>
             <li>
-              Ücretli Bean iptali durumunda iade politikası Bean oluşturucusu tarafından belirlenir,
+              Ücretli etkinlik iptali durumunda iade politikası etkinlik oluşturucusu tarafından belirlenir,
               uygulama sayfasında gösterilir.
             </li>
           </ul>
@@ -112,8 +112,8 @@ export default function TermsPage() {
 
           <h2>7. Sorumluluk Reddi</h2>
           <p>
-            ClubBeans, Bean&apos;lerde gerçekleşen olaylardan, katılımcıların davranışlarından veya
-            ürettiği içerikten sorumlu değildir. Bean&apos;ler kullanıcılar tarafından oluşturulur.
+            ClubBeans, etkinliklerde gerçekleşen olaylardan, katılımcıların davranışlarından veya
+            ürettiği içerikten sorumlu değildir. Etkinlikler kullanıcılar tarafından oluşturulur.
             Kendi güvenliğinizden siz sorumlusunuz.
           </p>
 
