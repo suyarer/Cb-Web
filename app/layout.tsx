@@ -119,7 +119,7 @@ const jsonLd = {
       url: 'https://clubbeans.com',
       logo: 'https://clubbeans.com/icon.svg',
       description:
-        'Anti-platform topluluk uygulaması. Yakındaki fiziksel buluşmaları (Beans) keşfet, kendi Club\'ını dakikalar içinde kur.',
+        'Anti-platform topluluk uygulaması. Yakındaki fiziksel buluşmaları keşfet, kendi Club\'ını dakikalar içinde kur.',
       slogan: 'Ekran süresi değil, yaşam süresi.',
     },
     {

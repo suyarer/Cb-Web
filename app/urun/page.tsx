@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     'ClubBeans uygulamasının ekranları: Akış, Radar, Compass Mode, Bean detayı. Dört ekran — beşincisi senin hayatın.',
   openGraph: {
     title: 'Ürün — ClubBeans ekranları',
-    description: 'Akış, Radar, Compass, Bean detayı — dört ana ekran',
+    description: 'Akış, Radar, Compass, Etkinlik detayı — dört ana ekran',
     url: 'https://clubbeans.com/urun',
   },
   alternates: { canonical: 'https://clubbeans.com/urun' },
