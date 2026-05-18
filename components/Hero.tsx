@@ -94,24 +94,28 @@ export default function Hero() {
             className="max-w-2xl w-full sm:w-auto"
           >
             <div className="flex items-center gap-3 text-[10.5px] md:text-xs font-mono uppercase tracking-[0.2em] md:tracking-[0.25em] text-zinc-500">
-              <span className="w-6 md:w-8 h-px bg-zinc-700 flex-shrink-0" />
+              <span className="hidden sm:block w-6 md:w-8 h-px bg-zinc-700 flex-shrink-0" />
               <span className="flex items-center gap-2">
                 <span className="text-acid font-semibold">Bin takipçi. Sıfır masa.</span>
                 {greeting && (
                   <>
-                    <span className="text-zinc-700">·</span>
-                    <span>{greeting.kicker}</span>
+                    <span className="hidden sm:inline text-zinc-700">·</span>
+                    <span className="hidden sm:inline">{greeting.kicker}</span>
                   </>
                 )}
               </span>
             </div>
-            <div className="mt-3 text-sm text-zinc-400 max-w-lg leading-relaxed">
+            {/* Sosyal Obezite paragrafı: mobile gizli — form fold içine alınsın.
+                Manifesto seven kullanıcı scroll edince görür. */}
+            <div className="hidden sm:block mt-3 text-sm text-zinc-400 max-w-lg leading-relaxed">
               Sosyal Obezite çağında, gerçek Cumartesileri geri alıyoruz.
               ClubBeans — anti-platform topluluk uygulaması. Türkiye&apos;de yapıldı.
             </div>
           </motion.div>
 
-          {/* Filizlenen Bean — markanın metaforu, sayfaya girişte canlanır */}
+          {/* Filizlenen Bean — markanın metaforu.
+              Mobile: küçük (48px) — fold içinde form'a yer bırak.
+              Desktop: 88px (orijinal). */}
           <motion.div
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -119,18 +123,18 @@ export default function Hero() {
             className="relative flex-shrink-0 self-start"
           >
             <div
-              className="absolute -inset-6 sm:-inset-8 bg-acid/20 blur-3xl rounded-full pointer-events-none"
+              className="absolute -inset-4 sm:-inset-8 bg-acid/20 blur-2xl sm:blur-3xl rounded-full pointer-events-none"
               aria-hidden
             />
             <div className="relative">
               <span className="block sm:hidden">
-                <BeanSprout size={96} animated breathe />
+                <BeanSprout size={48} animated breathe />
               </span>
               <span className="hidden sm:block">
                 <BeanSprout size={88} animated breathe />
               </span>
             </div>
-            <div className="mt-2 text-[9px] md:text-[10px] font-mono uppercase tracking-[0.2em] md:tracking-[0.25em] text-zinc-600 text-center whitespace-nowrap">
+            <div className="hidden sm:block mt-2 text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-600 text-center whitespace-nowrap">
               Tohumdan <span className="text-zinc-700">·</span> Topluluğa
             </div>
           </motion.div>
@@ -139,12 +143,14 @@ export default function Hero() {
         <div className="grid lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-20 items-center">
           {/* Sol: Metin */}
           <div>
+            {/* Pill bar: mobile gizli (value box'ta zaten 29 May var, fold içinde yer aç).
+                Desktop'ta görünür kalır. */}
             <motion.div
               variants={variants}
               initial="hidden"
               animate="visible"
               custom={0}
-              className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 mb-8 text-xs font-medium text-zinc-300 backdrop-blur"
+              className="hidden sm:inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 mb-8 text-xs font-medium text-zinc-300 backdrop-blur"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-acid" />
               29 Mayıs 2026 · Lansmandan önce ilk sen haber al

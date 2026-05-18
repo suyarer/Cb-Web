@@ -25,7 +25,7 @@ export default function KineticHeadline() {
 
   if (reduced) {
     return (
-      <h1 className="text-hero font-bold tracking-tight leading-[0.95] mb-6">
+      <h1 className="text-4xl sm:text-5xl md:text-hero font-bold tracking-tight leading-[0.95] mb-5 md:mb-6">
         Ekran süresi değil,
         <br />
         <span className="text-gradient-acid">yaşam süresi.</span>
@@ -38,7 +38,7 @@ export default function KineticHeadline() {
       variants={container}
       initial="hidden"
       animate="visible"
-      className="text-hero font-bold tracking-tight leading-[0.95] mb-6"
+      className="text-4xl sm:text-5xl md:text-hero font-bold tracking-tight leading-[0.95] mb-5 md:mb-6"
       aria-label="Ekran süresi değil, yaşam süresi."
     >
       <span className="block overflow-hidden">
