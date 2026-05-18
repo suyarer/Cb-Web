@@ -6,10 +6,10 @@ import { motion } from '@/lib/motion';
 // SSS sayfasında üste yerleştirilen mini terim kutusu.
 // Sözlük sayfa kaldırıldığından, terimler ilk karşılaşmada burada toplu açıklanır.
 const TERMS = [
-  { t: 'Bean', d: 'Yakındaki fiziksel buluşma (kahve, koşu, pitch, kitap...)' },
-  { t: 'Club (Kulüp)', d: 'Bir ilgi alanı etrafında kurulan topluluk' },
-  { t: 'Kabile', d: 'Bir kulübün üye topluluğu; takipçi değil, kulübe ait kimlik' },
-  { t: 'TrustScore', d: 'Sözünü tutmana göre artan 0-100 güven puanı' },
+  { t: 'Bean', d: 'Uygulamanın kullanıcısı — fasulye gibi, topluluğun tek tek üyesi' },
+  { t: 'Etkinlik', d: 'Yakındaki fiziksel buluşma (kahve, koşu, kitap, yemek...)' },
+  { t: 'Kulüp', d: 'Bir ilgi alanı etrafında kurulan topluluk' },
+  { t: 'TrustScore', d: 'Sözünü tutmana göre artan 0-100 güven puanı (no-show korumalı)' },
   { t: 'Compass', d: 'Ruh haline göre uygulamanın tonunu değiştiren mod' },
   { t: 'Sosyal Obezite', d: 'Çok dijital bağ, az gerçek karşılık — çağın hastalığı' },
 ];

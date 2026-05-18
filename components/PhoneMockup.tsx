@@ -104,7 +104,7 @@ function DefaultAppPreview() {
       {/* Tabs */}
       <div className="flex gap-4 mb-4 px-1 text-xs">
         <span className="text-white font-semibold border-b-2 border-acid pb-1">Sana Özel</span>
-        <span className="text-zinc-500">Kabile</span>
+        <span className="text-zinc-500">Mahallen</span>
       </div>
 
       {/* Fake feed cards */}

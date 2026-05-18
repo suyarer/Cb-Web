@@ -10,7 +10,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Club Aç — Kurucular için ClubBeans',
   description:
-    'Kendi kulübünü bir dakikada kur. Bean aç, kabileni yönet, masana kim oturur sen seç. WhatsApp grup, Instagram, Eventbrite karmaşası son bulsun.',
+    'Kendi kulübünü bir dakikada kur. Etkinlik aç, topluluğunu yönet, masana kim oturur sen seç. WhatsApp grup, Instagram, Eventbrite karmaşası son bulsun.',
   openGraph: {
     title: 'Club Aç — Kurucular için ClubBeans',
     description:
