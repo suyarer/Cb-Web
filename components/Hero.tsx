@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import KineticHeadline from '@/components/KineticHeadline';
-import LiveCounter from '@/components/LiveCounter';
+import LaunchCountdown from '@/components/LaunchCountdown';
 import SubscribeForm from '@/components/SubscribeForm';
 import WhatsAppCTA from '@/components/WhatsAppCTA';
 import { easeOutExpo, fadeUpVariant } from '@/lib/motion';
@@ -196,10 +196,10 @@ export default function Hero() {
               <SubscribeForm source="hero" />
             </motion.div>
 
-            {/* FOMO mechanic — live counter + countdown.
-                Davranış paneli (Mira): "Promise-value uçurumu kapanmalı,
-                somut sayı + scarcity + deadline klasik FOMO." */}
-            <LiveCounter />
+            {/* Sade launch countdown — sayı yok, sadece deadline.
+                Bandwagon effect riskini ortadan kaldırır: düşük abone sayısı
+                ters etki yaratıyordu. Anti-platform DNA sayı vurgulamaz. */}
+            <LaunchCountdown />
 
             {/* WhatsApp alternative path — A/B test partneri.
                 Davranış paneli (Cem): "Bekleme listesi 2026'da öldü,
