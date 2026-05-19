@@ -2,9 +2,10 @@
 
 import { sendCapi, trackLead } from '@/lib/metaPixel';
 import { AnimatePresence, motion } from '@/lib/motion';
+import { trackEvent } from '@/lib/posthog';
 import Script from 'next/script';
 import { useSearchParams } from 'next/navigation';
-import { useCallback, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
@@ -73,11 +74,24 @@ export default function SubscribeForm({
     });
   }, []);
 
+  // PostHog: form viewed
+  useEffect(() => {
+    trackEvent('form_view', { source });
+  }, [source]);
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || status === 'loading') return;
 
+    // PostHog: submit attempt (success/fail ayrımı sonrada)
+    trackEvent('form_submit_attempt', {
+      source,
+      hasConsent: consent,
+      hasEmail: !!email,
+    });
+
     if (!consent) {
+      trackEvent('form_submit_blocked_consent', { source });
       setStatus('error');
       setMessage('E-posta izni kutusunu işaretlemen gerek.');
       return;
@@ -121,6 +135,12 @@ export default function SubscribeForm({
       });
       const data = await res.json();
       if (!res.ok || !data.ok) {
+        // PostHog: backend error — conversion debug için kritik
+        trackEvent('form_submit_error', {
+          source,
+          status: res.status,
+          error: data.error || 'unknown',
+        });
         setStatus('error');
         setMessage(data.error || 'Gönderilemedi. Tekrar dener misin?');
         // Turnstile token tek kullanımlık — reset
@@ -129,6 +149,12 @@ export default function SubscribeForm({
           setTurnstileToken(null);
         }
       } else {
+        // PostHog: success — funnel completion
+        trackEvent('form_submit_success', {
+          source,
+          position: data.position,
+          campaign: utm.campaign,
+        });
         setStatus('success');
         setPosition(data.position ?? null);
         setRefCode(data.refCode ?? null);
@@ -155,7 +181,12 @@ export default function SubscribeForm({
           });
         }
       }
-    } catch {
+    } catch (err) {
+      // PostHog: network/fetch error
+      trackEvent('form_submit_network_error', {
+        source,
+        error: err instanceof Error ? err.message : 'unknown',
+      });
       setStatus('error');
       setMessage('Bağlantı sorunu. Biraz sonra dener misin?');
     }

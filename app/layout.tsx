@@ -8,6 +8,7 @@ import GutterSprout from '@/components/GutterSprout';
 import LiveTicker from '@/components/LiveTicker';
 import MetaPixel from '@/components/MetaPixel';
 import MotionProvider from '@/components/MotionProvider';
+import PosthogProvider from '@/components/PosthogProvider';
 import ScrollRoots from '@/components/ScrollRoots';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -160,19 +161,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="tr" className={`${inter.variable} ${jetbrains.variable}`}>
       <body>
-        <MotionProvider>
-          <CompassProvider>
-            <CosyMode />
-            <div className="grain-overlay" aria-hidden />
-            <CompassTint />
-            <ScrollRoots />
-            <GutterSprout />
-            {children}
-            <LiveTicker />
-            <ClientExtras />
-            <CookieConsent />
-          </CompassProvider>
-        </MotionProvider>
+        <PosthogProvider>
+          <MotionProvider>
+            <CompassProvider>
+              <CosyMode />
+              <div className="grain-overlay" aria-hidden />
+              <CompassTint />
+              <ScrollRoots />
+              <GutterSprout />
+              {children}
+              <LiveTicker />
+              <ClientExtras />
+              <CookieConsent />
+            </CompassProvider>
+          </MotionProvider>
+        </PosthogProvider>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
