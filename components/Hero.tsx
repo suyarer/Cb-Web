@@ -184,27 +184,42 @@ export default function Hero() {
               </div>
             </motion.div>
 
-            {/* PRIMARY — inline mail form (conversion #1) */}
+            {/* PRIMARY: WhatsApp Channel — pivot strategy (19 May).
+                Cem'in tezi: "Bekleme listesi 2026'da öldü, insanlar
+                gelecekteki bir mail için email vermiyor."
+                Conversion %0.07 → WhatsApp Channel anında follow modeli.
+                En düşük friction (tek tık → bağlı). */}
             <motion.div
-              id="subscribe-form"
               variants={variants}
               initial="hidden"
               animate="visible"
-              custom={3}
+              custom={2.9}
               className="scroll-mt-24"
+              id="subscribe-form"
             >
+              <WhatsAppCTA />
+            </motion.div>
+
+            {/* SECONDARY: Email form — alternatif yol, WhatsApp tercih etmeyenler için.
+                Küçük "veya email ile" başlık altında, daha az dikkat çekici. */}
+            <motion.div
+              variants={variants}
+              initial="hidden"
+              animate="visible"
+              custom={3.2}
+              className="mt-6"
+            >
+              <div className="flex items-center gap-2 mb-3 max-w-md">
+                <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-600">
+                  veya — email ile
+                </span>
+                <span className="h-px flex-1 bg-zinc-800" />
+              </div>
               <SubscribeForm source="hero" />
             </motion.div>
 
-            {/* Sade launch countdown — sayı yok, sadece deadline.
-                Bandwagon effect riskini ortadan kaldırır: düşük abone sayısı
-                ters etki yaratıyordu. Anti-platform DNA sayı vurgulamaz. */}
+            {/* Sade launch countdown — deadline urgency, sayı yok */}
             <LaunchCountdown />
-
-            {/* WhatsApp alternative path — A/B test partneri.
-                Davranış paneli (Cem): "Bekleme listesi 2026'da öldü,
-                WhatsApp grup = anında topluluk içine girme." */}
-            <WhatsAppCTA />
 
             <motion.p
               variants={variants}
