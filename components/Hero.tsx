@@ -98,7 +98,7 @@ export default function Hero() {
             <div className="flex items-center gap-3 text-[10.5px] md:text-xs font-mono uppercase tracking-[0.2em] md:tracking-[0.25em] text-zinc-500">
               <span className="hidden sm:block w-6 md:w-8 h-px bg-zinc-700 flex-shrink-0" />
               <span className="flex items-center gap-2">
-                <span className="text-acid font-semibold">Bin takipçi. Sıfır masa.</span>
+                <span className="text-acid font-semibold">Bin takipçi. Sıfır temas.</span>
                 {greeting && (
                   <>
                     <span className="hidden sm:inline text-zinc-700">·</span>
@@ -145,7 +145,7 @@ export default function Hero() {
         <div className="grid lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-20 items-center">
           {/* Sol: Metin */}
           <div>
-            {/* Pill bar: mobile gizli (value box'ta zaten 29 May var, fold içinde yer aç).
+            {/* Pill bar: mobile gizli (value box'ta zaten 4 Haz var, fold içinde yer aç).
                 Desktop'ta görünür kalır. */}
             <motion.div
               variants={variants}
@@ -155,7 +155,7 @@ export default function Hero() {
               className="hidden sm:inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 mb-8 text-xs font-medium text-zinc-300 backdrop-blur"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-acid" />
-              29 Mayıs 2026 · Lansmandan önce ilk sen haber al
+              4 Haziran 2026 · Lansmandan önce ilk sen haber al
             </motion.div>
 
             <KineticHeadline />
@@ -174,7 +174,7 @@ export default function Hero() {
                 <span className="mt-0.5 text-lg" aria-hidden>🟢</span>
                 <div className="flex-1">
                   <p className="text-sm md:text-base font-semibold text-acid mb-1.5 leading-snug">
-                    İlk 1.000 Bean → 29 Mayıs lansman + 30 Mayıs Moda buluşması davetiyesi
+                    İlk 1.000 Bean → 4 Haziran lansman + 6 Haziran Moda buluşması davetiyesi
                   </p>
                   <p className="text-xs md:text-sm text-zinc-400 leading-relaxed">
                     Lansman günü &quot;indir&quot; linkin ve Moda buluşma davetin

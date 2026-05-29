@@ -20,8 +20,8 @@ import { useEffect, useState } from 'react';
  * @governing_law clubbeans-privacy-v1
  */
 
-// Lansman: 29 Mayıs 2026 Cuma 09:00 İstanbul saati
-const LAUNCH_DATE = new Date('2026-05-29T09:00:00+03:00');
+// Lansman: 4 Haziran 2026, 09:00 İstanbul saati (App Store + Google Play)
+const LAUNCH_DATE = new Date('2026-06-04T09:00:00+03:00');
 
 function getCountdown(): { days: number; hours: number; expired: boolean } {
   const now = new Date();

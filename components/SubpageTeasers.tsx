@@ -20,8 +20,8 @@ const TEASERS: Teaser[] = [
   },
   {
     kicker: 'Kulüp aç',
-    title: 'Kulüp kurmak için?',
-    sub: 'Kurucular için tam rehber.',
+    title: 'Kendi kulübünü kur.',
+    sub: 'Kurucular için adım adım rehber.',
     href: '/club-kur',
   },
   {
@@ -38,14 +38,14 @@ const TEASERS: Teaser[] = [
   },
   {
     kicker: 'Yol haritası',
-    title: 'Ne zaman, nerede?',
+    title: 'Neredeyiz, nereye gidiyoruz?',
     sub: 'Alfa → beta → lansman.',
     href: '/yol-haritasi',
   },
   {
     kicker: 'SSS',
-    title: '12 net cevap.',
-    sub: 'KVKK, iptal, ücretsizlik.',
+    title: 'Sorular, cevaplar net.',
+    sub: 'Kulüp, ücret, anti-platform.',
     href: '/sss',
   },
 ];
@@ -62,12 +62,12 @@ export default function SubpageTeasers() {
           className="max-w-2xl mb-10 md:mb-14"
         >
           <div className="text-xs uppercase tracking-[0.3em] text-acid mb-3 font-mono">
-            Derine in
+            Daha fazlası
           </div>
           <h2 className="text-section font-bold tracking-tight text-white leading-tight">
-            Merak ettiğini öğren.
+            Merak ettiklerini öğren.
             <br />
-            <span className="text-zinc-500">Her konu kendi sayfasında.</span>
+            <span className="text-zinc-500">Her soruya bir sayfa ayırdık.</span>
           </h2>
         </motion.div>
 

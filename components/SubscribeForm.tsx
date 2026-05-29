@@ -321,7 +321,7 @@ export default function SubscribeForm({
             className="mt-0.5 w-4 h-4 rounded border-white/20 bg-white/[0.03] text-acid focus:ring-acid/40 focus:ring-offset-0 flex-shrink-0 cursor-pointer"
           />
           <span className="text-[11px] text-zinc-500 leading-relaxed group-hover:text-zinc-400 transition">
-            Lansman günü tek bir bilgilendirme e-postası almayı kabul ediyorum.{' '}
+            Lansman günü e-posta almayı kabul ediyorum.{' '}
             <a
               href="/privacy"
               className="text-zinc-400 hover:text-acid underline underline-offset-2"

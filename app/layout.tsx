@@ -40,7 +40,7 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   title: 'ClubBeans — Ekran süresi değil, yaşam süresi.',
   description:
-    'ClubBeans bir anti-platformdur. Seni ekranda tutmak için değil, masaya çağırmak için çalışır. Yakındaki etkinliklere katıl ya da kendi etkinliğini bir dakikada kur. Algoritma yok, sonsuz feed yok, bildirim yağmuru yok. 29 Mayıs 2026 İstanbul lansman.',
+    'ClubBeans bir anti-platformdur. Seni ekranda tutmak için değil, gerçek temas için çalışır. Yakındaki etkinliklere katıl ya da kendi etkinliğini bir dakikada kur. Algoritma yok, sonsuz feed yok, bildirim yağmuru yok. 4 Haziran 2026 İstanbul lansman.',
   metadataBase: new URL('https://clubbeans.com'),
   keywords: [
     'ClubBeans',
