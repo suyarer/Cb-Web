@@ -19,7 +19,7 @@ export default function FAQ() {
             transition={{ duration: 0.6 }}
             className="text-xs uppercase tracking-[0.3em] text-acid mb-6 font-mono text-center"
           >
-            6 net cevap · kalanı metinlerde
+            {FAQS.length} net cevap
           </motion.div>
 
           <motion.h2

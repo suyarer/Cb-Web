@@ -11,10 +11,10 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'SSS — Sık Sorulan Sorular',
   description:
-    'ClubBeans hakkında 12 net cevap: lansman tarihi, ücretsizlik, iOS/Android, veri gizliliği, iptal kuralları, KVKK, ücretli Bean ve daha fazlası.',
+    'ClubBeans hakkında 11 net cevap: ClubBeans nedir, neden anti-platform, ücretsizlik, kimin için, lansman tarihi, Trust Score, kulüp kurma, ücretli etkinlik ve daha fazlası.',
   openGraph: {
     title: 'SSS — Sık Sorulan Sorular · ClubBeans',
-    description: 'Aklındakine 12 net cevap. Bahaneye yer yok.',
+    description: 'Aklındakine 11 net cevap. Bahaneye yer yok.',
     url: 'https://clubbeans.com/sss',
   },
   alternates: { canonical: 'https://clubbeans.com/sss' },
@@ -32,7 +32,7 @@ export default function SSSPage() {
         <SubPageHeader
           kicker="Sık sorulan sorular"
           title="Aklındakini sor."
-          subtitle="Bahaneye yer bırakmıyoruz. 12 kritik soru + metinlerde bağlantılar."
+          subtitle="Karar aşamasındakine net cevaplar. Felsefe değil, bilgi."
         />
         <GlossaryBox />
         <FAQ />

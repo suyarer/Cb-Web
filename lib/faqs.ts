@@ -3,54 +3,71 @@ export type FAQItem = {
   a: string;
 };
 
-// Tam FAQ seti — /sss alt sayfasında gösterilir.
+/**
+ * Navbar SSS — karar aşamasındaki ziyaretçi için net cevaplar.
+ *
+ * Bu liste /sss sayfasında ve layout.tsx JSON-LD (SEO) için kullanılır.
+ * Footer "Destek" SSS (/support) AYRI tutulur — orada mevcut kullanıcının
+ * sorun çözme soruları (hesap silme, KVKK, KYC vb) bulunur. Karıştırılmaz.
+ *
+ * Cevaplar; felsefe değil, net karar bilgisi verecek şekilde yazıldı.
+ *
+ * @governing_law clubbeans-content-v1
+ *
+ * GEÇİCİ SORULAR (lansman sonrası kaldırılacak):
+ *  - "Ne zaman çıkacak?" (index 4) — uygulama yayına girdiğinde sil
+ *  - "Erken erişim nasıl sağlarım?" (index 7) — uygulama yayına girdiğinde sil
+ *
+ * Brand kuralları:
+ *  - Bean kelimesi DM dışında kullanılmaz (jargon ziyaretçiyi kafalar)
+ *  - "Ev sahibi" kullanılır (host yerine, kullanıcı kararı 2026-05-28)
+ *  - "Trust Score" iki kelime (orijinal brand terim)
+ */
 export const FAQS: FAQItem[] = [
   {
-    q: 'Ne zaman çıkacak?',
-    a: '2026 Q2 — Mayıs. Önce İstanbul (Kadıköy, Beşiktaş, Beyoğlu, Moda), ardından Ankara ve İzmir. Lansman günü tek mail alırsın — tarih, davet kodu, link. Sonrası senin.',
+    q: 'ClubBeans nedir?',
+    a: 'ClubBeans, etkinlik odaklı anti-platform topluluk uygulamasıdır. Yakınındaki buluşmaları keşfedebilir, ilgi alanına göre kulüplere katılabilir veya kendi kulübünü kurup etkinlikler düzenleyebilirsin.',
+  },
+  {
+    q: 'Neden anti-platform?',
+    a: 'Çoğu uygulama seni ekranda tutmak için tasarlandı. ClubBeans\'in amacı ise seni ekrandan çıkarmak. Reklam yok, davranış takibi yok, seni besleyen bir algoritma yok. Kiminle buluşacağına ve nereye gideceğine sen karar verirsin, uygulama değil.',
   },
   {
     q: 'Ücretsiz mi?',
-    a: 'Evet. Bean\'e katılmak ücretsiz. Club kurmak ücretsiz. Ücretli Bean düzenlersen bile ClubBeans payı %0. Abonelik yok, premium katman yok — ve olmayacak.',
+    a: 'Uygulamayı indirmek, etkinliklere katılmak, kulüp kurmak ve etkinlik düzenlemek tamamen ücretsiz. Abonelik yok, zorunlu premium üyelik yok ve temel deneyim her zaman ücretsiz kalacak. İleride ek özellikler içeren gönüllü ücretli seçenekler gelebilir.',
   },
   {
-    q: 'iOS ve Android\'te var mı?',
-    a: 'İkisinde de. App Store ve Google Play\'de lansman günü aynı anda çıkacak. Web versiyonu yok — çünkü ClubBeans ekranda değil hayatta çalışmak için yazıldı.',
+    q: 'ClubBeans kimin için?',
+    a: 'Şehirde yeni birini tanımak isteyen, etkinlik düzenlemek isteyen, ortak ilgi alanı olan insanlarla bir araya gelmek isteyen herkes için. Yeni bir şehre taşındıysan veya yıllardır aynı şehirde olup hâlâ o çevreyi arıyorsan, ClubBeans senin için. 16 yaş ve üzeri.',
+  },
+  // GEÇİCİ — uygulama yayına girince bu kaydı kaldır
+  {
+    q: 'Ne zaman çıkacak?',
+    a: '4 Haziran 2026 — App Store ve Google Play\'de yayında. Lansman duyuruları için ana sayfadaki listemize katılabilirsin.',
   },
   {
-    q: 'Verim, fotoğraflarım ne olacak?',
-    a: 'Sunucular Türkiye\'de ve EU\'da (KVKK + GDPR uyumlu). Veri satmıyoruz, üçüncü taraf tracker kullanmıyoruz, davranış takibi yok. Hesabını her zaman tek tıkla silebilirsin; 30 gün içinde tüm veriler silinir.',
+    q: 'iOS ve Android\'de var mı?',
+    a: 'App Store ve Google Play\'de lansman günü aynı anda çıkıyor. Web versiyonu yok.',
   },
   {
-    q: 'Kulüp kurmak için onay gerekiyor mu?',
-    a: 'Hayır. Bir dakikada kendi Club\'ını kurabilirsin. Alan seç, isim ver, Bean aç — kabilen dolmaya başlar. Tek şart: TrustScore\'un 75\'te başlar, masaya oturduğunda yükselir.',
+    q: 'Şu an hangi şehirlerde aktif?',
+    a: 'İlk etapta İstanbul\'da başlıyoruz. Diğer şehirler için çalışmalarımız devam ediyor. Yaşadığın şehirde ClubBeans\'i görmek istersen info@clubbeans.com adresinden bize yazabilirsin.',
+  },
+  // GEÇİCİ — uygulama yayına girince bu kaydı kaldır
+  {
+    q: 'Erken erişim nasıl sağlarım?',
+    a: 'Ana sayfadaki e-posta listesine veya WhatsApp kanalımıza katıl. Lansmanda indir linkini sana iletelim.',
   },
   {
-    q: 'TrustScore neden önemli?',
-    a: 'Rastgele insan değil, sözünü tutan insan masanda otursun diye. Herkes 75\'ten başlar. Gittiğin Bean, düzenlediğin masa, aldığın referans — hepsi şeffaf katkı sağlar. İptal ve no-show puan düşürür.',
+    q: 'Trust Score nedir ve neden önemli?',
+    a: 'Profilindeki takipçi sayını değil, gerçekte ne kadar güvenilir olduğunu gösteren puan sistemidir. Etkinliklere katıldıkça, etkinlik düzenledikçe ve verdiğin sözleri tuttukça artar; iptal edersen veya geleceğim deyip gelmezsen azalır. Ev sahipleri kimlerin etkinliğe katılacağına bu puana bakarak karar verebilir. Yani ClubBeans\'te kim olduğun değil, ne yaptığın önemlidir.',
   },
   {
-    q: 'Erken erişim nasıl alırım?',
-    a: 'Ana sayfadaki mail formuna e-postanı bırak. Lansmandan 2 hafta önce alfa grubuna, 1 hafta önce beta grubuna davet ederiz. Tek mail, tek link — spam yok, söz.',
+    q: 'Herkes kulüp kurabilir mi?',
+    a: 'Evet. Ortak ilgi alanı olan insanlarla bir araya gelmek istiyorsan — kitap, koşu, kahve, müzik ya da aklındaki herhangi bir şey — tek yapman gereken kulübünü kapsayan bir alan seçmek ve kulübüne bir isim vermek. Sonra kulübün hazır, ilk etkinliğini oluşturabilirsin.',
   },
   {
-    q: 'İstanbul/Ankara/İzmir dışında kullanılır mı?',
-    a: 'İlk fazda bu üç şehir odaklı çünkü kabile kritik yoğunluğa ihtiyacı var. 2026 Q3\'te tüm Türkiye, 2027\'de yurt dışı. Şehrini mail\'e yazarsan oraya sıra gelince ilk sen haberdar olursun.',
-  },
-  {
-    q: 'Reklam var mı?',
-    a: 'Hayır. 0 popup, 0 banner, 0 interstitial, 0 sponsored content. ClubBeans bir anti-platform — dikkatini ürün olarak görmüyoruz, onu saygı duyduğumuz bir şey olarak tanıyoruz.',
-  },
-  {
-    q: 'Bir Bean\'e gelemeyeceğim. İptal nasıl?',
-    a: 'Bean başlamadan 24 saat öncesine kadar ücretsiz iptal. Sonrasında TrustScore\'un -5 puan kaybeder — çünkü masaya söz verdin. Acil durum varsa host\'a mesaj atarsan no-show sayılmaz.',
-  },
-  {
-    q: 'Ücretli Bean nasıl olur?',
-    a: 'Host isterse ücretli yapabilir (bilet satışı, mekan maliyeti). Ödeme Bean\'e katılırken peşin alınır. ClubBeans hiçbir komisyon almaz — tüm para host\'a gider. Yarım kalan Bean\'lerde otomatik iade.',
-  },
-  {
-    q: 'KVKK uyumlu musunuz?',
-    a: 'Tam uyumlu. Aydınlatma metnini, veri kullanım hakkını ve silme prosedürünü uygulamadan her an görebilirsin. Veri sorumlusu: ClubBeans Teknoloji A.Ş., İstanbul. İletişim: privacy@clubbeans.com.',
+    q: 'Ücretli etkinlik düzenleyebilir miyim?',
+    a: 'Evet. Ev sahibi isterse etkinliği ücretli yapabilir. Bunu etkinliği oluştururken belirtir ve etkinliğe katılacak kişiler bu konuda bilgilendirilir. Ödeme etkinliğe katılım sırasında alınır. Şu an ClubBeans herhangi bir komisyon talep etmemektedir. Ödeme süreci ev sahibi ve katılımcı arasında gerçekleşir.',
   },
 ];
