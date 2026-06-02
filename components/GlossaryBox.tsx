@@ -5,13 +5,15 @@ import { motion } from '@/lib/motion';
 
 // SSS sayfasında üste yerleştirilen mini terim kutusu.
 // Sözlük sayfa kaldırıldığından, terimler ilk karşılaşmada burada toplu açıklanır.
+// 2026-06-01: Compass çıkarıldı (genel ziyaretçi için iç jargon), Anti-platform
+// eklendi. Trust Score iki kelime brand standardı.
 const TERMS = [
-  { t: 'Bean', d: 'Uygulamanın kullanıcısı — fasulye gibi, topluluğun tek tek üyesi' },
-  { t: 'Etkinlik', d: 'Yakındaki fiziksel buluşma (kahve, koşu, kitap, yemek...)' },
-  { t: 'Kulüp', d: 'Bir ilgi alanı etrafında kurulan topluluk' },
-  { t: 'TrustScore', d: 'Sözünü tutmana göre artan 0-100 güven puanı (no-show korumalı)' },
-  { t: 'Compass', d: 'Ruh haline göre uygulamanın tonunu değiştiren mod' },
-  { t: 'Sosyal Obezite', d: 'Çok dijital bağ, az gerçek karşılık — çağın hastalığı' },
+  { t: 'Bean', d: 'ClubBeans\'teki her bir kullanıcı' },
+  { t: 'Trust Score', d: 'Bean\'lerin etkinliklere katılımlarına ve verdikleri sözleri tutmasına göre şekillenen güven puanı' },
+  { t: 'Kulüp', d: 'Ortak ilgi alanı etrafında bir araya gelen topluluk' },
+  { t: 'Etkinlik', d: 'Kulüpler tarafından düzenlenen, yeri ve tarihi belirli fiziksel buluşmalar' },
+  { t: 'Sosyal Obezite', d: 'Dijital ilişkilerin kalabalığına karşın yüz yüze ilişkilerin azalması — çağın hastalığı' },
+  { t: 'Anti-platform', d: 'Bean\'leri ekranda tutmak yerine ekrandan uzaklaştırmayı hedefleyen uygulama yaklaşımı' },
 ];
 
 export default function GlossaryBox() {

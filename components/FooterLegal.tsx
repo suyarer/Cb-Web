@@ -35,7 +35,7 @@ export default function FooterLegal() {
             </p>
             <div className="mt-6 inline-flex items-center gap-2 bg-white/[0.03] border border-white/10 rounded-full pl-3 pr-4 py-1.5 text-[11px] font-mono">
               <span className="w-1.5 h-1.5 rounded-full bg-acid" />
-              <span className="text-zinc-400">29 Mayıs 2026 — lansman yaklaşıyor</span>
+              <span className="text-zinc-400">4 Haziran 2026 — lansman yaklaşıyor</span>
             </div>
           </div>
 

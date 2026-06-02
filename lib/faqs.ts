@@ -40,6 +40,10 @@ export const FAQS: FAQItem[] = [
     q: 'ClubBeans kimin için?',
     a: 'Şehirde yeni birini tanımak isteyen, etkinlik düzenlemek isteyen, ortak ilgi alanı olan insanlarla bir araya gelmek isteyen herkes için. Yeni bir şehre taşındıysan veya yıllardır aynı şehirde olup hâlâ o çevreyi arıyorsan, ClubBeans senin için. 16 yaş ve üzeri.',
   },
+  {
+    q: 'Uygulamaya herkes girebiliyor mu?',
+    a: 'Uygulamaya herkes hızlıca girebiliyor. Kimlik doğrulaması ise fiziksel bir etkinlik oluştururken ya da katılırken gerekli. Çünkü biz ClubBeans ekosistemini sorunsuz devam ettirmek ve kullanıcılarımızın güvenliğini garanti altına almak için bu çözümü uyguluyoruz. Etkinliklere katılmadan önce tek seferlik bir doğrulama yapıyorsun — bu sayede her hesap gerçek bir kişiye karşılık geliyor. Topluluğu kötüye kullanan biri kalıcı olarak engelleniyor ve geri gelemiyor. Topluluk güvenliği bu temele dayanıyor.',
+  },
   // GEÇİCİ — uygulama yayına girince bu kaydı kaldır
   {
     q: 'Ne zaman çıkacak?',
@@ -61,6 +65,10 @@ export const FAQS: FAQItem[] = [
   {
     q: 'Trust Score nedir ve neden önemli?',
     a: 'Profilindeki takipçi sayını değil, gerçekte ne kadar güvenilir olduğunu gösteren puan sistemidir. Etkinliklere katıldıkça, etkinlik düzenledikçe ve verdiğin sözleri tuttukça artar; iptal edersen veya geleceğim deyip gelmezsen azalır. Ev sahipleri kimlerin etkinliğe katılacağına bu puana bakarak karar verebilir. Yani ClubBeans\'te kim olduğun değil, ne yaptığın önemlidir.',
+  },
+  {
+    q: 'Verilerim güvende mi?',
+    a: 'Evet. Verilerini kimseyle paylaşmıyoruz, satmıyoruz. KVKK ve GDPR uyumluyuz. Detaylar için Gizlilik Politikası sayfasına bakabilirsin.',
   },
   {
     q: 'Herkes kulüp kurabilir mi?',

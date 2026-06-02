@@ -11,10 +11,10 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'SSS — Sık Sorulan Sorular',
   description:
-    'ClubBeans hakkında 11 net cevap: ClubBeans nedir, neden anti-platform, ücretsizlik, kimin için, lansman tarihi, Trust Score, kulüp kurma, ücretli etkinlik ve daha fazlası.',
+    'ClubBeans hakkında 13 net cevap: ClubBeans nedir, neden anti-platform, ücretsizlik, kimin için, kimlik doğrulama, lansman tarihi, Trust Score, veri güvenliği, kulüp kurma, ücretli etkinlik ve daha fazlası.',
   openGraph: {
     title: 'SSS — Sık Sorulan Sorular · ClubBeans',
-    description: 'Aklındakine 11 net cevap. Bahaneye yer yok.',
+    description: 'Aklındakine 13 net cevap. Bahaneye yer yok.',
     url: 'https://clubbeans.com/sss',
   },
   alternates: { canonical: 'https://clubbeans.com/sss' },
