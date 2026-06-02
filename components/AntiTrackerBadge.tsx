@@ -2,10 +2,11 @@
 
 import { motion } from '@/lib/motion';
 
+// "cookie banner" ve "tracker" listeden çıkarıldı (2026-06-01):
+// Reklam ölçümü için CookieConsent banner aktif; "0 cookie banner / 0 tracker"
+// iddiası bu gerçeklikle çelişiyordu. Geri kalanlar hâlâ doğru.
 const items = [
   { label: 'popup' },
-  { label: 'cookie banner' },
-  { label: 'tracker' },
   { label: 'spam' },
   { label: 'abonelik' },
   { label: 'paywall' },

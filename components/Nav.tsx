@@ -4,6 +4,7 @@ import BeanSprout from '@/components/BeanSprout';
 import { easeOutExpo } from '@/lib/motion';
 import { AnimatePresence, motion } from '@/lib/motion';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 const LINKS = [
@@ -18,6 +19,29 @@ export default function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const hamburgerRef = useRef<HTMLButtonElement>(null);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  // Ana sayfadayken logoya tıklarsa scroll-to-top, başka sayfadaysa default Link.
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (pathname === '/') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  // Launch CTA — ana sayfada scrollIntoView, başka sayfada cross-page hash
+  // navigation (sessionStorage flag + ScrollManager mount handler).
+  const handleLaunchClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    setOpen(false);
+    if (pathname === '/') {
+      document.getElementById('launch')?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      sessionStorage.setItem('scrollToLaunch', '1');
+      router.push('/');
+    }
+  };
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
 
@@ -87,6 +111,7 @@ export default function Nav() {
         <div className="container-x py-4 flex items-center justify-between">
           <Link
             href="/"
+            onClick={handleLogoClick}
             className="flex items-center gap-2.5 no-underline group min-h-[44px]"
             aria-label="ClubBeans ana sayfa"
           >
@@ -111,6 +136,7 @@ export default function Nav() {
             ))}
             <a
               href="/#launch"
+              onClick={handleLaunchClick}
               className="bg-white/5 border border-white/10 hover:bg-white/10 hover:border-acid/50 transition px-4 py-2 rounded-full text-white text-xs font-medium no-underline"
             >
               Lansman listesi →
@@ -189,7 +215,7 @@ export default function Nav() {
                 whileTap={{ scale: 0.97 }}
                 transition={{ delay: 0.4, duration: 0.5, ease: easeOutExpo }}
                 href="/#launch"
-                onClick={() => setOpen(false)}
+                onClick={handleLaunchClick}
                 className="mt-8 bg-acid text-midnight font-bold text-center py-4 rounded-full no-underline"
               >
                 Lansman listesine katıl →

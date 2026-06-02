@@ -9,6 +9,7 @@ import LiveTicker from '@/components/LiveTicker';
 import MetaPixel from '@/components/MetaPixel';
 import MotionProvider from '@/components/MotionProvider';
 import PosthogProvider from '@/components/PosthogProvider';
+import ScrollManager from '@/components/ScrollManager';
 import ScrollRoots from '@/components/ScrollRoots';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -164,6 +165,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <PosthogProvider>
           <MotionProvider>
             <CompassProvider>
+              <ScrollManager />
               <CosyMode />
               <div className="grain-overlay" aria-hidden />
               <CompassTint />

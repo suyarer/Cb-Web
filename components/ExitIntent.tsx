@@ -54,9 +54,6 @@ export default function ExitIntent() {
         >
           <div className="container-x py-3 flex items-center gap-4 justify-between">
             <div className="flex items-center gap-3 min-w-0">
-              <span className="text-[10px] font-mono uppercase tracking-wider bg-midnight/15 px-2 py-0.5 rounded-full flex-shrink-0">
-                Ters davet
-              </span>
               <span className="text-sm md:text-base font-semibold truncate">{msg}</span>
             </div>
             <button

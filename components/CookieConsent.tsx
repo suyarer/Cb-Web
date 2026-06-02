@@ -60,7 +60,7 @@ export default function CookieConsent() {
         id="consent-desc"
         className="mb-4 text-sm leading-relaxed text-zinc-200"
       >
-        Reklam ölçümü için izin verir misin?
+        Ziyaretçi sayısını ölçüyoruz, kişisel veri toplamıyoruz. Ölçmemize izin verir misin?
         <Link
           href="/privacy"
           className="ml-1 text-zinc-500 underline-offset-2 hover:text-acid hover:underline"
@@ -82,7 +82,7 @@ export default function CookieConsent() {
           onClick={handleAccept}
           className="rounded-full bg-acid px-4 py-2 text-sm font-semibold text-midnight transition hover:bg-acid-400"
         >
-          İzin ver
+          Tamam
         </button>
       </div>
 
