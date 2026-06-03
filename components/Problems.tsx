@@ -6,24 +6,43 @@ import { motion } from '@/lib/motion';
 const problems = [
   {
     n: '01',
-    cta: 'Yakında Bul',
-    pain: '"Bu akşam n\'aparız?" — WhatsApp\'a yazdın. 12 kişi okudu. Kimse yazmadı. Cumartesi yine boş geçti. Oysa iki sokak ötende aynı kahveyi içen, aynı kitabı okuyan biri vardı.',
+    persona: 'Etkinlik Arayan',
+    cta: 'Yakında bul',
+    pain: '"Bu akşam ne yaparız?" — Gruplara yazdın. 12 kişi okudu, kimse cevap vermedi. Akşam yine boş geçti. Oysa bir sokak ileride aynı kahveyi içen, aynı kitabı okuyan birileri var.',
     solution:
-      'Uygulamayı aç — yakındaki etkinlikler tek ekranda. Saat, yer, tür; filtreyi sen kurarsın. Algoritma seni beslemez; şehir sana el uzatır.',
+      'Uygulamayı aç, yakındaki etkinlikler tek ekranda karşında. Saat, yer, tür; filtreni sen oluştur. Algoritma seni beslemez, şehir sana el uzatır.',
   },
   {
     n: '02',
-    cta: 'Birlikte Yap',
-    pain: 'Bugün 284 like aldın. 43 yorum yazdın. Hikaye attın, story\'ye cevap verdin. 0 kişiyle masaya oturmadın. Ekranda kalabalık, hayatta yalnız — işte Sosyal Obezite.',
+    persona: 'Sosyal Medyadan Yorulan',
+    cta: 'Birlikte yap',
+    pain: 'Bugün 284 beğeni aldın. 26 yorum yazdın. Hikaye paylaştın, gönderilere cevap verdin. 0 kişiyle gerçek vakit geçirdin. Ekran çok kalabalık, sokaklar çok yalnız — işte Sosyal Obezite.',
     solution:
-      'ClubBeans\'teki bir etkinlik dijital değil — başı sonu belli gerçek bir buluşma. Belli bir masa, belli yüzler. Katılırsın, ekrandan inersin, sohbete oturursun. Uygulama kapanır, akşam başlar.',
+      'ClubBeans\'te insanlar sayılardan ibaret değil. Etkinlikler gerçek bir buluşma — gerçek yüzler, gerçek anlar. Orada olursan ekranda olmazsın, hayata dahil olursun.',
   },
   {
     n: '03',
-    cta: 'Kolay Kur',
-    pain: 'Kendi kulübünü açmak istedin: WhatsApp grup — 40 sessiz üye. Instagram hesap — 12 takipçi. Eventbrite denedin — biletsiz kaldı. Üç uygulama, hiçbir yere varamıyor.',
+    persona: 'Şehre Yeni Gelen',
+    cta: 'İçeri gir',
+    pain: 'Kaç aydır bu şehirdesin. İşe gidiyorsun, eve geliyorsun. Bir iki tanıdık var ama gerçek bir çevren henüz yok. Nereden başlayacağını bilmiyorsun. Her yer tanıdık, hiçbir yer sen değil.',
     solution:
-      'Kendi kulübünü ClubBeans\'te bir dakikada kurarsın. Etkinlik açarsın, üyelerini davet edersin, güven puanıyla (TrustScore) kimi kabul edeceğini sen seçersin. Üç uygulama yok; bir ekran, bir akış, bir topluluk.',
+      'Şehri sıfırdan keşfetmene gerek yok. Yakınındaki etkinlikleri görebilir, ilgi alanına göre insanlarla bir araya gelebilirsin. Beraber kahve içip bisiklet sürebilir, belki hafta sonu koşusu yapabilirsiniz. Sen ilk adımı at, gerisini şehir getirir.',
+  },
+  {
+    n: '04',
+    persona: 'Ortak İlgi Alanı Arayan',
+    cta: 'Bean\'leri bul',
+    pain: 'Kitap okuyup kahve içmekten mi hoşlanıyorsun? Ya da koşmak, kutu oyunları oynamak, belki voleybol maçı yapmak… Bunu seninle birlikte yapmak isteyen insanlar kesinlikle var. Ama neredeler, onları nasıl bulacaksın?',
+    solution:
+      'Yapmak istediğin şeye göre kulüpleri keşfedip etkinliklere katılabilirsin. Cuma akşamı müzik eğlencesi, ya da cumartesi doğa yürüyüşü. Zamanı ve yeri sen belirle, doğru Bean\'ler seni bulur.',
+  },
+  {
+    n: '05',
+    persona: 'Kulüp Kurmak İsteyen',
+    cta: 'Kolay kur',
+    pain: 'Kendi kulübünü kurmak, seninle aynı zevkleri paylaşan insanlarla gerçek hayatta vakit geçirmek istedin. Sohbet grubu kurdun, sosyal medyada duyuru yaptın, eşe dosta haber verdin, belki afişler bastırdın. Birçok farklı yöntem, hiçbir yere varmıyor.',
+    solution:
+      'Kendi topluluğunu ClubBeans\'te bir dakikada kurarsın. Etkinlik oluşturup insanlarla buluşursun — belki bir film gecesi, belki satranç turnuvası, belki doğa yürüyüşü. Trust Score ile kimleri kabul edeceğini sen seçersin. Üç uygulama değil; bir ekran, bir akış, bir topluluk.',
   },
 ];
 
@@ -39,7 +58,7 @@ export default function Problems() {
             transition={{ duration: 0.6 }}
             className="text-xs uppercase tracking-[0.3em] text-acid mb-6 font-mono"
           >
-            Tanıdık mı geliyor?
+            Tanıdık geldi mi?
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -50,7 +69,7 @@ export default function Problems() {
           >
             Aynı dert,
             <br />
-            <span className="text-zinc-500">üç farklı sahne.</span>
+            <span className="text-zinc-500">beş farklı sahne.</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
@@ -59,10 +78,9 @@ export default function Problems() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mt-6 text-zinc-400 max-w-2xl"
           >
-            Plan yapamadığın Cumartesiler. 284 like ile 0 insanla süren günler.
-            Bir türlü toparlanamayan kulüp denemeleri. Aşağıdaki üç sahne —
-            ister katılan ister kurucu olsun — herkese tanıdık geliyorsa,
-            ClubBeans tam da sana yazıldı.
+            Etkinlik arıyorsun, insan arıyorsun ya da kendi topluluğunu kurmak istiyorsun.
+            Belki şehre yeni geldin, belki yıllardır buradasın ama hâlâ o çevreyi bulamadın.
+            Hangisi sana tanıdık geliyorsa, ClubBeans senin için tam da oradan başlıyor.
           </motion.p>
         </div>
 
@@ -85,7 +103,7 @@ export default function Problems() {
                 </div>
                 <div>
                   <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 mb-3">
-                    Bu sahne
+                    {p.persona}
                   </div>
                   <p className="text-lg md:text-xl text-zinc-400 leading-snug">{p.pain}</p>
                 </div>

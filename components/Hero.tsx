@@ -228,9 +228,9 @@ export default function Hero() {
               custom={2}
               className="text-lg md:text-xl text-zinc-400 max-w-xl leading-relaxed mt-10 mb-8"
             >
-              Telefonun bittiği yerde başlar.
-              Mahallendeki Cumartesi geceleri, yan masadaki yabancılarla
-              paylaşılan sofralar için. Anti-platform topluluk.
+              Telefonun bittiği yerde ClubBeans başlar.
+              Mahallendeki cumartesi akşamları, yan masadaki yabancılarla
+              paylaşabileceğin sofralar için. Anti-platform topluluk.
             </motion.p>
 
             <motion.div
@@ -241,9 +241,9 @@ export default function Hero() {
               className="flex flex-wrap items-center gap-2 mb-10"
             >
               {[
-                'Yakında Bul',
-                'Birlikte Yap',
-                'Kolay Kur',
+                'Kolay kur',
+                'Yakınlarda bul',
+                'Birlikte yap',
               ].map((label) => (
                 <span
                   key={label}
@@ -301,14 +301,14 @@ export default function Hero() {
             >
               <PersonaCard
                 kicker="Etkinliğe katıl"
-                title="Keşfet, Katıl"
-                meta="Yakındaki buluşmalar, 3 dokunuş uzakta"
+                title="Keşfet ve katıl"
+                meta="Uzak sandığın buluşmalar, 3 dokunuş kadar yakın."
                 href="#nasil-calisir"
               />
               <PersonaCard
-                kicker="Masayı sen kur"
-                title="Kulüp aç, topluluğunu büyüt"
-                meta="Bir dakikada kurulum, bir ekranda yönetim"
+                kicker="Etkinliği sen oluştur"
+                title="Kulübünü kur, topluluğunu büyüt"
+                meta="Bir dakikada kulübünü kur, tek ekranda yönet."
                 href="/club-kur"
               />
             </motion.div>

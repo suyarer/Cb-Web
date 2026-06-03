@@ -34,18 +34,17 @@ export default function AttentionCounter() {
 
   return (
     <div
-      className="group inline-flex items-center gap-3 bg-white/[0.02] border border-white/[0.08] rounded-full pl-3 pr-4 py-2 text-[11px] text-zinc-400 backdrop-blur"
+      className="group inline-flex items-center gap-2 bg-white/[0.02] border border-white/[0.08] rounded-full pl-3 pr-4 py-2 text-[11px] text-zinc-400 backdrop-blur"
       role="status"
       aria-live="polite"
     >
-      <span className="inline-flex items-center gap-1.5 font-mono text-acid">
-        <span className="w-1.5 h-1.5 rounded-full bg-acid" />
-        {timeLabel}
-      </span>
-      <span className="w-px h-3 bg-white/10" />
-      <span className="font-mono tabular-nums">
-        ≈ {posts} post{' '}
-        <span className="text-zinc-500">· aynı sürede ortalama kullanıcı kaydırdı</span>
+      <span className="w-1.5 h-1.5 rounded-full bg-acid flex-shrink-0" aria-hidden />
+      <span className="leading-snug">
+        Tek bir kullanıcı{' '}
+        <span className="font-mono tabular-nums text-acid">{timeLabel}</span>{' '}
+        sürede ortalama{' '}
+        <span className="font-mono tabular-nums text-white">{posts}</span>{' '}
+        gönderi kaydırdı
       </span>
     </div>
   );
