@@ -9,17 +9,20 @@
  */
 
 import { createBrowserClient } from '@supabase/ssr';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error(
-    '[Supabase] NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY missing. Public routes will 404.',
+// Build-safe: env eksikse null döndür. Routes notFound() yapacak.
+// Vercel ENV ekleyene kadar build crash etmez.
+export const supabaseAnon: SupabaseClient | null =
+  supabaseUrl && supabaseAnonKey
+    ? createBrowserClient(supabaseUrl, supabaseAnonKey)
+    : null;
+
+if (!supabaseAnon && typeof window === 'undefined') {
+  console.warn(
+    '[Supabase] NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY missing. Public routes will 404 until env vars set.',
   );
 }
-
-export const supabaseAnon = createBrowserClient(
-  supabaseUrl ?? '',
-  supabaseAnonKey ?? '',
-);

@@ -26,6 +26,7 @@ export async function fetchUserPublic(
   username: string,
 ): Promise<UserPublic | null> {
   if (!USERNAME_RE.test(username)) return null;
+  if (!supabaseAnon) return null;
 
   const { data, error } = await supabaseAnon
     .from('profiles')

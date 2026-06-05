@@ -22,6 +22,7 @@ export interface ClubPublic {
 
 export async function fetchClubPublic(id: string): Promise<ClubPublic | null> {
   if (!UUID_RE.test(id)) return null;
+  if (!supabaseAnon) return null;
 
   const { data, error } = await supabaseAnon
     .from('clubs')

@@ -26,6 +26,7 @@ export interface PostPublic {
 
 export async function fetchPostPublic(id: string): Promise<PostPublic | null> {
   if (!UUID_RE.test(id)) return null;
+  if (!supabaseAnon) return null;
 
   const { data, error } = await supabaseAnon
     .from('posts')
