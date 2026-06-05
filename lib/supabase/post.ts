@@ -37,8 +37,17 @@ export async function fetchPostPublic(id: string): Promise<PostPublic | null> {
 
   if (error || !data) return null;
 
+  // Supabase relation array → first element (profiles!user_id 1:1)
+  type RawAuthor = {
+    username: string;
+    avatar_url: string | null;
+    is_private: boolean;
+    is_deleted: boolean;
+  };
+  const authorRaw = (data as unknown as { author: RawAuthor[] | RawAuthor | null }).author;
+  const author = Array.isArray(authorRaw) ? authorRaw[0] : authorRaw;
+
   // Defense-in-depth: post author private/deleted ise post'u gizle
-  const author = (data as { author: { is_private: boolean; is_deleted: boolean } | null }).author;
   if (!author || author.is_private || author.is_deleted) return null;
 
   return {
@@ -46,6 +55,6 @@ export async function fetchPostPublic(id: string): Promise<PostPublic | null> {
     caption: data.caption,
     created_at: data.created_at,
     media_url: data.media_url,
-    author: { username: (author as unknown as { username: string }).username, avatar_url: (author as unknown as { avatar_url: string | null }).avatar_url },
+    author: { username: author.username, avatar_url: author.avatar_url },
   };
 }
