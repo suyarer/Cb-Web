@@ -9,7 +9,6 @@
           "/club/*",
           "/user/*",
           "/post/*",
-          "/invite/*",
           "NOT /privacy",
           "NOT /terms",
           "NOT /support",
