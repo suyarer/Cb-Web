@@ -19,6 +19,12 @@ const AASA = {
       {
         appID: '3FKY8YVC66.com.clubbeans.app',
         paths: [
+          // Sprint GAP-2 (2026-06-07): /auth/callback + /kyc-complete eklendi
+          // Magic Link + KYC Didit callback URL'leri Apple Universal Link
+          // gate'ini geçsin diye. Önceden listede yoktu → tap edince browser
+          // açılıyordu, app açılmıyordu.
+          '/auth/callback',
+          '/kyc-complete',
           '/bean/*',
           '/club/*',
           '/user/*',
