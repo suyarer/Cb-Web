@@ -4,10 +4,16 @@
  *
  * Android Digital Asset Links (Universal Links / App Links verification).
  * Content-Type: application/json zorunlu.
- * SHA256 fingerprint: EAS upload key + Play App Signing key (dual fingerprint
- * Google önerisi). Production fingerprint user'dan beklenir (Sprint Commit 1).
  *
- * Sprint: share-2-alpha-web Commit 3
+ * SHA256 fingerprints:
+ * 1) EAS upload keystore (production, alias 45e42ad71362f16f647dece335558035)
+ *    Source: EAS GraphQL androidKeystore.sha256CertificateFingerprint
+ *    Build credentials id: 626934a5-ca44-4792-9a3f-d0a97c866fdc
+ * 2) Play App Signing fingerprint (Google generated after Play Console upload)
+ *    Source: Play Console → Setup → App Integrity → App signing key certificate
+ *    TODO: Play Console SHA-256 production'a yüklenince eklenecek.
+ *
+ * Sprint: SHARE-2-CB-WEB-ANDROID-ASSETLINKS-FINGERPRINT (#442, 2026-06-07)
  */
 
 import { NextResponse } from 'next/server';
@@ -19,8 +25,7 @@ const ASSETLINKS = [
       namespace: 'android_app',
       package_name: 'com.clubbeans.app',
       sha256_cert_fingerprints: [
-        'REPLACE_WITH_EAS_UPLOAD_KEY_SHA256',
-        'REPLACE_WITH_PLAY_APP_SIGNING_SHA256',
+        '5E:39:34:65:AC:D7:C3:A4:75:B7:7C:FE:E6:EC:76:D3:8E:3C:FF:E1:D0:8A:51:B2:B0:37:2A:44:7A:1B:58:4E',
       ],
     },
   },
