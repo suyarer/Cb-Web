@@ -29,10 +29,22 @@ const AASA = {
           '/club/*',
           '/user/*',
           '/post/*',
+          // DEEP-CHAIN-4 (2026-06-07): cb-web web-only routes explicit NOT.
+          // Önceden listede tanımsızdı → Apple default davranış browser açar
+          // (zaten doğruydu), ama explicit NOT netliği artırır + Apple cache
+          // davranışı kesinleşir.
           'NOT /privacy',
           'NOT /terms',
           'NOT /support',
           'NOT /delete-account',
+          'NOT /sss',
+          'NOT /manifesto',
+          'NOT /fark',
+          'NOT /founding-voices',
+          'NOT /club-kur',
+          'NOT /urun',
+          'NOT /yol-haritasi',
+          'NOT /unsubscribed',
         ],
       },
     ],
