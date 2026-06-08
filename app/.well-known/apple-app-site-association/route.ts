@@ -17,7 +17,7 @@ const AASA = {
     apps: [],
     details: [
       {
-        appID: '3FKY8YVC66.com.clubbeans.app',
+        appID: 'S8RNZ754YW.com.clubbeans',
         paths: [
           // Sprint GAP-2 (2026-06-07): /auth/callback + /kyc-complete eklendi
           // Magic Link + KYC Didit callback URL'leri Apple Universal Link
@@ -50,7 +50,7 @@ const AASA = {
     ],
   },
   webcredentials: {
-    apps: ['3FKY8YVC66.com.clubbeans.app'],
+    apps: ['S8RNZ754YW.com.clubbeans'],
   },
 };
 
