@@ -62,6 +62,14 @@ export default function TermsPage() {
             Kurallara uymayan içerikler kaldırılır, tekrar eden ihlallerde hesap askıya alınır veya
             silinir.
           </p>
+          <p>
+            <strong>Çocuk güvenliği — sıfır tolerans:</strong> ClubBeans yalnızca 18 yaş ve üzeri
+            yetişkinler içindir. Çocukların cinsel istismarı/sömürüsü (CSAE) ve çocuk cinsel istismarı
+            materyali (CSAM) kesinlikle yasaktır; tespit edilen içerik derhal kaldırılır, hesap kalıcı
+            olarak kapatılır ve yetkili makamlara (Türkiye yetkili birimleri ve NCMEC) bildirilir. Çocuk
+            güvenliği standartlarımız:{' '}
+            <a href="https://clubbeans.com/child-safety">clubbeans.com/child-safety</a>.
+          </p>
 
           <h2>4. Etkinlik ve Bilet Kuralları</h2>
           <ul>
