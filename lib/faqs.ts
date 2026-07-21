@@ -44,14 +44,13 @@ export const FAQS: FAQItem[] = [
     q: 'Uygulamaya herkes girebiliyor mu?',
     a: 'Uygulamaya herkes hızlıca girebiliyor. Kimlik doğrulaması ise fiziksel bir etkinlik oluştururken ya da katılırken gerekli. Çünkü biz ClubBeans ekosistemini sorunsuz devam ettirmek ve kullanıcılarımızın güvenliğini garanti altına almak için bu çözümü uyguluyoruz. Etkinliklere katılmadan önce tek seferlik bir doğrulama yapıyorsun — bu sayede her hesap gerçek bir kişiye karşılık geliyor. Topluluğu kötüye kullanan biri kalıcı olarak engelleniyor ve geri gelemiyor. Topluluk güvenliği bu temele dayanıyor.',
   },
-  // GEÇİCİ — uygulama yayına girince bu kaydı kaldır
   {
-    q: 'Ne zaman çıkacak?',
-    a: '4 Haziran 2026 — App Store ve Google Play\'de yayında. Lansman duyuruları için ana sayfadaki listemize katılabilirsin.',
+    q: 'Nasıl indiririm?',
+    a: 'App Store ve Google Play\'de yayında — ücretsiz. Ana sayfadaki indir butonundan telefonuna alabilirsin.',
   },
   {
     q: 'iOS ve Android\'de var mı?',
-    a: 'App Store ve Google Play\'de lansman günü aynı anda çıkıyor. Web versiyonu yok.',
+    a: 'Evet — hem App Store hem Google Play\'de yayında. Web versiyonu yok, deneyim tamamen mobil.',
   },
   {
     q: 'Şu an hangi şehirlerde aktif?',

@@ -129,7 +129,7 @@ export default function FoundingVoicesPage() {
         <SubPageCTA
           source="founding-voices"
           headline="Sen de listede miydin?"
-          subtitle="Bu sayfa davet alanlar için bir hatırlatma. Sen değilsen — lansman listesi yine açık. 30 Mayıs Cumartesi Moda'da masaya otur."
+          subtitle="Bu sayfa davet alanlar için bir hatırlatma. Sen değilsen — uygulamayı indir, yakınındaki masaya sen otur."
         />
       </main>
       <FooterLegal />

@@ -139,7 +139,7 @@ export default function Nav() {
               onClick={handleLaunchClick}
               className="bg-white/5 border border-white/10 hover:bg-white/10 hover:border-acid/50 transition px-4 py-2 rounded-full text-white text-xs font-medium no-underline"
             >
-              Lansman listesi →
+              İndir →
             </a>
           </nav>
 
@@ -218,7 +218,7 @@ export default function Nav() {
                 onClick={handleLaunchClick}
                 className="mt-8 bg-acid text-midnight font-bold text-center py-4 rounded-full no-underline"
               >
-                Lansman listesine katıl →
+                Uygulamayı indir →
               </motion.a>
             </motion.nav>
           </motion.div>

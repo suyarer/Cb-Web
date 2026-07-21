@@ -38,7 +38,7 @@ export default function ManifestoPage() {
         <SubPageCTA
           source="manifesto"
           headline="Aynı sözü paylaşıyor musun?"
-          subtitle="Lansman listesi — sana benzer düşünenlerin masasına ilk sen otur."
+          subtitle="Uygulamayı indir, sana benzer düşünenlerin masasına otur."
         />
       </main>
       <FooterLegal />

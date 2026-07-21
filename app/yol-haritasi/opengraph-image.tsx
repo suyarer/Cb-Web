@@ -9,6 +9,6 @@ export default async function OG() {
   return createOgImage({
     kicker: 'Yol haritası',
     title: 'Açık takvim —\nne zaman, nerede?',
-    subtitle: '29 Mayıs 2026 lansman. Önce İstanbul, sonra Türkiye geneli.',
+    subtitle: 'App Store & Google Play\'de yayında. Önce İstanbul, sonra Türkiye geneli.',
   });
 }

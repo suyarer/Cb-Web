@@ -10,7 +10,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Yol Haritası — ClubBeans 2026-2027',
   description:
-    'Nisan 2026 kapalı alfa, Mayıs pre-launch sprint, 29 Mayıs 2026 Cuma genel lansman. 2026 Q3 Türkiye geneli, 2027 yurt dışı. Takvim şeffaf, söz şeffaf.',
+    'Nisan 2026 kapalı alfa, 2026 genel lansman — App Store ve Google Play\'de yayında. Sırada Türkiye geneli, 2027 yurt dışı. Takvim şeffaf, söz şeffaf.',
   openGraph: {
     title: 'Yol Haritası — ClubBeans 2026-2027',
     description: 'Gizli tutmuyoruz — her adım takvimde.',
@@ -31,13 +31,13 @@ export default function YolHaritasiPage() {
         <SubPageHeader
           kicker="Yol haritası"
           title="Açık takvim — ne zaman, nerede?"
-          subtitle="Gizli söz, gizli tarih yok. 29 Mayıs 2026 Cuma — İstanbul pilot ile başlıyoruz (Karaköy, Cihangir, Moda). Q3 Türkiye geneli, 2027 yurt dışı. Her aşama şeffaf."
+          subtitle="Gizli söz, gizli tarih yok. İstanbul pilot ile başladık (Karaköy, Cihangir, Moda). Sırada Türkiye geneli, sonra yurt dışı. Her aşama şeffaf."
         />
         <Roadmap />
         <SubPageCTA
           source="yol-haritasi"
-          headline="Şehrini yazarsan, ilk sen haberdar olursun."
-          subtitle="Hangi mahalle/şehir olduğunu mail'e ekle; sıra ulaşınca sana tek mail gelir."
+          headline="Şehrinde ClubBeans'i başlat."
+          subtitle="Uygulamayı indir; yakınındaki etkinliği bul ya da kendi kulübünü kur."
         />
       </main>
       <FooterLegal />

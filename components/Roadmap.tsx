@@ -14,20 +14,20 @@ const STAGES: Stage[] = [
   {
     when: 'Nisan 2026',
     title: 'Kapalı alfa · ilk test grubu',
-    body: '50 kişilik davetli çekirdek uygulamayı deniyor. İstanbul Kadıköy + Moda\'da ilk etkinlikler düzenlendi.',
+    body: '50 kişilik davetli çekirdek uygulamayı denedi. İstanbul Kadıköy + Moda\'da ilk etkinlikler düzenlendi.',
     state: 'done',
   },
   {
-    when: 'Mayıs 2026',
-    title: 'Pre-launch sprint · lansman listesi',
-    body: 'Manifesto serisi, host onboarding ve Karaköy/Cihangir/Moda fiziksel buluşmalar. Listedekiler ilk davetiye için sıraya girer.',
-    state: 'active',
+    when: 'Yaz 2026',
+    title: 'Genel lansman · İstanbul',
+    body: 'App Store ve Google Play\'de yayında. İstanbul pilot — Karaköy, Cihangir, Moda.',
+    state: 'done',
   },
   {
-    when: '29 Mayıs 2026 · Cuma',
-    title: 'Genel lansman',
-    body: 'App Store + Google Play yayında. İstanbul pilot — Karaköy, Cihangir, Moda. Lansman event 30 Mayıs Karaköy.',
-    state: 'next',
+    when: 'Sırada',
+    title: 'Türkiye geneli',
+    body: 'Yeni şehirler, yeni topluluklar; 2027\'de yurt dışı. Her aşama şeffaf.',
+    state: 'active',
   },
 ];
 

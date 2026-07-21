@@ -26,7 +26,7 @@ export default function StickyCTA() {
       // Ana sayfadaysak hero form'u veya Launch görünürlüğünü kontrol et
       // (form görünür ise zaten erişilebilir, sticky'e gerek yok)
       if (onHome) {
-        const formEl = document.getElementById('subscribe-form');
+        const formEl = document.getElementById('indir');
         const launchEl = document.getElementById('launch');
         // Hero form ekrandaysa sticky gizle
         if (formEl) {
@@ -56,7 +56,7 @@ export default function StickyCTA() {
 
   // Hero'daki form'a anchor — Launch section'a değil
   // (Launch sayfa derinlerinde, sticky bunu beklemez)
-  const href = onHome ? '#subscribe-form' : '/#subscribe-form';
+  const href = onHome ? '#indir' : '/#indir';
 
   return (
     <AnimatePresence>
@@ -71,7 +71,7 @@ export default function StickyCTA() {
           className="fixed md:hidden bottom-0 inset-x-0 z-[44] pointer-events-auto no-underline"
         >
           <div className="mx-3 mb-3 bg-acid text-midnight rounded-full shadow-[0_20px_60px_rgba(168,230,0,0.35)] flex items-center justify-between px-5 py-3.5 min-h-[48px]">
-            <span className="text-sm font-bold">Lansman listesine katıl</span>
+            <span className="text-sm font-bold">Uygulamayı indir</span>
             <span className="text-sm font-bold">→</span>
           </div>
         </motion.a>

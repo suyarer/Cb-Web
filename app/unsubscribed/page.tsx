@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Listeden çıktın — ClubBeans',
-  description: 'ClubBeans lansman listesinden ayrıldın.',
+  description: 'ClubBeans e-posta listesinden ayrıldın.',
   robots: { index: false, follow: false },
 };
 
@@ -58,7 +58,7 @@ export default async function UnsubscribedPage({
         </div>
 
         <div className="text-[10.5px] font-mono uppercase tracking-[0.3em] text-zinc-500 mb-6">
-          Lansman listesi
+          E-posta listesi
         </div>
 
         <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight mb-4 leading-tight">
@@ -83,7 +83,7 @@ export default async function UnsubscribedPage({
               href="/#launch"
               className="inline-flex items-center gap-2 text-acid hover:underline font-medium px-4 py-3 no-underline min-h-[48px]"
             >
-              Tekrar listeye katıl →
+              Tekrar abone ol →
             </Link>
           )}
         </div>

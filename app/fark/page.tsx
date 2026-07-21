@@ -38,7 +38,7 @@ export default function FarkPage() {
         <SubPageCTA
           source="fark"
           headline="Farkı gördün. Sırada sen varsın."
-          subtitle="Lansman listesine katıl — aynı rafta olmayanların arasına."
+          subtitle="Uygulamayı indir — aynı rafta olmayanların arasına katıl."
         />
       </main>
       <FooterLegal />

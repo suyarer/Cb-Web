@@ -95,7 +95,7 @@ export default function ForHosts() {
               href="#launch"
               className="inline-flex items-center gap-2 bg-white/[0.04] hover:bg-acid hover:text-midnight border border-white/10 hover:border-acid text-white font-semibold px-5 py-3 rounded-full text-sm no-underline transition"
             >
-              Kurucular için lansman listesi
+              Kulübünü kurmaya başla
               <span>→</span>
             </motion.a>
           </div>

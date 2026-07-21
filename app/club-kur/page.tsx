@@ -37,8 +37,8 @@ export default function ClubKurPage() {
         <ForHosts />
         <SubPageCTA
           source="club-kur"
-          headline="Kulübünü kurmak istiyorsan önce sen haberdar ol."
-          subtitle="Beta'da kurucular için özel erişim. Lansman günü Club'ın yayında."
+          headline="Kulübünü kurmaya hazır mısın?"
+          subtitle="Uygulamayı indir, kulübünü bir dakikada kur."
         />
       </main>
       <FooterLegal />

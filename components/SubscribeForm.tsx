@@ -208,17 +208,10 @@ export default function SubscribeForm({
           </span>
           <div className="flex-1 min-w-0">
             <div className="text-white font-semibold mb-1">
-              Listede yerin hazır.
+              Kaydın alındı ✓
             </div>
             <div className="text-zinc-400 text-sm">
-              {position != null ? (
-                <>
-                  <span className="text-acid font-mono">{position}.</span> kişisin.
-                  Lansman günü tek mail gelir — spam yok, söz.
-                </>
-              ) : (
-                'Lansman günü tek mail gelir — spam yok, söz.'
-              )}
+              Yeni etkinlikler ve güncellemeler e-postana gelir — spam yok, söz.
             </div>
             {refCode && (
               <ReferralBlock refCode={refCode} />
@@ -321,7 +314,7 @@ export default function SubscribeForm({
             className="mt-0.5 w-4 h-4 rounded border-white/20 bg-white/[0.03] text-acid focus:ring-acid/40 focus:ring-offset-0 flex-shrink-0 cursor-pointer"
           />
           <span className="text-[11px] text-zinc-500 leading-relaxed group-hover:text-zinc-400 transition">
-            Lansman günü e-posta almayı kabul ediyorum.{' '}
+            E-posta güncellemeleri almayı kabul ediyorum.{' '}
             <a
               href="/privacy"
               className="text-zinc-400 hover:text-acid underline underline-offset-2"

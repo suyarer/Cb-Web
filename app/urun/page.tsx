@@ -36,8 +36,8 @@ export default function UrunPage() {
         <Showcase />
         <SubPageCTA
           source="urun"
-          headline="Uygulamayı ilk sen dene."
-          subtitle="Lansman günü App Store + Google Play. Listedekilerin davet kodu erken gelir."
+          headline="Uygulamayı hemen dene."
+          subtitle="App Store ve Google Play&apos;de yayında. Ücretsiz indir, keşfetmeye başla."
         />
       </main>
       <FooterLegal />

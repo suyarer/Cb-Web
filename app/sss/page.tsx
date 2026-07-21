@@ -38,8 +38,8 @@ export default function SSSPage() {
         <FAQ />
         <SubPageCTA
           source="sss"
-          headline="Cevabı aldın. Listedeki yerin seni bekliyor."
-          subtitle="Lansman günü tek mail. Sözümüz bu kadar."
+          headline="Cevabı aldın. Sıra sende."
+          subtitle="Uygulamayı indir, ilk etkinliğini bul."
         />
       </main>
       <FooterLegal />

@@ -58,7 +58,7 @@ export function welcomeEmailHtml({ email, position, unsubscribeUrl, baseUrl }: W
           </p>
           <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:#d4d4d8;">
             Sözümüz şu: <strong style="color:#ffffff;">spam yok</strong>, <strong style="color:#ffffff;">haftalık newsletter yok</strong>.
-            Tek mail — lansman günü, uygulama kullanılabilir olduğunda.
+            Sadece önemli olduğunda tek mail — yeni etkinlikler ve güncellemeler.
           </p>
         </td></tr>
 
@@ -90,10 +90,10 @@ export function welcomeEmailHtml({ email, position, unsubscribeUrl, baseUrl }: W
 }
 
 export function welcomeEmailText({ email, position, unsubscribeUrl, baseUrl }: WelcomeProps): string {
-  return `Listede yerin hazır.
+  return `Kaydın alındı.
 
-Sen ${position}. kişisin. Lansman olduğunda tek mail gelir —
-uygulama App Store ve Google Play'de senin için hazır.
+Sen ${position}. kişisin. ClubBeans App Store ve Google Play'de
+yayında — hemen indirebilirsin.
 
 ClubBeans bir anti-platformdur. Dikkatini çalmak için değil,
 masaya çağırmak için çalışır.
@@ -101,7 +101,7 @@ masaya çağırmak için çalışır.
 Sözümüz:
 - Spam yok
 - Haftalık newsletter yok
-- Tek mail, lansman günü
+- Sadece önemli güncellemeler
 
 Manifesto: ${baseUrl}/manifesto
 

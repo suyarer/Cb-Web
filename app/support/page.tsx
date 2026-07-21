@@ -21,7 +21,7 @@ const faqs = [
   },
   {
     q: 'App Store ve Google Play\'de mi?',
-    a: 'Şu an lansman öncesi hazırlık aşamasındayız. 29 Mayıs 2026 Cuma — App Store + Google Play\'de yayında. Lansman listesine katıl, tek mail ile haberin olsun.',
+    a: 'Evet — App Store ve Google Play\'de yayında. Ücretsiz indirip hemen kullanmaya başlayabilirsin.',
   },
   {
     q: 'Neden "anti-platform"?',

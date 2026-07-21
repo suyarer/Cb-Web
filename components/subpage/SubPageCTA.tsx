@@ -1,14 +1,14 @@
 'use client';
 
-import SubscribeForm from '@/components/SubscribeForm';
+import DownloadButtons from '@/components/DownloadButtons';
 import { easeOutExpo } from '@/lib/motion';
 import { motion } from '@/lib/motion';
 
-// Alt sayfa sonunda conversion CTA — mail formu + ana sayfaya dön.
+// Alt sayfa sonunda conversion CTA — indirme modülü.
 export default function SubPageCTA({
   source,
   headline = 'İkna olduysan masaya yer ayır.',
-  subtitle = 'Lansman günü tek mail, tek link, tek davet kodu. Gerisi senin akşamın.',
+  subtitle = 'Uygulamayı indir, yakınındaki etkinlikleri keşfet ya da bir dakikada kendi kulübünü kur.',
 }: {
   source: string;
   headline?: string;
@@ -26,14 +26,14 @@ export default function SubPageCTA({
           className="max-w-2xl mx-auto text-center"
         >
           <div className="text-xs uppercase tracking-[0.3em] text-acid mb-4 font-mono">
-            Lansmandan önce ilk sen
+            Hemen indir
           </div>
           <h2 className="text-section font-bold tracking-tight text-white leading-tight mb-5">
             {headline}
           </h2>
           <p className="text-base md:text-lg text-zinc-400 mb-8">{subtitle}</p>
           <div className="flex justify-center">
-            <SubscribeForm source={source} />
+            <DownloadButtons source={source} align="center" />
           </div>
         </motion.div>
       </div>
