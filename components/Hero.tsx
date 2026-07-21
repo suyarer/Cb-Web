@@ -2,8 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import KineticHeadline from '@/components/KineticHeadline';
-import LaunchCountdown from '@/components/LaunchCountdown';
-import SubscribeForm from '@/components/SubscribeForm';
+import DownloadButtons from '@/components/DownloadButtons';
 import WhatsAppCTA from '@/components/WhatsAppCTA';
 import { easeOutExpo, fadeUpVariant } from '@/lib/motion';
 import { useTimeGreeting } from '@/lib/useTimeGreeting';
@@ -154,72 +153,54 @@ export default function Hero() {
               custom={0}
               className="hidden sm:inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 mb-8 text-xs font-medium text-zinc-300 backdrop-blur"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-acid" />
-              4 Haziran 2026 · Lansmandan önce ilk sen haber al
+              <span className="w-1.5 h-1.5 rounded-full bg-acid brand-pulse" />
+              Artık yayında · App Store &amp; Google Play
             </motion.div>
 
             <KineticHeadline />
 
-            {/* Form Value Proposition — H1'in HEMEN ALTI (mobile above-the-fold için kritik).
-                4.500+ LPV / 4 signup tespiti sonrası form yukarı taşındı:
-                kullanıcı H1 → değer önerisi → email input akışını kesintisiz görsün. */}
+            {/* PRIMARY CTA — App CANLI: indirme modülü (App Store + Google Play).
+                Tıklama Meta Pixel AppDownloadClick + PostHog fırlatır → lookalike tohumu. */}
             <motion.div
               variants={variants}
               initial="hidden"
               animate="visible"
               custom={2.8}
-              className="mb-5 max-w-md rounded-2xl border border-acid/30 bg-acid/[0.06] p-4"
-            >
-              <div className="flex items-start gap-3">
-                <span className="mt-0.5 text-lg" aria-hidden>🟢</span>
-                <div className="flex-1">
-                  <p className="text-sm md:text-base font-semibold text-acid mb-1.5 leading-snug">
-                    İlk 1.000 Bean → 4 Haziran lansman + 6 Haziran Moda buluşması davetiyesi
-                  </p>
-                  <p className="text-xs md:text-sm text-zinc-400 leading-relaxed">
-                    Lansman günü &quot;indir&quot; linkin ve Moda buluşma davetin
-                    tek mailde gelir. Spam yok, söz.
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* PRIMARY: WhatsApp Channel — pivot strategy (19 May).
-                Cem'in tezi: "Bekleme listesi 2026'da öldü, insanlar
-                gelecekteki bir mail için email vermiyor."
-                Conversion %0.07 → WhatsApp Channel anında follow modeli.
-                En düşük friction (tek tık → bağlı). */}
-            <motion.div
-              variants={variants}
-              initial="hidden"
-              animate="visible"
-              custom={2.9}
               className="scroll-mt-24"
-              id="subscribe-form"
+              id="indir"
             >
-              <WhatsAppCTA />
+              <DownloadButtons source="hero" />
+              <p className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-medium text-zinc-500">
+                <span className="text-acid">Ücretsiz</span>
+                <span className="text-zinc-700" aria-hidden>·</span>
+                <span>iPhone &amp; Android</span>
+                <span className="text-zinc-700" aria-hidden>·</span>
+                <span>18+</span>
+                <span className="text-zinc-700" aria-hidden>·</span>
+                <span>Türkiye&apos;de yapıldı</span>
+              </p>
             </motion.div>
 
-            {/* SECONDARY: Email form — alternatif yol, WhatsApp tercih etmeyenler için.
-                Küçük "veya email ile" başlık altında, daha az dikkat çekici. */}
-            <motion.div
-              variants={variants}
-              initial="hidden"
-              animate="visible"
-              custom={3.2}
-              className="mt-6"
-            >
-              <div className="flex items-center gap-2 mb-3 max-w-md">
-                <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-600">
-                  veya — email ile
-                </span>
-                <span className="h-px flex-1 bg-zinc-800" />
-              </div>
-              <SubscribeForm source="hero" />
-            </motion.div>
-
-            {/* Sade launch countdown — deadline urgency, sayı yok */}
-            <LaunchCountdown />
+            {/* SECONDARY — topluluk: WhatsApp kanalı (güncel kal / indirmeden bağlan).
+                Env yoksa WhatsAppCTA null döner → ayıracı da gizle (sarkma olmasın). */}
+            {process.env.NEXT_PUBLIC_WHATSAPP_GROUP_URL && (
+              <motion.div
+                variants={variants}
+                initial="hidden"
+                animate="visible"
+                custom={3.2}
+                className="mt-6 scroll-mt-24"
+                id="subscribe-form"
+              >
+                <div className="flex items-center gap-2 mb-3 max-w-md">
+                  <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-600">
+                    veya — topluluğa katıl
+                  </span>
+                  <span className="h-px flex-1 bg-zinc-800" />
+                </div>
+                <WhatsAppCTA />
+              </motion.div>
+            )}
 
             <motion.p
               variants={variants}

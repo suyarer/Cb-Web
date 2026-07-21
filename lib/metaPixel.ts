@@ -130,6 +130,34 @@ export function trackViewContent(params: ViewContentParams = {}): string | null 
 }
 
 /**
+ * AppDownloadClick — kullanıcı App Store / Google Play indirme butonuna tıkladı.
+ *
+ * App CANLI olduğundan bu, sitenin EN YÜKSEK NİYET sinyalidir: kişi uygulamayı
+ * indirmeye niyetleniyor. Meta lookalike için en kaliteli tohum (waitlist Lead'inden
+ * daha güçlü). Custom event — Ads Manager'da bundan Custom Audience → Lookalike kurulur.
+ *
+ * Returns: event_id
+ */
+export function trackDownloadClick(
+  platform: 'ios' | 'android',
+  source = 'hero',
+): string | null {
+  if (!canTrack()) return null;
+  const eventId = generateEventId();
+  try {
+    window.fbq?.(
+      'trackCustom',
+      'AppDownloadClick',
+      { platform, source, content_category: 'app-download' },
+      { eventID: eventId },
+    );
+    return eventId;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Custom — manifesto serisi gibi marka-spesifik olaylar için.
  * Standart Meta listesinde olmayan olaylar burada (trackCustom).
  */

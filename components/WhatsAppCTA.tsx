@@ -63,8 +63,8 @@ export default function WhatsAppCTA() {
         </span>
       </a>
       <p className="mt-2.5 text-[11px] text-zinc-500 leading-relaxed pl-1">
-        WhatsApp&apos;ta tek tık. Lansman duyurusu + 30 Mayıs Moda
-        etkinlik davetiyesi telefonunda. Bekleme yok.
+        WhatsApp&apos;ta tek tık. Yakınındaki etkinlik duyuruları ve
+        topluluk — telefonunda. Spam yok.
       </p>
     </motion.div>
   );
