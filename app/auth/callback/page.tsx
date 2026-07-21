@@ -51,14 +51,14 @@ export default function AuthCallback() {
           <div className="space-y-3 pt-4 border-t border-white/10">
             <p className="text-xs text-white/50 mb-3">Uygulama açılmadıysa:</p>
             <a
-              href="https://apps.apple.com/app/clubbeans/id6762319190"
+              href="https://apps.apple.com/app/id6778042472"
               className="block bg-white text-black rounded-2xl px-6 py-3 font-medium text-sm hover:opacity-90 transition"
               rel="noopener noreferrer"
             >
               App Store&apos;dan indir
             </a>
             <a
-              href="https://play.google.com/store/apps/details?id=com.clubbeans.app"
+              href="https://play.google.com/store/apps/details?id=com.clubbeans"
               className="block bg-acid text-black rounded-2xl px-6 py-3 font-medium text-sm hover:opacity-90 transition"
               rel="noopener noreferrer"
             >

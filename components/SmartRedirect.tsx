@@ -14,6 +14,7 @@
  */
 
 import { useEffect, useRef } from 'react';
+import { APP_STORE_URL, PLAY_STORE_URL } from '@/lib/appLinks';
 
 interface Props {
   deepLink: string;
@@ -21,14 +22,10 @@ interface Props {
   playStoreUrl?: string;
 }
 
-const DEFAULT_APP_STORE = 'https://apps.apple.com/app/clubbeans/id6762319190';
-const DEFAULT_PLAY_STORE =
-  'https://play.google.com/store/apps/details?id=com.clubbeans.app';
-
 export function SmartRedirect({
   deepLink,
-  appStoreUrl = DEFAULT_APP_STORE,
-  playStoreUrl = DEFAULT_PLAY_STORE,
+  appStoreUrl = APP_STORE_URL,
+  playStoreUrl = PLAY_STORE_URL,
 }: Props) {
   const triggered = useRef(false);
 

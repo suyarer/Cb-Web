@@ -101,13 +101,13 @@ export default async function ClubPage({ params }: Props) {
 
         <div className="mt-12 text-center text-zinc-500 text-sm">
           <a
-            href="https://apps.apple.com/app/clubbeans/id6762319190"
+            href="https://apps.apple.com/app/id6778042472"
             className="underline mr-4"
           >
             App Store
           </a>
           <a
-            href="https://play.google.com/store/apps/details?id=com.clubbeans.app"
+            href="https://play.google.com/store/apps/details?id=com.clubbeans"
             className="underline"
           >
             Google Play
