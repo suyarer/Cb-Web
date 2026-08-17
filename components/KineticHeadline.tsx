@@ -26,6 +26,12 @@ export default function KineticHeadline() {
   if (reduced) {
     return (
       <h1 className="text-4xl sm:text-5xl md:text-hero font-bold tracking-tight leading-[0.95] mb-5 md:mb-6">
+        {/* Marka adı h1'in İÇİNDE: Google OAuth marka doğrulaması ana başlıkta uygulama
+            adını arıyor ("app name does not match the app name on your home page",
+            2026-08-17 red gerekçesi). Slogan korunur. */}
+        <span className="block text-sm sm:text-base md:text-lg font-semibold uppercase tracking-[0.18em] leading-none text-acid mb-3 md:mb-4">
+          ClubBeans
+        </span>
         Ekran süresi değil,
         <br />
         <span className="text-gradient-acid">yaşam süresi.</span>
@@ -39,8 +45,18 @@ export default function KineticHeadline() {
       initial="hidden"
       animate="visible"
       className="text-4xl sm:text-5xl md:text-hero font-bold tracking-tight leading-[0.95] mb-5 md:mb-6"
-      aria-label="Ekran süresi değil, yaşam süresi."
+      aria-label="ClubBeans — Ekran süresi değil, yaşam süresi."
     >
+      {/* Marka adı h1'in İÇİNDE: Google OAuth marka doğrulaması ana başlıkta uygulama adını
+          arıyor ("app name does not match the app name on your home page", 2026-08-17 red
+          gerekçesi). Slogan ve kinetik animasyon korunur.
+          ⚠️ BİLEREK motion DEĞİL: motion.span SSR'da style="opacity:0" basıyor — JS
+          çalıştırmayan bir denetleyici satırı GÖREMEZ. Bu satırın tek işi görünmek, o yüzden
+          animasyondan bağımsız. motion'a çevirme. */}
+      <span className="block text-sm sm:text-base md:text-lg font-semibold uppercase tracking-[0.18em] leading-none text-acid mb-3 md:mb-4">
+        ClubBeans
+      </span>
+
       <span className="block overflow-hidden">
         <motion.span variants={word} className="inline-block relative">
           <span className="relative text-zinc-400">

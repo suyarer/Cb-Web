@@ -159,6 +159,19 @@ export default function Hero() {
 
             <KineticHeadline />
 
+            {/* AMAÇ CÜMLESİ — Google OAuth marka doğrulaması ana sayfada uygulamanın ne
+                yaptığının DÜZ bir cümleyle açıklanmasını istiyor ("your home page does not
+                explain the purpose of your app", 2026-08-17 red gerekçesi). Slogan şiirsel
+                kalır; bu satır somut karşılığını verir. Silme — doğrulama buna bağlı.
+                ⚠️ BİLEREK motion DEĞİL: fadeUpVariant hidden={opacity:0} olduğu için
+                motion.p SSR'da style="opacity:0" basıyor — JS çalıştırmayan bir denetleyici
+                cümleyi GÖREMEZ. Bu cümlenin tek işi görünmek. motion'a çevirme. */}
+            <p className="max-w-xl mb-7 md:mb-8 text-base sm:text-lg leading-relaxed text-zinc-400">
+              <strong className="font-semibold text-zinc-200">ClubBeans</strong> bir topluluk
+              uygulaması: yakınındaki etkinlikleri bul ve katıl, ya da kendi etkinliğini bir
+              dakikada kur.
+            </p>
+
             {/* PRIMARY CTA — App CANLI: indirme modülü (App Store + Google Play).
                 Tıklama Meta Pixel AppDownloadClick + PostHog fırlatır → lookalike tohumu. */}
             <motion.div
