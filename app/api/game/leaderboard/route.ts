@@ -1,7 +1,9 @@
+import * as Sentry from '@sentry/nextjs';
+import { Ratelimit } from '@upstash/ratelimit';
 import { NextResponse } from 'next/server';
 import { trGunu } from '@/lib/game/gun';
-import { anonIdOku } from '@/lib/game/oturum';
-import { redisAl } from '@/lib/game/redis';
+import { anonIdOku, istemciIp } from '@/lib/game/oturum';
+import { oyunKapaliMi, redisAl, zamanAsimi } from '@/lib/game/redis';
 
 /**
  * Skor tablosu okuma.
@@ -12,93 +14,118 @@ import { redisAl } from '@/lib/game/redis';
  *
  * Sınırsız deneme modelinde enflasyon ZADD GT ile engellenir: bir oyuncu ne
  * kadar oynarsa oynasın tabloda tek satırı vardır ve yalnız en iyi skoru durur.
+ *
+ * MALİYET (denetim guvenlik-8 / performans-6): istek başına 9-10 komut, önbellek ve
+ * hız sınırı yoktu. Top-20 artık 10 sn modül-önbelleğinde (lambda örneği başına),
+ * "sen" satırı çerez varsa taze; istek 2 pipeline'a indirildi; 120/dk/IP sınırı.
  */
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const TAVAN = 20;
+const ONBELLEK_MS = 10_000;
 
 type Satir = { sira: number; ad: string; skor: number; ben: boolean };
+type Tablo = { gun: string; bugun: Array<{ id: string; skor: number; ad: string }>; tum: Array<{ id: string; skor: number; ad: string }>; toplam: number };
 
-export async function GET() {
+let onbellek: { zaman: number; tablo: Tablo } | null = null;
+let limiter: Ratelimit | null | undefined;
+
+const KAPALI = { acik: false, bugun: [], tumZamanlar: [] };
+
+async function tabloOku(): Promise<Tablo | null> {
   const redis = redisAl();
-  if (!redis) {
-    return NextResponse.json({ acik: false, bugun: [], tumZamanlar: [] });
-  }
-
-  /**
-   * "Sen" işareti SUNUCUDAN gelir.
-   *
-   * Önceki hâli `?ben=<anonId>` query parametresiydi ve HİÇ çalışmazdı: anonId
-   * httpOnly çerezde tutuluyor, istemci onu okuyup gönderemiyor. httpOnly'yi
-   * gevşetmek ise kimlik modelini çökertirdi (anonId sızarsa başkasının adına
-   * skor yazılır). Doğrusu: sunucu çerezi kendi okur, istemci hiç bilmez.
-   */
-  const benimId = await anonIdOku();
+  if (!redis) return null;
+  const simdi = Date.now();
+  if (onbellek && simdi - onbellek.zaman < ONBELLEK_MS) return onbellek.tablo;
 
   const gun = trGunu();
+  const p1 = redis.pipeline();
+  p1.zrange(`lb:day:${gun}`, 0, TAVAN - 1, { rev: true, withScores: true });
+  p1.zrange('lb:all', 0, TAVAN - 1, { rev: true, withScores: true });
+  p1.zcard('lb:all');
+  const [bugunHam, tumHam, toplam] = (await zamanAsimi(p1.exec(), 2500, null)) ?? [];
+  if (!bugunHam || !tumHam) return null;
 
-  async function tablo(anahtar: string): Promise<Satir[]> {
-    const ham = (await redis!.zrange(anahtar, 0, TAVAN - 1, {
-      rev: true,
-      withScores: true,
-    })) as Array<string | number>;
-    if (!ham?.length) return [];
+  const coz = (ham: unknown): Array<{ id: string; skor: number }> => {
+    const dizi = ham as Array<string | number>;
+    const out: Array<{ id: string; skor: number }> = [];
+    for (let i = 0; i + 1 < dizi.length; i += 2) out.push({ id: String(dizi[i]), skor: Number(dizi[i + 1]) });
+    return out;
+  };
+  const bugun = coz(bugunHam);
+  const tum = coz(tumHam);
+  const idler = [...new Set([...bugun, ...tum].map((s) => s.id))];
+  const adlar = idler.length
+    ? (await zamanAsimi(redis.mget<Array<string | null>>(...idler.map((id) => `nick:${id}`)), 2500, null)) ?? []
+    : [];
+  const adHaritasi = new Map(idler.map((id, i) => [id, adlar[i] ?? 'anonim']));
+  const tablo: Tablo = {
+    gun,
+    bugun: bugun.map((s) => ({ ...s, ad: adHaritasi.get(s.id) ?? 'anonim' })),
+    tum: tum.map((s) => ({ ...s, ad: adHaritasi.get(s.id) ?? 'anonim' })),
+    toplam: typeof toplam === 'number' ? toplam : 0,
+  };
+  onbellek = { zaman: simdi, tablo };
+  return tablo;
+}
 
-    const idler: string[] = [];
-    const skorlar: number[] = [];
-    for (let i = 0; i < ham.length; i += 2) {
-      idler.push(String(ham[i]));
-      skorlar.push(Number(ham[i + 1]));
-    }
-    const adlar = idler.length
-      ? await redis!.mget<Array<string | null>>(...idler.map((id) => `nick:${id}`))
-      : [];
+/** Top-20 dışındaki oyuncunun kendi satırı — tabloda kendini göremeyen yarışmadan çıkar. */
+async function benimSatirim(anahtar: string, benimId: string, ad: string | null): Promise<Satir | null> {
+  const redis = redisAl();
+  if (!redis) return null;
+  const p = redis.pipeline();
+  p.zrevrank(anahtar, benimId);
+  p.zscore(anahtar, benimId);
+  const [rank, skor] = (await zamanAsimi(p.exec(), 1500, null)) ?? [null, null];
+  if (rank == null || skor == null) return null;
+  if (Number(rank) < TAVAN) return null; // zaten tabloda görünüyor
+  return { sira: Number(rank) + 1, ad: ad ?? 'anonim', skor: Number(skor), ben: true };
+}
 
-    return idler.map((id, i) => ({
-      sira: i + 1,
-      ad: adlar?.[i] ?? 'anonim',
-      skor: skorlar[i],
-      ben: !!benimId && id === benimId,
-    }));
-  }
+export async function GET(req: Request) {
+  const redis = redisAl();
+  if (!redis || (await oyunKapaliMi(redis))) return NextResponse.json(KAPALI);
 
-  /**
-   * Top-20 dışındaki oyuncunun kendi satırı.
-   * Tabloda kendini GÖREMEYEN oyuncu yarışmadan çıkar; sıralaman 3184. bile
-   * olsa görünmek "bir sonraki sefere" duygusunu ayakta tutar.
-   */
-  async function benimSatirim(anahtar: string): Promise<Satir | null> {
-    if (!benimId) return null;
-    const [rank, skor] = await Promise.all([
-      redis!.zrevrank(anahtar, benimId),
-      redis!.zscore(anahtar, benimId),
-    ]);
-    if (rank == null || skor == null) return null;
-    if (rank < TAVAN) return null; // zaten tabloda görünüyor
-    const ad = await redis!.get<string>(`nick:${benimId}`);
-    return { sira: rank + 1, ad: ad ?? 'anonim', skor: Number(skor), ben: true };
-  }
+  const ip = istemciIp(req);
+  limiter ??= new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(120, '1 m'), prefix: 'rl:game:lb', timeout: 1000 });
+  const { success } = await limiter.limit(ip ?? 'ipsiz');
+  if (!success) return NextResponse.json({ ...KAPALI, hata: 'yogunluk' }, { status: 429 });
 
   try {
-    const [bugun, tumZamanlar, toplam, benBugun, benTum] = await Promise.all([
-      tablo(`lb:day:${gun}`),
-      tablo('lb:all'),
-      redis.zcard('lb:all'),
-      benimSatirim(`lb:day:${gun}`),
-      benimSatirim('lb:all'),
-    ]);
-    return NextResponse.json({
-      acik: true,
-      gun,
-      bugun,
-      tumZamanlar,
-      benBugun,
-      benTum,
-      toplamOyuncu: typeof toplam === 'number' ? toplam : 0,
-    });
-  } catch {
-    return NextResponse.json({ acik: false, bugun: [], tumZamanlar: [] });
+    // "Sen" işareti SUNUCUDAN gelir: anonId httpOnly çerezde, istemci onu bilmez.
+    const benimId = await anonIdOku();
+    const tablo = await tabloOku();
+    if (!tablo) return NextResponse.json(KAPALI);
+
+    const satirla = (liste: Tablo['bugun']): Satir[] =>
+      liste.map((s, i) => ({ sira: i + 1, ad: s.ad, skor: s.skor, ben: !!benimId && s.id === benimId }));
+
+    let benBugun: Satir | null = null;
+    let benTum: Satir | null = null;
+    if (benimId) {
+      const benimAd = (await zamanAsimi(redis.get<string>(`nick:${benimId}`), 1000, null)) ?? null;
+      [benBugun, benTum] = await Promise.all([
+        benimSatirim(`lb:day:${tablo.gun}`, benimId, benimAd),
+        benimSatirim('lb:all', benimId, benimAd),
+      ]);
+    }
+
+    return NextResponse.json(
+      {
+        acik: true,
+        gun: tablo.gun,
+        bugun: satirla(tablo.bugun),
+        tumZamanlar: satirla(tablo.tum),
+        benBugun,
+        benTum,
+        toplamOyuncu: tablo.toplam,
+      },
+      { headers: { 'Cache-Control': 'private, no-store' } }
+    );
+  } catch (err) {
+    Sentry.captureException(err, { tags: { alan: 'oyun', rota: 'leaderboard' } });
+    return NextResponse.json(KAPALI);
   }
 }

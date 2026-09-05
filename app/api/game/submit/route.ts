@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs';
 import { Ratelimit } from '@upstash/ratelimit';
 import { randomUUID } from 'node:crypto';
 import { NextResponse } from 'next/server';
@@ -5,35 +6,49 @@ import { z } from 'zod';
 import { HILE_REDDI } from '@/content/sosyal-obezite-feed';
 import { aklaYatkin, sunucuSkoru, type TurOzeti } from '@/lib/game/engine';
 import { trGunu } from '@/lib/game/gun';
-import { takmaAdGecerli } from '@/lib/game/nickname';
+import { iskelet, takmaAdGecerli } from '@/lib/game/nickname';
 import { anonIdOku, istemciIp, originGecerli } from '@/lib/game/oturum';
-import { redisAl } from '@/lib/game/redis';
+import { oyunKapaliMi, redisAl, zamanAsimi } from '@/lib/game/redis';
 
 /**
  * SOSYAL OBEZİTE — skor gönderimi.
  *
  * Sunucu istemcinin skoruna ASLA güvenmez: kendi hesabını yapar ve onu yazar.
  *
- * KİMLİK MODELİ (spec §5.3 — ilk yazımda ihlal edilmişti):
- *   sorted-set member = anonId (çerezden). Takma ad member DEĞİL.
+ * KİMLİK MODELİ (spec §5.3):
+ *   sorted-set member = anonId (imzalı çerezden). Takma ad member DEĞİL.
  *   Ad sahipliği: SETNX nickowner:{iskelet} → anonId. Başkasının adını alamazsın.
  *   Görüntülenen ad: nick:{anonId} hash'inde.
- * Aksi halde `takmaAd:'Ayşe'` yazan herkes Ayşe'nin skorunu ezebiliyordu ve
- * ZADD GT tek yönlü olduğu için ad kalıcı olarak işgal ediliyordu.
+ *
+ * SIRA (denetim 2026-09-05, bilinen #5 CONFIRMED): ad rezervasyonu GETDEL'den ÖNCE.
+ * Önce oturum tüketilip sonra 409 'ad-alinmis' dönünce dürüst oyuncunun turu çöpe
+ * gidiyordu; artık ad çakışırsa oturum yaşar, oyuncu başka ad dener.
+ *
+ * TTL'ler (guvenlik-1/-2, dogruluk-5): nick:/nickowner: 180 gün (run: ile hizalı, her
+ * submit'te yenilenir); ad değişince eski iskelet yalnız sahibi bensem serbest bırakılır
+ * (Lua, atomik); günde 3 ad değişimi; lb:all en fazla 5000 üye.
  */
 
 let limiter: Ratelimit | null | undefined;
-function limiterAl(): Ratelimit | null {
-  if (limiter !== undefined) return limiter;
+let ipsizLimiter: Ratelimit | null | undefined;
+function limiterAl(ipli: boolean): Ratelimit | null {
   const redis = redisAl();
-  limiter = redis
-    ? new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(40, '1 m'), prefix: 'rl:game:submit' })
-    : null;
-  return limiter;
+  if (!redis) return null;
+  if (ipli) {
+    limiter ??= new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(40, '1 m'), prefix: 'rl:game:submit', timeout: 1000 });
+    return limiter;
+  }
+  ipsizLimiter ??= new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(8, '1 m'), prefix: 'rl:game:submit:ipsiz', timeout: 1000 });
+  return ipsizLimiter;
 }
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+
+const AD_TTL = 60 * 60 * 24 * 180;
+const RUN_TTL = 60 * 60 * 24 * 180;
+const TABLO_TAVANI = 5000;
+const GUNLUK_AD_DEGISIMI = 3;
 
 const Govde = z.object({
   sessionId: z.string().uuid(),
@@ -57,19 +72,24 @@ const Oturum = z
   .object({ baslangic: z.number().int().positive() })
   .passthrough();
 
+/** Yalnız değeri anonId ise siler — başkasının rezervasyonuna dokunmaz. */
+const ESKI_ADI_SERBEST_BIRAK = "if redis.call('GET', KEYS[1]) == ARGV[1] then return redis.call('DEL', KEYS[1]) end return 0";
+
+function reddedildi(sebep: string, ekstra?: Record<string, string | number>) {
+  Sentry.captureMessage('oyun.skor_reddedildi', { level: 'info', tags: { alan: 'oyun', rota: 'submit', sebep }, extra: ekstra });
+}
+
 export async function POST(req: Request) {
   // 1) Köken — cookie tabanlı kimlikten ÖNCE (CSRF yazma vektörü)
   if (!originGecerli(req)) {
     return NextResponse.json({ hata: 'kaynak-reddedildi' }, { status: 403 });
   }
 
-  // 2) Hız sınırı. IP yoksa daha sıkı ayrı kova — tek "bilinmiyor" kovası
-  //    tüm trafiği aynı limite sıkıştırıyordu.
+  // 2) Hız sınırı. IP yoksa daha sıkı ayrı kova.
   const ip = istemciIp(req);
-  const rl = limiterAl();
+  const rl = limiterAl(ip !== null);
   if (rl) {
-    const anahtar = ip ?? 'ipsiz';
-    const { success, reset } = await rl.limit(anahtar);
+    const { success, reset } = await rl.limit(ip ?? 'ipsiz');
     if (!success) {
       // NÖTR metin: CGNAT arkasındaki dürüst oyuncuya "hileci" demek marka riski.
       // HILE_REDDI yalnız 422 (akla-yatkınlık) yolunda kullanılır.
@@ -100,69 +120,106 @@ export async function POST(req: Request) {
   }
 
   const redis = redisAl();
-  if (!redis) {
+  if (!redis || (await oyunKapaliMi(redis))) {
     return NextResponse.json(
       { hata: 'tablo-kapali', mesaj: 'Skor tablosu şu an kapalı. Oyun oynanmaya devam eder.' },
       { status: 503 }
     );
   }
 
-  // 3) Tek kullanımlık oturum — GETDEL atomik, paralel iki submit yarışını çözer
-  const oturumHam = await redis.getdel<string | Record<string, unknown>>(`sess:${sessionId}`);
-  if (!oturumHam) {
-    return NextResponse.json(
-      { hata: 'oturum-bitti', mesaj: 'Tur kaydı için süre doldu. Bir tur daha oyna.' },
-      { status: 409 }
-    );
-  }
-  const oturumParse = Oturum.safeParse(
-    typeof oturumHam === 'string' ? JSON.parse(oturumHam) : oturumHam
-  );
-  if (!oturumParse.success) {
-    return NextResponse.json({ hata: 'oturum-bozuk' }, { status: 422 });
-  }
-  const oturum = oturumParse.data;
-
-  // Duvar saati: 60 sn'lik tur 45 sn'den kısa sürede gelemez
-  const gecen = Date.now() - oturum.baslangic;
-  if (!Number.isFinite(gecen) || gecen < 45_000) {
-    return NextResponse.json(
-      { hata: 'akla-yatmadi', sebep: 'duvar-saati', mesaj: HILE_REDDI },
-      { status: 422 }
-    );
-  }
-
-  const dogrulama = aklaYatkin(ozet as TurOzeti, skor, olaylar);
-  if (!dogrulama.gecerli) {
-    return NextResponse.json(
-      { hata: 'akla-yatmadi', sebep: dogrulama.sebep, mesaj: HILE_REDDI },
-      { status: 422 }
-    );
-  }
-
-  const nihaiSkor = sunucuSkoru(ozet as TurOzeti, olaylar);
-  const runId = randomUUID();
-  // Gün kovası TUR BAŞLANGICINDAN — gece yarısını turun içinde geçen oyuncunun
-  // skoru başladığı güne yazılır (spec §5.4)
-  const gun = trGunu(new Date(oturum.baslangic));
-
   try {
-    // 4) Ad sahipliği: iskelet üzerinden rezervasyon. Anahtar DAİMA iskelet;
-    //    "Ayşe"/"ayşe"/"AYŞE" aynı iskelete iner, tabloda tek satır olur.
-    const sahip = await redis.set(`nickowner:${ad.iskelet}`, anonId, { nx: true });
-    if (sahip === null) {
-      const mevcutSahip = await redis.get<string>(`nickowner:${ad.iskelet}`);
-      if (mevcutSahip !== anonId) {
+    // 3) Ön okuma — TEK gidiş-dönüş: engel, ad rezervasyonu (NX), mevcut sahip, mevcut ad, en iyi skor
+    const onOkuma = redis.pipeline();
+    onOkuma.sismember('oyun:engelli', anonId);
+    onOkuma.set(`nickowner:${ad.iskelet}`, anonId, { nx: true, ex: AD_TTL });
+    onOkuma.get<string>(`nickowner:${ad.iskelet}`);
+    onOkuma.get<string>(`nick:${anonId}`);
+    onOkuma.zscore('lb:all', anonId);
+    const [engelli, , sahip, eskiAd, eskiSkor] = (await onOkuma.exec()) as [
+      number, unknown, string | null, string | null, number | null,
+    ];
+
+    if (engelli === 1) {
+      reddedildi('engelli');
+      return NextResponse.json({ hata: 'engelli', mesaj: 'Bu kimlikten skor kabul edilmiyor.' }, { status: 403 });
+    }
+    if (sahip && sahip !== anonId) {
+      // Oturum TÜKETİLMEDİ — oyuncu başka bir ad deneyebilir.
+      reddedildi('ad-alinmis');
+      return NextResponse.json(
+        {
+          hata: 'ad-alinmis',
+          mesaj: 'Bu takma ad başkasına ait. Başka bir şey dene. (Sen aldıysan: privacy@clubbeans.com)',
+        },
+        { status: 409 }
+      );
+    }
+
+    // Ad değişimi: günlük sınır + eski iskeleti serbest bırak (yalnız sahibi bensem)
+    const eskiIskelet = eskiAd ? iskelet(eskiAd) : null;
+    const adDegisti = !!eskiIskelet && eskiIskelet !== ad.iskelet;
+    if (adDegisti) {
+      const sayac = await redis.incr(`nickchg:${anonId}`);
+      if (sayac === 1) await redis.expire(`nickchg:${anonId}`, 86_400);
+      if (sayac > GUNLUK_AD_DEGISIMI) {
+        // Yeni rezervasyonu geri al ki ad boşta kalmasın
+        await redis.eval(ESKI_ADI_SERBEST_BIRAK, [`nickowner:${ad.iskelet}`], [anonId]);
+        reddedildi('ad-degisim-siniri');
         return NextResponse.json(
-          { hata: 'ad-alinmis', mesaj: 'Bu takma ad başkasına ait. Başka bir şey dene.' },
-          { status: 409 }
+          { hata: 'ad-degisim-siniri', mesaj: 'Bugün için ad değiştirme hakkın doldu. Önceki adınla devam et.' },
+          { status: 422 }
         );
       }
     }
 
-    // 5) Yazma — tek pipeline. Önce 5 ayrı await vardı: biri düşerse oturum
-    //    tüketilmiş ama skor yazılmamış oluyordu, retry 409 "zaten kaydedildi"
-    //    yalanı dönüyordu ve dürüst skor sessizce kayboluyordu.
+    // 4) Tek kullanımlık oturum — GETDEL atomik, paralel iki submit yarışını çözer
+    const oturumHam = await redis.getdel<string | Record<string, unknown>>(`sess:${sessionId}`);
+    if (!oturumHam) {
+      reddedildi('oturum-bitti');
+      return NextResponse.json(
+        { hata: 'oturum-bitti', mesaj: 'Tur kaydı için süre doldu. Bir tur daha oyna.' },
+        { status: 409 }
+      );
+    }
+    const oturumParse = Oturum.safeParse(
+      typeof oturumHam === 'string' ? JSON.parse(oturumHam) : oturumHam
+    );
+    if (!oturumParse.success) {
+      reddedildi('oturum-bozuk');
+      return NextResponse.json({ hata: 'oturum-bozuk' }, { status: 422 });
+    }
+    const oturum = oturumParse.data;
+
+    // Duvar saati: 60 sn'lik tur 45 sn'den kısa sürede gelemez
+    const gecen = Date.now() - oturum.baslangic;
+    if (!Number.isFinite(gecen) || gecen < 45_000) {
+      reddedildi('duvar-saati', { gecen: Math.round(gecen) });
+      return NextResponse.json(
+        { hata: 'akla-yatmadi', mesaj: HILE_REDDI },
+        { status: 422 }
+      );
+    }
+
+    const dogrulama = aklaYatkin(ozet as TurOzeti, skor, olaylar);
+    if (!dogrulama.gecerli) {
+      // Eşik adı yalnız telemetriye — saldırgana deneme-yanılma haritası vermez (spec §6)
+      reddedildi(dogrulama.sebep);
+      return NextResponse.json(
+        { hata: 'akla-yatmadi', mesaj: HILE_REDDI },
+        { status: 422 }
+      );
+    }
+
+    const nihaiSkor = sunucuSkoru(ozet as TurOzeti, olaylar);
+    const runId = randomUUID();
+    // Gün kovası TUR BAŞLANGICINDAN — gece yarısını turun içinde geçen oyuncunun
+    // skoru başladığı güne yazılır (spec §5.4)
+    const gun = trGunu(new Date(oturum.baslangic));
+    // Görünen ad yalnız en iyi skor gerçekten güncellendiyse değişir (tablo = en iyi tur)
+    const nickYaz = eskiSkor == null || nihaiSkor >= Number(eskiSkor) || !eskiAd;
+
+    // 5) Yazma — tek pipeline. Biri düşerse oturum tüketilmiş ama skor yazılmamış
+    //    olurdu; tek gidiş-dönüşte ya hepsi ya hiçbiri (Upstash pipeline ardışık ama tek RTT).
     const p = redis.pipeline();
     p.set(
       `run:${runId}`,
@@ -170,26 +227,28 @@ export async function POST(req: Request) {
         takmaAd: ad.temiz, skor: nihaiSkor,
         yakalanan: ozet.yakalanan, kacan: ozet.kacan, kart: ozet.kart,
         toplamSaniye: toplamSaniye ?? Math.round(ozet.sureMs / 1000),
-        // Turun OYNANDIĞI gün. Seed günlük olduğu için şart: dünkü bir kartın
-        // linkiyle gelen oyuncu BUGÜNÜN akışını oynar, yani "aynı turu oynadık"
-        // vaadi tutmaz. Gün yazılmadan bu farkı arayüzde söylemek imkânsızdı.
         gun,
         tarih: Date.now(),
       }),
-      // TTL: OG kartı viral kuyrukta 2 hafta sonra da açılır ama TTL'siz bırakmak
-      // bot pompalamasında sınırsız Redis büyümesi demek. 180 gün ikisini dengeler.
-      { ex: 60 * 60 * 24 * 180 }
+      { ex: RUN_TTL }
     );
-    p.set(`nick:${anonId}`, ad.temiz);
+    if (nickYaz) p.set(`nick:${anonId}`, ad.temiz, { ex: AD_TTL });
+    else p.expire(`nick:${anonId}`, AD_TTL);
+    p.expire(`nickowner:${ad.iskelet}`, AD_TTL);
+    if (adDegisti && eskiIskelet) p.eval(ESKI_ADI_SERBEST_BIRAK, [`nickowner:${eskiIskelet}`], [anonId]);
     p.zadd('lb:all', { gt: true }, { score: nihaiSkor, member: anonId });
     p.zadd(`lb:day:${gun}`, { gt: true }, { score: nihaiSkor, member: anonId });
     p.expire(`lb:day:${gun}`, 172_800);
-    await p.exec();
-
-    const [sira, toplam] = await Promise.all([
-      redis.zcount('lb:all', nihaiSkor + 1, '+inf'),
-      redis.zcard('lb:all'),
-    ]);
+    // KVKK silme zinciri: takma ad → anonId → kartlar (scripts/oyun-sil.mjs)
+    p.sadd(`runs:${anonId}`, runId);
+    p.expire(`runs:${anonId}`, RUN_TTL);
+    // Tablo tavanı: bot pompalamasında sınırsız büyüme yok
+    p.zremrangebyrank('lb:all', 0, -(TABLO_TAVANI + 1));
+    p.zcount('lb:all', nihaiSkor + 1, '+inf');
+    p.zcard('lb:all');
+    const sonuc = await p.exec();
+    const sira = sonuc[sonuc.length - 2];
+    const toplam = sonuc[sonuc.length - 1];
 
     return NextResponse.json({
       runId,
@@ -200,7 +259,9 @@ export async function POST(req: Request) {
     });
   } catch (err) {
     if (process.env.NODE_ENV !== 'production') console.error('[oyun] submit yazma hatası:', err);
-    // Oturum tüketildi ama yazma düştü — 409 "zaten kaydedildi" DEMİYORUZ,
+    // Takma ad / IP gönderilmez (KVKK); yalnız rota ve hata nesnesi.
+    Sentry.captureException(err, { tags: { alan: 'oyun', rota: 'submit' } });
+    // Oturum tüketilmiş olabilir ama yazma düştü — 409 "zaten kaydedildi" DEMİYORUZ,
     // çünkü kaydedilmedi. Dürüst oyuncu doğru teşhis görmeli.
     return NextResponse.json(
       { hata: 'kayit-tamamlanamadi', mesaj: 'Kayıt tamamlanamadı. Bir tur daha oyna.' },

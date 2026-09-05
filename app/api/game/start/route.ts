@@ -3,8 +3,9 @@ import { randomUUID } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { GERCEK_SAYISI, TUR_SURESI_MS } from '@/lib/game/engine';
 import { trGunu } from '@/lib/game/gun';
+import { oneriAdUret } from '@/lib/game/nickname';
 import { anonIdAlVeYaz, istemciIp, originGecerli } from '@/lib/game/oturum';
-import { redisAl } from '@/lib/game/redis';
+import { oyunKapaliMi, redisAl, zamanAsimi } from '@/lib/game/redis';
 
 /**
  * SOSYAL OBEZİTE — tur başlatma.
@@ -12,22 +13,30 @@ import { redisAl } from '@/lib/game/redis';
  * deterministik olmak zorunda), bu yüzden bot mükemmel tur üretebilir —
  * BİLİNEN ve KABUL EDİLMİŞ risk (karar 10 sert replay doğrulama istemiyor).
  * Sınır: skor matematiksel tavanla kapalı (1605), bot tavana oturur,
- * tabloyu sonsuza kaçıramaz.
+ * tabloyu sonsuza kaçıramaz; kimlik başına günlük oturum sayacı (aşağıda) tek
+ * botun top-20'yi doldurmasını da keser.
  */
 
 // Tembel kurulum: env yoksa oyun Redis'siz oynanır (skor tablosu devre dışı).
 let limiter: Ratelimit | null | undefined;
-function limiterAl(): Ratelimit | null {
-  if (limiter !== undefined) return limiter;
+let ipsizLimiter: Ratelimit | null | undefined;
+function limiterAl(ipli: boolean): Ratelimit | null {
   const redis = redisAl();
-  limiter = redis
-    ? new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(60, '1 m'), prefix: 'rl:game:start' })
-    : null;
-  return limiter;
+  if (!redis) return null;
+  if (ipli) {
+    limiter ??= new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(60, '1 m'), prefix: 'rl:game:start', timeout: 1000 });
+    return limiter;
+  }
+  // IP'siz istekler tek "bilinmiyor" kovasına düşüyordu — ayrı ve daha sıkı kova (guvenlik-10)
+  ipsizLimiter ??= new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(10, '1 m'), prefix: 'rl:game:start:ipsiz', timeout: 1000 });
+  return ipsizLimiter;
 }
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+
+/** Kimlik başına günlük tur tavanı — bot tek kimlikle sınırsız satır açamasın (guvenlik-1) */
+const GUNLUK_TUR_TAVANI = 200;
 
 export async function POST(req: Request) {
   // Köken denetimi cookie'den ÖNCE — anonId çerezi CSRF yüzeyini yükseltiyor
@@ -35,8 +44,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ hata: 'kaynak-reddedildi' }, { status: 403 });
   }
 
+  const redis = redisAl();
+  if (await oyunKapaliMi(redis)) {
+    return NextResponse.json({ hata: 'kapali' }, { status: 503, headers: { 'Retry-After': '300' } });
+  }
+
   const ip = istemciIp(req);
-  const rl = limiterAl();
+  const rl = limiterAl(ip !== null);
   if (rl) {
     const { success, reset } = await rl.limit(ip ?? 'ipsiz');
     if (!success) {
@@ -69,29 +83,43 @@ export async function POST(req: Request) {
    */
   const seed = `so-${trGunu()}`;
   // Kalıcı anonim kimlik — skor tablosunun sorted-set member'ı bu olur
-  await anonIdAlVeYaz();
+  const anonId = await anonIdAlVeYaz();
 
-  const redis = redisAl();
   /**
-   * TTL 600 sn (180 değil): oyuncu itiraf ekranında oyalanabilir, bildirime
+   * TTL 600 sn (180 değil): oyuncu tur sonu ekranında oyalanabilir, bildirime
    * geçip dönebilir. 180 sn'de dürüst oyuncunun submit'i getdel-null → 409
    * ile sessizce kayboluyordu. Duvar-saati kontrolü (>=45 sn) hile kapısını
    * zaten tutuyor, TTL'yi kısa tutmanın güvenlik faydası yok.
+   *
+   * Oturum kaydında IP YOK (KVKK: yalnız hız sınırı için işlenir, saklanmaz — kvkk-4).
+   * Redis askıda kalırsa 1500 ms'de vazgeçilir; sessionId '' döner, oyun tablosuz oynanır.
    */
+  let tabloAcik = false;
   if (redis) {
-    await redis.set(
-      `sess:${sessionId}`,
-      JSON.stringify({ seed, ilkTur, baslangic: Date.now(), ip: ip ?? 'ipsiz' }),
-      { ex: 600 }
+    const sayac = await zamanAsimi(redis.incr(`sess-count:${anonId}`), 800, 0);
+    if (sayac === 1) void zamanAsimi(redis.expire(`sess-count:${anonId}`, 86_400), 800, 0);
+    if (sayac > GUNLUK_TUR_TAVANI) {
+      return NextResponse.json(
+        { hata: 'gunluk-tavan', mesaj: 'Bugünlük bu kadar. Yarın aynı akış, yeni gerçekler.' },
+        { status: 429, headers: { 'Retry-After': '3600' } }
+      );
+    }
+    const yazildi = await zamanAsimi(
+      redis.set(`sess:${sessionId}`, JSON.stringify({ seed, ilkTur, baslangic: Date.now() }), { ex: 600 }),
+      1500,
+      null
     );
+    tabloAcik = yazildi === 'OK';
   }
 
   return NextResponse.json({
-    // Redis yoksa sessionId boş gider → istemci skoru göndermeye çalışmaz
-    sessionId: redis ? sessionId : '',
+    // Redis yoksa/askıdaysa sessionId boş gider → istemci skoru göndermeye çalışmaz
+    sessionId: tabloAcik ? sessionId : '',
     seed,
     ilkTur,
     turSuresiMs: TUR_SURESI_MS,
     gercekSayisi: GERCEK_SAYISI,
+    // Sunucu-üretimi takma ad önerisi — alan dolu gelir, tek dokunuşla yazılır (spec §3.4)
+    oneriAd: oneriAdUret(`${anonId}:${seed}`),
   });
 }

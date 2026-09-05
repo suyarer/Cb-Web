@@ -4,6 +4,7 @@
   "buildCommand": "next build",
   "outputDirectory": ".next",
   "installCommand": "npm install",
+  "regions": ["fra1"],
   "crons": [
     {
       "path": "/api/cron/backup-subscribers",
