@@ -31,7 +31,7 @@ export default function Page() {
         <article className="prose-legal">
           <h1>Sosyal Obezite — Aydınlatma Metni</h1>
           <p className="font-mono text-sm text-zinc-500">
-            6698 sayılı KVKK m.10 kapsamında · Son güncelleme: 18 Ağustos 2026
+            6698 sayılı KVKK m.10 kapsamında · Son güncelleme: 5 Eylül 2026
           </p>
 
           <p>
@@ -43,7 +43,8 @@ export default function Page() {
           <h2>1. Veri sorumlusu</h2>
           <p>
             CLUBBEANS TEKNOLOJİ LTD. İletişim:{' '}
-            <a href="mailto:privacy@clubbeans.com">privacy@clubbeans.com</a>
+            <a href="mailto:privacy@clubbeans.com">privacy@clubbeans.com</a>. Veriler yalnız
+            oyunu oynadığında, tarayıcın üzerinden otomatik olarak toplanır.
           </p>
 
           <h2>2. İşlenen veriler</h2>
@@ -70,15 +71,15 @@ export default function Page() {
                 <td>
                   <strong>Takma ad</strong> — yalnız skorunu tabloya yazdırırsan
                 </td>
-                <td>Skor tablosunda gösterilmek</td>
-                <td>Sen sildirene kadar</td>
+                <td>Skor tablosu ve paylaşım kartı (linkini verdiğin kişiler ve önizleme)</td>
+                <td>Son turundan itibaren 180 gün, ya da sen sildirene kadar</td>
               </tr>
               <tr>
                 <td>
-                  <strong>Skor ve tur istatistiği</strong> (yakalanan gerçek, süre, mesafe)
+                  <strong>Skor ve tur istatistiği</strong> (yakalanan gerçek, süre, kaydırılan kart sayısı)
                 </td>
                 <td>Skor tablosu ve paylaşım kartı</td>
-                <td>Paylaşım kartı: 180 gün · Tablo: sen sildirene kadar</td>
+                <td>Paylaşım kartı ve tablo: 180 gün (günlük tablo 2 gün)</td>
               </tr>
               <tr>
                 <td>
@@ -88,7 +89,7 @@ export default function Page() {
                   Yalnız hız sınırı (aynı adresten saniyeler içinde yüzlerce istek gelmesini
                   engellemek). Skorunla <em>eşleştirilmez</em>.
                 </td>
-                <td>Dakikalar (geçici sayaç)</td>
+                <td>En fazla 2 dakika (hız sınırı sayacı); oturum kaydına yazılmaz</td>
               </tr>
             </tbody>
           </table>
@@ -108,17 +109,18 @@ export default function Page() {
 
           <h2>4. Hukuki sebep</h2>
           <p>
-            Skorunu tabloya yazdırman tamamen isteğe bağlıdır; takma ad girip &quot;yaz&quot;
-            dediğinde <strong>açık rızanı</strong> vermiş olursun (KVKK m.5/1). Hız sınırı için
-            işlenen IP, hizmetin güvenliğini sağlamaya yönelik <strong>meşru menfaat</strong>
-            kapsamındadır (KVKK m.5/2-f). Skorunu yazdırmadan oynarsan hiçbir kalıcı kayıt
+            Skorunu tabloya yazdırman tamamen isteğe bağlıdır. Takma ad girip &quot;yaz&quot;
+            dediğinde takma adın ve skorun, oyunun sunulması için gereken ölçüde{' '}
+            <strong>meşru menfaat</strong> kapsamında işlenir (KVKK m.5/2-f); hız sınırı için
+            işlenen IP de aynı kapsamdadır. Skorunu yazdırmadan oynarsan hiçbir kalıcı kayıt
             oluşmaz.
           </p>
 
           <h2>5. Aktarım</h2>
           <p>
             Skor tablosu ve oturum verisi, altyapı sağlayıcımız Upstash üzerinde Avrupa
-            bölgesinde barındırılır. Site Vercel üzerinde yayınlanır.
+            Birliği bölgesinde (Frankfurt) barındırılır. Site Vercel üzerinde yayınlanır;
+            Vercel Web Analytics çerezsiz, toplu sayfa sayımı yapar (kişi tanımlamaz).
           </p>
 
           <h2>6. Haklarınız ve silme</h2>
@@ -128,9 +130,11 @@ export default function Page() {
             <a href="mailto:privacy@clubbeans.com?subject=Sosyal%20Obezite%20skor%20silme">
               privacy@clubbeans.com
             </a>{' '}
-            adresine <strong>takma adını</strong> yazarak e-posta gönder — 30 gün içinde
-            siliyoruz. Tarayıcı çerezini kendin de silebilirsin; sildiğinde anonim kimliğin
-            ortadan kalkar.
+            adresine <strong>takma adını</strong> (varsa paylaşım kartı linkini) yazarak e-posta
+            gönder — 30 gün içinde tablodan, paylaşım kartlarından ve sunucudan siliyoruz.
+            Tarayıcı çerezini kendin silersen cihazınla tablodaki satır arasındaki bağ kopar;
+            takma adın ve skorun tabloda kalır (aynı adı yeni cihazdan tekrar alamazsın). Kalıcı
+            silme için e-posta yolu gerekir.
           </p>
 
           <h2>7. Yaş</h2>

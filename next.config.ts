@@ -52,7 +52,8 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://*.facebook.com https://www.facebook.com https://*.supabase.co",
       "font-src 'self' data:",
-      "connect-src 'self' https://*.ingest.sentry.io https://*.ingest.de.sentry.io https://challenges.cloudflare.com https://*.facebook.com https://www.facebook.com https://*.supabase.co",
+      // PostHog (EU) — anahtar Vercel env'inde tanımlanınca site + oyun olayları buraya gider
+      "connect-src 'self' https://*.ingest.sentry.io https://*.ingest.de.sentry.io https://challenges.cloudflare.com https://*.facebook.com https://www.facebook.com https://*.supabase.co https://eu.i.posthog.com https://eu-assets.i.posthog.com",
       "frame-src 'self' https://challenges.cloudflare.com",
       "frame-ancestors 'none'",
       "base-uri 'self'",

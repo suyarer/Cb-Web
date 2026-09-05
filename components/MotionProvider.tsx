@@ -1,24 +1,26 @@
 'use client';
 
-import { LazyMotion, domAnimation } from 'framer-motion';
+import { LazyMotion } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 import type { ReactNode } from 'react';
+import { sadeMi } from '@/components/SiteKatmanlari';
 
 /**
- * LazyMotion + domAnimation bridge.
- * Bundle 34KB → 4.6KB initial render (rest async loaded).
+ * LazyMotion bridge — özellikler TEMBEL yüklenir.
+ *
+ * `domAnimation` statik import edilince (~32 KB gz) her rotanın paylaşılan
+ * parçasına giriyordu; oyun rotası hiç motion bileşeni kullanmadığı hâlde
+ * taşıyordu (denetim performans-4). Şimdi: sade rotalarda LazyMotion hiç yok,
+ * diğerlerinde özellikler `import()` ile ilk gerekince gelir.
  *
  * IMPORTANT: Bu wrapper içinde sadece `m.X` (proxied as `motion.X` via lib/motion.ts) çalışır.
- * Direkt `import { motion } from 'framer-motion'` kullanılırsa "Failed to lazy-load motion features"
- * uyarısı gelir (strict mode kapalı, sadece warning).
- *
- * domAnimation features:
- * - animate, initial, exit, transition, variants
- * - whileHover, whileTap, whileFocus, whileInView
- * - layout (basic)
- *
- * NOT included: drag, pan, dragControls (domMax gerektirir).
- * Eğer drag kullanırsak → features={domMax} olarak yükselt.
+ * domAnimation: animate/initial/exit/variants/whileHover/whileTap/whileInView/layout(basic).
+ * drag gerekirse features'ı domMax'e yükselt.
  */
+const ozellikler = () => import('framer-motion').then((m) => m.domAnimation);
+
 export default function MotionProvider({ children }: { children: ReactNode }) {
-  return <LazyMotion features={domAnimation}>{children}</LazyMotion>;
+  const pathname = usePathname();
+  if (sadeMi(pathname)) return <>{children}</>;
+  return <LazyMotion features={ozellikler}>{children}</LazyMotion>;
 }
