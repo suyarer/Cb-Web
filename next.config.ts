@@ -1,6 +1,21 @@
 import { withSentryConfig } from '@sentry/nextjs';
 import type { NextConfig } from 'next';
 
+/**
+ * Üretim mi? Yerelde http://localhost üzerinden çalışıyoruz.
+ *
+ * Bu ayrım OLMADAN `upgrade-insecure-requests` yerelde SAFARI'yi kırıyor:
+ * Safari (Chromium'un aksine) localhost'u bu direktiften muaf tutmaz, tüm
+ * CSS/JS alt-isteklerini https://localhost'a yükseltir ve hepsi düşer.
+ * Sonuç: sayfa beyaz zeminde serif metin olarak açılır, hidrasyon hiç olmaz.
+ * Kanıt (2026-08-18): iPhone 17 Pro simülatöründe yerel sunucu tamamen
+ * stilsizdi, canlı clubbeans.com aynı cihazda kusursuzdu — yani üretimde
+ * sorun yok, ama yerelde iPhone/Safari testi imkânsızdı.
+ *
+ * HSTS de aynı sebeple yerelde gönderilmez: http üzerinden anlamsız.
+ */
+const uretim = process.env.NODE_ENV === 'production' && process.env.VERCEL === '1';
+
 const securityHeaders = [
   {
     key: 'X-Frame-Options',
@@ -42,7 +57,8 @@ const securityHeaders = [
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'",
-      'upgrade-insecure-requests',
+      // Yerelde YOK — bkz. yukarıdaki `uretim` açıklaması
+      ...(uretim ? ['upgrade-insecure-requests'] : []),
     ].join('; '),
   },
 ];

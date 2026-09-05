@@ -24,7 +24,11 @@ const config: Config = {
         midnight: '#050505',
         elevated: '#0A0A0A',
         raised: '#111111',
-        ghost: '#737373',
+        // WCAG AA düzeltmesi (axe, 2026-08-18): #737373 siyah zeminde 4.18-4.30
+        // veriyordu, AA normal metin için 4.5 gerekir. #7D7D7D en açık kart
+        // zemininde bile 4.5'in üstünde kalıyor. 47 kullanımın tamamı oyun
+        // sayfasında — site geri kalanı etkilenmiyor.
+        ghost: '#7D7D7D',
         border: '#1F1F1F',
       },
       fontFamily: {
