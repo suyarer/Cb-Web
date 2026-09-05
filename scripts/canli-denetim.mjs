@@ -190,9 +190,10 @@ async function motorDenetle(tarayiciTipi, ad) {
       const m = document.body.innerText.match(/SKOR\s*\n?\s*(-?\d+)/i);
       return m ? Number(m[1]) : null;
     };
-    /** Gerçek AKTİF mi: işaret kutusunun HESAPLANMIŞ opaklığı (inline değil). */
+    /** Gerçek AKTİF mi: işaret görünür VE rozet 'GERÇEK' diyor (ödül/kaçırma imzası da görünür kalıyor). */
     const isaret = () => [...document.querySelectorAll('div[aria-hidden]')].find((d) => {
       if (!d.className.includes?.('border-2')) return false;
+      if (!(d.firstElementChild?.textContent ?? '').startsWith('GERÇEK')) return false;
       return Number(getComputedStyle(d).opacity) > 0.5;
     });
 
