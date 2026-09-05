@@ -1,0 +1,86 @@
+{
+ "boyut": "Güvenlik ve skor tablosu bütünlüğü",
+ "bulgular": [
+  {
+   "baslik": "Takma ad sahipliği yok: herkes herkesin adını ezebilir/sahiplenebilir (spec §5.3 ihlali)",
+   "dosyaSatir": "app/api/game/submit/route.ts:124-125 (member: ad.temiz), spec-v2 §5.3 satır 119",
+   "kosul": "Saldırı adımları: (1) B kullanıcısı 'Ayşe' adıyla 800 skor yazmış. (2) Saldırgan A normal bir tur oynar (veya seed açık olduğundan botla 12×'yakala' + tavan mesafeyle 1605 üretir), submit'e takmaAd:'Ayşe' yazar. (3) ZADD GT ile member 'Ayşe' saldırganın skoruyla ezilir — hem lb:all hem lb:day. (4) GT tek yönlü olduğundan B adını asla geri alamaz; 1605'e sabitlenen ad kalıcı olarak işgal edilir. Ayrıca run:{runId} kaydına B'nin adı saldırganın istatistikleriyle yazılır → paylaşım/OG kartı sahte kimlikle üretilir.",
+   "nBozulur": "Skor tablosu kimlik bütünlüğü tamamen çöker: viral kampanyada birinin adına skor/kart üretmek sıfır maliyetli. Spec v2 §5.3 tam da bu yüzden 'sorted set member = anonId; takma ad ASLA anahtar değil' + 'SETNX nick:{skeleton} günlük sahiplik' demişti — kod her iki kuralı da uygulamıyor.",
+   "duzeltme": "Spec'e dön: httpOnly cookie'de anonId üret (start'ta), member=anonId yap, takmaAd'ı ayrı hash'te tut (nick:{anonId}); ad sahipliği için SETNX nick:{iskelet}→anonId rezervasyonu ekle. Okuma endpoint'i yazılırken ZRANGE member=anonId → hash'ten ada çevir; anonId asla istemciye sızmasın.",
+   "siddet": "KRITIK"
+  },
+  {
+   "baslik": "Ham ad saklanıyor, iskelet yalnız filtrede: büyük/küçük harf + homoglif varyantlarıyla görsel taklit ve tablo çöplenmesi",
+   "dosyaSatir": "lib/game/nickname.ts:118 (temiz döner, iskelet saklanmaz) + app/api/game/submit/route.ts:124",
+   "kosul": "'Ayşe', 'ayşe', 'AYŞE', 'Ay.şe', 'A yşe' hepsi geçerli ve FARKLI sorted-set üyesi olur; charset regex'i (nickname.ts:99) tüm \\p{L}'yi geçirdiğinden SINIF_HARITASI'nda listelenmeyen alfabe harfleri (Yunanca ο, Ermenice օ vb.) iskelette aynı kalıp saklanan ham formda görsel ikiz üretir. Filtre iskelet üzerinden çalışır ama ZADD 'ad.temiz' ile yapılır.",
+   "nBozulur": "Aynı görünen ad tabloda N kez yer alır (zcount'la hesaplanan 'sıra' şişer) ve bulgu-1'in rezervasyonu eklense bile anahtar ham form olursa taklit sürer: yüksek skorlu birinin görsel ikizi üretilebilir.",
+   "duzeltme": "Tekillik/rezervasyon anahtarı DAİMA iskelet olmalı (nick:{iskelet}); görüntülenen ad ilk kaydedenin 'temiz' formu. Zod max(24) ile nickname max(20) farkını da kapat (Zod'u 20'ye çek).",
+   "siddet": "YUKSEK"
+  },
+  {
+   "baslik": "istemciIp soldan-XFF okuyor — spec'in açıkça yasakladığı spoof'lanabilir desen",
+   "dosyaSatir": "app/api/game/start/route.ts:28-31 ve app/api/game/submit/route.ts:53-56; yasak: spec-v2 §5.3 satır 117",
+   "kosul": "Vercel prod'da platform XFF'i temizlediği için bugün sömürülmesi zor; ama (a) Vercel önüne Cloudflare/proxy eklenirse, (b) self-host/preview-tünel senaryosunda, (c) lokal testte istemci 'X-Forwarded-For: <rastgele>' başlığıyla her istekte yeni IP taklit eder → rl:game:start ve rl:game:submit limitleri tamamen bypass (sınırsız start = sınırsız sess anahtarı; sınırsız submit = tablo/run pompalama).",
+   "nBozulur": "Tek koruma katmanı olan IP ratelimit tek header'la düşer. Spec v2 bunu isimle yasaklamıştı ('subscribe/route.ts:50-52 soldan-XFF deseni KOPYALANMAZ') — kod aynen kopyalamış.",
+   "duzeltme": "Önce req.headers.get('x-real-ip') (Vercel platform header'ı), XFF hiç okunmasın; 'bilinmiyor' fallback'i tek küresel bucket oluşturuyor — IP'siz isteği reddet veya ayrı sıkı limite bağla.",
+   "siddet": "YUKSEK"
+  },
+  {
+   "baslik": "GETDEL sonrası hata yolu korumasız: geçici Redis hatası skoru kalıcı yutar, retry 409 'zaten kaydedildi' yalanı döner",
+   "dosyaSatir": "app/api/game/submit/route.ts:78-133 (try/catch yok; getdel→set→zadd×2→expire→zcount ayrı ayrı await)",
+   "kosul": "GETDEL atomiktir, paralel iki submit yarışını doğru çözer (ikinci 409 alır) — o kısım sağlam. Ama oturum satır 78'de TÜKETİLDİKTEN sonra 109-133'teki 5 ayrı Upstash çağrısından biri geçici hata fırlatırsa: route 500 döner, sess silinmiş, zadd yapılmamış → oyuncu retry'da 409 'Bu tur zaten kaydedildi' görür ama tabloda YOKTUR. Kısmi yazım da mümkün: run:{runId} yazıldı, zadd düştü → paylaşım kartı var, tabloda skor yok.",
+   "nBozulur": "Dürüst oyuncunun skoru sessizce kaybolur; 409 mesajı yanlış teşhis koydurur. Viral yükte Upstash'in tekil timeout'ları bunu düzenli üretir.",
+   "duzeltme": "getdel sonrası bloğu try/catch'e al; set+zadd+expire'ı tek pipeline/multi'de topla; hata halinde sess'i kalan TTL'iyle geri yaz (SET NX) veya 'kayıt tamamlanamadı, tekrar dene' dön; captureError zorunlu (error-observability kuralı).",
+   "siddet": "ORTA"
+  },
+  {
+   "baslik": "Submit 429'u HILE_REDDI metniyle dönüyor; 15/dk/IP CGNAT arkasındaki dürüst kullanıcıları keser",
+   "dosyaSatir": "app/api/game/submit/route.ts:60-62 (429 + HILE_REDDI) ve start/route.ts:19-23 (20/dk)",
+   "kosul": "Türk mobil operatörleri CGNAT kullanır: yüzlerce gerçek kullanıcı tek çıkış IP'sini paylaşabilir. Viral tepede aynı dakikada 16. submit'i yapan dürüst oyuncu 429 alır ve 'Bu skor akla yatmadı. Akış bile bu kadar hızlı akmaz.' görür — hileci ilan edilir. Aynı IP'den 21. tur başlatmak isteyen oyunu hiç açamaz (OyunKabuk fallback'iyle skorsuz oynar).",
+   "nBozulur": "Kampanyanın hedef kitlesi (mobil, viral tepe trafiği) tam bu limite çarpar; yanlış 'hile' mesajı güven kırar, ekran görüntüsüyle krize dönüşebilir.",
+   "duzeltme": "429'a dürüst ayrı metin ('Şu an yoğunluk var, birazdan tekrar dene') — HILE_REDDI yalnız 422 yoluna. Limitleri CGNAT payıyla büyüt, Retry-After ekle; istemci skoruGonder 429'da otomatik tek retry yapabilir (sess TTL 180 sn izin veriyor).",
+   "siddet": "ORTA"
+  },
+  {
+   "baslik": "Oturum nesnesi shape-doğrulamasız: baslangic yoksa NaN karşılaştırması 45 sn duvar-saati kapısını sessizce geçirir",
+   "dosyaSatir": "app/api/game/submit/route.ts:85-91 (cast as { baslangic: number }, Zod yok)",
+   "kosul": "getdel dönüşü için typeof kontrolü VAR ve Upstash'in otomatik JSON deserialize'ını doğru karşılıyor — JSON.parse(nesne) TypeError riski kapalı, bu kısım yeterli. Ama içerik yalnız cast ediliyor: sess:{id} altına farklı şekilli değer gelirse (ileride start route değişir, elle Redis müdahalesi, başka yazıcı) oturum.baslangic=undefined → Date.now()-undefined=NaN → 'NaN < 45000'=false → duvar-saati kontrolü SESSİZCE GEÇER.",
+   "nBozulur": "Tek satırlık gelecek değişiklikle en ucuz anti-bot kapısı (45 sn bekleme) fark edilmeden devre dışı kalır; start'ın yazdığı seed/ip alanları da hiç doğrulanmıyor/kullanılmıyor.",
+   "duzeltme": "Oturumu Zod ile parse et (z.object({ baslangic: z.number().int().positive() }).passthrough()); parse düşerse 409; ek olarak Number.isFinite(gecen) guard'ı.",
+   "siddet": "ORTA"
+  },
+  {
+   "baslik": "run:{runId} her kabul edilen submit'te koşulsuz ve TTL'siz yazılıyor — bot pompalamasıyla sınırsız Redis büyümesi, tavan/alarm yok",
+   "dosyaSatir": "app/api/game/submit/route.ts:104-120",
+   "kosul": "TTL'siz karar OG kartı için bilinçli (spec §0) — onu tartışmıyorum. Sorun: paylaşılmayan koşular dahil HER submit ~200 baytlık kalıcı anahtar üretir; tek IP 15/dk hızla (bulgu-3 ile birleşince sınırsız) pompalayabilir: tek IP bir haftada ≈150K anahtar ≈ 30MB; küçük botnet ile Upstash depolama+komut faturası keyfi büyür. Sayaç/alarm/tavan yok.",
+   "nBozulur": "Maliyet ve operasyonel tavan sessizce şişer; fark edildiğinde temizlik için key-scan gerekir.",
+   "duzeltme": "En az biri: (a) run kaydını yalnız paylaşım anında üret (POST /api/game/share), (b) uzun-sonlu TTL (örn. 180 gün) + OG erişiminde tazeleme, (c) günlük run-yazım sayacı + PostHog alarmı. OG/okuma endpoint'i yazılırken runId'yi UUID regex'iyle doğrula (keyspace'e serbest string sokma).",
+   "siddet": "ORTA"
+  },
+  {
+   "baslik": "Origin/Referer kontrolü yok: content-type'sız simple-request ile cross-site POST geçer (req.json() content-type'a bakmaz)",
+   "dosyaSatir": "app/api/game/start/route.ts:33 ve app/api/game/submit/route.ts:58 (ikisinde de Origin denetimi yok)",
+   "kosul": "Kötü niyetli sayfa fetch(url,{method:'POST',body:JSON.stringify(...)}) ile (content-type text/plain → preflight YOK) ziyaretçilerinin tarayıcısından start/submit çağırtabilir. Cookie-kimlik olmadığından skor zinciri kurulamaz (start yanıtını CORS engeller, sessionId'siz submit 409) — ama kurbanın IP ratelimit bütçesini yakar ve sess:{id} anahtarları ürettirir; bulgu-5'in dar limitleriyle tek sayfa ziyareti bir NAT'ın dakikalık bütçesini bitirebilir.",
+   "nBozulur": "Bugün: hedefli 429-tacizi. Yarın: bulgu-1 düzeltmesiyle anonId cookie'si eklendiğinde aynı açık gerçek CSRF yazma vektörüne yükselir — cookie gelmeden kapatılmalı.",
+   "duzeltme": "Her iki route'ta Origin header'ı https://clubbeans.com (+ preview domainleri) ile eşleşmiyorsa 403 — iki satır.",
+   "siddet": "DUSUK"
+  },
+  {
+   "baslik": "Zod'da kart/sureMs/yanlisDokunma üst sınırsız; aklaYatkin çoğunu kesiyor ama yanlisDokunma HİÇBİR katmanda sınırlanmıyor",
+   "dosyaSatir": "app/api/game/submit/route.ts:35-41; kısmi sınırlar: lib/game/engine.ts:175 (sureMs 58-62 sn), :192 (kart ≤4800); yanlisDokunma sınırsız",
+   "kosul": "yanlisDokunma=1e300 (int() geçer: tam-sayı double) → cezaPuani=-2e302 → Math.max(0,…)=0 → istemci skor=0 bildirirse tüm kontroller geçer, tabloya 0 yazılır (GT sayesinde kimseyi ezmez). Çökme/taşma yok (değerler finite), olaylar ≤64 zaten kapalı — bugün zararsız. Ama formül ileride değişirse (örn. ceza/taban kuralı oynarsa) doğrulanmamış devasa alanlar sessiz istismar kapısı olur.",
+   "nBozulur": "Bugün hiçbir şey; gelecekteki formül değişikliğinde sınırsız sayılar skor hattına girer.",
+   "duzeltme": "Şemaya gerçekçi tavanlar: kart max 5000, sureMs max 62_000, yakalanan/kacan max 12, yanlisDokunma max 600 (10 tap/sn zaten insan-üstü).",
+   "siddet": "DUSUK"
+  },
+  {
+   "baslik": "trGunu kalıcı-UTC+3 için DOĞRU; kalan iki kenar: gün bucket'ı submit anından seçiliyor (spec: start anı) ve lb:day expire'ı zadd'den ayrı çağrı",
+   "dosyaSatir": "app/api/game/submit/route.ts:48-51 (trGunu), :105 (gun submit anında), :123-128 (zadd → ayrı expire)",
+   "kosul": "getTime()+3h → toISOString.slice(0,10): Türkiye 2016'dan beri kalıcı UTC+3, DST yok → gün sınırında (21:00 UTC = 00:00 TR) dahil her an doğru tarih üretir; Intl'e gerek yok. Kenar 1: 23:59'da biten tur 00:00'da submit edilirse ertesi günün tablosuna yazılır — spec §5.4 'bucket session start anından' diyordu (oturum.baslangic elde, kullanılmıyor). Kenar 2: zadd başarılı olup expire düşerse lb:day:{gun} kalıcı kalır; aynı gün sonraki submit onarır ama günün SON submit'inde olursa anahtar sonsuz yaşar.",
+   "nBozulur": "Kenar 1: gece yarısı oyuncusu 'Bugün' tablosunda kendini bulamaz (nadir, kozmetik). Kenar 2: 48 saatte silinmesi gereken günlük anahtarlar birikir (küçük sızıntı).",
+   "duzeltme": "gun = trGunu(new Date(oturum.baslangic)); zadd+expire tek pipeline'da (bulgu-4 düzeltmesiyle birleşir).",
+   "siddet": "DUSUK"
+  }
+ ],
+ "enBuyukRisk": "Takma ad sahipliğinin hiç olmaması: sorted-set üyesi doğrudan kullanıcı-girdisi takma ad (submit/route.ts:124-125) olduğundan herhangi biri, herhangi birinin adını yazıp ZADD GT ile skorunu ezebilir, adı 1605 tavanına sabitleyip kalıcı işgal edebilir ve o ad adına sahte run/paylaşım kartı ürettirebilir — spec v2 §5.3 bunu öngörüp 'member=anonId, takma ad asla anahtar değil + SETNX iskelet rezervasyonu' şart koşmuştu, kod ikisini de uygulamamış. Viral kampanyada tek tweet'lik ekran görüntüsüyle 'skor tablosu sahte' krizine dönüşür; skor tablosu okuma endpoint'i yazılmadan ve tabloya gerçek veri dolmadan ÖNCE member modeli anonId'ye çevrilmeli (sonradan migration canlı tabloyu kırar)."
+}

@@ -1,0 +1,500 @@
+[
+ {
+  "alan": "Kaydirma fizigi sabitleri — gercek platform/OSS referanslari (iOS, Android, Chrome, use-gesture, framer-motion, lenis, swiper, iScroll)",
+  "bulgular": [
+   {
+    "baslik": "Lastik (rubberband) modeli YANLIS: dogrusal 0.35 yerine asimptotik formul",
+    "disReferans": "iOS UIScrollView rubberband: b = (1 - 1/((x*c/d)+1)) * d, c=0.55, d=ekran boyutu (chpwn formulu, gist.github.com/originell/6961057). Ayni formulun esdegeri use-gesture'da: (x*d*c)/(d+c*x), varsayilan c=0.15 (pmndrs/use-gesture packages/core/src/utils/maths.ts, rubberbandIfOutOfBounds). framer-motion ise dogrusal mix kullanir ama katsayisi 0.35 (motiondivision/motion .../drag/utils/constraints.ts: defaultElastic = 0.35)",
+    "bizdekiDurum": "fizik.ts:22 LASTIK=0.35, konumIlerlet() icinde DUZ CARPAN: offset + delta*0.35. Dogrusal oldugu icin ne kadar cekersen o oranda gider — direnc mesafeyle ARTMAZ. Gercek iOS'ta 2. yuz piksel 1.'den cok daha zor gelir; bizde ayni gelir. 'Ucuz his'in klasik kaynagi",
+    "onerilenDeger": "fizik.ts konumIlerlet(): lastik(x) = (x * d * c) / (d + c * x); d = viewport yuksekligi (parametre olarak gecir), c = 0.55 (iOS birebir) veya 0.15 (use-gesture, daha sert). Dogrusal LASTIK sabitini sil",
+    "etki": "COK-YUKSEK"
+   },
+   {
+    "baslik": "Reel hissi = FAST sonum (0.99) — bizim 0.998 'serbest liste' hissi veriyor",
+    "disReferans": "UIScrollView.DecelerationRate.normal = 0.998, .fast = 0.99 (ms basina hiz-koruma orani; medium.com/@esskeetit/scrolling-mechanics-of-uiscrollview-142adee1142c). React Native ScrollView docs: decelerationRate 'fast' = 0.99 ve iOS paging bu degeri kullanir (reactnative.dev/docs/scrollview). Sayisal fark: 2000 px/sn firlatma 0.998'de ~2.6 sn / ~1000 px coast eder; 0.99'da ~0.5 sn'de durur",
+    "bizdekiDurum": "fizik.ts:18 SONUM_MS=0.998 (iOS 'normal' birebir — deger dogru ama YANLIS mod). Gercek reel akislari (TikTok/IG) pagingEnabled + fast kombinasyonudur: kisa coast + karta oturma. Bizde 60 sn'lik turda tek firlatma 2.6 sn basibos akiyor, kart yakalama hedefleme hissi yok",
+    "onerilenDeger": "fizik.ts: SONUM_MS = 0.99 (veya kart-yakinligina gore 0.998→0.99 harmanla) + SosyalObezite.tsx'te coast bitiminde en yakin kart sinirina snap (iOS paging esdegeri). Oyun mekanigi 'karti yakala' oldugu icin snap ayrica hedeflemeyi oyunlastirir",
+    "etki": "COK-YUKSEK"
+   },
+   {
+    "baslik": "Bayat-ornek esigi 90 ms cok genis — Android 40 ms'de hizi sifirlar",
+    "disReferans": "Android VelocityTracker.cpp: ASSUME_POINTER_STOPPED_TIME = 40ms — parmak 40 ms hareketsiz kalirsa hiz sifir sayilir (android.googlesource.com/platform/frameworks/native libs/input/VelocityTracker.cpp)",
+    "bizdekiDurum": "fizik.ts:41 son ornek 90 ms'den eskiyse hiz=0. 40-90 ms araligindaki 'dur-birak' hala firlatma uretir — parmagini durdurup kaldiran oyuncu istemsiz kayma gorur (dosyadaki 'hortlak' yorumunun ayni sinifi, esik sadece yari yolda)",
+    "onerilenDeger": "fizik.ts: bayat-ornek esigini HIZ_PENCERESI_MS'ten AYIR — yeni sabit DURDU_ESIGI_MS = 40; firlatmaHizi():41'deki kontrol 90 yerine 40 kullansin (pencere 90 kalabilir)",
+    "etki": "YUKSEK"
+   },
+   {
+    "baslik": "Minimum firlatma hizi kapisi YOK — Android 50 dp/sn alti fling saymaz",
+    "disReferans": "Android ViewConfiguration.java: MINIMUM_FLING_VELOCITY = 50 (dp/sn) — bunun alti fling degildir, icerik oldugu yerde kalir (github.com/aosp-mirror/platform_frameworks_base core/java/android/view/ViewConfiguration.java). Swiper esdegeri: freeMode.minimumVelocity = 0.02 px/ms = 20 px/sn (nolimits4web/swiper src/modules/free-mode/free-mode.ts)",
+    "bizdekiDurum": "fizik.ts'de alt kapi yalnizca DURMA_ESIGI=12 px/sn (sonum sirasinda). Birakma aninda 13-50 px/sn arasi mikro-hizlar 'sumuklu' milimetrik kaymalar uretiyor — yavas birakista icerik net durmuyor",
+    "onerilenDeger": "fizik.ts: yeni sabit MIN_FIRLATMA = 50 (px/sn); firlatmaHizi() donus degeri |v| < 50 ise 0 dondursun",
+    "etki": "YUKSEK"
+   },
+   {
+    "baslik": "Hiz kestirimi 90 ms DUZ ORTALAMA — birakma hizini sistematik DUSUK tahmin eder",
+    "disReferans": "Android: LSQ2 (2. derece en-kucuk-kareler, ivmeyi modeller), HORIZON = 100 ms, HISTORY_SIZE = 20 ornek; X/Y ekseni varsayilan stratejisi LSQ2 (VelocityTracker.cpp DEFAULT_STRATEGY_BY_AXIS + VelocityTracker.h HORIZON = 100*1000000 ns). Swiper karsi-uc: yalnizca SON IKI olay arasi delta/dt, sonra /2 (free-mode.ts:111-112)",
+    "bizdekiDurum": "fizik.ts:33-51 pencere-icindeki ilk ve son ornek farki = 90 ms'lik ORTALAMA hiz ≈ ~45 ms ONCEKI anlik hiz. Hizlanarak biten gercek bir savurma (flick sonu ivmelidir) oldugundan guclu firlatma bizde zayif cikar — 'melas' hissinin olcum-tarafi ayagi",
+    "onerilenDeger": "fizik.ts firlatmaHizi(): pencereyi 90→50 ms'e indir VEYA son-agirlikli kestirim: son 2 ornegin anlik hizi ile 90 ms ortalamasinin max()'i. (Tam LSQ2 portu sart degil; 50 ms pencere Android/iOS davranisina yeterince yaklasir)",
+    "etki": "YUKSEK"
+   },
+   {
+    "baslik": "Ham hiz tavani YOK — Android 8000 dp/sn'de kirpar",
+    "disReferans": "Android ViewConfiguration.java: MAXIMUM_FLING_VELOCITY = 8000 (dp/sn) — dokunma gurultusunden dogan absurt hizlar bu tavanda kirpilir (aosp-mirror/platform_frameworks_base)",
+    "bizdekiDurum": "fizik.ts hicbir tavan uygulamiyor (tasarim karari gorsel harekete tavan koymamak — dogru; ama OLCUM gurultusu tavani ayri konu). Tek kotu ornek cifti (dt~1-8 ms) 20000+ px/sn uretebilir → ekran isinlanmis gibi atlar",
+    "onerilenDeger": "fizik.ts firlatmaHizi() donusunde clamp: MAX_FIRLATMA = 8000 px/sn. (Skor tavanindan bagimsiz; bu gorsel-oncesi olcum hijyeni)",
+    "etki": "ORTA"
+   },
+   {
+    "baslik": "Geri yaylanma 0.985^ms ustel cozulme — endustri spring kullanir",
+    "disReferans": "framer-motion drag birakiminda sinir-donusu: type inertia + bounceStiffness = 200, bounceDamping = 40, timeConstant = 750 (motiondivision/motion VisualElementDragControls.ts startAnimation). motion-dom inertia varsayilanlari: power = 0.8, timeConstant = 325, bounceStiffness = 500, bounceDamping = 10, restDelta = 0.5 (motion-dom/src/animation/generators/inertia.ts)",
+    "bizdekiDurum": "fizik.ts:71-75 geriYayla(): offset *= 0.985^ms — kritik-sonumlu ustel yaklasim, hiz tasimaz (firlatmayla sinira carpan icerik hizini yutup ayni yavas egriyle doner). Spring'deki 'carpma sertligi hizla orantili' hissi yok",
+    "onerilenDeger": "fizik.ts geriYayla(): mevcut hizi devralan sonumlu yay — stiffness = 200, damping = 40 (framer degerleri) ile a = -k*x - c*v entegrasyonu; en az, sinira hizli carpista donusun daha hizli baslamasi saglanmali",
+    "etki": "ORTA"
+   },
+   {
+    "baslik": "Toplam coast suresi referanslari: Chrome ~1.3 sn, iScroll sabit-yavaslama 0.0006 px/ms²",
+    "disReferans": "Chrome/Blink fling egrisi: pozisyon = alpha*e^(-gamma*t) - beta*t - alpha; kDefaultAlpha = -5707.62, kDefaultBeta = 172, kDefaultGamma = 3.7 (chromium/ui/events/gestures/fling_curve.cc) → egrinin v=0 suresi ≈ 1.3 sn. iScroll: deceleration = 0.0006 (px/ms²), destination = v²/(2*0.0006), duration = v/0.0006 (cubiq/iscroll src/utils.js momentum()). Lenis (smooth-scroll ucu): lerp = 0.1/frame, syncTouchLerp = 0.075, touchInertiaExponent = 1.7, duration = 1.2 sn (darkroomengineering/lenis README)",
+    "bizdekiDurum": "SONUM_MS=0.998 + DURMA_ESIGI=12 px/sn ile 2000 px/sn firlatma ~2.6 sn coast eder — Chrome'un 2 kati, 0.99-fast'in 5 kati. 60 sn'lik skorlu turda uzun coast 'oyuncu kaydirmadan puan akiyor' etkisi de yaratir (engine kart=1 puan)",
+    "onerilenDeger": "Bulgu #2 ile birlikte cozulur (SONUM_MS = 0.99 → ayni firlatma ~0.5 sn). DURMA_ESIGI 12 px/sn kalabilir (0.99'da suresel etkisi ihmal edilir)",
+    "etki": "ORTA"
+   },
+   {
+    "baslik": "TEYIT: 0.998/ms sabitinin kendisi iOS-normal ile birebir dogru; 90 ms pencere de norm araliginda",
+    "disReferans": "DecelerationRate.normal = 0.998 = 'her milisaniyede hizin %99.8'i korunur' (medium.com/@esskeetit scrolling-mechanics; RN docs ayni degerleri listeler). Android hiz penceresi HORIZON = 100 ms (VelocityTracker.h)",
+    "bizdekiDurum": "fizik.ts:18 SONUM_MS=0.998 ms-tabanli uygulanmis (Math.pow(0.998, dtMs)) — matematik dogru, frame-bagimsiz. Sorun degerin kendisi degil mod secimi (bulgu #2). HIZ_PENCERESI_MS=90, Android'in 100 ms'ine yakin — pencere BOYU dogru, kestirim YONTEMI yanlis (bulgu #5)",
+    "onerilenDeger": "Degisiklik yok — bu satirlarin 'zaten dogru' oldugu kaydi; fix turunda yanlislikla bozulmasin",
+    "etki": "DUSUK"
+   }
+  ],
+  "enDegerliKazanim": "SONUM_MS 0.998→0.99 (iOS 'fast' — gercek reel akislarinin kullandigi mod) + coast sonunda karta snap: tek basina 'serbest liste' hissini 'reel' hissine cevirir (2.6 sn basibos coast → 0.5 sn + karta oturma).",
+  "kaynaklar": [
+   "https://medium.com/@esskeetit/scrolling-mechanics-of-uiscrollview-142adee1142c",
+   "https://reactnative.dev/docs/scrollview",
+   "https://github.com/aosp-mirror/platform_frameworks_base/blob/main/core/java/android/view/ViewConfiguration.java",
+   "https://github.com/aosp-mirror/platform_frameworks_base/blob/main/core/java/android/widget/OverScroller.java",
+   "https://android.googlesource.com/platform/frameworks/native/+/refs/heads/main/libs/input/VelocityTracker.cpp",
+   "https://android.googlesource.com/platform/frameworks/native/+/refs/heads/main/include/input/VelocityTracker.h",
+   "https://github.com/chromium/chromium/blob/main/ui/events/gestures/fling_curve.cc",
+   "https://github.com/pmndrs/use-gesture/blob/main/packages/core/src/utils/maths.ts",
+   "https://github.com/motiondivision/motion/blob/main/packages/framer-motion/src/gestures/drag/utils/constraints.ts",
+   "https://gist.github.com/originell/6961057",
+   "https://github.com/nolimits4web/swiper/blob/master/src/modules/free-mode/free-mode.ts",
+   "https://github.com/cubiq/iscroll/blob/master/src/utils.js"
+  ]
+ },
+ {
+  "alan": "GitHub repoları — momentum scroll, jest kütüphaneleri, sanal liste, oyun döngüsü, doomscroll oyunları, leaderboard",
+  "bulgular": [
+   {
+    "baslik": "Fırlatma hızı kestirimi: 90ms düz ortalama, endüstri 25ms (hammer.js) / LSQ2-100ms (Android)",
+    "disReferans": "hammerjs/hammer.js src/input.js: COMPUTE_INTERVAL = 25ms, hız = delta/deltaTime (px/ms) her 25ms'de yeniden hesap (hammerjs.github.io/jsdoc/input.js.html). AOSP frameworks/native VelocityTracker.cpp: varsayılan strateji LSQ2 = son örneklere ikinci derece polinom uydurma (düz ortalama DEĞİL), scroll ekseni için IMPULSE (android.googlesource.com).",
+    "bizdekiDurum": "fizik.ts:24 HIZ_PENCERESI_MS=90 + firlatmaHizi() penceredeki İLK ve SON örnek arasında düz ortalama alıyor. 90ms'lik pencere fırlatmanın yavaş başlangıcını da hesaba katıyor → bırakma anındaki tepe hız sistematik DÜŞÜK tahmin ediliyor → fling'ler gerçek reel'den zayıf hissettiriyor.",
+    "onerilenDeger": "fizik.ts firlatmaHizi(): pencereyi 90→50ms indir VEYA 90ms'de kal ama son örnekleri ağırlıklandır (Android LSQ2 mantığı; basit versiyon: son 2 örnekten hız + önceki pencere hızıyla 0.8/0.2 low-pass — ariya/kinetic Part 2'nin birebir katsayısı).",
+    "etki": "COK-YUKSEK"
+   },
+   {
+    "baslik": "Bayat-örnek (dur-bırak) eşiği: bizde 90ms, Android'de 40ms — 40-90ms arası hâlâ hayalet fling",
+    "disReferans": "AOSP VelocityTracker.cpp: ASSUME_POINTER_STOPPED_TIME = 40ms — parmak 40ms hareketsiz kalırsa hız SIFIR sayılır (android.googlesource.com/platform/frameworks/native/+/master/libs/input/VelocityTracker.cpp).",
+    "bizdekiDurum": "fizik.ts:41 bayat-örnek koruması aynı sabiti (HIZ_PENCERESI_MS=90) kullanıyor. Oyuncu parmağını 40-89ms tutup kaldırırsa eski hareketli örnekler hâlâ pencerede → Android'in sıfırlayacağı durumda biz fling atıyoruz. his-denetiminin 'hortlak fling' bulgusu tam kapanmamış.",
+    "onerilenDeger": "fizik.ts: ayrı sabit BAYAT_ESIGI_MS = 40; satır 41'deki koşul `simdi - son.t > 40` olmalı (kestirim penceresi 50-90ms kalabilir, ikisi AYRI kavram).",
+    "etki": "YUKSEK"
+   },
+   {
+    "baslik": "Fling sonu kart-sınırına snap YOK — gerçek reel/feed hissinin tanımlayıcı parçası",
+    "disReferans": "nolimits4web/swiper (MIT, ~40k★, aktif) freeMode: momentum=true, momentumRatio=1, momentumVelocityRatio=1, minimumVelocity=0.02, sticky=false — sticky:true 'momentum bittiğinde en yakın slide sınırına yapış' davranışı (swiperjs.com/swiper-api#free-mode). iOS'ta karşılığı UIScrollView targetContentOffset ile hedefe yuvarlama.",
+    "bizdekiDurum": "SosyalObezite.tsx rAF döngüsü: hız DURMA_ESIGI(12 px/sn) altına düşünce olduğu yerde kalıyor — kartlar rastgele yarım kesilmiş durur. Gerçek reel/TikTok DAİMA bir içerik sınırında durur; 'kötü his'in en görünür kaynaklarından biri.",
+    "onerilenDeger": "fizik.ts'e snap adımı: hiz 0'a düşerken durma ofsetini kapalı-form projekte et (ofset + hiz/|ln(0.998)|/1000) ve en yakın KART_H(188px) katına hedefle; son ~200ms'de hedefe ease. Swiper'ın sticky mantığının 30 satırlık portu — kütüphane alınmaz, davranış alınır.",
+    "etki": "COK-YUKSEK"
+   },
+   {
+    "baslik": "Sönüm 0.998/ms (tc≈500ms) — iOS-web referansı 325ms, RN 'fast' 0.99: içerik uzun süre kayıyor",
+    "disReferans": "ariya/kinetic (github.com/ariya/kinetic) + ariya.io/2013/11/javascript-kinetic-scrolling-part-2: iOS taklidi için timeConstant=325ms, kapalı-form pozisyon = hedef - genlik*exp(-t/325); 60fps'te kare başına ×0.95. Framer Motion inertia varsayılanı: power=0.8, timeConstant=700 (motion.dev/docs/react-transitions).",
+    "bizdekiDurum": "fizik.ts:18 SONUM_MS=0.998 → zaman sabiti -1/ln(0.998)≈500ms; 1sn sonra hızın %13'ü hâlâ canlı. 0.998 UIKit'in resmi 'normal' oranı (yorum doğru), ama 188px'lik kısa kartlarda 500ms sabiti akışı 'durmak bilmiyor' hissine itiyor; ariya'nın ölçtüğü 325ms 1sn'de %4.6 bırakır.",
+    "onerilenDeger": "fizik.ts SONUM_MS: 0.998 → 0.9969 (=exp(-1/325), ariya iOS ölçümü) A/B ile dene; snap (bulgu 3) eklenirse ikisi birlikte kalibre edilmeli. Tek başına oynanacaksa 0.997 orta yol.",
+    "etki": "ORTA"
+   },
+   {
+    "baslik": "Lastik (overscroll) LİNEER 0.35 — referans formül asimptotik, iOS katsayısı 0.55",
+    "disReferans": "pmndrs/use-gesture (MIT, aktif) packages/core/src/utils/maths.ts rubberbandIfOutOfBounds: (mesafe*boyut*c)/(boyut+c*mesafe), varsayılan c=0.15, kaynak yorumunda iOS referansı c=0.55; boyut=görünür alan yüksekliği (github.com/pmndrs/use-gesture).",
+    "bizdekiDurum": "fizik.ts:22 LASTIK=0.35 + konumIlerlet() negatif bölgede delta*0.35 LİNEER — sınırsız: yeterince çekince içerik sınırsız gider. iOS lastiği asimptotik: ne kadar çekersen o kadar SERTLEŞİR, ekranın ~yarısından öteye geçmez.",
+    "onerilenDeger": "fizik.ts konumIlerlet(): negatif dal use-gesture formülüyle değişsin — c=0.55, dim=viewportH (SosyalObezite.tsx s.viewportH zaten var, parametre geçir). Üst sınır oyunda nadir; etki sınırlı ama 6 satırlık iş.",
+    "etki": "ORTA"
+   },
+   {
+    "baslik": "Geri yaylanma 0.985/ms (~%95 sönüm 200ms'de) — referanslar 500-800ms",
+    "disReferans": "better-scroll/better-scroll (MIT, aktif) varsayılanları: swipeBounceTime=500ms, bounceTime=800ms, momentumLimitTime=300ms, momentumLimitDistance=15px, deceleration=0.0015 (better-scroll.github.io/docs/en-US/guide/base-scroll-options.html).",
+    "bizdekiDurum": "fizik.ts geriYayla() 0.985^ms → zaman sabiti ~66ms; lastikten geri dönüş ~200ms'de bitiyor. Referans kütüphanelerin yaylanması 2.5-4× daha yavaş ve bu yüzden 'yaylanma' olarak ALGILANIYOR; bizimki sertçe geri çarpıyor.",
+    "onerilenDeger": "fizik.ts:73: 0.985 → 0.994 (tc≈166ms, yerleşme ~500ms = swipeBounceTime). Ayrıca momentumLimitDistance=15px karşılığı: 15px altı mikro-hareketten fling üretme (onUp'ta |mesafe|<15 → hiz=0).",
+    "etki": "ORTA"
+   },
+   {
+    "baslik": "Sanal liste kütüphanesine GEÇME — 10-kartlık DOM havuzu doğru mimari (karar sorusu)",
+    "disReferans": "TanStack/virtual (MIT, 7.1k★, aktif — canlı fetch): scroll-element + scroll-event güdümlü, her ofset değişimini framework re-render'ı (onChange→state) üzerinden akıtır; bvaughn/react-window aynı sınıf. Her ikisi de gerçek bir scroll container varsayar.",
+    "bizdekiDurum": "Bizde scroll container YOK: rAF içinde transform yazan, React commit=0 şartlı elle sürülen 10-kartlık havuz (SosyalObezite.tsx:474-497). Virtualizer'a geçiş her frame React render'ı demek — kendi şartımızı ihlal eder, his fizik kontrolü de kütüphaneye geçer.",
+    "onerilenDeger": "Değişiklik YOK — mevcut havuz kalsın. Kütüphaneler ancak oyun DIŞI listelerde (skor tablosu) kullanılabilir. Bu karar kapatılsın, tekrar açılmasın.",
+    "etki": "ORTA"
+   },
+   {
+    "baslik": "Oyun döngüsü: fixed-timestep kütüphanesi GEREKMİYOR, tek eksik jank telafisi zaten kapalı-formda",
+    "disReferans": "IceCreamYou/MainLoop.js (MIT): simulationTimestep=1000/60≈16.67ms sabit adım + biriken gecikmede panic mekanizması; 'çoğu ana döngü yanlış yazılır, kare hızına göre hızlanır/yavaşlar' (github.com/IceCreamYou/MainLoop.js).",
+    "bizdekiDurum": "SosyalObezite.tsx:124 dt'yi 50ms'te kırpıyor; fizik Math.pow(SONUM_MS, dtMs) kapalı-form → kare hızından bağımsız (MainLoop'un çözdüğü sınıf hata bizde YOK). Spawn/tur zamanı duvar saatinden (gecen=t-baslangic) → 50ms kırpma oyun süresini kaydırmaz. Mimari doğrulandı.",
+    "onerilenDeger": "Değişiklik YOK; MainLoop.js alınmaz. Tek not: 50ms kırpma janklı karede fiziği yavaşlatır ama skor sunucuda yeniden hesaplandığı için adalet sorunu yaratmaz.",
+    "etki": "DUSUK"
+   },
+   {
+    "baslik": "'Doomscroll simulator' isim alanı dolu ama kod değeri sıfır — öğrenilecek repo yok, isim çakışması var",
+    "disReferans": "aaronstanek/doom-scroll-simulator (MIT, 4 commit, 0★ — canlı fetch), hieuns/infinite-scrolling-demo (Phaser demo), github.com/topics/doomscrolling; itch.io'da 'Doomscrolling Simulator' (macicola) yayınlı.",
+    "bizdekiDurum": "Konseptte yalnız değiliz; mevcut GitHub örneklerinin hiçbirinde momentum fiziği + yakalama mekaniği + sunucu-doğrulamalı skor üçlüsü yok — teknik olarak öndeyiz. 'Doomscroll simulator' aramasında görünürlük için rakip az.",
+    "onerilenDeger": "Kod aksiyonu YOK. Pazarlama notu: EN/US aramada 'doomscroll simulator' terimi bu zayıf projelere gidiyor — sayfa meta/OG'sinde bu anahtar kelime geçerse boşluk bize kalır.",
+    "etki": "DUSUK"
+   },
+   {
+    "baslik": "Skor tablosu deseni endüstri standardıyla birebir — Upstash sorted-set örnekleriyle doğrulandı",
+    "disReferans": "upstash/redis-examples + upstash/examples (MIT): leaderboard = Redis sorted set, zadd({score,member}) + zrange(0,100) deseni (github.com/upstash/redis-examples); redis.io resmi leaderboard rehberi aynı desen.",
+    "bizdekiDurum": "engine.ts yorumu: skor tablosu zaten Redis sorted set + sunucu kendi skorunu hesaplıyor (sunucuSkoru) — referans mimariyle aynı. Formül-kilidi kararı (lansman sonrası değiştirilemez) doğru; fizik değişiklikleri (bulgu 1-6) skor formülüne DOKUNMUYOR, sadece his katmanında.",
+    "onerilenDeger": "Değişiklik YOK. Tek dikkat: bulgu 3 (snap) kart sayısını marjinal etkiler (durma noktası yuvarlanır) — mesafePuani tavan-kırpmalı olduğu için skor dağılımını bozmaz, yine de deploy öncesi teorikTavan testleri koşulsun.",
+    "etki": "DUSUK"
+   }
+  ],
+  "enDegerliKazanim": "Fling bittiğinde en yakın kart sınırına yumuşak snap (Swiper freeMode sticky davranışının ~30 satırlık portu) + fırlatma hızının 90ms düz ortalama yerine son-ağırlıklı kestirimi — 'gerçek reel' hissinin iki tanımlayıcı parçası da bu ikisinde.",
+  "kaynaklar": [
+   "https://github.com/ariya/kinetic",
+   "https://ariya.io/2013/11/javascript-kinetic-scrolling-part-2",
+   "https://hammerjs.github.io/jsdoc/input.js.html",
+   "https://android.googlesource.com/platform/frameworks/native/+/master/libs/input/VelocityTracker.cpp",
+   "https://github.com/pmndrs/use-gesture",
+   "https://better-scroll.github.io/docs/en-US/guide/base-scroll-options.html",
+   "https://swiperjs.com/swiper-api#free-mode",
+   "https://github.com/TanStack/virtual",
+   "https://github.com/IceCreamYou/MainLoop.js",
+   "https://github.com/aaronstanek/doom-scroll-simulator",
+   "https://github.com/upstash/redis-examples",
+   "https://motion.dev/docs/react-transitions"
+  ]
+ },
+ {
+  "alan": "Game feel / juice — tatmin hissi (Swink, Juice it or lose it, Art of Screenshake, haptik/sarsıntı literatürü)",
+  "bulgular": [
+   {
+    "baslik": "Yakalama anında hitstop (donma karesi) hiç yok — literatürün en etkili tek tekniği",
+    "disReferans": "Vlambeer 'Art of Screenshake' (Nijman, INDIGO 2013): vuruşta ~0.2 sn 'sleep' ekliyor ve 'fark edilmeden beyne işleme süresi verir' diyor. valdemird.com 'Game feel on the web': web'de yıkıcı onay anına 60-80ms hitstop öneriyor. Smash serisi (ssbwiki/Hitlag): hasarla orantılı hitlag, güçlü vuruşta 0.5 sn'ye kadar. arXiv 2208.06155 (19-özellik impact-feel çerçevesi, Steam bestseller taraması): hit stop, ses tutarlılığı ve kamera kontrolü en belirleyici 3 özellik — 'birinin eksikliği impact hissini tek başına öldürür'.",
+    "bizdekiDurum": "Hitstop YOK. yakalamaDene() içinde akış hiç duraksamadan akmaya devam ediyor; tek imza 150ms scale pop + rozet. Ses de bu turda kilitli (sentez §5) — arXiv üçlüsünün 3 kanalından 2'si (ses+hitstop) tamamen boş, yük tek başına görselde.",
+    "onerilenDeger": "SosyalObezite.tsx rAF döngüsü: S.current'a hitstopBitisT ekle; yakalamada hitstopBitisT = t + 80 (60-80ms bandı, valdemird). Donma yalnız GÖRSEL akışa: hitstop süresince offset/sönüm ilerletilmez (s.hiz korunur), tur saati ve spawn takvimi DEĞİŞMEZ (aklaYatkin ±2sn toleransı ve determinizm bozulmaz; 12 yakalama × 80ms = 960ms < 2000ms zaten güvenli). reduced=true'da atla.",
+    "etki": "COK-YUKSEK"
+   },
+   {
+    "baslik": "Ceza anında ekran sarsıntısı yok — kamera kanalı tamamen kapalı",
+    "disReferans": "Eiserloh GDC 2016 'Juicing Your Cameras With Math' (archive.org/GDC2016Eiserloh): trauma-tabanlı sarsıntı, shake = trauma² (0.30 trauma → %3, 0.60 → %22 sarsıntı); MAX_TRANSLATION=20px 'dikkat dağıtmayacak kadar düşük', MAX_ANGLE=10°. Vlambeer: rutin olay için küçük, gerçek olay için büyük olmak üzere ÜÇ kademeli sarsıntı merdiveni. arXiv 2208.06155: kamera kontrolü en etkili 3 özellikten biri.",
+    "bizdekiDurum": "Sarsıntı sıfır. Yanlış dokunmada yalnız yüzen -20 (600ms) + skor çipinde 150ms renk; kaçırmada yalnız kenarlık grileşmesi. Oyun konteyneri hiçbir olayda kıpırdamıyor.",
+    "onerilenDeger": "SosyalObezite.tsx: oyun kök div'ine rAF içinde translate sarsıntısı. Ceza = küçük kademe: trauma 0.3, max 6-8px, ~200ms sönümlü (Eiserloh'un 20px tavanının altı; oyun alanı tam ekran olduğundan küçük tut). Seri sıfırlayan kaçırma = orta kademe: trauma 0.5, max 10-12px. Yalnız transform (compositor-safe), reduced'da kapalı. Not: sarsıntıyı YAKALAMAYA koyma — yakalama pozitif, hitstop+pop onun kanalı; sarsıntı negatif olayların kanalı (Vlambeer merdiveni).",
+    "etki": "YUKSEK"
+   },
+   {
+    "baslik": "Yakalama pop'u overshoot'suz ve zayıf: 1.06 ölçek, tek yönlü ease-out",
+    "disReferans": "Jonasson & Purho 'Juice it or lose it' (Nordic Game Jam 2012): tek teknik alacaksan tween al — bounce/elastic overshoot'lu ölçek animasyonu ilk eklenen ve en çok fark yaratan katman; blokatt 'how 2 game juice': 'bare minimum = tweening + variations'. Material Design 3 motion tokens (m3.material.io): vurgulu giriş için emphasized-decelerate cubic-bezier(0.05, 0.7, 0.1, 1), küçük bileşen vurgusu duration-medium1 = 250ms.",
+    "bizdekiDurum": "im.style.scale='1.06' + 150ms 'scale 150ms ease-out' + 150ms sonra setTimeout ile 1'e dönüş. Tepe noktası %6 — algı eşiğinin hemen üstü; overshoot (1'in üstüne çıkıp geri oturma) yok, iki setTimeout arası simetrik olduğundan 'yay' değil 'nefes' gibi okunuyor.",
+    "onerilenDeger": "SosyalObezite.tsx yakalamaDene(): scale 1 → 1.12 → 1; çıkış 90ms emphasized-decelerate benzeri cubic-bezier(0.05,0.7,0.1,1), dönüş 160ms (toplam ~250ms, M3 medium1). Hitstop ile birlikte: 80ms donma sırasında pop tepede kalır, akış çözülürken oturur — Vlambeer'in 'sleep + kick' bileşimi.",
+    "etki": "YUKSEK"
+   },
+   {
+    "baslik": "GERÇEK spawn girişinde anticipation yok: 120ms düz linear opacity ile 'ışık açılır gibi' beliriyor",
+    "disReferans": "M3 motion: viewport'a giren içerik emphasized-decelerate cubic-bezier(0.05, 0.7, 0.1, 1) ile girer, küçük yüzeyler 250ms (duration-medium1); linear easing yalnız opacity-only çıkışlara önerilir. Swink 'Game Feel': olayın algılanması polish katmanının işi — oyuncu 100ms korreksiyon döngüsüyle oynar, girişi kaçırılan hedef mekanik olarak da kaçmış sayılır. arXiv 2208.06155: dikkat çekmeyen olay sinyali = impact-feel çöküşü.",
+    "bizdekiDurum": "isaretRef transition: 'opacity 120ms linear' — ölçek girişi yok (scale='1' anında yazılıyor). 2000+ px/sn akış sırasında (his-denetimi §0: '0.1-0.3 sn ekranda parlar') düz fade algılanamıyor; kaçan gerçek 'piyango' hissi üretiyor. Bu, kullanıcının 'çok kötü' yargısıyla en doğrudan bağlı bulgu.",
+    "onerilenDeger": "SosyalObezite.tsx işaret stili: spawn'da scale 0.9 → 1.03 → 1, 250ms, cubic-bezier(0.05,0.7,0.1,1); opacity 120ms kalabilir. Ek: boxShadow glow'u spawn sonrası ilk 400ms'de bir kez pulse (mevcut 0.34 alpha → 0.55 → 0.34, rAF'ta) — sabit parlaklık yerine değişim dikkat çeker (blokatt: 'USE SIN()'). reduced'da yalnız opacity.",
+    "etki": "YUKSEK"
+   },
+   {
+    "baslik": "Haptik desen yanlış kalibre: tek düz 50ms buzz; Android tık standardı <20ms, iOS'ta API zaten yok",
+    "disReferans": "Android Haptics (source.android.com haptics-constants-primitives): CLICK/TICK/LOW_TICK kısa primitifleri <20ms — net 'tık' hissi bu banttadır; 50ms tek parça titreşim bildirim buzz'ı kategorisine düşer. Zengin an için desen (kompozisyon) önerilir. iOS: Vibration API Safari'de desteklenmiyor (web-platform-tests/interop#837); checkbox-switch hack'i (vibrator.dev, ios-haptics) iOS 17.4-26.4'te çalışıp 26.5'te Apple tarafından kapatıldı — güvenilir kanal DEĞİL.",
+    "bizdekiDurum": "navigator.vibrate?.(50) — yalnız yakalamada, tek düz 50ms. Cezada/kaçırmada haptik yok. iOS'ta hiçbir şey titremiyor (koddaki 'görsel imza asıl kanal' notu doğru ama Android tarafı da yanlış kalibre).",
+    "onerilenDeger": "SosyalObezite.tsx: yakalama = navigator.vibrate?.([18, 50, 22]) (çift vuruş: kısa tık + vurgu — Android 'zengin an' kompozisyon deseni); yanlış dokunma = vibrate?.(12) (tek zayıf tık; ceza gövdeye değil parmağa küçük 'hayır'); kaçırmaya haptik EKLEME (pasif olay, oyuncunun eylemi yok). iOS hack'i EKLEME (26.5'te ölü, bakım borcu).",
+    "etki": "ORTA"
+   },
+   {
+    "baslik": "Yakalamada parçacık yok — tek dopamin anı çıplak",
+    "disReferans": "'Juice it or lose it': parçacıklar tween'den sonra eklenen ikinci büyük katman (blok kırılınca parça saçılması turnusol örneği); blokatt: 'randomisation everywhere — particle effects, colour tinting'. Vlambeer: kalıcılık (permanence) — olaydan iz kalması hissi büyütür.",
+    "bizdekiDurum": "Parçacık sıfır. Yakalama izi 150ms sonra tamamen kayboluyor; 'bir şey kazandım' kalıntısı yok.",
+    "onerilenDeger": "SosyalObezite.tsx: 8 adet önceden mount edilmiş span havuzu (asit-yeşili #A8E600 nokta/çubuk), yakalamada işaret merkezinden rastgele açıyla 40-80px saçılıp 400ms'de sönme; yalnız transform+opacity (backdrop-blur dersiyle aynı sebep: compositor dışına çıkma), rAF içinde sürülür, React'siz. Havuz sabit → GC/DOM maliyeti sıfıra yakın. reduced'da kapalı.",
+    "etki": "ORTA"
+   },
+   {
+    "baslik": "Skor çipi sayı atlaması: +75 tek karede zıplıyor, count-up/tick yok",
+    "disReferans": "blokatt 'how 2 game juice': skor enterpolasyonu (lerp ile akan sayı) + monospace font juice temel listesinde; 'Juice it or lose it' skor sayacını tween'lenen ilk öğelerden biri olarak gösterir. M3: küçük durum değişimi duration-short2 = 100ms.",
+    "bizdekiDurum": "setHud 250ms throttle ile skor bir karede 132→207 zıplıyor; sentez §3 '100ms scale-tick' kararı henüz kodda yok. tabular-nums mono zaten var (altyapı hazır).",
+    "onerilenDeger": "SosyalObezite.tsx: skorRef'e yazımı rAF'ta lerp'le (gösterilen += (hedef-gösterilen)*0.15/frame, blokatt deseni) + değer değiştiğinde 100ms scale 1→1.08→1 tick (M3 short2). React state yerine mevcut skorRef DOM yazımı kullanılırsa throttle da kalkar.",
+    "etki": "ORTA"
+   },
+   {
+    "baslik": "Olay şiddeti merdiveni yok: seri kaybı (skorun ~%70'ini yöneten olay) ile sıradan kaçırma aynı cılız imzayı alıyor",
+    "disReferans": "Vlambeer: geri bildirim ÜÇ kademeli olmalı — rutin olay küçük, gerçek olay büyük; Smash (ssbwiki/Hitlag): şiddet hasarla ORANTILI ölçeklenir, sabit değil. arXiv 2208.06155: iyi oyunlar impact şiddetini olayın önemine bağlar.",
+    "bizdekiDurum": "Kaçırma imzası her durumda aynı: borderColor #3A3A3A + scale 0.97. ×2.0 seri taşırken kaçırmak (kayıp ≥100 puan/gerçek) ile seri 0'da kaçırmak görsel olarak özdeş. HUD'da seri göstergesi de yok (sentez §3'te kararlı, kodda yok).",
+    "onerilenDeger": "SosyalObezite.tsx: kaçırma imzasını s.seri'ye dalla — seri==0: mevcut sönme; seri>0: orta kademe (bulgu-2'deki trauma 0.5 sarsıntı + işaret 300ms'de 14px aşağı düşerek sönme + HUD'a eklenecek seri noktalarının boşalma titremesi). Şiddet farkı çarpan mekaniğini İLK KEZ hissettirir.",
+    "etki": "ORTA"
+   },
+   {
+    "baslik": "Hıza bağlı hiçbir görsel deformasyon/tepki yok — akış her hızda aynı görünüyor",
+    "disReferans": "'Juice it or lose it': topun hıza göre stretch'i (velocity-scaled deformation) talkta ilk eklenen efektlerden; Swink: hissedilen hız = polish'in sattığı şey, simülasyonun değil. Eiserloh: hız hissi kamera/ölçek diliyle verilir.",
+    "bizdekiDurum": "Kartlar 300 px/sn'de de 3000 px/sn'de de piksel-özdeş akıyor. Fizik doğru (0.998^ms iOS eşdeğeri) ama hızın GÖRSEL karşılığı sıfır — 'gerçek reel' hissi fizik + görsel hız dili toplamıdır.",
+    "onerilenDeger": "SosyalObezite.tsx rAF: |s.hiz| > 1500 px/sn iken kart konteynerine scaleY(1 + min(|hiz|/40000, 0.03)) (tepe %3, transform-origin akış yönünde) — eşiğin altında sıfır, bırakınca sönümle 1'e döner. Alternatif ucuz sürüm: yüksek hızda kart opacity 0.92 (motion blur iması). İkisi de compositor-only. Gerçek reel'ler deforme olmaz — bu yüzden tepe %3'te tutulur: bilinçaltı hız iması, karikatür değil.",
+    "etki": "DUSUK"
+   }
+  ],
+  "enDegerliKazanim": "Yakalama anına 80ms görsel hitstop (akış donması) + 1.12 overshoot pop eklemek — ses kilitliyken arXiv 2208.06155'in en etkili üç kanalından bizde tamamen boş duran ikisini (hit stop + kamera) tek commit'te açan değişiklik.",
+  "kaynaklar": [
+   "https://www.youtube.com/watch?v=AJdEqssNZ-U",
+   "https://theengineeringofconsciousexperience.com/jan-willem-nijman-vlambeer-the-art-of-screenshake/",
+   "https://valdemird.com/blog/game-feel-on-the-web/",
+   "https://www.youtube.com/watch?v=Fy0aCDmgnxg",
+   "https://me.blokatt.net/post/144808979049/how-2-game-juice",
+   "https://archive.org/details/GDC2016Eiserloh",
+   "https://www.ssbwiki.com/Hitlag",
+   "https://arxiv.org/abs/2208.06155",
+   "https://source.android.com/docs/core/interaction/haptics/haptics-constants-primitives",
+   "https://github.com/web-platform-tests/interop/issues/837",
+   "https://vibrator.dev/",
+   "https://m3.material.io/styles/motion/easing-and-duration/tokens-specs"
+  ]
+ },
+ {
+  "alan": "Viral yarışma ve paylaşım tasarımı",
+  "bulgular": [
+   {
+    "baslik": "Paylaşım formatı: görsel kart değil, tek tıkla kopyalanan spoiler'sız emoji SATIRI",
+    "disReferans": "Wordle: 1 Kasım 2021'de 90 oyuncu → Ocak 2022 başı 300.000+ → birkaç hafta sonra 2M+/gün (en.wikipedia.org/wiki/Wordle). Patlamayı tetikleyen şey oyun değil, 16 Aralık 2021'de eklenen paylaş butonu: cevabı ele vermeyen 🟩🟨⬛ emoji ızgarası + 'Wordle 180 3/6' satırı, panoya metin olarak kopyalanıyor (x.com/powerlanguish/status/1471493886031773707). Format oyuncular (@irihapeta, 2 Aralık 2021) tarafından icat edildi, Wardle ürüne aldı (thespinoff.co.nz 13-01-2022).",
+    "bizdekiDurum": "Paylaşım kartı 'N gerçeği kurtardım' yazan görsel bir kart; skor küçük yazılı. Emoji/metin formatı yok, tur akışını gösteren spoiler'sız dizi yok. Görsel kart WhatsApp/X'te metin kadar sürtünmesiz yayılmaz — Wordle'ın gücü panoya düşen DÜZ METİN olmasıydı.",
+    "onerilenDeger": "Tur-sonu ekranına (OyunKabuk.tsx tur-sonu bloğu) 'kopyala' butonu: `SOSYAL OBEZİTE #<günNo>\\n🟢🟢⚫🟢🟢🟢⚫🟢🟢🟢🟢🟢 9/12 ×2\\nclubbeans.com/sosyal-obezite`. GERCEK_SAYISI=12 (engine.ts:15) zaten olay listesi ('yakala'/'kacir' dizisi, engine.ts:135) olarak elde — 12'lik emoji satırı sıfır ek veriyle üretilir. 'N gerçeği kurtardım' cümlesi kalır, emoji satırı üstüne eklenir.",
+    "etki": "COK-YUKSEK"
+   },
+   {
+    "baslik": "Herkes AYNI turu oynamalı: günlük sabit seed = kıyaslanabilir yarış",
+    "disReferans": "GeoGuessr Daily Challenge: her gün TÜM oyunculara aynı 5 lokasyon, tavan 25.000 puan — skorlar ancak aynı içerikte kıyaslanabilir olduğu için arkadaş yarışı çalışıyor; ayrıca oyun sonu ekranından 'challenge link' üretilip arkadaşa aynı seed gönderiliyor (geoguessr.com/daily-challenges; geoguessr.canny.io challenge-link talebi). Wordle'da da 'herkes aynı bulmacayı çözüyor' = ortak kültürel an, paylaşımın anlamlı olmasının önkoşulu (philaverse.substack.com/p/wordle-a-classic-case-of-scarcity).",
+    "bizdekiDurum": "spawnTakvimi(seed) zaten deterministik (engine.ts:74-108, mulberry32) ve sunucu seed'i doğrulayabiliyor — altyapı HAZIR ama seed oyuncu-başına üretiliyor: iki oyuncunun 500 puanı farklı spawn şansına denk gelebiliyor, 'Bugün' tablosundaki kıyas kısmen piyango.",
+    "onerilenDeger": "Sunucu seed üretimine `gunlukSeed = 'so-' + YYYY-MM-DD` sabiti: 'Bugün' skor tablosuna yazan tur bu seed'le oynanır (engine.ts'e `gunlukSeed()` helper + API'de seed ataması). Ek: tur-sonu 'arkadaşına meydan oku' linki `?seed=<seed>` — gelen oyuncu aynı spawn takvimini oynar, sonuç ekranında iki skor yan yana. Skor formülü DEĞİŞMEZ, lansman kilidi (engine.ts:7-9) korunur.",
+    "etki": "COK-YUKSEK"
+   },
+   {
+    "baslik": "Deneme sınırı sorusu: ikili yapı — 'Günün Turu' günde 1 resmi hak + serbest mod sınırsız",
+    "disReferans": "İki zıt viral model de belgeli: (a) Wordle günde-1 = yapay kıtlık; binge'i engelleyip beklenti yaratıyor, herkes aynı gün aynı şeyi konuşuyor (cnbc.com/2022/02/15 'bite-sized fun'; philaverse.substack.com scarcity analizi). (b) Flappy Bird sınırsız anında-retry = 'rage loop'; yüksek skor ekran görüntüleri + öfke paylaşımları viralitenin motoru (now.temple.edu 2024-09-20; vocal.media/gamers/farewell-to-flappy-bird). İkisi birbirini dışlamıyor: GeoGuessr Daily Challenge'da günlük tur 1 denemedir, serbest oyun sınırsızdır.",
+    "bizdekiDurum": "Günlük deneme sınırı YOK; her deneme aynı tabloya yazıyor. Bu, 'Bugün' tablosunu en-çok-deneyen kazanır grind'ına çevirir (deneme sayısı beceri sinyalini boğar) ve Wordle-tipi 'tek atış heyecanı + yarın yine gel' döngüsünü tamamen kaçırır. Sınırsızlığın Flappy-faydası (retry bağımlılığı) ise zaten elimizde.",
+    "onerilenDeger": "Sınır KOYMA ama ayrıştır: 'Günün Turu' (günlük sabit seed, günde TEK resmi deneme, 'Bugün' tablosuna yalnız o yazılır — localStorage `soGunlukDeneme:<tarih>` + sunucuda IP/anon-id ile aynı gün ikinci yazımı reddet) + 'Antrenman' modu sınırsız (tabloya yazmaz, 'rekorunu geç' oturum-içi hedefiyle Flappy-retry döngüsü). OyunKabuk.tsx'e mod ayrımı + skor API'sine gün-kilidi.",
+    "etki": "YUKSEK"
+   },
+   {
+    "baslik": "Near-miss tur-sonu: 'şu isme 12 puan kaldı' — tekrar-oynatmanın en belgeli tetiği",
+    "disReferans": "Clark ve ark. 2009 (Neuron): near-miss sonuçlar beyinde GERÇEK kazançla aynı ödül devrelerini aktive ediyor; slot literatüründe ~%30 near-miss oranı oynamaya devam etme davranışını en çok artıran oran (psychologyofgames.com/2016/09/the-near-miss-effect-and-game-rewards; ncbi.nlm.nih.gov/pmc/articles/PMC7214505). Tasarım çevirisi: sistem 'kaybettin' değil 'NE KADAR yaklaştın' vurgular (medium.com/@milijanakomad near-miss mekanikleri).",
+    "bizdekiDurum": "Tur sonunda yalnız kendi skorun + 'rekoru geç: 430' (his-denetimi-sentez.md §3, oturum-içi rekor) planlı. Skor tablosuyla arasında köprü yok: oyuncu 8. sıradaysa 7.'ye kaç puan kaldığını görmüyor — near-miss anı üretilmiyor, 'bir tur daha' butonunun duygusal yakıtı eksik.",
+    "onerilenDeger": "Tur-sonu ekranına (OyunKabuk.tsx) skor API'sinden 2 satır: hemen üstündeki takma ad + fark ('deniz_04'ü geçmek için 12 puan') ve bugünkü sıra. Fark <50 puansa (bir yakalama değeri, YAKALAMA_TABAN=50) satır vurgulu — 'tek gerçek fazla yakalasan geçiyordun' mesajı near-miss'i somutlar. Redis sorted-set'te ZRANK+ZRANGE ile bedava.",
+    "etki": "YUKSEK"
+   },
+   {
+    "baslik": "Ham sıra değil yüzdelik dilim: '#4.372' umutsuzluk, 'en iyi %24' paylaşılabilir gurur",
+    "disReferans": "Yu-kai Chou (Octalysis) lider-tablosu rehberi: '500.000 içinde #42.372' göstermek çaresizlik aktive eder; aynı veri 'en iyi %24' olarak gösterilince ustalığa-ilerleme hissi verir — tabloların %90'ı kazanamayanları demotive eder, yüzdelik bunu tersine çevirir (yukaichou.com/gamification-analysis/leaderboard-design-definitive-guide-octalysis; nudgenow.com leaderboard rehberi aynı ilkeyi 'top 20%' örneğiyle verir).",
+    "bizdekiDurum": "Skor tablosu ham sıralı liste (Bugün/Tüm Zamanlar). Paylaşım kartında kıyas metriği hiç yok — 'N gerçeği kurtardım' kişisel ama yarışmasız; alan kim olursa olsun kendi konumunu bilmiyor, kartı gören de 'iyi mi kötü mü' okuyamıyor.",
+    "onerilenDeger": "Tur-sonu + paylaşım metnine yüzdelik satır: 'bugün oyuncuların %X'inden önde' (Redis ZCOUNT/ZCARD, 1 sorgu). İlk 10'daysa yüzdelik yerine ham sıra ('bugün 3.') — tepe için ham sıra prestij, geri kalan %90 için yüzdelik. Emoji-satırı paylaşımına (bulgu 1) bu satır da girer.",
+    "etki": "YUKSEK"
+   },
+   {
+    "baslik": "'Bugün' sekmesi varsayılan olmalı — tüm-zamanlar tablosu yeni oyuncuya kapalı yarış",
+    "disReferans": "Trophy.so + Adrian Crook lider-tablosu analizleri: all-time tablolarda erken katılan kapanmaz fark açar, yarış 'başlamadan bitmiş' hissedilir; günlük/haftalık reset her yeni oyuncuya İLK GÜNDEN kazanılabilir bağlam verir — time-based reset modern oyun tasarımının en etkili uzun-vade retention aracı sayılıyor (trophy.so/blog/leaderboards-feature-gamification-examples; adriancrook.com/how-leaderboards-impact-player-retention).",
+    "bizdekiDurum": "Bugün + Tüm Zamanlar ikilisi VAR (doğru karar) ama hangi sekmenin varsayılan açıldığı ve tabloda oyuncunun kendi satırının sabitlenip sabitlenmediği belirsiz. Lansman büyüdükçe Tüm Zamanlar, günlük-tekrar ziyaretçisi için ölü vitrine döner.",
+    "onerilenDeger": "Skor tablosu bileşeninde: (1) varsayılan sekme = Bugün; (2) oyuncunun kendi satırı listede görünmese de altta sabit ('sen: 430 — %24'); (3) lansman sonrası haftalık sekme eklemeye hazır Redis anahtar şeması (`so:lb:daily:<tarih>` zaten varsa `so:lb:weekly:<ISO-hafta>` eklemek bedava).",
+    "etki": "ORTA"
+   },
+   {
+    "baslik": "Arkadaş kıyası girişsiz de kurulur: rövanş linki = bizim tek K-faktör kanalımız",
+    "disReferans": "Zynga'nın kırılımı: rastgele yabancı yerine GERÇEK arkadaşlarla yarışan tablolar — kişisel ve adil hissedilen yarış engagement'ı katladı (yukaichou.com leaderboard rehberi Zynga vakası). Viral döngü matematiği: K = davet/kişi × dönüşüm; sürdürülebilir K 0.15-0.25 iyi, 0.4 çok iyi; davet-link dönüşümü pratik örneklerde ~%40 (reteno.com/blog/what-is-k-factor; viral-loops.com/blog/5-metrics-for-your-referral-campaign). Davet promptu duygusal zirvede (milestone/rekor sonrası) gösterilince paylaşım artar (tapp.so/guide-viral-loops-mobile-apps).",
+    "bizdekiDurum": "Takma adlı GLOBAL tablo yalnız — arkadaş grafiği yok (web oyunu, login yok, doğru). Ama kişiden-kişiye meydan okuma kanalı da yok: paylaşım kartı tek yönlü megafon, dönüş yolu ('seni geçtim' cevabı) tasarlanmamış — K-faktör üreten döngü kapanmıyor.",
+    "onerilenDeger": "Bulgu 2'deki `?seed=` linkine meydan-okuma parametresi: `?d=<davet-id>` — davet edenin skoru sunucuda 24 saat tutulur, gelen oyuncu AYNI seed'i oynar, tur sonunda 'sen 430 — deniz_04 512' yan yana + 'cevabını gönder' butonu (aynı mekanizma ters yönde). Tek Redis hash + 2 API ucu; login gerektirmez.",
+    "etki": "YUKSEK"
+   },
+   {
+    "baslik": "Gün serisi (streak): 'Günün Turu'na dönüşün en güçlü çengeli",
+    "disReferans": "Duolingo: 7+ gün serisi olan kullanıcı, seri kurmayanın 2.4 KATI oranında retain oluyor; şirket streak'i 'üründeki en etkili tek retention kolu' ilan etti, 32M DAU 7+ gün seride (duolingo.deconstructoroffun.com/mechanics/streaks; blog.duolingo.com/how-streaks-keep-duolingo-learners-committed). Wordle da oynanış sayacı/serisiyle aynı kancayı kullanır — kayıp-kaçınma psikolojisi.",
+    "bizdekiDurum": "Seri kavramı yalnız TUR İÇİ çarpan merdiveninde var (CARPAN_MERDIVENI, engine.ts:32). Günler-arası dönüş çengeli sıfır: bugün oynayanın yarın dönmesi için hiçbir birikimli sebep yok — ödülsüz tasarımda (bilinçli karar) streak, ödül vermeden dönüş sağlayan tek mekanik.",
+    "onerilenDeger": "Bulgu 3'teki Günün Turu'na bağlı gün-serisi: localStorage `soSeri:{sonTarih, gun}` (sentezdeki `donenOyuncuMesaji` localStorage deseniyle aynı KVKK notu kapsar). Tur-sonu + paylaşım metnine '🔥 4. gün' rozeti — emoji satırında seri de yayılır (Wordle'ın 'kaçıncı gün' numarası gibi kimlik üretir). Sunucu değişikliği gerekmez.",
+    "etki": "ORTA"
+   },
+   {
+    "baslik": "Tohum trafik: ilk 100 oyuncu tek kapalı gruptan gelmeli, format orada test edilmeli",
+    "disReferans": "Wordle'ın ilk kitlesi Wardle'ın ailesi + bir Yeni Zelanda arkadaş grubu; paylaşım formatının kendisi bile ürünün değil o KAPALI GRUBUN icadı (2 Aralık 2021 @irihapeta, 16 Aralık üründe) ve grid'ler önce WhatsApp/grup sohbetlerinde dolaştı, Twitter patlaması sonra geldi (thespinoff.co.nz/media/13-01-2022; videogamecanon.com/adventurelog/the-history-of-wordle). Flappy Bird'de de tetik mağaza değil sosyal akışlardaki skor-ekran-görüntüleriydi (now.temple.edu 2024-09-20).",
+    "bizdekiDurum": "Lansman planı belirsiz; mevcut varlıklar (X Radar kokpiti, Higgsfield içerik motoru — MEMORY) geniş-yayın araçları. Wordle deseni tersini söylüyor: viral format önce 20-50 kişilik grup sohbetinde 'cevap verilen' bir şeye dönüşmeli; grupta kimse skoruna cevap yazmıyorsa format geniş yayında da çalışmaz.",
+    "onerilenDeger": "Kod değil süreç: yayın öncesi emoji-satırı formatını (bulgu 1) 2-3 gerçek WhatsApp grubunda 1 hafta koştur; ölçüt = paylaşıma CEVAP oranı (yanıt/paylaşım ≥ 0.5 hedef) ve link tıklaması. Format tutmazsa satırı değiştirmek lansman ÖNCESİ serbest — skor tablosu kilidi (engine.ts:7-9) paylaşım metnini kapsamıyor.",
+    "etki": "ORTA"
+   }
+  ],
+  "enDegerliKazanim": "Günlük sabit-seed 'Günün Turu' (günde tek resmi deneme, herkes aynı spawn takvimi) + tur olaylarından üretilen tek-tıkla-kopyalanan 12'lik spoiler'sız emoji satırı — Wordle'ı 90 oyuncudan 2M'ye taşıyan iki mekaniğin (ortak-bulmaca + metin-paylaşım) mevcut deterministik engine üzerine neredeyse bedava kurulması.",
+  "kaynaklar": [
+   "https://en.wikipedia.org/wiki/Wordle",
+   "https://x.com/powerlanguish/status/1471493886031773707",
+   "https://thespinoff.co.nz/media/13-01-2022/those-coloured-boxes-on-twitter-are-new-zealands-fault",
+   "https://www.geoguessr.com/daily-challenges",
+   "https://www.cnbc.com/2022/02/15/bite-sized-fun-the-psychology-behind-your-sudden-wordle-obsession.html",
+   "https://now.temple.edu/news/2024-09-20/flappy-bird-return-after-10-year-hiatus-true-story-behind-worlds-most-viral-mobile-game",
+   "https://www.psychologyofgames.com/2016/09/the-near-miss-effect-and-game-rewards/",
+   "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7214505/",
+   "https://yukaichou.com/gamification-analysis/leaderboard-design-definitive-guide-octalysis/",
+   "https://duolingo.deconstructoroffun.com/mechanics/streaks",
+   "https://reteno.com/blog/what-is-k-factor-definition-calculation-tips-for-mobile-apps",
+   "https://adriancrook.com/how-leaderboards-impact-player-retention/"
+  ]
+ },
+ {
+  "alan": "Benzer oyunlar ve post-mortem'ler (dış referans araştırması)",
+  "bulgular": [
+   {
+    "baslik": "Anında yeniden başlatma — Super Hexagon dersi (bizim tur süremizle birebir aynı format)",
+    "disReferans": "Super Hexagon: ortalama oyun ~59 sn, 60 sn = seviye bitirme; Cavanagh: 'kısa oturumlar tekrar oynamaya davet etsin diye var' — kaybedince ANINDA (ara ekransız, <1 sn) yeni tura girilir, oyuncu ilerleme kaybı hissetmez (Time Extension 'Making of Super Hexagon' + Engadget 2012 röportajı)",
+    "bizdekiDurum": "60 sn tur (TUR_SURESI_MS=60000) formatımız Super Hexagon ile aynı, ama tur sonunda istatistik/geri dönüş ekranı akıyor, 'bir tur daha' İKİNCİL buton (store CTA birincil, sentez §5) ve restart-yolu süresi hiç ölçülmedi",
+    "onerilenDeger": "OyunKabuk.tsx: 'bir tur daha' = tek dokunuş, dokunuştan ilk kartın akmasına ≤1000 ms; itiraf/istatistik akışı yalnız turNo===1 (sentezle uyumlu); restart yolunu 1 sn üstüne çıkaran her animasyon kesilir",
+    "etki": "COK-YUKSEK"
+   },
+   {
+    "baslik": "Spoiler'sız emoji sonuç kartı — Wordle'ın tek viral mekaniği bizde hiç yok",
+    "disReferans": "Wordle: Aralık 2021'de eklenen emoji-grid paylaşımıyla 90 → 300.000+ oyuncu (2 ay, NYT 3 Oca 2022); Ara 2021–Şub 2022 arası 23,5 milyon paylaşım tweet'i; mekaniğin özü = sonucu SPOİLERSİZ gösteren, meraklandıran desen (aakashg.com 'Wordle is the Anti-Growth Hack', knowyourmeme)",
+    "bizdekiDurum": "Redis skor tablosu (Bugün/Tüm Zamanlar) var ama oyuncunun turu dışarı taşıyacağı hiçbir paylaşım eseri yok — viral hedefli oyunda sıfır paylaşım mekaniği",
+    "onerilenDeger": "OyunKabuk.tsx tur sonu + yeni lib/game/paylasim.ts: Web Share API metni 'SOSYAL OBEZİTE 430 · 🫘🫘⬛🫘⬛🫘... · clubbeans.com/sosyal-obezite' — 12 gerçeğin yakala/kacir sıralı olay listesi engine.ts'te ZATEN var, ek veri gerekmez; emoji deseni skoru açıklamadan merak uyandırır",
+    "etki": "COK-YUKSEK"
+   },
+   {
+    "baslik": "Juice katmanı fizikten önce gelir — 'Juice It or Lose It' kanıtı",
+    "disReferans": "GDC 2012 (Jonasson & Purho): aynı Breakout klonu, TEK kural değişmeden squash/stretch + partikül + trail + ekran sarsıntısı + ses katmanlarıyla sahnede 'ölü'den 'canlı'ya dönüştürüldü; 'his' farkının tamamı geri bildirim katmanında (gdcvault.com/play/1016487)",
+    "bizdekiDurum": "Yakalama/kaçırma/ceza olay imzaları kodda YOK (sentez §3'te planlı, uygulanmamış); oyuncu yakalayıp yakalamadığını skordan çıkarım yaparak anlıyor — 'çok kötü' hissinin kanıtlanmış birincil kaynağı sınıfı",
+    "onerilenDeger": "SosyalObezite.tsx:223-233, 373-384 — sentez değişiklik 3 aynen (150 ms pop + gerçek-puan rozeti, 250 ms gri sönme, 600 ms yüzen -20); dış referans bunun fizik sabitlerine (SONUM_MS=0.998, HIZ_PENCERESI_MS=90) dokunmadan önceki en yüksek kaldıraç olduğunu doğruluyor",
+    "etki": "COK-YUKSEK"
+   },
+   {
+    "baslik": "Reaksiyon bütçesi: 1800 ms pencere cömert AMA yalnız işaret gerçekten görünürse",
+    "disReferans": "Human Benchmark: 81+ milyon ölçümde medyan görsel reaksiyon 273 ms, ortalama 284 ms, kütle 220–320 ms; ölçüm TAM-EKRAN renk değişimi (maksimum salience) ile alınıyor — küçük/bağlam-içi uyaranda algılama süresi belirgin uzar (humanbenchmark.com/tests/reactiontime/statistics)",
+    "bizdekiDurum": "YAKALAMA_PENCERESI_MS=1800 ve YAKALANABILIR_MS=1500 medyan reaksiyonun ~6 katı — pencere DOĞRU boyutta; kırık olan algılama girdisi: 2000+ px/sn akışta işaret 0,1–0,3 sn ekranda parlıyor (sentez §0), yani zincirin 'algıla' adımı hiç başlamıyor",
+    "onerilenDeger": "engine.ts sabitleri KORUNUR (lansman kilidi); SosyalObezite.tsx:137,177-186 slot yeniden-atama (sentez değişiklik 4) dış veriyle doğrulanmış öncelik-1 + işaret belirirken 100-150 ms yüksek-salience giriş (scale-in + parlak kenar) — salience, reaksiyon süresinin ana belirleyicisi",
+    "etki": "YUKSEK"
+   },
+   {
+    "baslik": "Vaaz tuzağı: satir metinle değil mekanikle taşınır — Cow Clicker post-mortem'i",
+    "disReferans": "Cow Clicker (Bogost, 2010): FarmVille parodisi, 3 günde yazıldı, Eylül 2010'da 50.000+ oyuncu — oyuncular satiri UMURSAMADAN mekaniğe bağımlı oldu, Bogost kendisi bile kompulsif bağlandı ve oyunu 'Cowpocalypse' ile öldürmek zorunda kaldı (Wikipedia/Gamedeveloper GDC Online). September 12th (Frasca, 2003): mesaj tek satır kod-kuralında — ateş ettikçe şiddet çoğalır; metin vaazı yok, kural vaaz veriyor (procedural rhetoric, Bogost 'Persuasive Games' MIT Press)",
+    "bizdekiDurum": "Açılışta metin itirafı ('seni burada tutmak için yapıldı') + mekanikte zaten gömülü mesaj (kartlar boşalıyor, Bean çözülüyor) — çifte taşıyıcı; Cow Clicker dersi: oyuncu metni atlayıp skora kilitlenecek, mesajın metin bacağı ölü ağırlık",
+    "onerilenDeger": "OyunKabuk.tsx: itiraf ≤2 cümleye iner ve yalnız turNo===1; ana mesaj taşıyıcısı tur sonu SAYI kontrastı olur: '60 saniyede {kart} kart kaydırdın — {yakalanan}/12 gerçeği yakaladın' (veri TurOzeti'nde hazır) — kural-kaynaklı özdeyiş, metin vaazından güçlü",
+    "etki": "YUKSEK"
+   },
+   {
+    "baslik": "Parodi akışın prodüksiyon değeri = satirin inandırıcılığı — Stimulation Clicker",
+    "disReferans": "Stimulation Clicker (neal.fun, 6 Oca 2025): 4 AY geliştirme; sahici içerik üretildi — 45 dakikalık orijinal podcast için seslendirme sanatçıları, Halo spikeri Jeff Steitzer'dan yeni kayıtlar, Subway Surfers görüntüsü; overstimülasyonu ANLATMIYOR, birebir YAŞATIYOR ve bitişi var (okyanus jeneriği) (Wikipedia: Stimulation_Clicker)",
+    "bizdekiDurum": "Parodi kartlar tek-tip kısa metin + 8 kişilik ADLAR havuzu — 'gerçek reel' yanılsaması kurulamıyor; kullanıcının 'gerçek reel kaydırıyormuş gibi hissettirmeli' talebinin içerik yarısı bu",
+    "onerilenDeger": "content/sosyal-obezite-feed.ts + kartVerisi(): sentez §2'nin 3 kart varyantı (metin/medya-bloğu/büyük-punto) + ADLAR 8→20-25 + GERCEK_DAVETLER (8-10 somut davet) — dış referans, satir oyunlarında içerik prodüksiyonunun mekanik kadar yatırım aldığını gösteriyor",
+    "etki": "YUKSEK"
+   },
+   {
+    "baslik": "Günlük ortak seed — Wordle'ın 'herkes aynı bulmacayı oynuyor' kıyas dili",
+    "disReferans": "Wordle viralinin ikinci ayağı: günde TEK ortak bulmaca → herkesin sonucu doğrudan kıyaslanabilir, paylaşım ortak dile dönüşür ('bugünkü 3'te çözdüm'); sınırsız-tekrar oyunlarında bu kıyas dili kurulamaz (aakashg.com Wordle analizi)",
+    "bizdekiDurum": "spawnTakvimi(seed) deterministik ve sunucu-doğrulamalı AMA seed oyuncu-başı — 'Bugün' skor tablosu farklı spawn takvimlerini yarıştırıyor, kıyas adil değil ve 'aynı turu oynadık' sohbeti imkânsız",
+    "onerilenDeger": "engine.ts spawnTakvimi çağrısında günlük mod: seed = UTC tarih ('2026-08-18' → seedToInt) — sabitler/formül değişmez, yalnız seed kaynağı; 'Bugün' tablosu bu modda eşit koşula geçer, paylaşım kartıyla birleşince rekabet dili doğar",
+    "etki": "YUKSEK"
+   },
+   {
+    "baslik": "Açık itiraf, sevilir kaynaktan gelirse güçlenir — Bean'in ağzından ver",
+    "disReferans": "Frontiers in Psychology 2023 (310 katılımcılı deney, 'A game of persuasion'): persuasif niyetin AÇIK edilmesi, kaynak sevilirliği yüksekse tutum değişimini ARTIRIR; sevilirlik düşükse etkiyi söndürür (frontiersin.org/articles/10.3389/fpsyg.2023.1173429)",
+    "bizdekiDurum": "İtiraf ekranı kaynaksız/anonim sistem sesiyle konuşuyor; oysa elimizde tur boyunca çözülen sevimli Bean maskotu var — sevilirlik varlığı kullanılmıyor",
+    "onerilenDeger": "OyunKabuk.tsx itiraf ekranı: metin Bean maskotunun konuşma balonundan verilir (görsel zaten mevcut, yalnız yerleşim değişir) — açıklık dezavantajdan avantaja döner",
+    "etki": "ORTA"
+   },
+   {
+    "baslik": "Skor kırılımında 'kaydırmak kazandırmaz' sayıyla söylensin — LD57 DoomScrolling zıt-kutup kanıtı",
+    "disReferans": "DoomScrolling (Ludum Dare 57, 48 saatte, itch.io 4.0/5): kaydırmanın KENDİSİ bedelli — her kaydırma videonun beğeni sayısı kadar stres üretir, pil biter; tez tamamen kaynak-mekaniğinde. Bizim tasarım bilinçli tersi (kaydırma = 1 puan, satir gereği) ama oranın görünmemesi tezi gizliyor (iovorobiev.itch.io/ld57)",
+    "bizdekiDurum": "Teorik tavanda mesafe ≤480 puan vs yakalama 1125 puan (skorun ~%70'i yakalamadan) — bu oran engine.ts'te doğru kurulmuş ama oyuncuya HİÇ gösterilmiyor; oyuncu kaydırmanın kazandırdığını sanıyor",
+    "onerilenDeger": "OyunKabuk.tsx tur sonu: SkorKirilimi zaten {mesafePuani, yakalamaPuani, cezaPuani} döndürüyor — üç satırlık kırılım göster ('kaydırma: 214 · yakalama: 375 · ceza: -40'); engine değişmez, yalnız mevcut verinin sunumu",
+    "etki": "ORTA"
+   }
+  ],
+  "enDegerliKazanim": "Wordle tarzı spoiler'sız emoji sonuç kartı (12 gerçeğin yakala/kacir dizisi + skor + URL, Web Share API) — olay listesi engine'de zaten mevcut, tek dosyalık iş; Wordle'ı 2 ayda 90'dan 300.000+ oyuncuya taşıyan mekanik bizde tamamen eksik ve 'viral olma' hedefinin doğrudan karşılığı.",
+  "kaynaklar": [
+   "https://www.timeextension.com/features/the-making-of-super-hexagon-the-game-terry-cavanagh-never-expected-anyone-else-to-get",
+   "https://www.engadget.com/2012-09-21-terry-cavanagh-goes-inside-super-hexagon.html",
+   "https://www.aakashg.com/wordle/",
+   "https://knowyourmeme.com/memes/subcultures/wordle",
+   "https://www.gdcvault.com/play/1016487/juice-it-or-lose",
+   "https://humanbenchmark.com/tests/reactiontime/statistics",
+   "https://en.wikipedia.org/wiki/Cow_Clicker",
+   "https://www.gamedeveloper.com/game-platforms/gdc-online-ian-bogost-s-troubling-experiences-with-i-cow-clicker-i-",
+   "https://en.wikipedia.org/wiki/Stimulation_Clicker",
+   "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2023.1173429/full",
+   "https://iovorobiev.itch.io/ld57",
+   "https://direct.mit.edu/books/monograph/4392/Persuasive-GamesThe-Expressive-Power-of-Videogames"
+  ]
+ },
+ {
+  "alan": "Tarayıcı oyun performansı — mobilde 60fps (pointer/rAF/compositor/ölçüm)",
+  "bulgular": [
+   {
+    "baslik": "Gerçek-işaret süre çubuğu her frame width yazıyor — width layout tetikler, transform/opacity dışı her şey compositor'dan düşer",
+    "disReferans": "web.dev 'Stick to Compositor-Only Properties': yalnız transform ve opacity compositor'da kalır; web.dev 'animations-guide': width değişimi layout+paint tetikler, her frame ana thread çalıştırır. Frame bütçesi: 16.66ms'in ~6ms'i tarayıcı overhead'i, işimize kalan ~10ms (web.dev 'Rendering performance').",
+    "bizdekiDurum": "SosyalObezite.tsx:239 — aktif gerçek varken HER frame `(im.children[2]).style.width = kalan*100%` yazılıyor. Yani oyunun en kritik 1.8 sn'lik yakalama penceresi boyunca her frame layout. Ayrıca ceza elemanı left/top ile konumlanıyor (satır 300), border-color 250ms transition'ı paint tetikliyor.",
+    "onerilenDeger": "SosyalObezite.tsx:239 → çubuğa `transform-origin:left` ver, `im.children[2].style.transform = `scaleX(${kalan})`` yaz (width bir kere %100 sabit). Ceza elemanı: satır 300'de left/top yerine `transform: translate3d(x,y,0) translate(-50%,-50%)`.",
+    "etki": "YUKSEK"
+   },
+   {
+    "baslik": "Hız kestirimi frame-hizalı pointermove'a dayanıyor — Chrome pointermove'u frame başına 1'e coalesce eder, 90ms pencerede yalnız ~5 örnek kalır",
+    "disReferans": "MDN PointerEvent.getCoalescedEvents(): tarayıcı pointermove'u frame başına teke indirir (60Hz ekranda ~16.7ms'de 1 event); dokunmatik donanım 120Hz+ örnekler ve kaçan noktalar `getCoalescedEvents()` ile alınır. Janklı bir frame'de (örn. 50ms) pencere 2 örneğe düşer → fling hızı gürültülü.",
+    "bizdekiDurum": "SosyalObezite.tsx:353 — onMove yalnız ana event'in clientY'sini push ediyor (`s.ornekler.push({t: performance.now(), y: e.clientY})`), buffer 12. fizik.ts:24'teki 90ms pencere 60fps'te en fazla 5-6, jank altında 2-3 örnekle çalışıyor; performance.now() event'in gerçek zamanı değil işlenme zamanı.",
+    "onerilenDeger": "SosyalObezite.tsx onMove → `for (const c of (e.nativeEvent.getCoalescedEvents?.() ?? [e.nativeEvent])) s.ornekler.push({t: c.timeStamp, y: c.clientY})`; buffer 12→32. 90ms pencerede örnek sayısı 2-3 kat artar, fling tutarlılığı (aynı jestin aynı hızı vermesi) doğrudan iyileşir.",
+    "etki": "YUKSEK"
+   },
+   {
+    "baslik": "Ölçüm API'si: LoAF (50ms eşik) + Event Timing (durationThreshold:16) + rAF-delta — tek başına LoAF 17-49ms'lik düşen frame'leri GÖRMEZ",
+    "disReferans": "Chrome for Developers 'Long Animation Frames API': eşik sabit 50ms, `observe({type:'long-animation-frame', buffered:true})`, entry başına `blockingDuration` + suçlu `scripts[].invoker` verir (Chrome 123+). W3C Event Timing: varsayılan eşik 104ms, `durationThreshold` en düşük 16ms'e çekilebilir (8'in katına yuvarlanır) — 60fps'te tek frame kaçıran dokunuş bile yakalanır.",
+    "bizdekiDurum": "Oyunda hiçbir frame/latency ölçümü yok; 'kötü his' raporu sübjektif kaldı. 60fps hedefinde asıl düşman 17-49ms'lik frame'ler — LoAF bunları raporlamaz, yalnız rAF-delta yakalar.",
+    "onerilenDeger": "Tarayıcı paneline yapıştırılacak üçlü sonda: (1) `new PerformanceObserver(l=>l.getEntries().forEach(e=>console.log('LoAF',Math.round(e.duration),e.blockingDuration,e.scripts?.[0]?.invoker))).observe({type:'long-animation-frame',buffered:true})` (2) `new PerformanceObserver(l=>l.getEntries().forEach(e=>console.log('EV',e.name,Math.round(e.duration),Math.round(e.processingStart-e.startTime)))).observe({type:'event',durationThreshold:16})` (3) `let last=performance.now(),h={};requestAnimationFrame(function f(t){const d=t-last;last=t;const b=d<20?'16':d<34?'33':d<50?'50-':'50+';h[b]=(h[b]||0)+1;window.__fps=h;requestAnimationFrame(f)})` — 60sn tur sonunda `__fps` histogramı frame dağılımını verir. Kalıcı telemetri: tur sonunda histogram + LoAF sayısını skorla birlikte sunucuya yaz.",
+    "etki": "COK-YUKSEK"
+   },
+   {
+    "baslik": "Kademe sınırında 10 kartın tamamına aynı frame'de textContent+fontSize+background+opacity yazılıyor — 10ms bütçe tek frame'de yeniyor",
+    "disReferans": "web.dev 'Rendering performance': 60fps'te işimize kalan bütçe ~10ms (16.66 − ~6ms tarayıcı overhead'i). textContent ve fontSize yazımı style+layout+paint zincirinin tamamını tetikler; requestIdleCallback/parçalama ana-thread işini frame'lere yayar (aynı kaynak, 'Optimize JavaScript execution').",
+    "bizdekiDurum": "SosyalObezite.tsx:181-221 — kademe 12sn/25sn/38sn sınırlarında değişince döngü 10 kartın hepsinde dataset anahtarını ıskalar ve hepsi tek frame'de tam içerik+stil yazımı alır (kart başına ~10 style/textContent yazısı = ~100 mutasyon + 10 kartta layout). Normal geri dönüşümde frame başına 1 kart — o yol temiz.",
+    "onerilenDeger": "SosyalObezite.tsx kart döngüsü → frame başına kademe-yeniden-boyama kotası koy (örn. `let boyanan=0; ... if (!ayniIndexDegisimi && boyanan>=3) continue; boyanan++`): 10 kartlık toplu yazım 3-4 frame'e yayılır, sınır frame'i 10ms bütçenin altında kalır. (Ekran dışı 2-3 kart zaten görünmez — gecikme algılanmaz.)",
+    "etki": "ORTA"
+   },
+   {
+    "baslik": "will-change:transform 11 katman = DPR3 telefonda ~25MB GPU belleği — mevcut kullanım DOĞRU, ama tavan bu; yeni katman ekleme",
+    "disReferans": "Compositing katmanı piksel başına 4 byte tutar (mspk.substack 'What will-change Actually Does'; aynı hesap web.dev 'Stick to Compositor-Only Properties... manage layer count' — katman sayısını yönet, promotion'ı serbest bırakma).",
+    "bizdekiDurum": "10 kart + gerçek-işaret = 11 will-change:transform katmanı. 390px viewport'ta kart ~366×176 CSS px → DPR3'te 1098×528 = ~580K px × 4B ≈ 2.3MB/kart → toplam ~25MB. Her frame transform yazılan elemanlar için promotion doğru karar; sorun yok. Risk yalnız büyümede: HAVUZ'u artırmak ya da kart-içi elemanlara ayrıca will-change vermek bunu katlar. Ayrıca işaretin 44px blur'lu boxShadow'u katmanın paint alanını büyütüyor (border-color transition'ında yeniden paint).",
+    "onerilenDeger": "Değer değişikliği YOK — SosyalObezite.tsx:478/503'teki mevcut will-change kalsın; kural olarak HAVUZ ≤ 12 ve kart-içi çocuklara will-change eklenmemesi (kademe yazıları katman-içi paint olarak kalmalı). boxShadow'u statik tut (zaten statik) — border-color transition'ı yerine outline-color veya opacity'li ikinci çerçeve katmanı düşünülebilir (DUSUK öncelik).",
+    "etki": "ORTA"
+   },
+   {
+    "baslik": "touch-action:none + pointer capture kombinasyonu passive-listener sorununu kökten bertaraf ediyor — DOĞRULANDI, değişiklik yok",
+    "disReferans": "Chrome for Developers 'Improving scroll performance with passive event listeners': scroll-bloklayan listener'lar yüzünden 1. persentil scroll gecikmesi 400ms'ti; Chrome 56 müdahalesi (document/window'da touchstart/touchmove varsayılan passive) bunu ~250ms'e indirdi (~%38). Bu sorun yalnız TARAYICI scroll'u JS'i beklerken doğar.",
+    "bizdekiDurum": "SosyalObezite.tsx:469 `touchAction:'none'` + kendi fizik motorumuz = tarayıcı scroll'u hiç devrede değil, dolayısıyla 'passive bekleme' gecikme sınıfı bizde yapısal olarak yok. pointermove zaten frame-hizalı gelir (MDN). Bu boyutta kötü-his kaynağı ARANMAMALI.",
+    "onerilenDeger": "Değişiklik YOK. Tek bekçi: bu yüzeye ileride `onWheel`/`ontouchmove` eklenirse `{passive:true}` dışı eklenmemesi (React sentetik wheel non-passive'e düşebilir).",
+    "etki": "DUSUK"
+   },
+   {
+    "baslik": "DOM düğüm sayısı ~180 — Lighthouse uyarı eşiğinin (800) çok altında; havuz mimarisi doğru ölçekte",
+    "disReferans": "Lighthouse 'Avoid an excessive DOM size': body >~800 düğümde uyarı, >~1400'de hata; Lighthouse 13 (Ekim 2025) sonrası ölçüt style-recalc/layout işi >40ms. 2024 Web Almanac medyan sayfa 594 düğüm.",
+    "bizdekiDurum": "10 kart × ~14 düğüm + işaret (~8) + HUD/overlay (~20) ≈ 180 düğüm. Style-recalc yüzeyi küçük; kademe yazımlarındaki recalc maliyeti düğüm sayısından değil yazım hacminden geliyor (bkz. kademe bulgusu).",
+    "onerilenDeger": "Değişiklik YOK; tavan kuralı olarak oyun yüzeyi toplamı <400 düğümde tutulmalı (yeni süsleme/partikül eklerken DOM yerine tek canvas/tek eleman tercih et).",
+    "etki": "DUSUK"
+   },
+   {
+    "baslik": "Düşük-tier Android hedefi: P75 cihaz ≈ ~200$ Android — DevTools '6x slowdown' + 'low-tier mobile' preset ile ölçülmeden 60fps iddiası kurulamaz",
+    "disReferans": "infrequently.org 'Performance Inequality Gap 2024' (Alex Russell): küresel taban ~200$ Android; JS byte başına düşük-uç donanımda ≥3× pahalı; zengin-fakir cihaz makası 1 yılda 252 puan açıldı. Chrome DevTools Performance panelinde CPU throttling 4x/6x/20x + 'Use low-tier mobile' calibrated preset bu cihazları masaüstünde taklit eder.",
+    "bizdekiDurum": "Viral hedefli oyun = trafiğin önemli kısmı orta/düşük segment Android'den gelecek; şu ana kadar tüm his testleri geliştirici cihazında yapıldı, throttled ölçüm hiç yok. Ayrıca düşük-uç cihazların çoğu 60Hz — hedef 60fps doğru, 120fps kovalamaya gerek yok.",
+    "onerilenDeger": "Kalıcı test ritüeli: her his değişikliği DevTools Performance'ta CPU 6x + LoAF gözlemcisi açıkken 60sn tam tur; kabul eşiği = rAF-delta histogramında 33ms+ kova toplamı < %5 ve LoAF sayısı ≤ 2/tur. (Dosya değişikliği değil, docs/his-denetimi-sentez.md'ye ölçüm protokolü olarak eklenecek.)",
+    "etki": "YUKSEK"
+   }
+  ],
+  "enDegerliKazanim": "Gerçek-işaret süre çubuğunun her-frame `style.width` yazımını `transform: scaleX()`'e çevirmek — oyunun en kritik 1.8 saniyelik yakalama penceresindeki her frame'den layout adımını tamamen kaldırır (SosyalObezite.tsx:239).",
+  "kaynaklar": [
+   "https://developer.chrome.com/docs/web-platform/long-animation-frames",
+   "https://www.w3.org/TR/event-timing/",
+   "https://developer.mozilla.org/en-US/docs/Web/API/PerformanceEventTiming",
+   "https://web.dev/articles/rendering-performance",
+   "https://web.dev/articles/stick-to-compositor-only-properties-and-manage-layer-count",
+   "https://web.dev/articles/animations-guide",
+   "https://developer.chrome.com/blog/passive-event-listeners",
+   "https://developer.mozilla.org/en-US/docs/Web/API/PointerEvent/getCoalescedEvents",
+   "https://developer.chrome.com/docs/lighthouse/performance/dom-size",
+   "https://web.dev/articles/dom-size-and-interactivity",
+   "https://infrequently.org/2024/01/performance-inequality-gap-2024/",
+   "https://mspk.substack.com/p/what-will-change-actually-does-to"
+  ]
+ }
+]

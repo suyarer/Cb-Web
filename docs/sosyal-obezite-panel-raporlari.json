@@ -1,0 +1,618 @@
+{
+ "raporlar": [
+  {
+   "disiplin": "Oyun tasarımı (game feel, beceri eğrisi, tekrar oynama döngüsü)",
+   "bulgular": [
+    {
+     "baslik": "Yanlış-dokunma cezası tanımsız — 'her karta dokun' stratejisi beceri tavanını sıfırlar",
+     "sorun": "Spec'te (karar 2) yalnız 'gerçeği yakalamak için dokun' var; boş/parodi gönderiye dokunmanın sonucu YOK. Cezasız ortamda baskın strateji: kaydırırken saniyede 4-5 kez ekrana rastgele dokunmak. Bu oyuncu gerçeklerin %100'ünü 'yakalar', hiç ayırt etme becerisi kullanmaz. Beceri katmanı (spec'in tek beceri iddiası) tamamen çöker; skor tablosunun ilk sırası ilk gün spam-tap'çilere geçer ve 'gerçekleri fark et' ironisi mekanik olarak yalanlanır.",
+     "kosul": "Skor tablosu yarışan HER oyuncu; özellikle lansmanın ilk 24 saatinde optimize eden %1'lik kitle. Cihazdan bağımsız.",
+     "onerilenCozum": "Yanlış-dokunmaya somut bedel: (a) boş gönderiye dokunuş = -20 puan VEYA 400ms dokunma kilidi (spam'i fiziksel olarak imkânsızlaştırır) VEYA Bean çözülme yayını 1 eşik hızlandırır (tematik olarak en güçlüsü: 'boşa uzandıkça uyuşursun'). (b) Ceza tutorial'da ilk yanlış dokunuşta görsel geri bildirimle öğretilmeli. Sunucu plausibility kontrolüne 'dokunuş sayısı / gerçek sayısı ≤ 3' eşiği eklenmeli (karar 10 ile uyumlu).",
+     "siddet": "KRITIK",
+     "spec_maddesi": "2"
+    },
+    {
+     "baslik": "Skor formülü tanımsız — mesafe ile yakalama birbirine karşı çalışıyor ve baskın olan taraf oyunun mesajını belirliyor",
+     "sorun": "Karar 1 'skor = mesafe + yakalama' der ama ağırlık yok. İki bileşen mekanik olarak ÇATIŞIR: mesafe hızlı kaydırmayı, yakalama durup bakmayı ödüllendirir. Mesafe baskınsa optimal oyun 'gerçekleri umursamadan olabildiğince hızlı kaydır' olur — oyunun tezinin tam tersi bir meta doğar ve skor tablosu bunu herkese öğretir. Yakalama baskınsa mesafe ölü ağırlıktır, 'sonsuz kaydırma' hissi kaybolur. Formül lansmanda değil TASARIMDA kilitlenmeli; leaderboard oynayan kitle baskın stratejiyi 24 saatte bulur.",
+     "kosul": "60 sn'lik turda skor optimizasyonu yapan her oyuncu; 'Bugün' sekmesi ilk günden itibaren.",
+     "onerilenCozum": "Somut öneri: mesafe = geçilen KART başına 1 puan (60 sn'de oyuncu kontrolünde 2-4 kart/sn → 120-240 taban). Gerçek yakalama = 50 taban puan × seri çarpanı (ardışık yakalamada ×1→×2→×3, kaçırınca sıfırlanır). Böylece tipik oyuncu (%40 yakalama) ~400, iyi (%70 + kısa seriler) ~800-900, olağanüstü (%95 + tam seri) ~1600-1800. Yakalama toplamın ~%70-85'i olmalı ki mesaj ('gerçekler kaydırmaktan değerli') skor matematiğinde de yaşasın. Ek risk/ödül: yakalama anındaki kaydırma hızı yüksekse bonus (+%25) — hız-beceri takası beceri tavanını yükseltir.",
+     "siddet": "KRITIK",
+     "spec_maddesi": "acik-nokta"
+    },
+    {
+     "baslik": "iOS Safari momentum kaydırma sırasında dokunuş 'yakalama' yerine 'kaydırmayı durdurma' olarak yutulur",
+     "sorun": "Native scroll kullanılırsa (spec'in 'sonsuz liste sanallaştırma' notu bunu ima ediyor) iOS Safari'de momentum (fling) devam ederken gelen ilk dokunuş SCROLL'U DURDURUR, elemente click olarak ULAŞMAZ. Oyunun çekirdek döngüsü tam olarak 'hızlı kaydırırken beliren şeye dokun' olduğu için, en heyecanlı anda (yüksek hızda gerçek belirdi → dokun) dokunuş sessizce kaybolur. Oyuncu 'dokundum ama saymadı' hisseder — viral bir oyun için ölümcül game-feel kırığı; App Store trafiğinin çoğu iOS'tan gelecek.",
+     "kosul": "iOS Safari + fling (momentum) aktifken dokunan her oyuncu — yani mobil oyuncuların çekirdek akışı. Android Chrome'da davranış farklı ama benzer gecikmeler var.",
+     "onerilenCozum": "Native scroll KULLANMA. Feed'i pointermove/touchmove ile sürülen transform-tabanlı sanal akış olarak yaz (translateY animasyonu + kendi momentum fiziğin). Böylece (a) her pointerdown anında oyun kendisi 'kaydırma mı dokunma mı' kararını verir (10px hareket eşiği), (b) hız-mesafe fiziği tüm cihazlarda AYNI olur (bulgu 4'ü de kısmen çözer), (c) sanallaştırma zaten elle yapılır (DOM'da ~15 kart tut). Kabul testi: 60fps'te fling sırasında dokunulan gerçeğin ≥%99 kayıt olması, düşük-tier Android'de Playwright/gerçek cihazla ölçülmeli.",
+     "siddet": "KRITIK",
+     "spec_maddesi": "1"
+    },
+    {
+     "baslik": "Piksel-tabanlı mesafe + cihaz fling fiziği farkı: küçük ekran ve mobil, skor tablosunda yapısal dezavantajlı",
+     "sorun": "Mesafe piksel/scroll-offset ile ölçülürse: iPhone SE (667pt viewport) ile 13\" masaüstü (900+pt) aynı sürede aynı 'çabayla' 1.5-2× farklı mesafe üretir; masaüstü fare tekerleği + hazır bekleyen imleç kombinasyonu hem mesafede hem yakalamada insanüstüdür. 'Tüm zamanlar' sekmesi tek havuz olduğu için (karar 9) ilk hafta sonunda tablo masaüstü/tablet oyuncularına kilitlenir; mobil-öncelikli (karar 14) hedef kitle 'zaten kazanamıyorum' deyip tekrar oynamayı bırakır.",
+     "kosul": "Paylaşılan tek 'Tüm zamanlar' leaderboard'u; masaüstü erişimi açık olduğu her an. Özellikle küçük ekranlı Android cihazlar (TR pazarında yaygın).",
+     "onerilenCozum": "(a) Mesafeyi piksel değil GEÇİLEN KART sayısıyla ölç (kart = sabit oyun birimi, ekran boyutundan bağımsız). (b) Efektif kaydırma hızına oyun-içi tavan koy: maks 8 kart/sn — üstü skor üretmez (sunucu plausibility eşiği de bu olur, karar 10 ile birleşir). (c) Girdi türünü (touch/wheel) skor kaydında etiketle; masaüstünü ayrı sekmede göster veya tabloda rozetle işaretle. Kabul ölçütü: aynı beceri profilinin SE ve masaüstünde skor farkı ≤%10.",
+     "siddet": "YUKSEK",
+     "spec_maddesi": "1"
+    },
+    {
+     "baslik": "Gerçek nesne belirme kuralı tanımsız: zaman mı mesafe mi tabanlı olduğu hem adaleti hem hile kontrolünü belirliyor",
+     "sorun": "Mesafe-tabanlı spawn'da (her N kartta 1 gerçek) hızlı kaydıran DAHA ÇOK gerçek görür → skor kaydırma hızıyla süperlineer büyür, 'flick-spam' metası doğar. Zaman-tabanlıda kaydırma hızı yakalamayı hiç etkilemez → mesafe bileşeni anlamsızlaşır. Ayrıca spawn sayısı RNG ise 60 sn'lik turda varyans yüksek (10 vs 16 spawn = ~%40 skor şansı) → 'Tüm zamanlar' tablosunun tepesi beceri değil şans olur. Spawn'ı sunucu bilmiyorsa karar 10'daki plausibility kontrolü de kör: 'kaç gerçek yakalanabilirdi' doğrulanamaz.",
+     "kosul": "Her tur; özellikle leaderboard tepesi için binlerce tur atan oyuncular (varyans avcılığı) ve konsol/script ile skor POST eden hileciler.",
+     "onerilenCozum": "(a) Tur başına spawn SABİT olsun: tam 12 gerçek/60 sn, sunucunun ürettiği seed'le konumlanır (tur başında seed ver, tur sonunda seed+sonuç birlikte POST edilir → sunucu 'en fazla 12 yakalama' doğrular). (b) Reaksiyon penceresi tabanı: gerçek nesne, kaydırma hızından bağımsız ekranda ≥700ms yakalanabilir kalmalı (gerekirse gerçek belirince akış %30 yavaşlar — bu aynı zamanda 'gerçek, akışı yavaşlatır' diye tematik olarak mükemmel). (c) Yakalanabilir alan alt %60 viewport'ta ve tüm kart genişliğinde (≥48px yükseklik) — başparmak erişimi.",
+     "siddet": "YUKSEK",
+     "spec_maddesi": "2"
+    },
+    {
+     "baslik": "İlk 5 saniye: açılış manifestosu + takma ad + mekanik öğretimi üst üste binmiş, ilk gerçeğin garantisi yok",
+     "sorun": "Karar 3'ün açılış mesajı + karar 8'in takma ad girişi + 'dokunarak yakala' öğretimi oyun öncesine yığılırsa ilk dokunuşa ulaşma süresi 10+ sn olur; viral web oyununda link tıklayanların önemli bölümü ilk 5 sn'de kaybedilir. Ayrıca 'gerçeğe dokun' mekaniği kaydırma ekranından kendiliğinden ANLAŞILMAZ: ilk tur RNG'ye kalırsa ilk gerçek 20. saniyede belirebilir ve oyuncu ilk 20 sn 'bu sadece kaydırma mı?' diye sıkılıp çıkar. İlk gerçeği kaçıran oyuncu da ne kaçırdığını anlamadan kaybeder.",
+     "kosul": "İlk kez giren HER oyuncu (viral trafiğin tamamı); özellikle X/Instagram'dan tek dokunuşla gelen sabırsız kitle.",
+     "onerilenCozum": "(a) Takma adı OYUN SONUNA taşı (skor kaydederken sor) — girişte tek dokunuş: 'BAŞLA'. (b) Karar 3 mesajı tek ekran, tek cümle, 2 sn'de geçilebilir. (c) İlk turda ilk gerçek t=4-6 sn aralığında GARANTİ belirir, güçlü affordance ile (asit yeşili #A8E600 halka + daralan süre çemberi — palet zaten bunun için biçilmiş) ve akış otomatik %50 yavaşlar; bu ilk gerçek kaçırılırsa 'İşte az önce bir gerçek kaçırdın' mikro-mesajı çıkar (ceza yok). Kabul ölçütü: yeni oyuncunun %90'ı ilk turda en az 1 yakalama yapmalı.",
+     "siddet": "YUKSEK",
+     "spec_maddesi": "3"
+    },
+    {
+     "baslik": "Bean çözülme yayının 60 sn içindeki eşik takvimi yok — ilk tur oyuncusu paylaşılabilir final aşamayı hiç görmeyebilir",
+     "sorun": "Karar 6'daki 5 aşamalı yay (şişme→solma→cam göz→yavaşlama→pikselleşme) neye bağlı ilerliyor belirsiz: tur içi zamana mı, kümülatif panele mi (karar 7), mesafeye mi? Kümülatif zamana bağlıysa tek tur oynayan (viral trafiğin çoğunluğu) yalnız 'şişme'yi görür — oyunun en paylaşılabilir görseli (pikselleşen Bean) ve paylaşım kartının duygusal yükü ilk turda ASLA üretilmez. 'Yavaşlama' aşaması girdi gecikmesi olarak oynanışa yansıyorsa, telegraf edilmeden gelen input lag'i skor kovalayan oyuncuda 'oyun buglı' hissi yaratır.",
+     "kosul": "Tek tur oynayıp çıkan oyuncular (paylaşım kartı üretimi) + 45. saniye sonrası skor kovalayan herkes (yavaşlama aşaması).",
+     "onerilenCozum": "(a) Yayı TUR İÇİ ilerlemeye bağla: t≈12/25/38/50/57 sn eşikleri — her tur tam yay yaşanır, paylaşım kartı her koşulda final-hal Bean içerir (açık nokta 'kartta ne görünecek' sorusunun cevabı: pikselleşmiş Bean + skor + kaçırılan gerçek sayısı). (b) Kümülatif panel (karar 7) yalnız METNİ sertleştirsin, yayı hızlandırmasın. (c) 'Yavaşlama' girdiye DOKUNMASIN — yalnız görsel (Bean animasyon hızı, akış renk solması); girdi gecikmesi olarak uygulanacaksa ekranda açık telegraf şart ('uyuşuyorsun' vinyeti) ve maks 80ms.",
+     "siddet": "ORTA",
+     "spec_maddesi": "6"
+    },
+    {
+     "baslik": "'Bir daha' döngüsü utanç mesajına yaslanmış; kaçırılan-gerçek geri bildirimi olmadan tekrar oynama yakıtı yok",
+     "sorun": "Ödül yok (karar 11), tur arası mesaj sertleşiyor (karar 7: 'Hâlâ buradasın'). Bu metin karar 4'le ('hedef oyuncu DEĞİL') mekanik düzeyde çelişir: ikinci şahıs suçlama tam oyuncuya nişan alır ve retry anında caydırıcıdır — oyunların 'bir tur daha' anı en kırılgan andır. Near-miss geri bildirimi (neyi ne kadar farkla kaçırdın) spec'te hiç yok; skor tek başına 'tekrar dene' dürtüsü üretmez, kıyas ve kaçırma bilgisi üretir.",
+     "kosul": "Tur sonu ekranını gören her oyuncu; özellikle 2. turu oynayıp oynamama kararı anı (retention'ın tamamı bu tek ekranda).",
+     "onerilenCozum": "Tur sonu ekranı üç satır: (1) skor + 'bugün ilk %X'tesin' (Redis sorted set ZRANK ile bedava), (2) 'N gerçek yanından aktı — Y puan kaçırdın' (near-miss yakıtı; tematik olarak da oyunun cümlesi), (3) sertleşen mesajı oyuncuya değil AKIŞA yönelt: 'Hâlâ buradasın' yerine 'Akış seni 3 dakikadır tutuyor' — karar 7'nin sertleşme ilkesi korunur, hedefi karar 4'e uygun düzeltilir. 'Bir daha' düğmesi tek dokunuş, aynı ekranda, indirme CTA'sının ÜSTÜNDE (reklam hissi telafisi: önce oyun, sonra CTA).",
+     "siddet": "ORTA",
+     "spec_maddesi": "7"
+    }
+   ],
+   "enBuyukRisk": "Yanlış-dokunma cezası ve skor formülü tanımsızken beceri katmanı ilk 24 saatte çözülür (spam-tap + hızlı-kaydırma metası): skor tablosu anlamsızlaşır, \"gerçekleri fark et\" ironisi mekanik olarak yalanlanır ve oyunun viral iddiası tek günde ölür."
+  },
+  {
+   "disiplin": "Viral büyüme pazarlaması (k-faktörü, paylaşım mekanikleri, X dağıtımı)",
+   "bulgular": [
+    {
+     "baslik": "Paylaşım kartı per-koşu dinamik OG olmadan tüm paylaşımlar aynı görünür",
+     "sorun": "Cb-Web'deki mevcut OG altyapısı rota-seviyesi statik dosyalar (app/opengraph-image.tsx ve 10 alt-rota kopyası). Oyuncu skoru URL'ye gömülmezse X'te her paylaşım TIPATIP aynı görseli basar: merak boşluğu sıfır, kart CTR'ı jenerik marka görseli seviyesine düşer ve viral döngünün i (davet/oyuncu) bileşeni ölür. Kartta olması gereken üçlü: skor + Bean'in son hali (pikselleşme karesi — oyunun tek 'thumb-stopper' görseli) + toplam süre ('Toplam 4 dk buradaydım') + meydan okuma satırı ('Beni geç').",
+     "kosul": "Oyuncu X'te/WhatsApp'ta 'clubbeans.com/sosyal-obezite' düz linkini paylaştığında — yani spec'in şu anki halinde her paylaşımda",
+     "onerilenCozum": "Her koşuya runId ver (Upstash Redis'te zaten skor tutuluyor, TTL'li hash yeter), paylaşım URL'si /sosyal-obezite/s/[runId] olsun; app/sosyal-obezite/s/[runId]/opengraph-image.tsx içinde ImageResponse ile skor+Bean-son-hali+toplam-süre render et, twitter:card=summary_large_image zorunlu. Kart üzerindeki metin brand-voice'a uygun kısa-şiirsel tek cümle + skor.",
+     "siddet": "KRITIK",
+     "spec_maddesi": "acik-nokta"
+    },
+    {
+     "baslik": "Meydan-okuma (challenge) döngüsü yok — oyun tek-oyunculu yayına dönüşür",
+     "sorun": "Spec'te paylaşım anının tek tetiği 'oyun sonu'. Ref parametresi ve rakip-skor bağlamı olmadan paylaşılan link 'bak ben oynadım' yayınıdır, 'seni bekliyorum' daveti değildir; bu ikisi arasında dönüşüm farkı katlarcadır ve k-faktörünü 1'in altına kilitler. Ayrıca paylaşım tetiği duygusal zirveye bağlanmamış: en güçlü an Bean'in pikselleşip yok olduğu an ve kişisel rekor anı — 'oyun sonu ekranındaki buton' bu zirveyi kaçırır.",
+     "kosul": "İlk 100 oyuncu döngüsünde: davet edilen kişi landing'e gelip kime karşı oynadığını görmezse",
+     "onerilenCozum": "Paylaşım URL'sine ?ref=runId ekle; ref ile gelen oyuncunun koşusunda davet edenin skoru 'hayalet çizgi/hedef' olarak görünsün ('Ayşe 847'de bıraktı — sen?'). Paylaşım CTA'sını iki anda sun: (a) kişisel rekor kırıldığı an mikro-toast, (b) oyun sonu tam kart. PostHog'da ref'li landing → run_start dönüşümünü ayrı funnel yap; %40 altıysa hayalet-hedef sunumunu değiştir.",
+     "siddet": "KRITIK",
+     "spec_maddesi": "12"
+    },
+    {
+     "baslik": "İlk 100 oyuncu planı yok — k-faktörü çarpanı sıfırla çarpılıyor",
+     "sorun": "k>1 bile olsa tohum trafiği yoksa döngü ateşlenmez. Operasyonel bağlam 'canlı ama düşük trafik, çoğu mock-data': mevcut organik kanal ilk gün 200 tekil oyuncuyu tek başına getirmez. Karar 16 'en kısa sürede' derken dağıtım planı spec'te tek satır bile değil — oyun teknik olarak kusursuz çıkıp SESSİZLİĞE açılır.",
+     "kosul": "Lansman günü D1 tekil oyuncu < 200 ise (ölçülebilir eşik) döngü matematiksel olarak tutuşmaz",
+     "onerilenCozum": "Lansmandan ÖNCE hazırla: (1) kurucunun kişisel X hesabından video-önce thread (Bean'in çözülme animasyonu ekran kaydı — link tweet'te değil ilk reply'da), (2) x-radar kokpitiyle (Users/suyarer/x-radar) 'ekran süresi/dopamin/scroll' konuşmaları madenciliği + 20-30 hedefli reply-seeding, (3) 10-20 mikro hesaba özel ?ref'li meydan-okuma linki (kim kaç oyuncu getirdi ölçülür), (4) 8 Eylül ana-push takvimiyle senkron: oyun push'tan 1-2 hafta önce çıksın ki push'ta 'skorunu app'e taşı' anlatısı hazır olsun.",
+     "siddet": "KRITIK",
+     "spec_maddesi": "16"
+    },
+    {
+     "baslik": "Karar 12: indirme-CTA'sı paylaşım zirvesinin üstüne oturursa viraliteyi keser",
+     "sorun": "Oyun sonu tek bir duygusal zirve anı var ve iki eylem yarışıyor. Soğuk web trafiğinde ilk koşu sonrası mağaza-indirme niyeti ~%1 bandındadır; paylaşım niyeti ise zirvededir. Store butonları hiyerarşide üstte olursa hem indirme gelmez hem paylaşım oranı düşer — iki metrik birden kaybedilir. Ek zarar: 'dikkatini eleştirip app'e çeken oyun' çelişkisi indirme-butonu agresifleştikçe X'te quote-tweet malzemesi olur.",
+     "kosul": "İlk koşu sonu ekranında App Store/Play butonları paylaşım kartının üstünde/aynı boyutta gösterildiğinde",
+     "onerilenCozum": "Kararı değiştirmeden sırala: 1. koşu sonu = paylaşım kartı + 'tekrar oyna' birincil, store butonu ekranda ama ikincil ve ironiyi sürdüren kopyayla ('Bu oyunu kapat. Gerçek bir masaya otur.' — asla 'Hemen indir'). 2.-3. koşudan itibaren (runs_count>=2 flag) indirme bloğu birincil pozisyona yükselsin. PostHog'da run_index'e göre download_click kırılımı al; hipotez yanlışsa tek deploy'la sıra değişir.",
+     "siddet": "YUKSEK",
+     "spec_maddesi": "12"
+    },
+    {
+     "baslik": "X'in harici-link cezası paylaşım formatını belirlemeli — spec'te format yok",
+     "sorun": "X algoritması harici link içeren gönderilerin erişimini belirgin kırpar (yaygın ölçümlerde ~%40-50 erişim kaybı); ayrıca mobil navigator.share çıktısı X'e düz link olarak düşer ve OG kartı küçük özet olarak render olabilir. 'Paylaşım kartı her koşulda var' kararı, kartın X'te NASIL göründüğünü garanti etmiyor.",
+     "kosul": "Oyuncuların çoğunluğu mobilde native share sheet ile X'i seçtiğinde",
+     "onerilenCozum": "Paylaşım kartını ayrıca PNG olarak üret (aynı ImageResponse çıktısı Vercel Blob'a yazılır) ve 'görseli kaydet/kopyala' seçeneği sun — X'te görsel+linki-reply'da düzeni erişim cezasını atlatır. Web Share API Level 2 files desteği olan cihazlarda doğrudan görsel paylaş; fallback link. share_click event'ine channel + format (link|image) prop'u ekle ki hangi formatın landing getirdiği ölçülsün.",
+     "siddet": "YUKSEK",
+     "spec_maddesi": "acik-nokta"
+    },
+    {
+     "baslik": "PostHog şeması ve mağaza-atıflaması tanımsız — 'ikincil amaç' ölçülemez",
+     "sorun": "Spec'te tek bir event adı yok. Şemasız çıkılırsa k-faktörü hesaplanamaz ve karar 12'nin işe yarayıp yaramadığı asla bilinemez. Ayrıca store linkine tıklayan kullanıcı App Store'a geçtiği an atıf zinciri kopar: 'oyundan kaç indirme geldi' sorusu cevapsız kalır.",
+     "kosul": "Lansman sonrası ilk haftada 'oyun indirme getirdi mi' sorusu sorulduğunda",
+     "onerilenCozum": "Minimum şema: game_view, run_start, run_end{score,duration_ms,run_index,reals_caught,reals_missed}, share_click{channel,format}, ref_landing{ref}, download_click{store,run_index}, leaderboard_view, nickname_set. k-proxy = (share_click/run_end) × (ref_landing/share_click) × (ref'li run_start/ref_landing) — haftalık hedef eşikleri: paylaşım oranı ≥%8, ref-landing→oyun ≥%40. Atıf: Play tarafına referrer paramlı link, iOS tarafına App Store kampanya token'ı (ct=sosyal-obezite); mevcut DownloadButtons.tsx'e utm/ct geçir.",
+     "siddet": "YUKSEK",
+     "spec_maddesi": "acik-nokta"
+    },
+    {
+     "baslik": "Takma ad + global skor tablosu 48 saatte sosyal baskı üretmeyi bırakır",
+     "sorun": "Sosyal graf olmadan (karar 8) skor tablosundaki isimler yabancı; 'Tüm zamanlar' sekmesi ilk 48 saatte 15-20 grinder tarafından donar ve sıradan oyuncu kendini 4000. sırada görüp tabloyla ilişkisini keser. Sosyal baskı yabancıya karşı değil tanıdığa karşı çalışır — takma ad modeli bu kası tek başına çalıştıramaz.",
+     "kosul": "Lansmandan 48 saat sonra medyan oyuncunun 'Tüm zamanlar' sıralaması >500 olduğunda",
+     "onerilenCozum": "(1) Varsayılan sekme 'Bugün' olsun (Redis'te günlük sorted set zaten kararda var), (2) mutlak sıra yerine yüzdelik göster ('üst %12'desin' — Redis ZCOUNT ile ucuz), (3) ref zinciri üzerinden 'senin davet ettiklerin' mini-tablosu: challenge mekanizması (bulgu 2) buraya bedava mini-lig üretir. Doğrulanmış-rozet bağı (karar 8 opsiyonu) tabloda görünür olsun — app kullanıcısına statü, web oyuncusuna 'rozet nasıl alınır' merakı.",
+     "siddet": "ORTA",
+     "spec_maddesi": "8"
+    },
+    {
+     "baslik": "'Reklam hissi' çelişkisi X'te quote-tweet saldırı yüzeyi — cevap hattı hazırlanmalı",
+     "sorun": "Oyun dikkat ekonomisini eleştirirken kendisi dikkat çekip app indirtiyor; karar 3 bu ironiyi OYUN İÇİNDE sahipleniyor ama X yüzeyinde sahiplenmiyor. İlk sivri quote-tweet ('dikkatini eleştirip notification atan app') cevapsız kalırsa anlatı kontrolü kaybedilir; oysa aynı çelişki sahiplenilirse en güçlü yayılım motoru bu tartışmanın kendisidir.",
+     "kosul": "Oyun X'te ilk kez >10K görüntülenme alan eleştirel bir quote-tweet yediğinde",
+     "onerilenCozum": "Lansman thread'inin İÇİNE çelişki-itirafını koy (oyun açılış cümlesinin aynısı: 'Bu oyun seni burada tutmak için tasarlandı. Tıpkı diğerleri gibi.' — tweet olarak); marka hesabı için 2-3 hazır cevap satırı yaz ve site diliyle uyumlu tut. Oyun-sonu indirme kopyasında 'reklam' değil 'çıkış' çerçevesi (bulgu 4 ile aynı kopya). Bu, savunma değil yakıt: quote-tweet'ler ref'siz trafik getirir, game_view'da referrer=twitter kırılımını izle.",
+     "siddet": "ORTA",
+     "spec_maddesi": "3"
+    }
+   ],
+   "enBuyukRisk": "Oyunu asıl öldürecek şey mekanik değil dağıtım: tohum-trafik planı ve kişiye-özel (skor+Bean-hali gömülü, ref'li) paylaşım kartı olmadan çıkılırsa ilk 48 saatte döngü tutuşmaz ve teknik olarak kusursuz oyun kimse görmeden sessizce ölür."
+  },
+  {
+   "disiplin": "Marka stratejisi + kriz iletişimi",
+   "bulgular": [
+    {
+     "baslik": "İsim geri-tepmesi: 'obezite' tıbbi bir durum ve stigmatize bir grup — 3 hazır saldırı çerçevesi var, savunma metni yok",
+     "sorun": "Karar 13 'beden iması yok' dese de imayı görsel değil İSMİN KENDİSİ taşır. Türkiye yetişkin obezite oranı ~%30+ (Avrupa'nın en yükseği) — hedef kitlenin üçte biri metaforun 'kötü davranış' tarafına konmuş oluyor. En olası 3 senaryo: (A) Sağlık cephesi: bir diyetisyen-influencer veya obezite derneği (ör. TOAD) 'obezite hastalıktır, pazarlama malzemesi değildir' çerçevesiyle alıntı-tweet dalgası başlatır. (B) Gazeteci başlığı: 'Yeni sosyal uygulamadan tartışmalı kampanya: obeziteyle alay mı?' — habere tıklama garantili, yalanlaması tıklanmaz. (C) Yeme-bozukluğu (ED) okuması: 'şişmek = kötüleşmek, sonunda yok olmak' yayı genç kitlede tetikleyici içerik olarak etiketlenir; app'in genç hedef kitlesiyle çakışır. Spec'te bu üç senaryonun hiçbirine hazır yanıt yok.",
+     "kosul": "Kampanya viral hedefine ULAŞTIĞI anda — erişim büyüdükçe kötü-niyetli/duyarlı okuma olasılığı 1'e yaklaşır. Özellikle 8 Eylül–25 Ekim ana push penceresinde tek bir yüksek-takipçili alıntı yeterli.",
+     "onerilenCozum": "(1) Terimi rakipten önce TANIMLA: oyun açılışında ve /sosyal-obezite sayfasının meta-description'ında tek cümlelik tanım sabitle — 'Sosyal obezite: beslenmeden tüketmek. Bedenle değil, zamanla ilgili.' Tanımı ilk biz koyarsak beden okuması çerçeveyi kuramaz. (2) Üç hazır metin lansman ÖNCESİ yazılıp onaylansın: A-yanıtı (kabul+niyet+diyalog): 'Haklısınız, obezite ciddi bir sağlık meselesidir ve hiçbir beden şaka konusu değildir. Oyunumuz bedenle değil, ekran başında kaybettiğimiz zamanla ilgili. İsim sizi incittiyse bunu duyuyoruz, konuşmaya açığız.' B-yanıtı (gazeteciye, önleyici): medya kitine 'İsim neden bu?' paragrafı — kavramın zaman/tüketim tanımı + oyunda tartı/silüet/kilo öğesi olmadığının tek cümlelik kanıtı. C-yanıtı: ED-duyarlılığı için oyun sonu ekranına bedene değil süreye referans veren tek satır ('Bu oyun ekran süren hakkında, bedenin hakkında değil') opsiyonunu hazırda tut, tetiklenirse 1 saat içinde aç. (3) Yanıt sahibi TEK kişi belirle; ilk 24 saatte hesaplardan espri/savunma karışımı yanıt YASAK — sadece onaylı metin.",
+     "siddet": "YUKSEK",
+     "spec_maddesi": "13"
+    },
+    {
+     "baslik": "Şişmiş Bean + 'SOSYAL OBEZİTE' logosu tek karede = kendi ürettiğimiz kriz görseli (paylaşım kartı)",
+     "sorun": "Karar 6'nın 1-2. eşiği 'şişme'. Karar 13 'beden iması yok' der ama şişen bir maskot + OBEZİTE kelimesi aynı ekran görüntüsünde yan yana geldiği anda 'beden iması yok' iddiası GÖRSEL olarak çürür. Paylaşım kartı (karar 12: 'her koşulda var') Bean'in son hâlini gösterirse bu kare binlerce kez bizim elimizle dağıtılır; bağlam (çözülme/uyuşma anlatısı) kartla birlikte seyahat etmez. Senaryo-B'deki gazeteci haberinin kapak görseli hazır demektir.",
+     "kosul": "Açık-nokta 'paylaşım kartında ne görünecek' sorusu 'Bean'in son hâli' ile cevaplanırsa VE oyuncu 1-2. eşikte (şişme fazında) turu bitirirse — 60 sn'lik turda en olası bitiş fazı tam da bu.",
+     "onerilenCozum": "Paylaşım kartı (opengraph-image.tsx türevi) için sert kural: kartta Bean'in ŞİŞME fazı ASLA render edilmez. Kartta ya sağlıklı Bean ya pikselleşme/çözülme fazı kullanılır; metin daima zaman-odaklı ('X dakika aktı, Y gerçek yakaladın'). Oyun içinde de şişme fazı ölçek artışıyla sınırlansın (BeanSprout.tsx morph'unda scale ≤ 1.15, silüet oranları korunur — 'tombul' okuması üreten en/boy oranı değişimi yok); asıl dönüşüm yükü renk solması + cam gözler + pikselleşmeye verilsin. Karar 6'nın kendi cümlesi zaten savunmayı veriyor: 'anlam kiloda değil' — bunu görsel implementasyon da söylemeli, sadece spec değil.",
+     "siddet": "KRITIK",
+     "spec_maddesi": "6"
+    },
+    {
+     "baslik": "İkiyüzlülük okuması: 'seni tutmak için tasarlandı' itirafı + skor tablosu + tur sayacı + indirme CTA'sı aynı üründe",
+     "sorun": "Karar 3'ün itirafı ('Tıpkı diğerleri gibi.') zekice ama tek başına savunma değil, ALINTI malzemesi: 'Bağımlılığı eleştirip bağımlılık mekaniğiyle (skor tablosu k.9, her turda sertleşen geri-dön mesajı k.7) kullanıcı topluyorlar, sonunda da kendi uygulamalarını indirtiyorlar (k.12)' cümlesi kurulduğu anda itiraf 'kibirli pazarlama numarası'na döner. Karar 7'nin 'Hâlâ buradasın.' mesajı, oyun seni aynı anda tutmaya ÇALIŞIRKEN atılırsa kurgusal/sahte durur.",
+     "kosul": "Teknoloji-eleştirisi yapan bir gazeteci/podcast'çi oyunu 3+ tur oynayıp mekaniği yazdığında; veya oyun sonu CTA'sı turun bitişinden hemen sonra tam-ekran çıktığında ('reklam hissi' açık-noktası).",
+     "onerilenCozum": "Çelişkiyi sahiplenmeyi SÖZDE bırakma, MEKANİĞE işle — savunulabilirlik ancak böyle kurulur: (1) 'Onurlu çıkış': oyunu kendi isteğiyle bırakmak skorlanan bir eylem olsun (ör. 'Bırakabildin' durumu paylaşım kartında ayrı bir onur göstergesi). Kriz anında tek cümlelik savunma hazır olur: 'Oyunda en değerli hamle çıkmaktır — hangi platform bunu söylüyor?' (2) CTA metni 'indir' emri değil çıkış çerçevesi: 'Gerçek olan dışarıda. ClubBeans oraya çağırır.' (brand-voice şiirsel sesle uyumlu). (3) Tur sonunda otomatik 'tekrar oyna' vurgusu yerine eşit ağırlıkta 'bırak' seçeneği. (4) Karar 3 açılış cümlesine ikinci cümle ekle ki alıntılandığında bile lehimize çalışsın: 'Bu oyun seni burada tutmak için tasarlandı. Tıpkı diğerleri gibi. Fark şu: biz sana çıkışın nerede olduğunu söylüyoruz.'",
+     "siddet": "YUKSEK",
+     "spec_maddesi": "3"
+    },
+    {
+     "baslik": "Kriz hazırlığı ve kill-switch spec'te hiç yok — 'en kısa sürede' takvimi bunu atlatacak",
+     "sorun": "Viral olmak birincil amaç (Amaç bölümü) ama ters-viral senaryosu için tek bir hazırlık maddesi yok: yanıt planı yok, oyunu/ismi hızla değiştirme mekanizması yok, eskalasyon eşiği yok. Karar 16 ('mümkün olan en kısa sürede, canlıda öğrenilir') kriz hazırlığının 'sonra yaparız' listesine düşeceğinin garantisi. Ana lansman push'u (8 Eyl–25 Eki) sırasında patlayan bir isim krizi sadece oyunu değil, uygulamanın mağaza yorumlarını ve lansman kampanyasının tamamını kirletir.",
+     "kosul": "Lansman sonrası ilk 72 saat içinde bulgu-1'deki herhangi bir senaryo tetiklenirse ve ekip o anda metin yazmaya/deploy beklemeye başlarsa. Yanıt gecikmesi >3 saat = çerçeveyi karşı taraf kurar.",
+     "onerilenCozum": "Lansman tanımına 3 zorunlu madde ekle (kod tarafı zaten ucuz): (1) Kill-switch: /sosyal-obezite sayfası tek env/edge-config anahtarıyla 'yakında' sayfasına düşebilmeli (Cb-Web'de Vercel + Upstash mevcut, <5 dk devreye girer). (2) Eskalasyon eşiği SAYIYLA: isim/beden temalı negatif etkileşim toplam bahsin %20'sini geçerse veya 50K+ takipçili tek hesap negatif çerçeveyle paylaşırsa onaylı metin devreye girer; %40'ı geçerse kill-switch + isim revizyonu görüşülür. (3) PostHog'a 'oyun terk anı' ve paylaşım-kartı üretim sayısı event'i — kriz anında 'kaç kişi hangi kareyi paylaşıyor' verisi olmadan savunma körlemesine yapılır.",
+     "siddet": "YUKSEK",
+     "spec_maddesi": "16"
+    },
+    {
+     "baslik": "Parodi içerik için ölçülebilir 'taklit değil' kriteri yok — niyet kararı var, test yok",
+     "sorun": "Karar 5 'hiçbir gerçek platformun arayüzü/logosu taklit edilmeyecek' der ama taklit logoyla değil, ayırt edici öğe KOMBİNASYONUYLA oluşur. Somut tuzaklar: kalp ikonu + çift-dokunma beğeni = Instagram çağrışımı; 9:16 tam ekran + sağ kenarda dikey ikon sütunu = TikTok trade-dress; mavi onay rozeti = X/Twitter; hikâye halkaları = Instagram. Bunlardan ikisi bir arada göründüğü anda hem marka-hakkı riski hem 'aslında şu platformu kastediyorlar' haberi doğar — parodi savunması TR hukukunda ABD'deki kadar güçlü değildir.",
+     "kosul": "Tasarımcı 'boş gönderi' kartlarını hızlı üretirken bilinçsizce tanıdık kalıplara yaslandığında (en hızlı üretim yolu her zaman taklittir); özellikle karar 2'nin 'dokunarak yakala' mekaniği çift-dokunma-beğeni jestine kayarsa.",
+     "onerilenCozum": "Yayın öncesi 5 maddelik geçilebilir/kalınabilir kontrol listesi: (1) İkon: kalp/beğeni yerine soyut şekil (ör. fasulye/nokta) — kalp YASAK. (2) Renk: parodi kartlarında #FF0050 (TikTok kırmızısı), #E1306C ve mor-turuncu gradyan (IG), #1DA1F2 (eski Twitter mavisi) dominant renk olarak YASAK; parodi tamamen ClubBeans paletinde (#A8E600/#050505/#737373) kalır — bu aynı zamanda görsel imzayı bize sabitler. (3) Yerleşim: sağ-kenar dikey aksiyon sütunu + tam ekran dikey video kombinasyonu YASAK. (4) Parodi kullanıcı adları: gerçek ünlü/marka handle'ına Levenshtein ≤2 mesafede isim YASAK. (5) Algı testi: yayın öncesi ekipten olmayan 5 kişiye herhangi bir parodi kartı 3 sn gösterilir, 'bu hangi uygulama?' sorusuna 2+ kişi aynı gerçek platformu söylerse o kart yeniden tasarlanır.",
+     "siddet": "ORTA",
+     "spec_maddesi": "5"
+    },
+    {
+     "baslik": "Brand-voice çatışması: parodi katmanı YASAK jargonu göstermek ZORUNDA, meta katman ise gösteremez — ayrım tanımlanmamış",
+     "sorun": "Oyunun tezi gereği parodi gönderiler 'followers', 'viral', 'engagement' gibi tam da brand-voice.md'nin yasakladığı dili sergilemeli (boşluk ancak böyle gösterilir). Ama spec bu ayrımı çizmediği için iki yönlü kaza olur: ya parodi steril kalır (tez zayıflar) ya da yasaklı jargon skor ekranı/CTA/paylaşım kartına sızar (ör. 'Success!' alert'i, 'Join' butonu, 'Event' kelimesi) ve ClubBeans'in kendi sesi kirletir. Paylaşım kartı en riskli yüzey: hem oyun-içi estetiği hem marka sesini aynı karede taşır.",
+     "kosul": "Metin yazımı tek havuzda yapılırsa (parodi + UI metni aynı dosyada/aynı kişide) ve karar 16'nın hız baskısı altında brand-voice denetimi 'oyun zaten parodi' gerekçesiyle atlanırsa.",
+     "onerilenCozum": "İki katmanı dosya düzeyinde ayır: parodi metinleri tek bir içerik dosyasında (ör. content/sosyal-obezite-feed.ts) toplanır ve brand-voice denetiminden açıkça MUAF işaretlenir; meta katman (açılış mesajı k.3, tur mesajları k.7, skor tablosu k.9, CTA k.12, paylaşım kartı) %100 brand-voice taramasına tabidir — yasak liste: Join/Buy Ticket yerine 'biletini kap/katıl' bile değil, çıkış-çerçeveli CTA (bulgu-3), 'Success' alert başlığı YASAK, 'Event' yerine 'etkinlik'. Görsel ayrım da şart: parodi kartları ile meta-katman farklı tipografik ağırlıkta konuşsun ki ekran görüntüsünde hangi sesin ClubBeans olduğu tartışmasız olsun.",
+     "siddet": "ORTA",
+     "spec_maddesi": "5"
+    },
+    {
+     "baslik": "Skor formülü tezle çelişiyor: yüksek skor = en çok kaydıran — savunma hattı formülde kurulmalı",
+     "sorun": "Karar 1'de skor = mesafe + yakalanan gerçekler. Mesafe bileşeni baskınsa skor tablosunun (k.9) zirvesi 'en uzun süre kaydıranlar' olur ve 'kaydırmayı eleştiren oyunda kazanmanın yolu kaydırmak' cümlesi kurulur — bulgu-3'teki ikiyüzlülük okumasına ölçülebilir kanıt sağlar. Ayrıca oyuncular skor için mekanik hızlı-kaydırma yapar, 'gerçekleri fark etme' teması oyun deneyiminde kaybolur.",
+     "kosul": "60 sn'lik turda mesafe puanı toplam skorun >%50'sini oluşturursa; skor tablosu canlıya çıkıp ilk hafta liderlik stratejisi netleştiğinde topluluk bunu kendisi keşfeder.",
+     "onerilenCozum": "Skor ağırlığını tezin kendisi yap: yakalanan-gerçek puanı toplam skorun ≥%70'ini oluşturacak şekilde dengele (açık-noktadaki 'skor eğrisi dengesi' çalışmasına sayısal hedef olarak gir). Böylece hazır savunma cümlesi doğar ve DOĞRU olur: 'Bu oyunda en çok kaydıran değil, en çok fark eden kazanır.' Paylaşım kartında da mesafe değil yakalama sayısı öne çıksın ('7 gerçeği yakaladın' > '4.200 gönderi kaydırdın' — ikincisi ancak alt satır).",
+     "siddet": "ORTA",
+     "spec_maddesi": "1"
+    }
+   ],
+   "enBuyukRisk": "Şişmiş Bean ile SOSYAL OBEZİTE logosunun aynı karede bağlamsız dolaşması: tek bir ekran görüntüsü kampanyayı 'obeziteyle alay eden uygulama' olarak çerçeveler ve hazır savunma metni olmadığı için ana lansman push'unun ortasında marka bu görselle tanımlanır."
+  },
+  {
+   "disiplin": "Frontend performans (Next.js 16 / React 19 / mobil)",
+   "bulgular": [
+    {
+     "baslik": "Native scroll ile 'yakala' mekaniği fiziksel olarak çakışıyor — fling sırasındaki tap yutulur",
+     "sorun": "Karar 2'nin çekirdeği: akış kayarken gerçek nesneye DOKUNMAK. Tarayıcıda native (overflow) scroll kullanılırsa, momentum (fling) devam ederken gelen ilk touchstart tarayıcı tarafından 'scroll'u durdur' olarak tüketilir — click/tap event ÜRETİLMEZ. Oyuncu gerçek nesneyi görür, dokunur, nesne puanlanmadan akıp gider; oyuncu 'oyun bozuk' der. Ayrıca scroll event'i Android Chrome'da compositor'dan asenkron ve frame'e kilitli gelmez: skor=mesafe hesabı ve nesne belirme zamanlaması scroll pozisyonuna bağlanırsa düşük-tier cihazda 2-4 frame geriden gelir, hit-test kayar.",
+     "kosul": "Tüm Android Chrome + iOS Safari'de, momentum scroll aktifken yapılan her dokunuş; yani oyunun ana oynanış anının kendisi. Masaüstünde tekerlek scroll'da görülmez, test masaüstünde yapılırsa canlıya kadar fark edilmez.",
+     "onerilenCozum": "Native scroll HİÇ kullanma. Sabit (overflow:hidden) bir viewport + Pointer Events (pointerdown/move/up) + kendi momentum fiziği (rAF döngüsünde hız/sürtünme) + içerik konteynerine transform:translate3d. Böylece her pointerdown her zaman senin elinde: hem 'yakalama' hit-test'i hem fling-durdurma kararını sen verirsin. touch-action:none sadece oyun alanına, sayfa geneline değil. Bu aynı zamanda 'scroll event yerine ne' sorusunun cevabıdır: scroll event yok, tek rAF game-loop var.",
+     "siddet": "KRITIK",
+     "spec_maddesi": "2"
+    },
+    {
+     "baslik": "Sonsuz akışta sanallaştırma stratejisi tanımsız — DOM düğüm sayısı 60 saniyede tavanı aşar",
+     "sorun": "Karar 1 sonsuz akış diyor ama spec'te geri dönüşüm (recycling) stratejisi yok (satır 58'de açık-nokta olarak itiraf edilmiş). Agresif fling ile 60 sn'de ~2.500-4.000px/sn hız normaldir; kart başına ~15-30 DOM düğümü ile dakikada 1.500+ düğüm birikir. Düşük-tier Android'de (Mali-G52 / 4GB sınıfı, ör. Redmi 9, Galaxy A13) style/layout/paint maliyeti düğüm sayısıyla büyür: ~800-1.000 düğümden sonra frame süresi 16,7ms bütçeyi aşar, tur ilerledikçe jank ARTAR — en kötü performans tam Bean'in çözülme finalinde (karar 6) yaşanır.",
+     "kosul": "60 sn'lik turun ikinci yarısı, orta/düşük-tier Android; hedef kitle (TR mobil trafiği) ağırlıkla bu segmentte.",
+     "onerilenCozum": "Havuzlu geri dönüşüm: viewport'ta aynı anda görünebilecek maksimum kart + 4-6 tampon = ~12-16 sabit DOM elemanı. Kartlar hiç unmount/mount edilmez; ekrandan çıkan kart yeni içerikle üste taşınır (translate3d ile konum, React reconciliation'a sokmadan). Kabul eşiği: Chrome DevTools Performance'ta tur boyunca toplam DOM düğümü sabit (±0), Moto G/Redmi sınıfı gerçek cihazda 60 sn boyunca long task > 50ms sayısı ≤ 2.",
+     "siddet": "KRITIK",
+     "spec_maddesi": "1"
+    },
+    {
+     "baslik": "Bean çözülme yayının 'pikselleşme/ekrana karışma' evresi SVG+filter ile yapılırsa ana thread'i yer",
+     "sorun": "Mevcut maskot (components/BeanSprout.tsx) 8 motion.path + 3 linearGradient'lı bir SVG; framer-motion path/attribute animasyonları compositor'da değil JS ana thread'inde çalışır. Karar 6'daki pikselleşme/dağılma SVG filter (feTurbulence/feDisplacementMap) veya çok parçacıklı DOM ile yapılırsa Android Chrome'da CPU rasterizasyonuna düşer: tek başına 8-20ms/frame. SerendipityBean.tsx:79'daki desen (blur-3xl = 64px blur glow) oyuna kopyalanırsa tam ekran blend maliyeti eklenir. Bu animasyonlar scroll fiziğiyle AYNI ana thread'i paylaşır → morph başladığı anda kaydırma takılır.",
+     "kosul": "Karar 6'nın son iki evresi (cam gözler sonrası pikselleşme) aktifken + oyuncu kaydırmaya devam ederken; özellikle GPU'su zayıf Android'de.",
+     "onerilenCozum": "Bean evrelerini build-time'da sprite dizisine bak: her evre için 6-12 kare WebP/PNG sprite sheet, geçişler yalnız opacity+transform crossfade (compositor-only). Pikselleşme için küçük offscreen canvas'a drawImage ile küçült, imageSmoothingEnabled=false ile büyüt — GPU'da bedava 'pixelate'. Framer-motion morph'u yalnız intro/sonuç ekranında serbest. Kabul eşiği: morph evre geçişi sırasında scripting süresi < 4ms/frame.",
+     "siddet": "YUKSEK",
+     "spec_maddesi": "6"
+    },
+    {
+     "baslik": "Oyun sayfası root layout'un tüm global bileşenlerini miras alıyor — grain overlay, LiveTicker, SerendipityBean tur ortasında sahneye girer",
+     "sorun": "app/layout.tsx:165-187 her route'a ScrollManager, CosyMode, grain-overlay, CompassTint, ScrollRoots, GutterSprout, LiveTicker, ClientExtras (CursorBean+ExitIntent+SerendipityBean+SilentHour), CookieConsent, PostHog, MetaPixel mount ediyor. Somut çakışmalar: (a) globals.css:79-82 grain-overlay = tam ekran fixed + mix-blend-overlay → oyun boyunca her frame'de tam ekran blend, düşük-tier'de 2-4ms; (b) SerendipityBean %12 şansla 30-90 sn sonra ekrana fixed z-55 tıklanabilir öğe bırakır — 2. tur ortasında oyun alanının üstüne düşer, tıklanınca 'yakalama' sanılır; (c) PostHog autocapture her tap'te DOM serileştirmesi yapar — tap-yoğun 60 sn'de onlarca capture = jank + event çöplüğü; (d) ScrollManager pathname değişiminde scrollTo davranışına karışır.",
+     "kosul": "/sosyal-obezite route'u mevcut root layout altında açıldığı her oturumda; SerendipityBean çakışması ~her 8 oturumda 1.",
+     "onerilenCozum": "Oyunu route group'a al: app/(game)/sosyal-obezite/ + kendi minimal layout.tsx (PostHog manuel-capture modda kalır, MotionProvider kalır; grain-overlay, LiveTicker, ClientExtras, CursorBean, ExitIntent, SerendipityBean, CosyMode, GutterSprout YOK). PostHog'da oyun sayfasında autocapture kapat (posthog.set_config({autocapture:false}) veya route-bazlı guard), skor/tur olaylarını elle gönder.",
+     "siddet": "YUKSEK",
+     "spec_maddesi": "15"
+    },
+    {
+     "baslik": "Skor/mesafe/HUD React state ile frame başına güncellenirse 60 render/sn çöker",
+     "sorun": "Karar 1 (skor=mesafe) + karar 7 (toplam süre paneli) sürekli artan sayaçlar demek. Bunlar setState ile rAF döngüsünden beslenirse saniyede 60 render: HUD ağacı + context tüketicileri her frame yeniden çalışır, GC baskısı artar, düşük-tier Android'de her GC minor pause'unda 1-2 frame düşer. React 19 compiler bunu KURTARMAZ — re-render'ı ucuzlatır, sıfırlamaz; useTransition/useDeferredValue bu iş için yanlış araç.",
+     "kosul": "Oynanış boyunca sürekli; skor arttıkça sayı formatlama (toLocaleString) eklenirse maliyet büyür.",
+     "onerilenCozum": "Oyun durumu (mesafe, hız, aktif nesneler) ref/plain-object'te, rAF döngüsü DOM'a doğrudan yazar (textContent / transform / CSS custom property). React'e yalnız tur-geçişlerinde (başla, bitti, yeni tur) commit edilir. framer-motion useMotionValue da kabul (React render tetiklemez) ama tek rAF döngüsünde tutmak daha temiz. Kabul eşiği: oynanış sırasında React commit sayısı = 0 (React DevTools Profiler ile doğrula).",
+     "siddet": "YUKSEK",
+     "spec_maddesi": "1"
+    },
+    {
+     "baslik": "Oyun chunk'ı ve varlıkları ana sayfanın kritik yoluna sızabilir; oyunun kendi ilk boyaması da tanımsız",
+     "sorun": "İki yön: (1) Ana sayfaya konacak 'SOSYAL OBEZİTE' linki default <Link> ile prefetch edilirse oyun chunk'ı + sprite/ses varlıkları mobil veride ana sayfa ziyaretinde iner — viral trafik tam tersi yönde de akar (oyundan siteye). (2) Karar 3'ün açılış manifestosu ('Bu oyun seni burada tutmak için tasarlandı') statik metin; oyun motoru, ses, sprite'lar bununla aynı bundle'a girerse paylaşım linkinden gelen ilk ziyaretçi 4G'de boş ekrana bakar — viral trafiğin ilk 3 saniyesi dönüşümün tamamıdır.",
+     "kosul": "Paylaşım linkinden gelen soğuk-cache mobil ziyaretçi (kampanyanın ana senaryosu) + ana sayfadan linke viewport-prefetch.",
+     "onerilenCozum": "Intro ekranı server component + statik CSS olarak anında boyansın; oyun motoru 'use client' + dynamic(() => import(...)) ile intro göründükten sonra arka planda yüklensin ('Başla' tap'ine kadar hazır olur). Ana sayfadaki linke prefetch={false}. Ses dosyaları ilk kullanıcı etkileşiminden sonra fetch. Bütçe: /sosyal-obezite first-load JS ≤ 170KB gzip, intro LCP < 2s (4G, Moto G sınıfı); next build çıktısındaki route tablosuyla ve ana sayfa first-load JS'inin DEĞİŞMEDİĞİYLE doğrula.",
+     "siddet": "YUKSEK",
+     "spec_maddesi": "16"
+    },
+    {
+     "baslik": "Tekrarlı turlar + AnimatePresence çıkış patlaması: bellek birikimi ve tur-sonu jank'i",
+     "sorun": "Karar 7 çok-turlu oynamayı teşvik ediyor (mesaj sertleşmesi tur sayısına bağlı). Riskler: (a) her turda feed bileşenleri unmount/mount edilirse AnimatePresence onlarca kartın exit animasyonunu aynı frame'de başlatır → tur biterken, yani paylaşım kartı + indirme CTA'sı (karar 12) render olurken jank; (b) her 'yakalama'da new Audio() yaratılırsa 5+ turda onlarca decode edilmiş buffer birikir; (c) tur zamanlayıcıları (setInterval/rAF) ve pointer listener'ları tur geçişinde temizlenmezse çift döngü çalışır — hız fiziği 2x hızlanır gibi görünen sinsi bug.",
+     "kosul": "Aynı oturumda 3+ tur oynayan oyuncu (hedeflenen davranışın ta kendisi), özellikle 4GB RAM Android'de.",
+     "onerilenCozum": "Tur geçişinde DOM havuzu ve game-loop YAŞAMAYA devam etsin, sadece state sıfırlansın (unmount yok → exit patlaması yok). Ses için tek AudioContext + önceden decode edilmiş 2-3 buffer. Kabul eşiği: DevTools Memory'de 10 ardışık tur sonrası heap büyümesi < 5MB ve detached node sayısı 0; tur-sonu ekran geçişinde long task yok.",
+     "siddet": "ORTA",
+     "spec_maddesi": "7"
+    },
+    {
+     "baslik": "LazyMotion domAnimation kapsamı oyunun jest ihtiyacıyla uyumsuz — sessiz özellik kaybı veya bundle sıçraması",
+     "sorun": "components/MotionProvider.tsx:14-20 açıkça yazıyor: domAnimation drag/pan İÇERMEZ. Oyunda kaydırma jesti framer-motion'un drag/pan API'siyle yapılmaya kalkılırsa iki kötü sonuçtan biri olur: ya sessizce çalışmaz (strict mode kapalı, sadece console warning — canlıda fark edilmez), ya da domMax'a yükseltilir ve TÜM sitenin motion feature bundle'ı büyür (4.6KB → ~34KB sınıfına geri dönüş, ana sayfa dahil). Ayrıca 'lib/motion'dan motion' import alışkanlığı oyun kodunda sürdürülürse her feed hareketi framer-motion'un JS-frame pipeline'ından geçer — bulgu 1'deki custom rAF döngüsüyle iki ayrı frame zamanlayıcı yarışır.",
+     "kosul": "Oyun jest katmanı framer-motion ile yazılırsa; domMax yükseltmesi yapılırsa tüm route'lar etkilenir.",
+     "onerilenCozum": "Jest katmanı framer-motion'suz saf Pointer Events olsun (bulgu 1'in çözümüyle aynı). framer-motion yalnız intro/tur-sonu/paylaşım kartı UI geçişlerinde. domMax'a yükseltme YAPMA; eğer bir bileşen gerçekten drag isterse LazyMotion'un route-lokal ikinci bir provider'ı ile sadece oyun route'una domMax ver. Kontrol: next build sonrası shared chunk boyutu diff'i 0 olmalı.",
+     "siddet": "ORTA",
+     "spec_maddesi": "acik-nokta"
+    }
+   ],
+   "enBuyukRisk": "Oyun, sitenin mevcut aracıyla (native scroll + framer-motion + root layout global efektleri) yazılırsa tam hedef cihazda (orta/düşük-tier Android) çekirdek mekanik ölür: fling sırasındaki 'yakalama' tap'i tarayıcıya yutulur ve tur ilerledikçe biriken DOM+blend maliyeti 60fps'i düşürür — viral paylaşımdan gelen ilk izlenim 'takılan, tepki vermeyen oyun' olur."
+  },
+  {
+   "disiplin": "Güvenlik mühendisliği — skor tablosu bütünlüğü",
+   "bulgular": [
+    {
+     "baslik": "Skor submit'i sunucu-yeniden-hesap ve tek-kullanımlık oturum olmadan tasarlanırsa tablo tek curl ile ele geçirilir",
+     "spec_maddesi": "10",
+     "sorun": "Spec'te skorun İSTEMCİDEN sayı olarak gönderileceği örtük varsayım var. İstemcide 'imzalama' işe yaramaz: Next.js bundle'ındaki her secret/HMAC anahtarı DevTools ile dakikalar içinde çıkarılır, imza fonksiyonu kopyalanır. Doğru model: (1) POST /api/game/start → sunucu HMAC'li opak sessionId + RNG seed üretir (Redis'te SETNX, TTL 180s, tek kullanım); (2) 'gerçek' nesnelerin belirme zamanlaması bu seed'den türetilir, yani sunucu o oturumda KAÇ nesne doğduğunu bilir; (3) submit'te istemci ham skoru DEĞİL olay özetini (mesafe, yakalama timestamp'leri) gönderir, skoru SUNUCU formülden yeniden hesaplar ve tabloya kendi hesabını yazar. Bu yoksa: curl -X POST /api/game/score -d '{\"score\":999999}' → 1 istekte tüm zamanlar birincisi.",
+     "kosul": "Endpoint canlıya çıktığı gün; oyun viral olursa saat mertebesinde. Türk troll kültüründe skor tablosu = bilinen hedef.",
+     "onerilenCozum": "start/submit çifti + Redis tek-kullanım token (mevcut desen: app/api/subscribe/route.ts:15-23 Redis.fromEnv + Ratelimit zaten kurulu). Ek ucuz kemer: sunucu teorik maksimumu bilir (max spawn × puan + mesafe tavanı) → cap üstü submit'i sessizce kabul et ama tabloya YAZMA (saldırgana kırmızı bayrak verme). Yakalama sayısı > seed'in ürettiği spawn sayısı → reddet.",
+     "siddet": "KRITIK"
+    },
+    {
+     "baslik": "Karar 10 akla-yatkınlık kontrolü için somut eşik seti (spec'te hiçbiri tanımlı değil)",
+     "spec_maddesi": "10",
+     "sorun": "'Süre/ivme/dokunma tutarlılığı' ölçümsüz bırakılmış; kim yazarsa keyfî eşik koyacak. Önerilen somut set: (a) SÜRE: sunucu-taraflı start→submit farkı 58-90 sn dışıysa reddet (60 sn tur + ağ payı; istemci saatine ASLA güvenme). (b) DOKUNMA: 60 sn penceresinde ortalama dokunma aralığı < 80 ms VEYA herhangi iki dokunma arası < 30 ms → reddet (insan sürdürülebilir ~7 tap/sn, kısa patlama ~12-14/sn). (c) KAYDIRMA HIZI: tekil anlık hız > 15.000 CSS-px/sn VEYA 60 sn toplam mesafe > 400.000 px (≈500 ekran @ 800px viewport) → reddet; 250.000 px üstünü 'olağanüstü' işaretle. (d) İVME PROFİLİ: touchend sonrası momentum delta'ları azalan seri olmalı; ardışık scroll delta'ları sabitse (varyasyon katsayısı CV < 0.05, metronom) → bot; insan zamanlama CV'si tipik 0.15-0.4. (e) TUTARLILIK: skor ≠ f(mesafe, yakalama) sunucu formülüyle → reddet, tolerans 0.",
+     "kosul": "Her submit'te; eşikler yanlışsa ya meşru oyuncu reddedilir (mobil momentum scroll gerçekten 8-10k px/sn tepe yapar) ya da bot geçer.",
+     "onerilenCozum": "Eşikleri sabit koymadan önce soft-launch'ta PostHog'a ham telemetri bas (lib/posthog.ts mevcut), ilk 200 gerçek oturumun p99'unu ölç, eşik = p99 × 1.5 olarak kalibre et. Reddedilen oturumu kullanıcıya 'skor kaydedilemedi' değil skorunu LOKAL göster + tabloya yazma (false-positive'de oyuncu küsmesin).",
+     "siddet": "YUKSEK"
+    },
+    {
+     "baslik": "Heuristik atlatma maliyeti düşük — 'sert replay doğrulama YOK' kararının artık riski isimlendirilmeli",
+     "spec_maddesi": "10",
+     "sorun": "Bulgu-2'deki eşiklerin tamamı, aralıklarına Gauss jitter ekleyen ~50 satırlık bir trace-üreteci scriptle atlatılır; maliyet orta seviye saldırgan için ~30 dakika. Kayıtlı meşru bir oyunun trace'ini varyasyonla yeniden gönderme (replay) da mümkün. Karar 10 sert replay doğrulamayı bilinçli reddettiği için tablo ZİRVESİ hiçbir zaman garanti edilemez — bu kabul edilmiş risk olarak yazılmalı, 'hile korumamız var' diye pazarlanmamalı.",
+     "kosul": "Oyun Twitter/X'te gündem olursa; hedef kitle (yazılımcı-yoğun erken kitle) tam da bunu spor olarak yapar.",
+     "onerilenCozum": "Üç telafi: (1) seed-bağlama — yakalama timestamp'leri sunucu seed'inin spawn zamanlarıyla ±300 ms eşleşmek zorunda, bu replay'i o oturuma kilitler ve jenerik trace-üretecini kırar (tam replay-doğrulama maliyeti olmadan); (2) moderasyon kapısı — ZREM ile tek komutta üye silen korumalı bir admin endpoint'i (CRON_SECRET benzeri header, app/api/cron deseni) LANSMANDAN ÖNCE hazır olsun; (3) günlük top-1 skor teorik maksimumun %90'ını aşarsa PostHog alert → manuel bak.",
+     "siddet": "YUKSEK"
+    },
+    {
+     "baslik": "Rate-limit IP anahtarı hem spoof'lanabilir hem Türkiye CGNAT'inde meşru kullanıcıyı keser",
+     "spec_maddesi": "10",
+     "sorun": "Mevcut desen app/api/subscribe/route.ts:50-52 x-forwarded-for'un EN SOLDAKİ elemanını alıyor — bu istemcinin kendi gönderdiği header'la beslenebilir: saldırgan her istekte rastgele XFF basıp IP-bazlı limiti sıfır maliyetle atlatır. Ters yönde: Türk Telekom/Vodafone mobil ağları yoğun CGNAT kullanır; tek çıkış IP'sinin arkasında yüzlerce gerçek oyuncu olur — viral anda sıkı IP limiti (örn. 5/10dk) meşru oyuncuları toplu keser.",
+     "kosul": "Spoof: herhangi bir saldırgan, ilk gün. CGNAT: paylaşım viral olduğu akşam, mobil hatta oynayan kalabalık.",
+     "onerilenCozum": "Oyun endpoint'lerinde IP'yi Vercel'in platform header'ından al (x-vercel-forwarded-for'un platformun eklediği elemanı / x-real-ip), subscribe'daki getClientIp'yi KOPYALAMA. Katmanlı limit: start 15/dk/IP (CGNAT payıyla gevşek) + submit oturum-token'ı başına 1 (asıl kapı token, IP değil) + anonId (httpOnly cookie'deki rastgele UUID) başına 30 oturum/saat.",
+     "siddet": "YUKSEK"
+    },
+    {
+     "baslik": "Takma ad taklidi: 'ClubBeans' adına küfürlü skor + doğrulanmış rozetin istemciden sahte basılması",
+     "spec_maddesi": "8",
+     "sorun": "Giriş yok + takma ad serbest → herkes 'ClubBeans', 'clubbeans_resmi' veya başka bir oyuncunun adıyla submit atabilir; sorted set member adsa skor bile ezilir. Ayrıca karar 8'in rozeti istemciden gelen bir 'verified:true' alanıyla taşınırsa herkes rozetli görünür. Homoglyph tuzağı: 'СlubBeans' (Kiril С), 'ClubBeans​' (zero-width) filtreyi ve teklik kontrolünü geçer; İ/i büyük-küçük Türkçe fold sorunu CB2026'da yaşandı (username-policy dersi).",
+     "kosul": "İlk troll dalgasında; paylaşım kartı rozetli sahte 'ClubBeans' skoru gösterirse marka zararı doğrudan.",
+     "onerilenCozum": "(1) Sorted set member = anonId (UUID), takma ad ayrı hash'te — ad asla anahtar olmasın. (2) Ad normalize: NFKC + Türkçe casefold + zero-width strip + confusable skeleton, sonra SETNX nick:{skeleton} → anonId ile o gün için sahiplik. (3) Rezerve liste (clubbeans, admin, bean, resmi...) — CB2026 reserved_usernames dersini web'e taşı. (4) Rozet YALNIZ sunucuda Supabase oturumu doğrulanarak yazılır; submit payload'ında rozet alanı hiç olmasın. (5) Küfür filtresi açık-nokta olarak zaten listede — substring-tier + FP-kapısı deseni CB2026'da hazır, porte et.",
+     "siddet": "YUKSEK"
+    },
+    {
+     "baslik": "Tek kişi 'Bugün' tablosunun 10 sırasını da doldurabilir",
+     "spec_maddesi": "9",
+     "sorun": "Kimlik = takma ad ve ad serbestse, aynı kişi 10 farklı adla 10 oturum oynayıp (hile bile yapmadan, sadece iyi oynayarak) günlük tablonun tamamını kaplar. Sorted set'te dedupe anahtarı tanımlanmamış. Sonuç: tablo tek kişinin varyant adlarıyla dolar, 'topluluk' hissi ölür — kampanyanın amacının tam tersi.",
+     "kosul": "Düşük-trafik ilk günlerde 1 hevesli oyuncu yeter (operasyonel bağlam: gerçek trafik az, tablo kolay domine edilir).",
+     "onerilenCozum": "ZADD GT ile anonId başına yalnız EN İYİ skor tutulur (Upstash destekliyor); anonId httpOnly cookie'de, cookie silmek yeni kimlik demek — bunu kabul edilmiş artık risk olarak yaz (cookie+IP ikilisiyle günde IP başına en fazla 3 FARKLI anonId'nin tabloya girmesine izin ver, CGNAT payı için 3'ün altına inme). Görsel telafi: tabloda aynı anonId zaten tek satır olacağı için ekstra UI işi yok.",
+     "siddet": "YUKSEK"
+    },
+    {
+     "baslik": "'Bugün' sıfırlanması: UTC gün anahtarı kullanılırsa tablo TR saatiyle 03:00'te döner",
+     "spec_maddesi": "9",
+     "sorun": "Sunucu (Vercel fonksiyonları) UTC çalışır. Günlük sorted set anahtarı new Date().toISOString().slice(0,10) ile üretilirse gün TR saatiyle 03:00'te değişir: 00:30'da oynayan oyuncu 'Bugün' sekmesinde dünkü tabloyu görür, gece 00:00-03:00 arası atılan skorlar 'dünün' bucket'ına yazılır. İkinci tuzak: 23:59:57'de başlayan tur 00:01:10'da submit olur — bucket'ı submit anından seçersen skor oyuncunun gördüğü günden farklı tabloya düşer.",
+     "kosul": "Her gece 00:00-03:00 TR arası, yani gençlik hedef kitlesinin en aktif saatlerinde.",
+     "onerilenCozum": "Bucket anahtarını Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Istanbul' }) ile üret (TR'de DST yok ama elle +3 sabitleme yerine timeZone kullan); bucket'ı SUBMIT anından değil sunucunun kaydettiği SESSION START anından seç; günlük set'e EXPIRE 172800 sn (48 saat) koy ki eski bucket'lar Redis'te birikmesin.",
+     "siddet": "ORTA"
+    },
+    {
+     "baslik": "İzleme yoksa hile ancak ekran görüntüsü alay konusu olduktan sonra fark edilir",
+     "spec_maddesi": "acik-nokta",
+     "sorun": "Spec'te skor bütünlüğü için hiçbir gözlem/alarm maddesi yok. Heuristikler sessizce reddettiğinde false-positive oranını, geçen hileli skorları ve saldırı dalgasını kimse görmez — CB2026'nın 'sessiz-yalan' ders sınıfının aynısı. Kampanya sırasında top-1'in sahte olduğu tweet'lerle öğrenilirse mesaj ('platformlar sizi kandırıyor') kendi oyununda kandırılan markaya döner.",
+     "kosul": "Lansmanın 1-2. haftası; düşük trafikte tek hileli skor bile top-1 olur ve paylaşım kartıyla dağılır.",
+     "onerilenCozum": "PostHog'a üç olay: game_score_rejected (hangi eşik tetiklendi, eşik adı property), game_score_accepted (skor, mesafe, yakalama), game_session_orphan (start var submit yok). İki alert: (1) günlük red oranı > %20 → eşikler meşruları kesiyor; (2) kabul edilen skor > teorik maksimumun %90'ı → manuel incele + hazır ZREM endpoint'iyle sil. Sentry zaten kurulu; submit handler'daki her beklenmedik hata captureError ile gitsin.",
+     "siddet": "ORTA"
+    }
+   ],
+   "enBuyukRisk": "Skor submit'i sunucu-yeniden-hesap ve tek-kullanımlık oturum olmadan çıkarsa tablo ilk gün tek curl'lük sahte skorlar ve taklit takma adlarla dolar; \"platformlar seni kandırıyor\" diyen kampanyanın kendi skor tablosunun kandırılmış olması, viral anın markaya dönmüş silahıdır."
+  },
+  {
+   "disiplin": "Erişilebilirlik (WCAG 2.2 AA, ekran okuyucu, motor kısıt, vestibüler güvenlik)",
+   "bulgular": [
+    {
+     "baslik": "Kaydırma+zamanlı dokunma mekaniği alternatif girdisiz — motor kısıtlı kullanıcı tam dışlanır",
+     "spec_maddesi": "1",
+     "sorun": "Skor = kat edilen mesafe (sürekli kaydırma) + akıp giden hedefe zamanında dokunma. Bu, WCAG 2.2 SC 2.5.7 (Dragging Movements) ve 2.5.1 (Pointer Gestures) ihlali: sürekli sürükleme/flick hareketine tek-dokunuş alternatifi yok. Tremor, RSI, tek-el/anahtar-erişim (switch access) kullanıcısı 0 puanla elenir; skor tablosu (karar 9) bu dışlamayı kalıcı sıralamaya çevirir.",
+     "kosul": "Parkinson/tremor, switch-access veya yalnız klavye kullanan herkes; ayrıca masaüstünde (karar 14 'çalışır') trackpad'siz klavye kullanıcısı — oyun hiç başlatılamaz veya skor daima 0",
+     "onerilenCozum": "Mekaniği değiştirmeden girdi katmanı ekle: (a) basılı-tut veya tek-dokunuşla 'otomatik kaydırma' modu (hız 2 kademeli), (b) klavye eşlemesi: Boşluk/Aşağı-ok = kaydır, Enter = gerçeği yakala, (c) 'gerçek' belirdiğinde ekranın NERESİNE dokunulduğu değil DOKUNULDUĞU sayılsın (tam-ekran tap hedefi). Skor tablosu adaleti için otomatik mod normal modla aynı puan havuzunda kalmalı — ayrı lig kurma, dışlamayı resmileştirir",
+     "siddet": "KRITIK"
+    },
+    {
+     "baslik": "prefers-reduced-motion dalı tanımsız — sitenin geri kalanı RM-uyumlu, oyun kör nokta",
+     "spec_maddesi": "acik-nokta",
+     "sorun": "Cb-Web'de 15 dosya useReducedMotion/prefers-reduced-motion kullanıyor (Hero.tsx, lib/motion.ts, app/globals.css, BeanSprout.tsx dahil) ama spec oyunun ANA mekaniği olan sürekli akış için RM davranışı tanımlamıyor. RM açık kullanıcıda akış aynen oynarsa vestibüler bozukluğu olanlarda baş dönmesi/bulantı tetiklenir; oyun kapatılırsa ('RM'de oynanamaz') o kullanıcı kampanyadan tamamen dışlanır ve paylaşım kartı alamaz.",
+     "kosul": "iOS 'Hareketi Azalt' / Android 'Animasyonları kaldır' açık olan kullanıcı (mobil-öncelikli hedef kitlede azımsanamaz oran); oyun linkine sosyal medyadan tıkladığı anda",
+     "onerilenCozum": "RM dalını spec'e yaz: otomatik akış hızı 0 (yalnız kullanıcı-tetikli adım adım ilerleme), tüm geçişler ≤200ms opacity-only, Bean 'pikselleşme' animasyonu tek-kare cross-fade'e düşer, parallax/scale efektleri kapalı. lib/motion.ts'teki mevcut RM helper'ı oyun bileşenlerinde zorunlu import yap; Playwright'ta page.emulateMedia({reducedMotion:'reduce'}) ile tam tur smoke testi ekle",
+     "siddet": "KRITIK"
+    },
+    {
+     "baslik": "Skor ve 'gerçek belirdi' olayı ekran okuyucuya hiç ulaşmıyor — kör kullanıcı için oyun sessiz siyah ekran",
+     "spec_maddesi": "2",
+     "sorun": "Beceri katmanı tamamen görsel: 'gerçek' nesnesi görünüp kayboluyor, yakalama görsel algıya bağlı. SR kullanıcısı için ne belirme anonsu ne skor geri bildirimi var. Ters uçta, mesafe skoru her frame aria-live ile duyurulursa VoiceOver/TalkBack konuşma kuyruğu kilitlenir (saniyede 60 update = kullanılamaz).",
+     "kosul": "VoiceOver (iOS Safari) veya TalkBack (Android Chrome) kullanıcısı oyunu açtığında; ayrıca canvas render seçilirse DOM'da hiçbir erişilebilir düğüm kalmaz",
+     "onerilenCozum": "İki ayrı live region: (1) aria-live='assertive' yalnız 'gerçek belirdi — yakalamak için dokun' + 'yakaladın/kaçırdın' olayları için, (2) aria-live='polite' skor için 10 sn'de bir throttle'lı özet ('Mesafe 340, 2 gerçek'). Tur sonu paneli role='alert' + odağı panele taşı. 'Gerçek' belirdiğinde eşlik eden kısa ses ipucu (ses varsayılanı açık noktasına bağla) ve SR modunda yanıt penceresi ≥3 sn",
+     "siddet": "YUKSEK"
+    },
+    {
+     "baslik": "Pikselleşme/ekrana-karışma efekti flaş-nöbet sınırını test edilmeden geçemez",
+     "spec_maddesi": "6",
+     "sorun": "Bean'in 'ekrana karışma/pikselleşme' çözülme yayı, #A8E600 (parlak, yüksek lüminans 0.65) ile #050505 arasında hızlı piksel gürültüsü üretirse WCAG 2.3.1'in saniyede 3 flaş sınırını aşar — fotosensitif epilepsili kullanıcıda nöbet riski. Hızlanan akış + sertleşen tur mesajlarıyla birleşince efekt yoğunluğu turlar ilerledikçe artacak, risk son turlarda en yüksek.",
+     "kosul": "Pikselleşme shader/animasyonu >3 kez/sn lüminans değişimi üretirse ve etkilenen alan viewport'un %25'inden büyükse (1024×768 referansta ~341×256 CSS px); fotosensitif kullanıcıda",
+     "onerilenCozum": "Efekti tasarlarken sınır koy: piksel-gürültü frame değişimi ≤3/sn VEYA lüminans farkını düşür (koyu-gri↔siyah aralığında pikselleş, acid-green'i pikselleşme fazında paletten çıkar). Yayın öncesi PEAT (Photosensitive Epilepsy Analysis Tool) ile ekran kaydını analiz et — bu, axe'in yakalayamadığı tek kritik sınıf",
+     "siddet": "YUKSEK"
+    },
+    {
+     "baslik": "Ghost #737373 gece #050505 üzerinde 4.30:1 — normal metin AA'yı zaten kaçırıyor, 'solan gönderi' yayı bunu bilinçli fail'e çevirir",
+     "spec_maddesi": "5",
+     "sorun": "Mevcut palet çifti ghost/gece 4.30:1 (AA normal metin eşiği 4.5:1'in altında). Karar 5'in 'giderek boşalan' gönderileri tasarım gereği kontrastı DAHA da düşürecek — düşük görüşlü kullanıcı akış içeriğini hiç okuyamaz. Ayrıca acid-green üstüne beyaz/açık metin konursa 1.50:1 (CTA/skor rozeti tasarımında klasik hata).",
+     "kosul": "Parodi gönderi metni ghost veya daha soluk renkte render edildiğinde, düşük görüşlü (20/70+) kullanıcıda; acid-green buton/skor alanına açık metin yazan herhangi bir tasarım turunda",
+     "onerilenCozum": "Kural olarak spec v2'ye yaz: (a) okunması BEKLENEN her metin ≥4.5:1 — ghost'u #7A7A7A üstüne çek veya bu metinlerde kullanma, (b) 'solma' anlamsal olarak dekoratifse solan öğelere aria-hidden='true' + SR'a tek satır özet ('gönderiler boşalıyor'), (c) #A8E600 üstünde YALNIZ #050505 metin (13.6:1). axe'in color-contrast kuralını oyun sayfası Playwright testine zorunlu ekle — solma animasyonunun son karesini sabit state olarak test et",
+     "siddet": "YUKSEK"
+    },
+    {
+     "baslik": "Akan hedefe dokunma: hedef boyutu ve görünürlük süresi tanımsız — WCAG 2.5.8 + pratik yakalanabilirlik",
+     "spec_maddesi": "2",
+     "sorun": "'Gerçek' nesnesi akış hızında hareket eden bir dokunma hedefi. Boyut <24×24 CSS px ise WCAG 2.5.8 (Target Size, AA) fail; hareketli hedefte 24px bile motor kısıtta yetmez. Görünürlük süresi tanımsız — skor eğrisi dengesi (açık nokta) hız artışıyla süreyi kısaltırsa geç turlar yaşlı/tremor kullanıcı için fiziksel olarak imkansızlaşır.",
+     "kosul": "Akış hızı arttıkça (tur ilerledikçe) hedefin ekranda kalma süresi <1.5 sn'ye düştüğünde; tremor/yaşlı kullanıcıda ve küçük ekranlı (≤360px genişlik) Android cihazlarda",
+     "onerilenCozum": "Spec v2'ye ölçülebilir taban koy: dokunma hedefi ≥48×48 CSS px (görsel öğe küçük olabilir, hitbox büyük), ekranda kalma süresi ≥1.5 sn her hız kademesinde sabit, VE 'gerçek belirince akış 0.5 sn yavaşlar' mekaniği — bu aynı zamanda oyun hissini güçlendirir (ironi vurgusu: gerçek görününce dünya yavaşlar)",
+     "siddet": "ORTA"
+    },
+    {
+     "baslik": "Otomatik akan içerik + saniye sayan panel için durdurma kontrolü yok — 2.2.2 Pause/Stop/Hide",
+     "spec_maddesi": "7",
+     "sorun": "60 sn'lik tur boyunca otomatik hareket eden içerik 5 sn'yi aştığı için WCAG 2.2.2 durdurma kontrolü ister; 'oyun için hareket esastır' istisnası savunulabilir ama toplam-süre paneli her saniye DOM güncellerse (mevcut AnimatedCounter.tsx deseni) SR'da sürekli gürültü + bilişsel yük üretir. Telefon çalması/bildirim gelmesi gibi gerçek kesintilerde duraklatamayan kullanıcı turu ve skoru kaybeder.",
+     "kosul": "Tur ortasında kesintiye uğrayan her kullanıcı (mobilde çok sık); SR kullanıcısında sayaç canlı bölgeye bağlıysa her saniye anons",
+     "onerilenCozum": "Görünür Duraklat düğmesi (≥48px, sağ üst sabit) + visibilitychange'de otomatik pause — bu hile kontrolüyle (karar 10, süre tutarlılığı) de uyumlu çünkü sunucu süre doğrulamasına pause payı zaten eklenecek. Toplam-süre sayacı aria-hidden, SR'a yalnız tur sonunda tek cümleyle ver ('3. tur, toplam 3 dakika')",
+     "siddet": "ORTA"
+    },
+    {
+     "baslik": "axe mevcut Playwright kurulumu bu oyunun asıl risklerini yakalamaz — test kapsamı yanlış güven verir",
+     "spec_maddesi": "16",
+     "sorun": "Kurulu Playwright+axe statik DOM'u tarar; bu oyunda kritik sınıflar (hareketli hedef yakalanabilirliği, RM dalı, live-region zamanlaması, flaş oranı) axe kural setinin tamamen dışında. 'axe yeşil' raporu, motor/vestibüler dışlama canlıdayken sahte güvence olur — karar 16 'canlıda öğrenilir' yaklaşımıyla birleşince erişilebilirlik regresyonu fark edilmeden yayında kalır.",
+     "kosul": "CI yalnız axe koşuyor ve geçiyorken; oyun mekaniği güncellemelerinde (skor eğrisi ayarı, hız artışı) her deploy'da",
+     "onerilenCozum": "Üç ek Playwright senaryosu: (1) klavye-only tam tur — Tab/Boşluk/Enter ile oyunu başlat, 1 gerçek yakala, skor gönder (fail=merge blok), (2) emulateMedia reducedMotion:'reduce' ile tur aç, otomatik akış hızının 0 olduğunu assert et, (3) getByRole('status'/'alert') ile 'gerçek belirdi' ve tur-sonu anonslarının DOM'a düştüğünü assert et. Flaş analizi CI'a giremez — yayın öncesi tek seferlik manuel PEAT koşusunu release checklist'ine yaz",
+     "siddet": "DUSUK"
+    }
+   ],
+   "enBuyukRisk": "Kaydırma+zamanlı-dokunma çekirdek mekaniği alternatif girdi ve reduced-motion dalı tanımlanmadan canlıya çıkarsa, motor/vestibüler kısıtlı kullanıcılar tamamen dışlanır ve viral hedefli bir kampanyada 'erişilemez oyun' eleştirisi ClubBeans'in insan-odaklı anti-platform tezini kendi silahıyla vurur."
+  },
+  {
+   "disiplin": "Türkiye veri koruma ve dijital hukuk (KVKK)",
+   "bulgular": [
+    {
+     "baslik": "PostHog varsayılan kurulumu açık rıza olmadan cihaz kimliği yazıyor — çerez rehberi ihlali",
+     "sorun": "PostHog default modda sayfa yüklenir yüklenmez ph_* prefix'li cookie/localStorage anahtarıyla kalıcı device_id oluşturur. KVKK Kurulu Çerez Uygulamaları Rehberi'ne (2022) göre analitik çerezler 'kesinlikle gerekli' sınıfında değildir ve AÇIK RIZA gerektirir. Spec'te rıza banner'ı, rıza-öncesi davranış veya PostHog konfigürasyonu hiç geçmiyor. Oyunun amacı viral trafik: on binlerce ziyaretçiye rızasız analitik = görünür, şikayete açık ihlal; m.18 idari para cezası üst sınırı 2026 yeniden değerleme ile milyonlarca TL.",
+     "kosul": "clubbeans.com/sosyal-obezite'yi açan HER ziyaretçi, daha ilk frame'de — oyunu oynamasa, skor kaydetmese bile. Viral paylaşım kartından gelen trafik zirvesinde risk katlanır.",
+     "onerilenCozum": "Rıza öncesi PostHog'u cookieless başlat: init'te `persistence: 'memory'` + `person_profiles: 'never'` (veya `opt_out_capturing_by_default: true`); rıza banner onayından SONRA persistence'ı cookie'ye yükselt. Session replay/autocapture bu sayfada tamamen kapalı (oyun dokunma dizisini kaydeder — davranışsal veri). Kabul ölçütü: rıza verilmeden önce tarayıcıda ph_* prefix'li 0 cookie ve 0 localStorage anahtarı (Playwright testiyle assert edilebilir — altyapıda Playwright zaten var).",
+     "siddet": "KRITIK",
+     "spec_maddesi": "acik-nokta"
+    },
+    {
+     "baslik": "Aydınlatma metni tanımsız — takma ad + IP + skor + telemetri kişisel veridir (m.10 ihlali)",
+     "sorun": "Kurul kararlarında IP adresi tek başına kişisel veri sayılır. Takma ad + Upstash sorted set'teki skor + Vercel request loglarındaki IP + karar 10'un süre/ivme/dokunma telemetrisi birlikte kesin olarak KVKK m.3 kapsamındadır; 'anonim oyun' savunması düşer. Spec'in hiçbir yerinde aydınlatma metni, gösterim yeri veya hukuki dayanak (m.5/2-f meşru menfaat vs. açık rıza) tanımlı değil. Aydınlatma yükümlülüğü ihlali m.18'de ayrı ceza kalemidir ve viral kampanyada tek bir şikayet Kurul incelemesini tetikler — tam lansman push (8 Eylül–25 Ekim) penceresinde.",
+     "kosul": "Skor tablosuna takma adla skor gönderen her oyuncu; ayrıca sadece oynayanlar bile (IP + telemetri sunucuya gidiyorsa) kapsamda.",
+     "onerilenCozum": "Katmanlı aydınlatma: (1) takma ad giriş ekranında tek satır 'Takma adın ve skorun herkese açık listede görünür — detay' + link; (2) `/sosyal-obezite/kvkk` altında tam metin: veri sorumlusu CLUBBEANS TEKNOLOJI LTD, işlenen veriler (takma ad, skor, IP, oyun telemetrisi), dayanak m.5/2-f (skor tablosunun işleyişi + hile önleme meşru menfaati), saklama süreleri, m.11 hakları ve başvuru adresi. Karar 3'ün açılış overlay'i ('Bu oyun seni burada tutmak için tasarlandı') aydınlatma linki için doğal yüzey — ton bozulmadan mikro-link eklenebilir. Skor için açık rıza İSTEME (m.5/2-f yeterli); rıza yalnız analitik çereze saklanır.",
+     "siddet": "YUKSEK",
+     "spec_maddesi": "acik-nokta"
+    },
+    {
+     "baslik": "'Tüm zamanlar' sekmesi süresiz saklama vaat ediyor; giriş yokken silme talebi doğrulanamıyor",
+     "sorun": "Karar 9'un 'Tüm zamanlar' skor tablosu ürün gereği süresiz saklama demektir — m.4/2-d (gerektiği kadar süre) ve m.7 (silme) ile doğrudan çatışır. Daha kötüsü: karar 8'de giriş yok, dolayısıyla 'GurbetciBean61 benim, silin' talebini doğrulamanın yolu yok. Ya talebi reddedersiniz (m.11 ihlali, 30 gün yanıt süresi aşımı ayrı ihlal) ya da doğrulamadan silersiniz (herkes rakibinin skorunu sildirebilir — skor tablosu sabotajı).",
+     "kosul": "Kampanya bittikten aylar sonra gelen tek bir m.11/m.13 başvurusu (veya Kurul'a şikayet) durumunda; sabotaj vektörü ise skor tablosu rekabeti kızıştığı anda.",
+     "onerilenCozum": "Skor kaydında sunucu random bir deletion-token üretip localStorage'a yazsın; oyun-sonu ekranına 'skorunu sil' self-service butonu (token'la doğrulanır, anında siler). Token'ı kaybedenler için info@clubbeans.com başvuru yolu + IP/zaman eşleşmesiyle makul doğrulama prosedürü yazılı olsun. Saklama politikası spec v2'ye rakamla girsin: ham telemetri ≤24 saat (Upstash TTL), IP ≤7 gün, takma ad+skor kampanya bitişi + 6 ay sonra anonimleştirme (takma ad → 'Bean_####' rewrite; 'Tüm zamanlar' sekmesi anonim adlarla yaşamaya devam edebilir — ürün kararı bozulmaz).",
+     "siddet": "YUKSEK",
+     "spec_maddesi": "9"
+    },
+    {
+     "baslik": "18 yaş altı: veli onayı imkânsız + serbest takma ad alanı çocuğun gerçek adını alenileştirebilir",
+     "sorun": "Skor tabanlı, maskotlu, 60 saniyelik mobil oyun mekanik olarak çocuk çeker. Giriş olmadığı için (karar 8) veli onayı teknik olarak alınamaz. Asıl patlama noktası: takma ad alanı serbest metin — 13 yaşındaki bir çocuk 'AyseYilmaz7C' yazar ve bu herkese açık skor tablosunda süresiz yayınlanır. Küfür filtresi (açık-nokta listesinde var) bunu YAKALAMAZ; ad-soyad deseni küfür değildir. Çocuk verisinin alenileştirilmesi Kurul'un en sert yaklaştığı kategoridir.",
+     "kosul": "Yaş beyanı olmayan her oyuncu; özellikle okul döneminde (kampanya Eylül'e denk geliyor) sınıf arkadaşları arasında skor yarışı başladığında.",
+     "onerilenCozum": "Yaş kapısı koyma (doğrulanamaz + huni öldürür + ek veri toplar, ölçüsüz). Bunun yerine veri minimizasyonu: (1) takma ad alanı boş gelmesin — sunucu üretimi öneri adla dolu gelsin ('SolgunBean42' gibi, oyunun çözülme temasına uygun); (2) serbest girişte '<Ad> <Soyad>' desenine (iki kelime, ikisi de baş harfi büyük, TR ad sözlüğü eşleşmesi) uyarı: 'Gerçek adını yazma'; (3) aydınlatma metninin bir paragrafı sade, çocuk-anlaşılır dille; (4) e-posta/telefon/doğum tarihi ASLA istenmesin. Küfür filtresi web'e taşınırken ad-deseni kontrolü aynı modüle eklensin.",
+     "siddet": "YUKSEK",
+     "spec_maddesi": "8"
+    },
+    {
+     "baslik": "Karar 8 hesap bağlama: pseudonim veri gerçek kimliğe eşleşiyor, hesap-silme zincirine bağlanmazsa erasure-drift",
+     "sorun": "ClubBeans hesabı bağlandığı anda takma ad + skor + oyun telemetrisi doğrulanmış kullanıcı kimliğiyle eşleşir; 'takma adlı veri' savunması o kullanıcı için tamamen düşer. İki somut boşluk: (1) bağlama anında kullanıcıya eşleştirmenin sonucu söylenmiyor — m.10 aydınlatma bağlama yüzeyinde de gerekir; (2) proje geçmişinde 12-tablo erasure-drift dersi var (KVKK hesap-silme sertleştirmesi, 2026-08-04): web oyununun Redis sorted set üyeliği ve Supabase'deki hesap-skor eşleşme kaydı mevcut extract-then-delete silme zincirine eklenmezse, hesabını silen kullanıcının rozeti/eşleşmesi skor tablosunda yaşamaya devam eder = m.7 ihlali, üstelik daha önce aynı sınıf hatadan yandınız.",
+     "kosul": "Hesabını bağlayıp sonra ClubBeans hesabını KVKK gereği sildiren herhangi bir kullanıcı.",
+     "onerilenCozum": "(1) Bağlama butonunun hemen altında tek cümle: 'Skorun ve oyun geçmişin ClubBeans hesabınla eşleştirilir' + aydınlatma linki. (2) Eşleşme tablosu (hangi DB'de tutulacaksa) hesap-silme zincirinin tablo envanterine eklensin; Redis tarafında user_id → takma ad ters-indeksi tutulup silmede ZREM yapılsın. (3) Mevcut hesap-silme testine ölçülebilir assertion: 'silinen kullanıcının oyun eşleşmesi ve rozeti 0 kayıt'. Bu yapılmadan karar 8 canlıya alınmasın — rozet özelliği oyundan sonra da açılabilir, launch'u bloklamaz.",
+     "siddet": "YUKSEK",
+     "spec_maddesi": "8"
+    },
+    {
+     "baslik": "Karar 10 telemetrisi (süre/ivme/dokunma) ham haliyle saklanırsa gereksiz davranışsal veri birikir",
+     "sorun": "Hile kontrolü için sunucuya giden dokunma sayısı/ivme/süre dizisi, IP ile yan yana kalıcı saklanırsa amaçla sınırlılık (m.4/2-c) ihlaline dönüşür: hile kontrolünün amacı skor kabulü anında biter, ham davranış dizisinin sonrasında tutulmasının savunulabilir amacı yok. Ayrıca bu veri seti aydınlatma metnini şişirir ve olası bir veri ihlali bildiriminde (m.12) 'kullanıcı davranış kaydı sızdı' manşetine malzeme olur.",
+     "kosul": "Skor gönderen her oyuncu; sızıntı/şikayet senaryosunda kampanya sonrası aylarca birikmiş telemetri.",
+     "onerilenCozum": "Akla-yatkınlık kontrolü request-anında, bellekte hesaplansın; persist edilen SADECE sonuç olsun (skor + kabul/red boolean + coarse bucket'lar, örn. 'dokunma: 10-20 aralığı'). Ham dizi hiç yazılmasın; debug için gerekiyorsa Upstash'te TTL ≤ 24 saat ve IP'siz. Kabul ölçütü: Redis'te `EXPIRE`'sız telemetri anahtarı 0 adet.",
+     "siddet": "ORTA",
+     "spec_maddesi": "10"
+    },
+    {
+     "baslik": "Ödülsüz kurgu çekiliş mevzuatını gerçekten devre dışı bırakıyor — ama tek bir 'hediye' eklemesi bunu bozar",
+     "sorun": "Karar 11 (ödül yok, skor ve gurur) doğru: karşılığında mal/para/menfaat vaadi olmadığı için Karşılığı Nakit Olmayan Piyangolar ve Çekilişler Hakkında Yönetmelik (MPİ izni) kapsamı DIŞINDA — bu teyit edilir. Kırılgan nokta süreçtir: kampanya ivme kazanınca 'haftanın en yüksek skoruna ücretsiz etkinlik bileti' gibi tek bir pazarlama dokunuşu, yarışmayı bir anda izne tabi piyango yapar; izinsiz düzenleme idari yaptırım + MPİ süreci demektir ve lansman ortasında geri alınamaz.",
+     "kosul": "Kampanya sırasında herhangi birinin (pazarlama refleksiyle) skora bağlı maddi ödül/bilet/indirim eklemesi durumunda.",
+     "onerilenCozum": "Spec v2'ye değiştirilemez madde: 'Skora bağlı hiçbir maddi ödül, bilet, indirim veya çekiliş, hukuk incelemesi olmadan eklenemez.' Doğrulanmış rozet (karar 8) maddi menfaat sayılmaz, kalabilir.",
+     "siddet": "DUSUK",
+     "spec_maddesi": "11"
+    },
+    {
+     "baslik": "'Uygulama indir' yönlendirmesi kendi mecrada — reklam mevzuatı riski düşük, ama oyun adı RÖK şikayetine açık",
+     "sorun": "Karar 12'nin indirme CTA'sı ClubBeans'in kendi alan adında kendi ürününü tanıttığı için TKHK m.61 örtülü reklam sorunu üretmez; karar 3'ün açık itirafı ('seni burada tutmak için tasarlandı') Ticaret Bakanlığı'nın karanlık tasarım (dark pattern) yaklaşımının tam tersine, lehe çalışır. Kalan tek yüzey: 'SOSYAL OBEZİTE' adı, paylaşım kartlarıyla üçüncü platformlara yayıldığında, obezite bir hastalık olduğu için 'hasta grubunu küçümseyen ifade' gerekçesiyle Reklam Özdenetim Kurulu/Reklam Kurulu şikayeti çekebilir — karar 13'ün görsel güvenceleri (tartı yok, silüet yok) metinsel adı korumaz.",
+     "kosul": "Paylaşım kartının X/Instagram'da organik yayılması + tek bir hasta-hakları derneği veya rakip şikayeti.",
+     "onerilenCozum": "Adı değiştirme yetkim yok (karar 13); telafi: paylaşım kartı ve oyun-içi metinlerde 'obez/kilo/şişman' kelime ailesinin İNSANLAR için asla kullanılmamasını lint-seviyesinde garanti et (metin sözlüğü kontrolü, karar 13'ün ruhuyla uyumlu); olası şikayete hazır tek paragraflık savunma dosyası şimdiden yazılsın: metafor zaman/tüketim üstüne, hedef platform düzeni (karar 4), insan/beden iması yok.",
+     "siddet": "DUSUK",
+     "spec_maddesi": "12"
+    }
+   ],
+   "enBuyukRisk": "Viral olmayı başaran oyunun aynı görünürlükle rızasız PostHog çerezi + aydınlatmasız kişisel veri işlemeyi on binlerce kişiye sergilemesi — tam lansman push penceresinde tek bir Kurul şikayetiyle inceleme ve 'gizlilik vaazı veren anti-platform, KVKK'ya uymuyor' başlıklı itibar yangını."
+  },
+  {
+   "disiplin": "Türkçe metin yazarlığı (kampanya + oyun içi copy)",
+   "bulgular": [
+    {
+     "baslik": "İsim 'OBEZİTE' + Bean'in 'şişme' fazı = spec içi çelişki, bağlamsız ekran görüntüsünde beden-utandırma linci",
+     "spec_maddesi": "6 ve 13 (çelişki)",
+     "sorun": "Karar 13 'beden/kilo iması yok' der; karar 6'nın dönüşüm yayı 'şişme (1-2. eşik)' ile BAŞLAR. Şişmiş bir maskot + ekranda kocaman 'SOSYAL OBEZİTE' yazısı, oyunu hiç oynamamış birinin timeline'ında tek kare olarak dolaştığında okunacak şey 'obeziteyle dalga geçen oyun'dur. Viral hedefi (karar 1. amaç) tam tersine, beden-olumlama hesaplarının alıntı-tweet linci olarak gerçekleşir.",
+     "kosul": "Paylaşım kartı veya organik ekran görüntüsü, oyun bağlamı olmadan X/Instagram'da dolaştığında; özellikle Bean 1-2. eşikte (şişkin halde) yakalanmış bir karede.",
+     "onerilenCozum": "(1) Görsel yayı değiştiremem (karar 6) ama metin telafisi ZORUNLU: 'obezite' kelimesinin geçtiği HER yüzeye (açılış, paylaşım kartı, OG görseli) tanım satırı sabitle: 'Sosyal obezite: kilonun değil, zamanın yutulması.' Manifesto'daki mevcut BrandTerm kullanımı (components/Manifesto.tsx:65) zaten bu terimi açıklıyor — aynı açıklama cümlesi oyuna taşınsın. (2) Oyun copy'sinin hiçbir yerinde 'şişman/kilo/obez/yağ' kelimesi geçmesin; dönüşüm mesajları yalnız 'doldun/uyuştun/soldun/karıştın' fiilleriyle yazılsın. (3) Paylaşım kartında Bean'in ŞİŞKİN karesi değil, SON karesi (pikselleşme) kullanılsın — pikselleşme kilo değil yok olma okutur.",
+     "siddet": "KRITIK"
+    },
+    {
+     "baslik": "Karar 7 mesajları ikinci tekil şahısla sertleşirse hedef oyuncuya kayar (karar 4 ihlali) + oturum-ötesi sayaçta metin saçmalar",
+     "spec_maddesi": "7 ve 4 (gerilim)",
+     "sorun": "Spec'teki örnek 'Hâlâ buradasın.' zaten suçlayıcı sınırda. 6 kademe boyunca doğrudan sertleşen 'sen' dili, karar 4'ün 'oyuncu kurban, bizimle aynı tarafta' ilkesini kırar; oyuncu aşağılandığını hisseder ve paylaşmaz (viral ölümü). İkinci sorun: panel TÜM turların toplamını sayıyor — ertesi gün dönen oyuncu 'Toplam 47 dakika. Hâlâ buradasın.' görür; 'hâlâ' kelimesi oturumlar arası yanlış, metin yalan söyler.",
+     "kosul": "4. kademeden itibaren her tur sonu panelinde; ve oyuncu 24 saat sonra döndüğünde toplam sayaç dünkü süreyi de içerdiğinde.",
+     "onerilenCozum": "Sertleşme oyuncuya değil DÜZENE yönelsin; 6 kademe teslim: (1) 'İlk tur. 60 saniye gitti. Fark ettin mi?' (2) '2. tur. Toplam 2 dakika. Akış tam da bunu istiyor.' (3) '3. turun. Toplam 3 dakika. Hâlâ buradasın.' [kullanıcının cümlesi — korunur] (4) '4. tur. Toplam 4 dakika. Sen kaydırmıyorsun; kaydırılıyorsun.' (5) '5. tur. Toplam 5 dakika. Akış doymaz. Sen dolmazsın.' (6) '6. tur. Toplam 6 dakika. Biz kapıyı açık bıraktık. Diğerleri bırakmaz.' Dönen oyuncu için ayrı kalıp: 'Yine geldin. Dün X dakika, bugün Y. Akış seni hatırlıyor.' — 'hâlâ' yalnız aynı oturumda kullanılır.",
+     "siddet": "YUKSEK"
+    },
+    {
+     "baslik": "Tur sonu indirme CTA'sı düz reklam dili olursa oyunun tezi kendini yer (reklam hissi açık noktası)",
+     "spec_maddesi": "12 + acik-nokta (reklam hissi)",
+     "sorun": "'Dikkat ekonomisini eleştiren oyun, sonunda bana uygulama satmaya çalıştı' okuması tek bir alıntı-tweet'le kampanyanın ana anlatısı olur. 'Hemen indir!' tonundaki her CTA, karar 3'te sahiplenilen dürüstlüğü sahteleştirir.",
+     "kosul": "Tur sonu ekranında store butonlarının üstündeki başlık/alt metin, oyun mesajlarıyla aynı ekranda yan yana durduğunda.",
+     "onerilenCozum": "CTA'yı oyunun mekanik diline bağla — teslim edilen tur sonu bloğu: Başlık: '60 saniye bitti.' Gövde: '812 metre kaydırdın. 3 gerçeği yakaladın; 5'i akıp gitti.' Köprü satırı: 'Kaçırdığın gerçekler ekranda değil, dışarıda duruyor.' CTA üstü tek satır: 'ClubBeans: gerçeğin uygulaması. Akışı değil, buluşmayı açar.' Butonlar: 'App Store' / 'Google Play' (ham store isimleri, pazarlama fiili yok). 'Hemen/şimdi/kaçırma' kelimeleri YASAK — 'kaçırma' aciliyet dili, eleştirdiğimiz düzenin dilidir.",
+     "siddet": "YUKSEK"
+    },
+    {
+     "baslik": "Klişe kademesinde tanınabilir imza-söz/kitap adı/platform-özgü ifade sızması (karar 5'in metin düzeyindeki karşılığı yok)",
+     "spec_maddesi": "5",
+     "sorun": "Karar 5 yalnız 'arayüz/logo taklidi' yasaklıyor; metin düzeyi açık. Klişe motivasyon parodileri doğal olarak gerçek imzalara kayar: 'Sabah 5 Kulübü' Robin Sharma'nın tescilli kitap adıdır; 'link bio'da' ifadesi tek başına Instagram'ı işaret eder; belirli bir TR influencer'ın viral sözünün birebir alınması kişi hedefi sayılır. Tek bir çakışma 'X'i hedef almışlar' haberine dönüşür.",
+     "kosul": "Parodi metin havuzuna son dakikada, denetimsiz metin eklendiğinde; özellikle klişe kademesinde imza-cümle kalıbı kullanıldığında.",
+     "onerilenCozum": "İki kural metin havuzuna yazılı girsin: (a) hiçbir metin gerçek bir kitap/kurs/kişi sloganıyla 4+ kelime örtüşemez, (b) platform-özgü terim (bio, story, reels, RT, DM) geçemez. Yayın öncesi tüm havuz bu iki filtreden elle geçirilir ve her metnin yanına 'arketip' etiketi yazılır (motivasyon-koçu, minnet-gurusu, kaydet-tuzağı vb.) — arketip parodisi serbest, birey parodisi yasak.",
+     "siddet": "YUKSEK"
+    },
+    {
+     "baslik": "Parodi kademe havuzu (karar 5) — teslim edilen örnek setler + kademe geçişinin hissedilmesi için uzunluk kuralı",
+     "spec_maddesi": "5",
+     "sorun": "Kademeler ('anlamlı → klişe → boş → boş kutu') metinle taşınacak; kaydırma hızında 1 saniyeden kısa görünen kartlarda 120+ karakterlik metin okunmaz, kademe farkı hissedilmez ve karar 6'daki 'boşalma' yayı görsel olarak çöker. Uzunluk kademe başına daralmazsa oyuncu 3. dakikada hâlâ 'içerik var' sanır.",
+     "kosul": "Kart ekranda <1 sn kaldığında; anlamlı kademe metinleri 100 karakteri aştığında.",
+     "onerilenCozum": "Uzunluk merdiveni: anlamlı ≤90, klişe ≤60, boş ≤25 karakter, boş kutu = 0. Teslim edilen havuz — ANLAMLI: 'Babaannemin el yazısı tarif defterinden ilk deneme: yandı ama mutluyum.' / 'Bu sabah denize girdim. Kimse yoktu. Her şey duruyordu.' / 'Komşumla ilk kez konuştuk. Aynı kitabı okuyormuşuz.' / 'Üç yıldır ertelediğim çömlek kursuna yazıldım. Elim titriyor, iyi anlamda.' / 'Arkadaşım taşındı; mektuplaşmaya başladık. Kâğıt kokusu iyi geliyor.' — KLİŞE: 'Enerjini koru. Herkes seni hak etmiyor.' / 'Bugün de minnettarlıkla uyandım. Evren fazlasını verecek.' / 'Kimse sana bir şey borçlu değil. Işığını kendin yak.' / 'Vazgeçme. En karanlık an şafağa en yakın andır.' / 'Disiplin, motivasyonun bittiği yerde başlar.' — BOŞ: 'bunu herkes görmeli' / 'aynen öyle' / 'kaydet, sonra lazım olur' / 'yorumlar altın' / 'bu kadar.' — BOŞ KUTU: metin yok; yalnız gri blok, son eşikte tek karakter: '…'",
+     "siddet": "ORTA"
+    },
+    {
+     "baslik": "Karar 3 itiraf cümlesi oyun başında sürtünme yaratır; oyun sonunda tekrar edilmezse anlamı kaybolur",
+     "spec_maddesi": "3",
+     "sorun": "Viral linkten gelen oyuncu ilk 3 saniyede oynamak ister; iki cümlelik felsefi itiraf başta okunmadan geçilir ve tek işlevi gecikme olur. İtirafın gücü DENEYİMDEN SONRA anlaşılır — başta verilip sonda tekrarlanmazsa karar 3'ün 'çelişkiyi sahiplenme' amacı gerçekleşmez, sadece pretansiyöz bir açılış olarak kalır.",
+     "kosul": "Oyuncu paylaşım linkinden geldiğinde ve açılış ekranı 2 saniyeden uzun etkileşim istediğinde; itiraf yalnız açılışta gösterildiğinde.",
+     "onerilenCozum": "Açılışta tek dokunuşla geçilebilir, ≤2 satır tutulur; AYNI cümle son ekranda skorun altında geri döner ('Başta söylemiştik:' önekiyle). 3 alternatif yazım teslim: (A) 'Bu oyun seni burada tutmak için yapıldı. Fark şu: bunu yüzüne söylüyoruz.' (B) 'Seni tutacak her şeyi koyduk. Diğerlerinden tek farkımız: kapı görünür yerde.' (C) 'Bu akış da sonsuz. Tek farkı, sonunda gerçek bir çıkışı olması.' — (A) site sesine en yakın (kısa, ikinci tekil, itiraf tonu SerendipityBean.tsx:13 kalıbıyla uyumlu).",
+     "siddet": "ORTA"
+    },
+    {
+     "baslik": "Paylaşım kartı skor-övgüsü oyunun teziyle çelişir; kart metni mesafeyi değil kurtarılan gerçekleri övmeli",
+     "spec_maddesi": "12 + acik-nokta (paylaşım kartı)",
+     "sorun": "Kart 'X puan yaptım, geç beni' derse, oyun 'akışta uzun kalmayı' ödüllendirmiş olur — skorun ana bileşeni mesafe (karar 1) olduğu için yüksek skor = çok kaydırma = tezin tam tersi. Alıntı-tweet'lerde 'oyunun kendisi de seni kaydırtıyor ama' eleştirisine hazır bir hedef.",
+     "kosul": "Kart metni yalnız toplam skoru öne çıkardığında; 'gerçek' sayısı ve süre kartta görünmediğinde.",
+     "onerilenCozum": "Kartta üç veri ZORUNLU ve hiyerarşi şu sırayla: (1) kurtarılan gerçek sayısı BÜYÜK, (2) akışa verilen süre, (3) skor küçük. Teslim edilen kart metni: 'SOSYAL OBEZİTE — 7 gerçeği kurtardım. 4 dakikamı akış aldı. Sen kaçını kurtarabilirsin?' + alt satır: 'clubbeans.com/sosyal-obezite'. Meydan okuma fiili 'geç beni' değil 'kurtar' — rekabet tezi desteklesin. Kart tanım satırını (bulgu 1) taşısın.",
+     "siddet": "ORTA"
+    },
+    {
+     "baslik": "Parodi sesi ile ClubBeans sesi arasında karantina yok — jargon sızıntısı brand-voice ihlali üretir",
+     "spec_maddesi": "5 + 9",
+     "sorun": "Brand-voice sosyal medya jargonunu ('viral, feed, scroll, engagement') ClubBeans iletişiminde yasaklar; ama parodi kartlar bu jargonu bilerek kullanacak. İki ses tek ekranda karışırsa (ör. skor panelinde 'feed'de 812m' gibi bir yazım) yasak terim ClubBeans'in KENDİ ağzından çıkmış olur. Ayrıca skor tablosu/panellerde 'User', hile-reddi uyarısında 'Success' başlığı gibi refleks İngilizce ihlaller klasik hatadır.",
+     "kosul": "Skor paneli, tur sonu ekranı, hata/hile mesajı gibi ClubBeans-sesli yüzeylerde jargon veya yasaklı terim kullanıldığında; parodi metni kart çerçevesi DIŞINA taştığında.",
+     "onerilenCozum": "Oyun UI sözlüğü sabitle ve PR şablonuna ekle — ClubBeans-sesli yüzeylerde yalnız: 'akış' (feed değil), 'kaydırma' (scroll değil), 'gerçek', 'tur', 'skor', 'takma ad' (user/kullanıcı adı yerine), 'Bugün / Tüm Zamanlar'. Jargon yalnız parodi kart bileşeninin İÇİNDE yaşayabilir; kartlar görsel olarak 'alıntılanan düşman' çerçevesinde kalır. Hile-reddi metni teslim: 'Bu skor akla yatmadı. Akış bile bu kadar hızlı akmaz.' — suçlama yok, mizah düzende kalır.",
+     "siddet": "ORTA"
+    }
+   ],
+   "enBuyukRisk": "'SOSYAL OBEZİTE' adı + şişen Bean karesi bağlamsız bir ekran görüntüsünde 'obeziteyle dalga geçen oyun' olarak okunur ve hedeflenen viral dalga, lansman push'unun ortasında beden-utandırma linci olarak geri döner."
+  }
+ ],
+ "verdictler": [
+  {
+   "baslik": "Bulgu 1 — Yanlış-dokunma cezası tanımsız, spam-tap baskın strateji",
+   "karar": "CONFIRMED",
+   "gerekce": "Adım adım kuruldu, çürütülemedi: (1) spec satır 32 (karar 2) yalnız gerçek-yakalama dokunuşunu tanımlar; boş gönderiye dokunmanın sonucu belgede YOK. (2) Cezasız ortamda kaçırmanın maliyeti pozitif (gerçek gider), dokunmanın maliyeti sıfır → her karta dokunmak matematiksel olarak baskın strateji, ayırt etme becerisi devreden çıkar. (3) Çürütme denemesi olarak tek karşı-mekanizma 'tap kaydırmayı keser, mesafe kaybettirir' idi; ama bulgu 2'nin önerdiği gibi yakalama toplam skorun %70-85'i yapılırsa bu kayıp marjinalleşir — iki uzmanın çözümleri birbirinin sorununu BÜYÜTÜYOR, ceza olmadan denge kurulamıyor. (4) Karar 10'daki 'dokunma sayısı tutarlılığı' bunu ÇÖZMEZ: spam-tap bot değil gerçek insan davranışıdır; oyun kuralı onu geçersiz saymadıkça sunucu bu skoru akla-yatkın kabul etmek zorundadır. Koşul: leaderboard'a oynayan herkes, ilk 24 saat. Sonuç: 'Bugün' sekmesi tepesi ilk günden spam-tap skorlarına geçer.",
+   "cozumEelestirisi": "Üç ceza alternatifi birden verilmiş; hepsi uygulanırsa aşırı-cezalandırma. 400ms dokunma kilidi en tehlikelisi: gerçek belirdiği anda kilit aktifse dürüst oyuncu yakalayamaz → bulgu 3'ün uyardığı 'dokundum, saymadı' his kırığını oyunun KENDİ kuralı üretir. Bean-hızlanma cezası görünmez maliyet, oyuncu öğrenemez. En öngörülebilir olan puan cezasıdır (-20). Sunucu eşiği 'dokunuş/gerçek ≤ 3' yanlış katmanda: 12 spawn'da 36 tap tavanı, near-miss'lere uzanan dürüst oyuncuyu reddedebilir. Ceza istemci-taraflı oyun kuralı olmalı; sunucu eşiği yalnız aşırı ucu (örn. ≥10×) kesmeli."
+  },
+  {
+   "baslik": "Bulgu 2 — Skor formülü tanımsız, bileşenler çatışıyor",
+   "karar": "CONFIRMED",
+   "gerekce": "Her iki uçta da bozulma adım adım yazılabiliyor: mesafe baskınsa optimal oyun gerçekleri yok sayıp maksimum hızda kaydırmaktır — skor tablosu 'kaydır-geç' metasını herkese öğretir ve karar 4'ün mesajı mekanikçe yalanlanır; yakalama baskınsa mesafe ölü ağırlıktır ve karar 1'in ikili formülü tek bileşene çöker. Zayıflatıcı not: bu YENİ bir keşif değil — spec satır 55-56 aynı şeyi zaten 'bilinen açık nokta' olarak listeliyor; bulgunun katkısı 'canlıda öğreniriz' (karar 16) yaklaşımının formül için çalışmadığını göstermesi. O kısım sağlam: karar 9'daki 'Tüm zamanlar' Upstash sorted set'i kalıcıdır; lansman sonrası formül değişirse eski ve yeni formülle üretilmiş skorlar aynı set'te karşılaştırılamaz halde karışır — formül lansmandan önce kilitlenmek ZORUNDA. Koşul: leaderboard optimize eden oyuncu + ilk gün. Sonuç: baskın taraf hangisiyse meta 24 saatte ona oturur.",
+   "cozumEelestirisi": "Önerilen taban sayılar (kart=1, gerçek=50) makul başlangıç ama iki yan etki var: (1) seri çarpanı tek kaçırmada sıfırlanıyor → 60sn turda varyansı büyütür ve bulgu 1'e ceza eklendiyse etkileşim tanımsız (yanlış tap seriyi kırar mı?) — iki kural birlikte tasarlanmalı. (2) 'Yakalama anındaki hız bonusu +%25' hile yüzeyi: hız istemci ölçümüdür, karar 10 sert replay doğrulama içermez → sahte hız değeri POST edilebilir ve sunucu ayırt edemez. Bonus ya atılmalı ya sunucu-doğrulanabilir birime (seed'li spawn zamanı vs dokunma zamanı farkı) bağlanmalı."
+  },
+  {
+   "baslik": "Bulgu 3 — iOS momentum kaydırmada dokunuş yutulması",
+   "karar": "CONFIRMED",
+   "gerekce": "Mekanizma dar ama doğru: iOS Safari'de momentum sürerken gelen ilk dokunuş kaydırmayı durdurur ve elemente synthesized click ÜRETMEZ — bu belgelenmiş, yıllardır bilinen WebKit davranışı. React'te varsayılan yol onClick olduğu için naif implementasyonda yüksek-hız anındaki yakalama dokunuşları gerçekten sessizce kaybolur. Repro koşulu net: iOS Safari + fling aktif + onClick tabanlı yakalama handler'ı. Sonuç: en yüksek-değerli oyun anında girdi kaybı. ANCAK bulgunun 'native scroll KULLANMA' çıkarımı aşırı: touchstart/pointerdown olayları momentum sırasında da normal iletilir — yalnız click bastırılır. Yakalama kaydı pointerdown + hit-test ile yapılırsa sorun native scroll İÇİNDE çözülür. Bulgu 'click ile yazarsan kırılır' düzeyinde CONFIRMED; 'native scroll ile yazılamaz' düzeyinde DEĞİL.",
+   "cozumEelestirisi": "Önerilen çözüm sorundan KÖTÜ olma riski taşıyor. Native scroll compositor thread'de çalışır ve JS jank'inden etkilenmez; önerilen touchmove→translateY zinciri ise ana thread'e bağlıdır. Spec'in kendi açık noktası 'düşük-tier Android'de 60fps' (satır 58) tam bu mimariyle tehdit edilir: spawn-render veya GC ana thread'i ~30ms bloklarsa parmak-altı kayma kopar — bu his kırığı, çözmeye çalıştığı click-kaybından daha SIK yaşanır. Ayrıca özel momentum fiziği = rubber-band, overscroll ve erişilebilirlik (satır 52) sıfırdan yazılır; 'en kısa sürede canlı' (karar 16) takvimiyle çelişir. Doğru sıra: önce native scroll + pointerdown yakalama + scroll-offset hız ölçümü; bulgunun kendi kabul testi (fling'de ≥%99 kayıt) BU mimaride koşulmalı, geçemezse ancak o zaman custom akışa geçilmeli."
+  },
+  {
+   "baslik": "Bulgu 4 — Piksel mesafe + cihaz fiziği, masaüstü avantajı",
+   "karar": "PLAUSIBLE",
+   "gerekce": "Yapısal avantaj gerçek ama bulgunun vurguladığı yerde değil: asıl asimetri masaüstünde kaydırma (tekerlek) ile yakalamanın (imleç+tık) PARALEL girdi kanalları olması — masaüstü oyuncu kaydırmayı kesmeden yakalar; mobilde aynı parmak ikisini de yapar ve her dokunuş momentumu durdurur (bulgu 3) → mobil her yakalamada mesafe öder, masaüstü ödemez. Bu kadarı sağlam. Nicel iddialar ise ölçümsüz: '1.5-2× mesafe farkı' ve 'ilk hafta sonunda tablo masaüstüne kilitlenir' spekülatif; 'hazır bekleyen imleç insanüstüdür' de tartışmalı — nesne rastgele konumda belirir, imlecin hedefe taşınması Fitts yasasına tabidir ve başparmak dokunuşundan hızlı olduğu gösterilmemiştir. Ayrıca viewport-piksel kısmı, bulgu 2/5'in zaten önerdiği kart-birimi ölçümüne geçilince kendiliğinden düşer. Kalan risk (paralel-kanal asimetrisi) mekanizma olarak mantıklı ama magnitüdü ölçülmeden repro kurulamıyor → PLAUSIBLE, YUKSEK sınıfı ölçümle hak edilmeli.",
+   "cozumEelestirisi": "(a) Kart-birimi ölçüm doğru ve maliyetsiz — uygula. (b) '8 kart/sn tavan' sayısı kanıtsız: tavan gerçek insan tavanının altında kalırsa en becerikli oyuncuların skoru kırpılır, yani beceri tavanı bilinçli düşürülmüş olur — bulgu 1'in şikayet ettiği hatanın ters yönlüsü. Tavan kapalı-beta ölçümünden gelmeli, spec'e sayı olarak şimdi yazılmamalı. (c) 'Aynı beceri profilinin SE ve masaüstünde farkı ≤%10' kabul ölçütü pratikte ölçülemez — aynı-beceri kontrol grubu kurulamaz; vekil metrik (girdi-türü etiketli skor dağılımlarının medyan farkı) tanımlanmalı. (d) Girdi-türü etiketleme geri-dönüşsüz olmayan tek adım: lansmanda topla, masaüstü sekme ayrımını veri gösterirse sonradan aç."
+  },
+  {
+   "baslik": "Bulgu 5 — Spawn kuralı tanımsız, adalet + sunucu körlüğü",
+   "karar": "CONFIRMED",
+   "gerekce": "Üç bozulma da adım adım kurulabiliyor, en somutu tek başına yeter: sunucu spawn'ı bilmiyorsa karar 10'un akla-yatkınlık kontrolü 'yakalanan ≤ yakalanabilir' temel invariantını dahi doğrulayamaz — curl ile catches=50 POST eden istemciye karşı elde yalnız zaman-tabanlı kaba eşik kalır; karar 10 sert replay istemiyor ama bu, ÜST-SINIR bile kurulamaz demek değildir. İkincisi: mesafe-tabanlı spawn'da yakalama fırsatı kaydırma hızıyla ölçeklenir → skor hıza süperlineer büyür ve bulgu 1-2'deki meta bozulmasını katlar. Üçüncüsü: spawn sayısı RNG ise kalıcı 'Tüm zamanlar' tablosu (karar 9) varyans avcılığına açıktır — binlerce tur atan oyuncu kuyruk şansını yakalar, tepe beceriyi değil deneme sayısını ölçer. Koşul: her tur + leaderboard tepesi için grind eden azınlık. Sonuç: hem adalet hem hile kontrolü spawn tanımına bağlı; tanımsız bırakılamaz.",
+   "cozumEelestirisi": "İki yan etki: (1) Seed tur BAŞINDA verilirse istemci tüm spawn konum/zamanlarını önceden bilir → headless script mükemmel skoru her turda üretir. Seed yalnız üst-sınırı (≤12 yakalama) doğrular; 'hile çözüldü' sanılmamalı — tablo tepesi bota açık kalır. Bu kabul edilebilir OLABİLİR ama tek koşulla: maksimum skor matematiksel tavanla sınırlı olmalı (12×maks-puan + mesafe tavanı), sonsuz büyüyen bileşen kalmamalı ki bot 'tavana oturur', tabloyu sonsuza kaçırmaz. (2) 'Gerçek belirince akış %30 yavaşlar' önerisi bulgu 1'in savunduğu ayırt-etme becerisiyle ÇELİŞİR: yavaşlama içeriğe bakmadan algılanan bir TELL'dir — oyuncu gerçeği tanımayı değil yavaşlamayı beklemeyi öğrenir. İki uzman önerisi birbirini geçersizliyor; ≥700ms yakalanabilirlik garantisi yavaşlatmayla değil spawn konumu/kart-ekranda-kalma süresiyle sağlanmalı."
+  },
+  {
+   "baslik": "1. Ilk 5 saniye: manifesto + takma ad + ogretim yigilmasi, ilk gercegin garantisi yok",
+   "karar": "PLAUSIBLE",
+   "gerekce": "Bulgunun yarisi spec'te YOK olan bir seyi varsayiyor: karar 8 (spec satir 38) takma adin NE ZAMAN sorulacagini soylemiyor — skor tablosu (karar 9) icin ad ancak skor yazilirken gerekir, yani 'takma ad girisi oyun oncesine yigilirsa' kosulu bulgu sahibinin kurdugu worst-case, spec'in dayattigi bir sey degil. Karar 3'un mesaji da zaten TEK iki-cumlelik satir ('Bu oyun seni burada tutmak icin tasarlandi. Tipki digerleri gibi.' — spec satir 33); '2 sn'de gecilebilir tek ekran' onerisi spec'in mevcut halinden neredeyse farksiz, sorun sisirilmis. AYAKTA KALAN kisim: ilk gercegin zamanlama garantisi gercekten yok — spec satir 56 belirme sikligini acikca ACIK NOKTA olarak birakmis; naif uniform-RNG implementasyonunda ilk gercek 15-20. saniyeye sarkabilir ve karar 2'nin ironisi (kacirma/yakalama) hic yasanmadan tur biter. Bu mekanizma mantikli ama kod yokken (Cb-Web'de oyun dosyasi henuz yok, greenfield) repro kurulamaz ve '%X oyuncu 5 sn'de kacar' iddiasi kaynaksiz. Acik-nokta-olarak-isaretlenmis bir parametreyi 'bozuk' diye sunmak da bulguyu YUKSEK'ten asagi ceker.",
+   "cozumEelestirisi": "(a) takma adi skor-kayit anina tasima dogru ve maliyetsiz — zaten spec buna engel degil. (c) t=4-6 sn garantili ilk gercek + otomatik %50 yavaslama makul, ama '%90 yeni oyuncunun ilk turda 1 yakalama yapmasi' kabul olcutu PostHog'da first_run + catch_count funnel'i kurulmadan olculemez; olcum plani onerinin icinde yok. 'Ilk gercek kacirilirsa mikro-mesaj' iyi, fakat 60 sn'lik turda ekrana metin basmak akisi keser — mesaj 1 sn'den uzun kalirsa kendisi ikinci bir dikkat-hirsizi olur."
+  },
+  {
+   "baslik": "2. Per-kosu dinamik OG olmadan tum paylasimlar ayni gorunur",
+   "karar": "CONFIRMED",
+   "gerekce": "Cekirdek mekanizma deterministik ve spec'e karsi dogru: spec'te paylasim URL'si tanimsiz (karar 12 + satir 50 'paylasim kartinda ne gorunecek' ACIK), duz /sosyal-obezite linki paylasilirsa her tweet/WhatsApp mesaji ayni statik karti basar — bu OG protokolunun calisma seklinin dogrudan sonucu, tartisma yok. ANCAK bulgunun altyapi tespiti YANLIS: 'mevcut OG altyapisi rota-seviyesi statik dosyalar' degil — /Users/suyarer/Cb-Web/app/user/[username]/opengraph-image.tsx, club/[id], post/[id], bean/[id] zaten PARAM-DRIVEN dinamik OG (edge runtime, fetchUserPublic + lib/ogImage.tsx createOgImage helper'i ile veri cekip render ediyor). Yani onerilen /sosyal-obezite/s/[runId]/opengraph-image.tsx mevcut kaliba birebir oturur, is 'yeni altyapi' degil kopya-uyarlama; KRITIK etiketi dogru ama efor iddiasi sisik. Ek deflasyon: X 2023'ten beri link kartlarindan basligi kaldirdi ve harici linkli tweetleri algoritmik olarak dusuruyor — 'kart CTR' kaldiraci X'te bulgunun ima ettiginden zayif (bulgu 4'un kendi onerisi 'link ilk reply'da' bunu zaten itiraf ediyor); dinamik OG asil WhatsApp/Telegram/iMessage/Slack onizlemelerinde is gorur.",
+   "cozumEelestirisi": "runId'yi 'TTL'li hash yeter' diye Redis'e baglamak KENDI KENDINI VURAN yan etki: viral bir tweet 2 hafta sonra da goruntulenir; TTL dolunca /s/[runId] OG route'u veri bulamaz ve eski tweetlerin karti bos/fallback'e duser — tam da viralligin kuyruk trafiginde kart olur. Ya runId hash'leri TTL'siz tutulmali (kucuk payload, maliyet onemsiz) ya da skor+sure URL'ye imzali sekilde gomulmeli (HMAC'li query, Redis'e hic gitmez). Ikincisi hile-yuzeyine dikkat ister: imzasiz gomerseniz herkes elle 99999'luk kart uretir."
+  },
+  {
+   "baslik": "3. Meydan-okuma dongusu yok — oyun tek-oyunculu yayina donusur",
+   "karar": "PLAUSIBLE",
+   "gerekce": "Ref-parametresi + hayalet-hedef mekanizmasinin davet donusumunu artirdigi yon olarak dogru (davet baglami = kisisellestirilmis landing), ve spec'te gercekten yok. Ama bulgu iki olculemez iddiaya yaslaniyor: (1) 'donusum farki katlarcadir' — kaynaksiz; (2) 'k-faktorunu 1'in altina KILITLER' — abartili nedensellik: bu turden web oyunlarinin neredeyse tamami ref'li hayalet-hedefle BILE k<1 kosar (k>1 sistematik degil istisnadir); ref yoklugu k'yi kilitlemez, i bilesenini bir katsayiyla dusurur. 'Ilk 100 oyuncu dongusunde ... gormezse' kosulu bir kosul degil, sonucsuz bir gozlem — olculebilir esik yok. KRITIK yerine YUKSEK'lik bir iyilestirme onerisi; CURUTULDU diyemem cunku mekanizma (davet cercevesi > yayin cercevesi) davranissal olarak saglam ve spec bu firsati gercekten bosluyor.",
+   "cozumEelestirisi": "Iki yan etki es gecilmis: (1) Hayalet-hedef, bulgu 2'deki ayni TTL tuzagina tabi — 3 gun sonra tiklanan ref linkinde runId dolmussa 'Ayse 847'de birakti' satiri sessizce kaybolur; graceful-degrade tasarlanmazsa landing yari-bos gorunur. (2) 'Kisisel rekor kirildigi an mikro-toast' onerisi 60 saniyelik yogun dokunma oyununun ORTASINDA paylasim CTA'si basmak demek — oyuncu ya gormezden gelir ya da dokunup kosuyu oldurur; cozumun bu parcasi sorundan kotu, paylasim tetigi tur SONUNDAKI rekor ekranina baglanmali. PostHog %40 esigi ise havadan — ref'li landing->run_start icin sektor referansi verilmeden 'esik' degil tahmin."
+  },
+  {
+   "baslik": "4. Ilk 100 oyuncu / tohum trafik plani yok",
+   "karar": "CONFIRMED",
+   "gerekce": "Adim adim yazilabiliyor: kosul = spec'in mevcut haliyle (satir 27-46 arasi dagitima dair TEK madde karar 16'nin takvim cumlesi) oyun yalnizca organik trafige acilir; mevcut durum belgeli olarak 'canli ama dusuk-trafik, cogu mock-data' (operasyonel baglam kaydi) — clubbeans.com'un kendi trafigi gunde yuzlerce tekil oyuncu uretmez. Sonuc = k<1 iken toplam oyuncu ~ tohum/(1-k) aritmetigiyle sinirli; tohum onlarca kisiyse dongu matematiksel olarak tutusmaz, oyun sessizlige acilir. Bu spekulatif degil, dort islem. Tek duzeltme: 'plan tek satir bile yok' spec ICIN dogru ama ekosistem icin degil — 5-ajanli lansman master stratejisi (ana-push 8 Eylul-25 Ekim, ARZ-once) ve x-radar kokpiti zaten mevcut varlik; bosluk 'plan yoklugu' degil, oyunun bu mevcut makineye BAGLANMAMIS olmasi. 200 D1 esigi uydurma bir sayi ama olculebilir bir vekil olarak is gorur.",
+   "cozumEelestirisi": "Onerinin 4 kalemi mevcut varliklarla uyumlu (kurucu X hesabi, x-radar madenciligi, ref'li mikro-hesap linkleri). Tek gerilim: 'push'tan 1-2 hafta once ciksin' ile karar 16'nin 'mumkun olan en kisa surede'si bugun (17 Agustos) itibariyle catismiyor — 8 Eylul'e 3 hafta var, pencere tam oturuyor; ama gelistirme sarkar ve oyun push BASLADIKTAN sonra cikarsa 'skorunu app'e tasi' anlatisi tersine doner (push oyunu degil, oyun push'u beklemek zorunda kalir). Reply-seeding kalemi icin ek risk: 20-30 hedefli reply kisa surede ayni linkle atilirsa X spam filtresi hesabi kisitlar — linkli reply orani dusuk tutulmali."
+  },
+  {
+   "baslik": "5. Karar 12: indirme-CTA'si paylasim zirvesinin ustune oturursa viraliteyi keser",
+   "karar": "PLAUSIBLE",
+   "gerekce": "Mekanizma gercek: oyun sonu tek ekranda iki eylem (indir vs paylas) ayni dikkat butcesi icin yarisir ve karar 12 'asil eylem: indirme' diyerek store butonunu birincil konuma FIILEN zorluyor — yani kosul hipotetik degil, kararin dogal implementasyonu. Soguk web trafiginde ilk-temas store donusumunun dusuk tek haneler oldugu yonu de dogru. Ama CONFIRMED icin gereken olculebilir sonuc zinciri kurulamiyor: '~%1 bandi' kaynaksiz, 'hem indirme gelmez hem paylasim duser' cift-kayip iddiasi A/B verisi olmadan varsayim (paylasim butonu gorsel hiyerarside ikinci olsa da paylasma niyeti yuksek kullanici onu bulur — kayip orani bilinmiyor), 'quote-tweet malzemesi olur' tamamen spekulatif. Karar 3 zaten celiskiyi sahiplenmis durumda; ayni ironik ses tonuyla yazilmis bir indirme butonu ('Bu oyunu kapat. Gercek bir masaya otur.') alay konusu olmak yerine tezin parcasi olur — bulgunun kendi onerdigi kopya bu riski zaten sondurur.",
+   "cozumEelestirisi": "'Karari degistirmeden sirala' cumlesi kendini kandirma: ilk kosuda paylasimi birincil, store'u ikincil yapmak karar 12'nin 'oyun sonu ASIL eylem: indirme' hukmunu 1. kosu icin fiilen askiya alir — bu bir risk-telafisi olarak mesru ama 'karar korunuyor' diye pazarlanmamali, kullaniciya karar-degisikligi olarak acikca sunulmali. runs_count>=2 esigi de takma ad/cihaz bazli sayim gerektirir (localStorage yeter) — spec'te oturum kimligi tanimsizken 'flag' kolay denip gecilmis. PostHog run_index kirilimi onerisi ise dogru ve ucuz; bulgunun en saglam parcasi olcum plani."
+  }
+ ]
+}

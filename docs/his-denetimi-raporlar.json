@@ -1,0 +1,392 @@
+[
+ {
+  "boyut": "Kaydırma hissi (scroll feel, dokunmatik ergonomi)",
+  "bulgular": [
+   {
+    "baslik": "Çift başparmak kaydırması durumu paylaşıyor: ışınlanma sıçramaları + hayalet -20 cezası",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:236-275 (onDown/onMove/onUp — pointerId hiç kontrol edilmiyor, S.current tek set)",
+    "kosul": "Gerçek reel'lerin güç-jesti olan dönüşümlü başparmak kaydırması: A parmağı sürüklerken B parmağı ekrana iner. onDown koşulsuz basY/sonY/hiz sıfırlar; sonra A'nın move'u B'nin sonY'sinden delta hesaplar (satır 254: s.sonY - e.clientY, parmaklar arası yüzlerce px). A kalkınca onUp tap kapısını A'nın clientY'si ile B'nin basY'si arasında ölçer (satır 267).",
+    "oyuncuNeHisseder": "Hızlı iki-parmak kaydırmada akış aniden yüzlerce piksel zıplar; üstüne rastgele 'Boşa gitti, 20 puan eksi' yer. Reel refleksi olan herkes ilk 10 saniyede 'oyun bozuk' der — 'çok kötü' yargısının en olası tek kaynağı.",
+    "duzeltme": "onDown'da s.aktifPointerId = e.pointerId kaydet; surukleniyor iken gelen ikinci pointerdown'ı yoksay (veya yeni parmağa devret: sonY'yi yeni clientY'ye eşitle ama basY/basT/ornekler'i tap-değerlendirmesi dışı bırak). onMove/onUp'ta e.pointerId !== aktifPointerId ise return.",
+    "siddet": "KRITIK"
+   },
+   {
+    "baslik": "Akan feed'i durdurmak için dokunmak -20 ceza yiyor — reel'in en evrensel jesti cezalandırılıyor",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:262-271 (onUp tap dalı) + :229-232 (yanlisDokunma cezası); onDown:242 hiz=0",
+    "kosul": "Momentumla akan feed'e parmağını koyup (akış durur, doğru) hareket etmeden kaldırmak: mesafe<12px ve süre<280ms → tap sayılır → ekranda gerçek yoksa yanlisDokunma++ ve 'Boşa gitti, 20 puan eksi'. Gerçek reel'de fling'i dokunuşla durdurmak bedava ve saniyede birkaç kez yapılır.",
+    "oyuncuNeHisseder": "Doğal 'fırlat → dokunup durdur → oku' ritmi her seferinde puan yiyor. Oyuncu ya cezadan korkup fling atamıyor (akış tutuk hisseder) ya da skoru eriyor; iki durumda da 'oyun beni kaydırdığım için cezalandırıyor' hissi.",
+    "duzeltme": "onDown'da sıfırlamadan ÖNCE s.hizOnDown = s.hiz kaydet. onUp tap dalında Math.abs(hizOnDown) > ~200 px/sn ve aktifGercek YOKSA bunu 'fren dokunuşu' say: ceza yazma, yakalamaDene çağırma. Gerçek VARSA yine yakala (C3 korunur). -20 cezası yalnız duran feed'e boşa dokunana kalır — spec §2.3 spam-tap amacı bozulmaz.",
+    "siddet": "KRITIK"
+   },
+   {
+    "baslik": "Sürükle→dur→bırak, durmadan önceki hızla fırlatıyor (bayat örnek penceresi)",
+    "dosyaSatir": "lib/game/fizik.ts:33-44 (firlatmaHizi — ilk, ornekler[0] ile başlatılıp pencere dışıysa hiç güncellenmiyor)",
+    "kosul": "Parmak sürükler, sonra ekranda ≥90ms hareketsiz durur (hareket yok → pointermove yok → yeni örnek yok), sonra kalkar. Döngü ilk iterasyonda break eder, ilk=ornekler[0] kalır; hız = tüm son 12 örneklik mesafe / süre = durmadan ÖNCEKİ sürükleme hızı. (Süre >280ms olduğu için tap dalına da girmez.)",
+    "oyuncuNeHisseder": "'Parmağımla durdurdum, bıraktım — akış kendi kendine kaçtı.' iOS'ta dur-bırak = ölü duruş; burada içerik hortlak gibi fırlıyor. Bir gerçeği okumak için durup parmak kaldıran oyuncu gerçeğin ekrandan uçtuğunu görüyor.",
+    "duzeltme": "firlatmaHizi başında: son örnek bile pencerenin dışındaysa (simdi - ornekler[ornekler.length-1].t > HIZ_PENCERESI_MS) 0 döndür. Tek satır, mevcut testlere yeni vaka ekle.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "Gerçek işareti feed'le birlikte kayıp ekrandan çıkıyor; 1.8sn pencerenin çoğu görünmez geçiyor",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:137 (kartIndex spawn anındaki offset'e sabitlenir) + :182 (işaret feed transform'uyla akar)",
+    "kosul": "Orta bir fling (~1500 px/sn) sırasında spawn: işaret y≈376'da belirir, ~0.4sn'de ekranın üstünden çıkar; kalan ~1.4sn boyunca gerçek 'yakalanabilir' ama GÖRÜNMEZ. Engine §C5 'her hızda ≥1.5sn yakalanabilir' garantisi zamanda tutuyor, görüşte tutmuyor.",
+    "oyuncuNeHisseder": "Fling ortasında 'Kaçtı' anonsu — hiç görmediği bir şeyi kaçırmış sayılıyor. Kaçırmalar beceri değil piyango gibi hisseder; çarpan merdiveni de görünmez sebeple sıfırlanınca skor adaletsiz gelir.",
+    "duzeltme": "rAF içinde işaret ekran dışına taşarsa kartIndex'i akış yönünde bir sonraki görünür slota taşı (s.aktifGercek.kartIndex = floor(s.offset/KART_H)+2 yeniden ata; basladi DEĞİŞMEZ, pencere kısalmaz). Gerçek 'önünde belirir' hissi verir, determinizmi bozmaz (yakalama zaten viewport-geneli).",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "Lastik bölgesinden aşağı fırlatma anında öldürülüyor — üstten feed'e dönüş ölü hissettiriyor",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:129 (offset<0 dalı: geriYayla + s.hiz=0 koşulsuz)",
+    "kosul": "Oyuncu en üstte aşağı çekip (offset<0) feed'e dönmek için aşağı fling atar: bırakışta hiz>0 ama offset hâlâ negatifse bir sonraki frame'de hiz=0 yazılır; fling yutulur, yalnız yavaş yay dönüşü kalır.",
+    "oyuncuNeHisseder": "Üst sınırda oyun 'eli yapışkan' hisseder: fırlatıyorsun, akış tınmıyor, süzülerek 0'a dönüyor. iOS'ta lastikten fling momentumu içeri taşınır.",
+    "duzeltme": "hiz=0'ı yalnız hiz<=0 iken (yukarı/duran) uygula: if (s.offset < 0) { if (s.hiz <= 0) { s.offset = geriYayla(...); s.hiz = 0; } } — pozitif hiz varken normal entegrasyon lastik direncinden çıkışını tamamlasın.",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "12px/280ms tap kapısı aceleci yakalama dokunuşunu sessizce sürüklemeye çeviriyor",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:33-34 (TAP_ESIGI_PX=12, TAP_SURESI_MS=280) + :268",
+    "kosul": "Feed akarken telaşla yakalamaya uzanan başparmak tipik 10-20 CSS px kayar (12px ≈ ~2mm) veya heyecanla 280ms'den uzun basılı kalır; iki durumda da else dalı → mini-fling, yakalamaDene HİÇ çağrılmaz. Sentez §2-madde-2'nin 500ms/16-18px önerisi koda girmemiş (değerler hâlâ 12/280).",
+    "oyuncuNeHisseder": "'Dokundum, saymadı' — üstelik hiçbir geri bildirim yok, gerçek sonra 'Kaçtı' diye anons ediliyor. Yakalamanın güvenilmezliği oyunun tek beceri anını kumar yapar; K2 triyaj sınıfının (sessiz ölü dokunma) oyun içi hali.",
+    "duzeltme": "TAP_ESIGI_PX=18, TAP_SURESI_MS=500 (sentezle uyumlu; 24px değil — kısa kaydırmayı tap'a çevirir). Ek emniyet: else dalında mesafe<28px VE firlatmaHizi<~250px/sn ise fling yazmak yerine yakalamaDene çağır (kararsız jest = dokunma niyeti).",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "188px sabit vuruşlu tekdüze kartlar metronom gibi — akış değil ızgara hissi",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:30 (KART_H=188 tek slot) + :347-368 (her kart aynı iskelet: aynı gri avatar, aynı yükseklik, aynı arka plan)",
+    "kosul": "Her koşulda: bütün kartlar aynı boyda, aynı renkte, aynı yerleşimde. Gerçek feed'lerin his imzası değişken yükseklik ritmidir; göz slot periyodunu 2-3 kartta ezberleyip 'sayfa' gibi okur.",
+    "oyuncuNeHisseder": "Kaydırırken ekran duvar kâğıdı gibi tekrar eder; 'reel kaydırıyorum' değil 'test fikstürü kaydırıyorum' hissi. Ayrıca tekdüzelik gerçek işaretinin sürprizini de köreltiyor.",
+    "duzeltme": "Mantıksal slot 188px KALIR (skor/determinizm dokunulmaz); kart İÇ görünümü index'e bağlı deterministik varyasyon alır: rng(seedInt+index*...) ile iç yükseklik ~140-176px arası, avatar tonu 3-4 koyu-gri/yeşilimsi varyant, bazen 2 satır metin bazen 1 (palet kısıtı §2.5 korunur). Transform matematiği ve kart sayımı hiç değişmez.",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "HAVUZ=10: ilk düğüm daima ekran dışı, >1500px viewport'ta altta boşluk",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:32 (HAVUZ=10) + :157 (index = ilkIndex + i - 1)",
+    "kosul": "i=0 kartı her frame'de y ∈ [-376,-188] aralığında — hiçbir zaman görünmez (yukarı tampon olarak da gereksiz; geri kaydırmada index her frame yeniden hesaplandığından anında geri dönüşüm var). Görünür kapsama son kartın altı = 1504-f px; 100dvh > ~1500px ekranda (dikey monitör, büyük tablet) altta boş şerit kayar.",
+    "oyuncuNeHisseder": "Telefonda hissedilmez; masaüstü/tablet paylaşım trafiğinde (viral linkin gideceği yer) feed'in altında sonsuzluk yerine karanlık boşluk — 'bitmiş/bozuk sayfa' izlenimi.",
+    "duzeltme": "ilkIndex-1 ofsetini ilkIndex yap (ölü üst kart kazanılır) ve mount'ta HAVUZ'u Math.ceil(viewportH/KART_H)+2 ile hesapla (10 taban, büyük ekranda 12-14). Sentez §3-4'ün aynı bulgusunun KART_H=188'e güncellenmiş hali.",
+    "siddet": "DUSUK"
+   }
+  ],
+  "enBuyukRisk": "Oyun, gerçek reel kaydırmanın JEST SÖZLÜĞÜNÜ cezalandırıyor: dönüşümlü çift başparmak kaydırması ışınlanma + hayalet -20 üretiyor (pointerId yok), akan feed'i dokunuşla durdurmak -20 yiyor, dur-bırak hortlak fling atıyor. Fizik motoru (1:1 takip, iOS sönümü) artık doğru; kötü his artık fizikte değil, bu üç girdi-yorumlama hatasında. İlk 10 saniyede tetiklendikleri için oyuncunun 'çok kötü' yargısını tek başlarına açıklarlar — kart görselleri cilalanmadan önce bunlar kapanmalı."
+ },
+ {
+  "boyut": "Görsel tasarım / UI — \"gerçek bir akış gibi görünüyor mu\"",
+  "bulgular": [
+   {
+    "baslik": "GERÇEK'in kendi içeriği yok — yeşil çerçeve rastgele bir parodi gönderinin üstüne biniyor",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:137 (kartIndex ataması) + :370-384 (isaret overlay)",
+    "kosul": "Her spawn'da: isaret, o anki offset+2'deki karta konumlanıyor ama o kartın içeriği kartVerisi()'nden gelen sıradan parodi metni ('Enerjini koru. Herkes seni hak etmiyor.' gibi). Karar 2'deki 'buluşma/insan/davet' içeriği hiçbir yerde render edilmiyor.",
+    "oyuncuNeHisseder": "'GERÇEK — dokun' yazan çerçevenin içinde motivasyon klişesi görüyor. Neyi yakaladığını anlamıyor; çerçeve bir oyun hitbox'ı gibi duruyor, akışın içinden çıkan gerçek bir davet gibi değil. Oyunun tezi (kaydırırken gerçek fırsatlar akıp gidiyor) görsel olarak hiç kurulmuyor.",
+    "duzeltme": "feed.ts'e küçük bir GERCEK içerik havuzu ekle ('Perşembe 19:00 sahil yürüyüşü — 3 kişi eksik, gel' tarzı somut davetler). Spawn anında isaret elemanının İÇİNE bu metin + farklı bir mini düzen (avatar + davet metni) yazılsın; çerçeve+glow korunur ama artık içi dolu bir gönderi olur. rAF içinde tek textContent yazımı — commit=0 bozulmaz.",
+    "siddet": "KRITIK"
+   },
+   {
+    "baslik": "Boş kutu kademesi turun son 22 saniyesinde ekranı ölü gösteriyor — oyuncu 'bozuldu' sanır",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:43-44 (38sn sonrası boskutu) + :171-174 (ust opacity 0, alt 0, metin 0.12, bg #0C0C0C)",
+    "kosul": "gecenMs ≥ 38.000 olduğunda (60 saniyelik turun %37'si): tüm kartlarda avatar satırı opacity 0, etkileşim satırı 0, metin 0.12 ve çoğu metin zaten boş string. Geriye #050505 zemin üstünde #0C0C0C, ince kenarlıklı neredeyse görünmez kutular kalıyor.",
+    "oyuncuNeHisseder": "Ekran 22 saniye boyunca simsiyah, boş dikdörtgenler. 'Boşalma' ironisi olarak değil, render hatası/bitmiş oyun olarak okunur — tam da skorun en kızıştığı bölümde oyuncu kopar veya sekmeyi kapatır.",
+    "duzeltme": "Boş kutuyu 'kırık' değil 'iskelet' gibi çiz: gerçek uygulamaların yükleme iskeletine benzeyen soluk placeholder çubukları (avatar dairesi yerine boş halka, metin yerine 2 gri çubuk #1A1A1A). İroni güçlenir (akış kendi yükleme iskeletine dönüşüyor) ve ekran bilinçli-tasarlanmış görünür. rAF'ta kademe='boskutu' iken çubuk elemanlarının opacity'sini açmak yeterli — DOM havuzuna 2 sabit eleman ekle.",
+    "siddet": "KRITIK"
+   },
+   {
+    "baslik": "Tüm kartlar tek tip: aynı yükseklik, aynı iskelet, medya alanı yok — akış değil wireframe görünüyor",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:347-368 (tek kart şablonu, sabit KART_H 188)",
+    "kosul": "Her frame'de: 10 kartın hepsi avatar+metin+beğeni satırından ibaret, hepsi 176px, hepsi #111. 'Bu sabah denize girdim' gibi görsel anlatan gönderilerde bile görsel alanı yok. Gerçek akışların ritmi (kısa metin / fotoğraflı / uzun metin karışımı) tamamen yok.",
+    "oyuncuNeHisseder": "İlk 3 saniyede 'bu gerçek akış taklidi değil, kutu listesi' der. Kullanıcının tek somut şikâyeti ('gerçek reel kaydırıyormuş gibi hissettirmeli') en çok burada kırılıyor: göz aynı silueti görünce kaydırma dürtüsü ölüyor.",
+    "duzeltme": "KART_H mesafe birimi olduğundan yüksekliği DEĞİL iç düzeni çeşitlendir: seed'li rng ile 3 varyant — (a) metin-only, (b) metin + medya placeholder'ı (kart içinde ~90px yuvarlatılmış blok; seed'den türeyen 2 renkli koyu gradyan, marka paleti içinde), (c) kısa metin büyük puntolu. Varyant seçimi kartVerisi() içinde deterministik; rAF'ta ilgili blokların display/opacity'sini aç-kapa. Taklit-yasak listesine girmez çünkü hiçbir platform düzeni kopyalanmıyor.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "Avatarlar ölü: herkes aynı düz gri daire, 8 jenerik ad dönüyor",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:356 (bg-[#1F1F1F] boş daire) + :47 (ADLAR 8 ad) + :163-168 (recycle yazımı)",
+    "kosul": "Her kartta: avatar içeriksiz tek renk #1F1F1F daire; kullanıcı adları 'akış', 'sonsuz', 'kimse' gibi soyut kelimeler ve 8 ad kısa sürede tekrar ediyor.",
+    "oyuncuNeHisseder": "Akışta 'insan' hissi sıfır — aynı gri daire alt alta dizilince liste mockup'a benziyor. Gerçek akış hissinin yarısı avatar çeşitliliğinden gelir; burada monotonluk 'sahte' algısını her kartta yeniler.",
+    "duzeltme": "Recycle yazımında (163-168) avatar dairesine ad hash'inden türetilmiş kısık doygunlukta bir HSL arka plan + adın ilk harfini textContent olarak yaz (koyu tema uyumlu, hsl(hash%360, 25%, 22%) bandı). ADLAR havuzunu 20-25 sahici-görünümlü takma ada çıkar (deniz_04, kahveci.mert tarzı — gerçek handle'lara Levenshtein ≤2 kontrolüyle). Boşalma yayında bu renk de doygunluğunu kaybeder → çürüme görünür hale gelir.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "Kalp ikonu spec'in taklit-yasak listesini ihlal ediyor + etkileşim satırı tek elemanlı",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:168 ('♥ ${d.begeni}') + :363-366 (tek span); yasak: docs/sosyal-obezite-spec-v2.md §2.5 madde 1 ('kalp ikonu YASAK — soyut şekil')",
+    "kosul": "Her kartın etkileşim satırı yalnız '♥ 188'. Spec v2 taklit-değil kontrol listesi kalp ikonunu yayın-blokajlı olarak yasaklıyor; ayrıca tek elemanlı satır hiçbir akışa benzemiyor (gerçekte 3-4 eylem yan yana durur).",
+    "oyuncuNeHisseder": "Satır cılız ve yarım kalmış görünüyor; kart 'etkileşim satırı olan gönderi' değil 'sayı yazılmış kutu' gibi. Hukuki tarafta da yayın öncesi blokaj maddesi çiğnenmiş durumda.",
+    "duzeltme": "♥ yerine soyut şekiller: '◆ 188  ◇ 12  ↗ 3' gibi 3 span (beğeni/yorum/paylaşım karşılığı ama hiçbir platform ikonografisini kopyalamadan). Sayılar kartVerisi()'nde aynı rng'den türesin; kademe ilerledikçe alt satır zaten sönüyor — üç elemanın teker teker kaybolması boşalma yayına da malzeme verir.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "Hızlı fling'de gerçek ekran dışında doğup ekran dışında ölüyor — ekrana sabit hiçbir sinyal yok",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:177-186 (isaret yalnız içerik-konumlu transform) + :137 (spawn offset+2)",
+    "kosul": "Oyuncu 2000-4000 px/sn fling attığında (artık kırpma yok — bilinçli): spawn edilen kartIndex yarım saniyede viewport'un üstüne çıkar; isaret onunla birlikte ekran dışına taşınır ve 1800ms pencere oyuncu hiç görmeden dolar. Viewport-dışılığı algılayan tek satır kod yok.",
+    "oyuncuNeHisseder": "Tur sonunda '7 gerçek kaçırdın' yazıyor ama oyuncu çoğunu HİÇ görmedi. 'Oyun bana göstermeden ceza kesiyor' hissi — his açısından en tehlikeli adaletsizlik türü. Hızlı kaydıran (yani hedef kitlenin tam kendisi) en kör oynayan oluyor.",
+    "duzeltme": "rAF'ta isaret'in hedef y'si viewport dışındaysa ekrana sabit ikincil sinyal aç: ekranın ilgili kenarında (yukarıda kaldıysa üstte) ince bir asit-yeşili kenar parlaması / ok çipi ('▲ gerçek yukarıda') — pointer-events yok, tek elemanlı, opacity ile sürülür. Alternatif ucuz yol: HUD'daki Bean'in çevresine aktifGercek varken asit halka.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "Boşalma yayının ilk iki basamağı görsel olarak algılanamıyor — anlamlı→klişe geçişi görünmez",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:171-174 (anlamli: ust 1/alt 0.5 → klise: ust 1/alt 0.25)",
+    "kosul": "t=12sn eşiğinde tek görsel fark: 11px mono ghost renkli beğeni satırının opacity'sinin 0.5'ten 0.25'e inmesi. Avatar, ad, metin, kart zemini hiç değişmiyor. Kaydırma hızında bu fark fizyolojik olarak seçilemez.",
+    "oyuncuNeHisseder": "Oyunun tez taşıyıcısı olan 'akış gözünün önünde boşalıyor' hissi turun ilk 25 saniyesinde hiç yaşanmıyor; oyuncu değişimi ancak 38. saniyedeki sert boskutu düşüşünde fark ediyor — o da 'bozuldu' olarak (bkz. KRITIK bulgu 2). Yay kademeli değil, iki durumlu görünüyor.",
+    "duzeltme": "Her kademeye birden fazla parçada dokunan belirgin adımlar: klise'de avatar rengi griye çöksün (bulgu 4'teki HSL avatarı varsa doygunluğu düşür) + metin text-white/80→/55; bos'ta ad satırı 0.4'e insin + kart kenarlığı silikleşsin. Hepsi mevcut rAF yazım noktasında (171-174) 3-4 satırlık ek style ataması.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "Kademe eşiği anında ekrandaki kartların metni gözler önünde değişiyor — glitch gibi",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:159-161 (anahtar = index:kademeSimdi → eşikte 10 kartın hepsi yeniden yazılır)",
+    "kosul": "t=12/25/38sn eşiklerinde: recycle anahtarı kademe içerdiğinden o an ekranda duran (oyuncunun belki okumakta olduğu) kartların textContent'i tek frame'de başka metinle değişiyor.",
+    "oyuncuNeHisseder": "Okuduğu gönderi göz önünde başka gönderiye dönüşüyor — akış yanılsaması bir anda kırılıyor, 'bug mu bu?' dedirtiyor. (Duran oyuncunun yayı görmesi için bilinçli tercih olduğunu biliyorum — itirazım karara değil, geçişin çıplaklığına.)",
+    "duzeltme": "Kararı koru ama geçişi maskele: eşik anında karta 120ms opacity-out → içerik yaz → opacity-in crossfade uygula (mevcut inline 'transition: opacity 400ms' altyapısı zaten duruyor; el.style.opacity'yi rAF'tan sürmek yeterli). Yalnız viewport-içi kartlara uygula, ekran dışı kartlar anında değişsin.",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "HUD çipleri akışın üstünde yüzüyor; kartlar altından çıplak kesiliyor, üst kenarda maske yok",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:324-334 (absolute HUD, backdrop-blur) + :341 (akış inset-0'dan başlıyor)",
+    "kosul": "Her an: akış viewport'un en tepesinden başladığı için kartlar skor/Bean/kalan çiplerinin arkasından sert kenarla geçiyor; çiplerin arkası yarı saydam blur olduğundan kart metni çipin içinden bulanık okunuyor.",
+    "oyuncuNeHisseder": "Üst bölge 'oyun overlay'i + altından akan içerik' karmaşası — gerçek akış uygulamalarındaki gibi tanımlı bir üst bölge yok. Küçük ekranda (SE sınıfı) ilk görünür kartın üst yarısı sürekli çiplerin altında kalıyor; okunmayan kart 'değersiz' hissi veriyor.",
+    "duzeltme": "Üst kenara ekran-sabit bir fade maskesi ekle: HUD'un arkasına inset-x-0 top-0 h-24, linear-gradient(#050505 %30, transparent) pointer-events-none katman. Kartlar HUD'a girerken karanlığa karışarak kaybolur — hem çip okunurluğu artar hem akışın 'sonsuzdan gelme' hissi güçlenir. Blur da kaldırılabilir (sentez §3-7'nin perf notuyla aynı yönde).",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "Zaman damgası yok — gönderiler zamansız, akış 'canlı' hissetmiyor",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:355-357 (üst satır: yalnız avatar + @ad)",
+    "kosul": "Her kartta: gerçek akışların en tanıdık mikro-sinyali olan '2dk · 1sa' tarzı zaman etiketi hiç yok.",
+    "oyuncuNeHisseder": "Bilinçli fark etmese de eksikliği sezer: zamansız gönderi listesi statik demo gibi durur. 'Şu an akan canlı bir akış' yanılsaması küçük ama bedava bir sinyalden mahrum.",
+    "duzeltme": "kartVerisi()'ne rng'den 'şimdi / 2dk / 14dk / 1sa' havuzundan deterministik etiket ekle; üst satıra üçüncü span (@ad'ın yanına ghost '· 2dk'). Recycle yazımında tek textContent ataması. Bonus ironi: boskutu kademesinde etiketler hep 'şimdi' olsun — akış boşaldıkça zaman da anlamını yitirir.",
+    "siddet": "DUSUK"
+   }
+  ],
+  "enBuyukRisk": "Akış şu an gerçek bir akışın kendisi değil, tel-kafes çizimi gibi: tek tip 176px kutular, içeriksiz gri avatarlar, medya alanı yok, tek elemanlı etkileşim satırı ve son 22 saniyede neredeyse simsiyah bir ekran. Kullanıcının tek talebi 'gerçek reel kaydırıyormuş gibi hissettirmeli' iken oyuncunun yakaladığı 'GERÇEK' bile içi rastgele parodi metniyle dolu bir yeşil çerçeve — yani oyunun hem taklit ettiği şey (akış) hem sattığı şey (gerçek) görsel olarak boş. Fizik artık doğru ama göz 3 saniyede 'bu sahte' diyor; en yüksek getirili yatırım kart çeşitliliği + avatar canlılığı + gerçek'e kendi içeriğini vermek."
+ },
+ {
+  "boyut": "oyun-tasarimi-game-feel",
+  "bulgular": [
+   {
+    "baslik": "Yakalama ile kaçırma görsel olarak birbirinin AYNISI — iOS'ta yakalama anı tamamen hissiz",
+    "dosyaSatir": "SosyalObezite.tsx:223-233 (yakalamaDene), :141-149 (kaçırma timeout'u), :373-384 (işaret çerçevesi)",
+    "kosul": "Her yakalama ve her kaçırma. İkisinde de olan tek şey aktifGercek=null → yeşil çerçevenin 120ms opacity fade'i. Yakalamada ek olarak yalnız navigator.vibrate(14) var — iOS Safari'de vibrate API YOK (undefined, sessizce atlanır), 14ms Android'de bile hissedilmeyecek kadar kısa. Ses hiç yok, görsel kutlama hiç yok.",
+    "oyuncuNeHisseder": "Oyunun TEK beceri anı, tek dopamin vuruşu boş. Parmağını vurdun, çerçeve söndü — yakaladın mı, kaçtı mı? Bilemezsin; ancak 250ms sonra skora bakıp çıkarım yaparsın. Tatmin sıfır. Kullanıcının 'çok kötü' demesinin bir numaralı adayı bu: reel hissi bir yana, oyun hissi yok.",
+    "duzeltme": "Yakalama ve kaçırmaya ZIT görsel imza ver (rAF içinde, React'siz): yakalamada çerçeve kısa scale-pop + parlama + kartın üstünde '+50' rozeti; kaçırmada kart griye düşüp hızlanarak akıp gitsin. Yakalamaya kısa 'tık' sesi ekle (tek AudioContext, spec §13-4 zaten öneriyor); vibrate'i 14→40-60ms'e çıkar (Android için).",
+    "siddet": "KRITIK"
+   },
+   {
+    "baslik": "Fırlatma sırasında 'gerçek' ekran dışına akıp kayboluyor — pencere işliyor ama oyuncu göremiyor",
+    "dosyaSatir": "SosyalObezite.tsx:137 (kartIndex içerik-uzayında sabitlenir), :182 (işaret offset'le birlikte kayar); fizik.ts:18 (sönüm ~2.8sn)",
+    "kosul": "Gerçek belirdiğinde oyuncu fırlatma (fling) ortasındaysa. Hız tavanı kaldırıldığı için (doğru karar) fling 2000-4000 px/sn → 188px'lik işaretli kart 100-200ms'de ekranı terk eder. 1800ms yakalama penceresi ve tam-viewport tap mekanik olarak çalışmaya devam eder ama işaret görünmezdir. Spec C5'in 'gerçek her hızda ≥1.5sn EKRANDA kalır' güvencesi fiilen ihlal.",
+    "oyuncuNeHisseder": "Hızlı oynayan (yani en bağlanmış) oyuncu gerçeklerin yarısını HİÇ GÖRMEDEN kaçırır. 'Kaçtı' anonsu sessiz, tur sonunda '4/12' görünce oyun rastgele ve haksız hisseder. Mesafe puanı hızlı kaydırmayı teşvik edip aynı hareket görme şansını yok ediyor — oyun kendi kendiyle çelişiyor.",
+    "duzeltme": "İşareti içerik-uzayından ekran-uzayına taşı: gerçek belirdiğinde çerçeve ekranda sabit bir bantta dursun (akışla kaymasın) YA DA işaretli kart viewport dışına çıktığı an kenarda yönlü ok + kalan-süre çubuğu göster. Alternatif: spawn anında kartIndex'i 'şu anki offset + yarım ekran' yerine fling hedef konumuna göre seç.",
+    "siddet": "KRITIK"
+   },
+   {
+    "baslik": "-20 yanlış dokunma cezasının SIFIR görsel geri bildirimi var — spec'in açık şartına rağmen",
+    "dosyaSatir": "SosyalObezite.tsx:229-232 (yalnız sr-only anons); spec-v2 §2.3 'ilk yanlış dokunuşta görsel geri bildirim (öğretim)' — kodlanmamış",
+    "kosul": "Ekranda gerçek yokken her dokunuş. Tek geri bildirim ekran okuyucu anonsu ('Boşa gitti, 20 puan eksi') — gören oyuncu için görünmez. Üstelik skor tabanı 0 (engine.ts:167) ve mesafe puanı sürekli aktığı için -20, 250ms'lik HUD sıçramasında tamamen eriyor.",
+    "oyuncuNeHisseder": "Ceza mekaniğinin varlığını ASLA öğrenemez. Deneme amaçlı ekrana dokunur, hiçbir şey olmaz sanır, spam-tap stratejisine geçer; tur sonunda skoru 'beklediğinden az' gelir ve nedenini bilemez. Öğrenilemeyen ceza = adaletsizlik hissi; oyun tasarımının en temel kuralının ihlali.",
+    "duzeltme": "Dokunulan noktada kısa '-20' yüzen etiket + skor çipinde 150ms kırmızıya çalan flash (rAF ile, React'siz). İlk yanlış dokunuşta bir kez mikro-mesaj: 'Gerçek yokken dokunmak 20 puan yakar' (ILK_KACIRMA_IPUCU kalıbıyla aynı mekanizma).",
+    "siddet": "KRITIK"
+   },
+   {
+    "baslik": "Akışı parmakla durdurmak (evrensel reel refleksi) -20 ceza sayılıyor",
+    "dosyaSatir": "SosyalObezite.tsx:236-246 (onDown hiz=0), :262-275 (onUp: <12px + <280ms = tap → yakalamaDene → ceza)",
+    "kosul": "Momentum akarken oyuncu içeriği durdurmak için ekrana kısaca dokunup çekerse. onDown hızı doğru şekilde sıfırlıyor (iOS davranışı) ama parmak 12px'ten az oynayıp 280ms'ten önce kalkarsa bu 'durdurma' dokunuşu tap sayılır ve gerçek yoksa -20 yazılır.",
+    "oyuncuNeHisseder": "Gerçek reel'de her gün yüz kez yaptığı hareketi yapıyor — fling'i durdurup okumak — ve sessizce cezalanıyor (bulgu 3 yüzünden bunu fark bile etmiyor, sadece skoru eriyip gidiyor). 'Gerçek reel gibi hissettirmeli' talebinin tam kalbine oturan his kırığı: doğal davranış cezalandırılıyor.",
+    "duzeltme": "onDown anında |hiz| belirli eşiğin üstündeyse (örn. >300 px/sn) o dokunuşu 'durdurma' olarak işaretle: momentum durur, tap değerlendirmesine GİRMEZ, ceza yazılmaz. İstisna: ekranda yakalanabilir gerçek varsa dokunuş yine yakalama sayılır (oyuncu lehine).",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "Çarpan merdiveni (×1.5/×2.0) oyuncuya hiçbir yerde gösterilmiyor — skorun ~%70'i görünmez bir mekanikten geliyor",
+    "dosyaSatir": "engine.ts:32,135-148 (CARPAN_MERDIVENI + seri mantığı); SosyalObezite.tsx HUD:324-334'te hiçbir seri göstergesi yok",
+    "kosul": "Her ardışık yakalama. Teorik tavanın ~%70'i yakalama+çarpandan geliyor (spec §2.3) ama UI'da ne mevcut çarpan, ne seri sayısı, ne de kaçırmada serinin sıfırlandığı görünüyor.",
+    "oyuncuNeHisseder": "Seri yaptığını bilmiyor, koruyacak bir şeyi olduğunu bilmiyor, kaçırmanın skoru İKİ KAT yaktığını (kaçan puan + sıfırlanan çarpan) bilmiyor. Ustalaşma hissi ve 'bir daha oynasam seriyi korurum' motivasyonu — skor oyununun asıl tekrar-oyna yakıtı — hiç üretilmiyor.",
+    "duzeltme": "Yakalama anında rozete çarpanı yaz ('+75 ×1.5'); HUD skor çipinin altına 2 küçük seri noktası ekle (doldukça ×1.5→×2.0); kaçırmada noktaların kısa titreşimle boşalması serinin öldüğünü söylesin. Hepsi rAF-DOM ile yapılabilir, React commit gerekmez.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "Skor değişimleri eyleme bağlanamıyor: +50 yakalama, +1 mesafe, -20 ceza aynı 250ms'lik toplu sıçramada eriyor",
+    "dosyaSatir": "SosyalObezite.tsx:188-199 (HUD 250ms'de bir toplam skoru basar)",
+    "kosul": "Tüm oynanış. Skor yalnız toplam sayı olarak, en fazla 4Hz'de güncellenir; delta gösterimi, tick-up animasyonu, olay-anlı vurgu yok. Yakalamanın +50'si, o çeyrek saniyede akan mesafe puanıyla ve olası cezayla toplanıp tek sıçrama olarak gelir.",
+    "oyuncuNeHisseder": "Sayı 'kendi kendine' artıyor gibi. Hangi davranışın kaç puan getirdiğini çözemez → strateji kuramaz → skor anlamsızlaşır. 250ms'lik güncelleme tek başına sorun değil; sorun sıçramaların İMZASIZ olması.",
+    "duzeltme": "Bulgu 1 ve 3'teki olay-anlı '+50/-20' rozetleri bunu büyük ölçüde çözer; ek olarak skor sayısına değişim anında 100ms'lik scale-tick (büyüyüp oturma) ver — artışın yönü ve anı hissedilsin.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "'bir tur daha' tur sonu ekranının EN SİLİK elemanı ve kişisel rekor kıyası yok — tekrar-oyna döngüsü çalışmıyor",
+    "dosyaSatir": "OyunKabuk.tsx:245-251 (11px sönük noktalı-altçizgili metin link); önceki skor hiçbir yerde tutulup gösterilmiyor",
+    "kosul": "Her tur sonu. Skor tabanlı viral oyunun kalbi olan 'bir daha' eylemi, iki store butonu + paylaşım + form + itiraf bloğunun altında, ekranın en dibinde, dokunma hedefi standardının altında bir yazı.",
+    "oyuncuNeHisseder": "Oyun ona 'bitti, git' diyor. Yenilecek bir hedef de gösterilmiyor — 'rekorun 430'du, geçebilir misin?' cümlesi yok, hayalet-hedef yok. Tek tur oynayıp çıkar; skor tablosu ve viral döngü besleme alamaz. (Karar 12 store'u asıl eylem yapar ama 'bir daha'nın okunmaz olmasını gerektirmez.)",
+    "duzeltme": "'bir tur daha'yı ≥48px ikincil butona çıkar (store CTA'ları birincil kalır, karar 12 korunur) ve yanına oturum içi en iyi skoru koy: 'rekorun: 430'. 2+ turda buton metni 'rekoru geç: 430' olsun — near-miss yakıtı spec §3'te zaten isteniyor, hiç kodlanmamış.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "Bean çözülme yayı oynanış sırasında fiilen görünmez — oyunun tez taşıyıcısı yaşanmıyor",
+    "dosyaSatir": "SosyalObezite.tsx:329 (62px, üst-orta HUD); BeanCozulme.tsx:68 (900ms yumuşak geçiş)",
+    "kosul": "Faz geçişleri (12/25/38/50/57sn) 900ms'lik yumuşak renk/ölçek geçişiyle, oyuncunun bakmadığı bölgede (dikkat akış ortasında ve parmağında) sessizce olur. Değişim anını fark ettirecek hiçbir vurgu yok.",
+    "oyuncuNeHisseder": "60 saniye boyunca Bean'e bir kez bile bakmaz; tur sonunda karşısına çıkan gri-pikselli faz-5 Bean'i 'bu ne?' diye görür. 'Uyuşma ve yok olma' anlatısı — oyunun var oluş sebebi — oyuncuya hiç ulaşmıyor.",
+    "duzeltme": "Faz geçiş ANINDA tek seferlik, 300ms'lik dikkat köprüsü kur: Bean kısa bir scale-pop yapsın + akış kartları aynı anda 200ms hafifçe soluklaşsın (opacity 0.7→1). Göz otomatik olarak değişen şeye kayar; sürekli dikkat çalmaz, sadece 5 kez, anlamlı anda çalar.",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "İlk 5 saniye ölü: sayaç anında başlıyor, ekranda hedef hatırlatıcısı yok, talimat yalnız introdaki 11px metinde",
+    "dosyaSatir": "SosyalObezite.tsx:306-309 (talimat intro'da font-mono 11px), :110 (baslangic hemen); ilk gerçek engine.ts:25-26 ile 4-6sn'de",
+    "kosul": "Her ilk tur. '60 saniye' butonuna basınca sayaç anında akmaya başlar; oyuncu ne arayacağını ancak intro'nun en küçük yazısını okuduysa bilir. İlk 4-6 saniyede ekranda yalnız gri kutular vardır, oyun içi hiçbir şey 'yeşil çerçeveyi bekle' demez.",
+    "oyuncuNeHisseder": "Turun %10'unu 'ne yapıyorum ben?' diye harcar; ilk gerçek geldiğinde ne olduğunu anlamlandırana kadar pencerenin yarısı gitmiş olur. Spec'in '%90 ilk turda ≥1 yakalama' kabul ölçütü bu ölü başlangıçla riske girer.",
+    "duzeltme": "İlk turda, ilk yakalamaya kadar HUD altında kalıcı tek satır: 'Yeşil çerçeve belirince dokun' (ilk yakalamada kaybolur). İsteğe bağlı güçlendirme: ilk gerçeğe kadar sayaç 3-2-1 ile başlasın yerine — hayır, süre kilitli; sadece hatırlatıcı satır yeterli ve karar setiyle çelişmez.",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "Spawn'lar arası ~5 saniyelik boşluklar tamamen olaysız: mesafe ilerlemesi görünmez, kartlar tekdüze",
+    "dosyaSatir": "SosyalObezite.tsx:347-368 (tüm kartlar aynı 188px gri kutu; geçilen kart sayısı hiçbir yerde gösterilmiyor); engine.ts:16-17 (5sn pencere)",
+    "kosul": "İki gerçek arasındaki her boşluk. Oyuncunun tek eylemi puan ürettiğini bilmediği bir kaydırma: kart sayacı/kilometre göstergesi yok, kartların hepsi aynı boyda ve renksiz, ilerleme hissi veren hiçbir şey yok.",
+    "oyuncuNeHisseder": "Gerçek reel'in değişken ritmi (farklı boylar, görseller, sürpriz) yerine gri bir merdiven iniyor; 'kaydırmak da puan' olduğunu tur sonunda bile net göremiyor. 60 saniyenin ~40'ı bekleme gibi hissediliyor — 'çok kötü' yorumunun ikinci büyük adayı.",
+    "duzeltme": "HUD skor çipine küçük 'geçilen kart' sayacı ekle (rAF ile textContent). Kart yüksekliğine kademe içinde ±2-3 varyant + beğeni sayısı/ad çeşitliliğinin görsel ağırlığını artır — boşalma yayını bozmadan (karar 5-6 korunur) akışa doku kazandırır.",
+    "siddet": "ORTA"
+   }
+  ],
+  "enBuyukRisk": "Oyunun tek ödül anı duyusal olarak boş: iOS'ta (birincil kitle) bir gerçeği yakalamak hiçbir görsel/işitsel/dokunsal iz bırakmıyor ve kaçırmayla birebir aynı görünüyor. Core loop'un dopamin vuruşu yoksa fizik ne kadar iOS-doğru olursa olsun oyun 'ölü' hisseder — kullanıcının 'çok kötü' yorumunun kökü büyük olasılıkla budur ve yakalama/kaçırma/ceza anlarına imza veren geri bildirim katmanı eklenmeden diğer hiçbir düzeltme bu hissi kurtarmaz."
+ },
+ {
+  "boyut": "Frontend performans — mobil / düşük-tier Android (rAF döngüsü, paint/layout maliyeti, kompozitör, bellek)",
+  "bulgular": [
+   {
+    "baslik": "HUD çiplerindeki backdrop-blur, altında akan kartlar yüzünden HER frame yeniden blur hesaplatıyor",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:325 ve :330 (className içinde `backdrop-blur`)",
+    "kosul": "Oyuncu kaydırdığı veya fırlatma süzülürken — yani oyunun %90'ında. Kartlar skor/kalan çiplerinin ALTINDAN her frame geçiyor; backdrop-filter'lı bölge her transform değişiminde GPU'da yeniden örneklenip bulanıklaştırılıyor. Düşük-tier Android'de (Mali-G52 sınıfı GPU) bu tek başına frame bütçesinin birkaç ms'sini yer.",
+    "oyuncuNeHisseder": "Kaydırmanın kendisi tekliyor — özellikle hızlı fırlatmada kartlar 60fps yerine 40-50fps'e düşüp 'ucuz web sayfası' hissi veriyor. Kullanıcının tek talebi 'gerçek reel gibi hissetsin' tam bu noktada ölüyor: gerçek reel uygulamaları scroll altında canlı blur KULLANMAZ.",
+    "duzeltme": "backdrop-blur'u kaldır, yerine yarı saydam düz arka plan + hafif border kullan (bg-elevated/90 zaten var, blur'suz görsel fark minimal). Blur illa isteniyorsa yalnız oyun DIŞI ekranlarda (itiraf/tur sonu) bırak.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "Havuzdan geri dönüştürülen kart, parçalarındaki 400ms opacity geçişini miras alıyor — her 'yeni' gönderi ekranda kendini 400ms boyunca monte ediyor",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:355, :361, :364 (inline `transition: 'opacity 400ms'`) + :171-173 (rAF içinde opacity yazımı)",
+    "kosul": "Her kart geri dönüşümünde (hızlı fırlatmada saniyede ~10-16 kez). `transition` kalıcı olarak elemanın üstünde durduğu için index değişip opacity yeniden yazıldığında tarayıcı bunu ANİMASYONLU uyguluyor: alttan giren taze kart eski kademenin opacity'sinden yenisine 400ms'de süzülüyor. Ayrıca 10 kart × sürekli koşan opacity animasyonu = geçiş boyunca her frame ekstra paint.",
+    "oyuncuNeHisseder": "Hızlı kaydırırken ekrana giren gönderilerin kullanıcı adı / etkileşim satırı hayalet gibi belirip kayboluyor; içerik 'takılıyor / geç yükleniyor' izlenimi veriyor. Gerçek reel'de yeni gönderi ANINDA tam halde gelir — buradaki sürekli cross-fade, akışı ucuz ve pelte gösteriyor.",
+    "duzeltme": "400ms geçiş SADECE kademe değişimi anında istenen etki. Geri dönüşümde: opacity yazmadan önce `el.style.transition='none'` yaz, değerleri bas, sonraki frame'de geçişi geri aç — ya da daha basiti: index değişiminde (recycle) geçişsiz yaz, yalnız aynı index'te kademe değiştiğinde geçişli yaz (anahtar zaten index:kademe olarak ayrışıyor, iki durumu ayırt edebilirsin).",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "Yakalama sayacı çubuğu her frame `style.width` ile küçülüyor — kompozitör dışı, frame başına layout",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:184 (`bar.style.width = %`) + :383 (çubuk elemanı)",
+    "kosul": "Gerçek ekrandayken (tur başına 12 kez × 1.8sn = turun ~%36'sı). width değişimi her frame layout invalidation + paint tetikler; transform/opacity gibi kompozitörde kalmaz. Üstelik tam bu anda oyuncu tipik olarak hâlâ kaydırıyor — layout maliyeti en kritik girdiye biniyor.",
+    "oyuncuNeHisseder": "Tam 'GERÇEK belirdi, dokun!' gerilim anında kaydırma mikro-tekliyor; çubuğun kendisi de düşük-tier cihazda kesik kesik eriyor. Oyunun tek refleks anı en az akıcı anı oluyor.",
+    "duzeltme": "Çubuğu `transform: scaleX(kalan)` + `transform-origin: left` ile sür (width sabit %100 kalsın). will-change-transform ekle — tamamen kompozitörde kalır, layout sıfırlanır.",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "Kademe eşiği ile Bean faz eşiği aynı milisaniyeye çakışıyor: 12s/25s/38s'de tek frame'de 10 kartın tam DOM yeniden yazımı + React commit + SVG geçişleri",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:40-45 (kademeIcin: 12/25/38sn) + :153-175 (anahtar değişince 10 kart birden textContent/opacity/background) + /Users/suyarer/Cb-Web/lib/game/engine.ts:38 (BEAN_ESIKLERI_MS aynı 12/25/38sn)",
+    "kosul": "t=12.000, 25.000, 38.000'de: (1) 10 kartın anahtarı aynı anda geçersizleşir → tek frame'de 30 textContent yazımı (her biri metin layout'u), 30+ opacity, 10 background repaint; (2) aynı 250ms penceresinde setHud faz değişimiyle React commit + BeanCozulme'de 900ms'lik transform/fill geçişleri başlar. Düşük-tier Android'de bu birleşik frame 16ms bütçesini rahat aşar.",
+    "oyuncuNeHisseder": "Oyunun en dramatik anında — akış 'boşalmaya' başladığı saniyede — ekran belirgin şekilde HIÇKIRIYOR. Oyuncu bunu tema olarak değil bug olarak okur: 'oyun kasıyor'.",
+    "duzeltme": "Kademe geçişindeki toplu yazımı yay: anahtar karşılaştırmasına frame başına en fazla 2-3 kart güncelleme bütçesi koy (kalanı sonraki frame'lere sarkar; 400ms'lik görsel geçişte 3-4 frame'lik sarkma algılanmaz). Alternatif: kademe eşiklerini Bean eşiklerinden ±300ms kaydır ki iki maliyet aynı frame'e binmesin.",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "\"Oynanış sırasında React commit = 0\" iddiası tutmuyor: setHud her 250ms'de koşulsuz yeni obje ile commit tetikliyor, setAnons her spawn/dokunuşta araya giriyor",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:188-199 (setHud, değer değişmese de her 250ms) + :139, :143, :227, :231 (setAnons oyun ortası commit)",
+    "kosul": "Tur boyunca 4 commit/sn: skor ve kalan saniye değişmemiş olsa bile setHud yeni obje aldığı için render kaçınılmaz — 10 havuz kartı + HUD ağacının reconciliation'ı her seferinde koşar. setAnons ise tam dokunma/fırlatma jestinin ortasında ekstra commit sokar. Düşük-tier cihazda her commit 2-4ms; rAF ile aynı main-thread'i paylaşır.",
+    "oyuncuNeHisseder": "Saniyede 4 kez, kaydırmayla senkron olmayan minik takılmalar — özellikle skor sayacının değiştiği anlarda. Tek başına küçük ama backdrop-blur ve width-layout ile üst üste binince 'sürekli huzursuz' bir akış hissi.",
+    "duzeltme": "setHud'u yalnız değer gerçekten değişince çağır (önceki skor/kalan/faz'ı ref'te tut, üçü de aynıysa setState atla — kalan saniye zaten sn'de 1 değişir, commit 4/sn'den ~1/sn'e düşer). anons için React state yerine havuz kartlarıyla aynı teknikle aria-live düğümünün textContent'ini doğrudan yaz.",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "Fırlatma sırasında geri dönüşen her kart rAF içinde FEED.filter() ile yeni dizi üretiyor",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:51 (kartVerisi içinde FEED.filter), :163'ten çağrılıyor",
+    "kosul": "Her kart geri dönüşümünde (hızlı fırlatmada ~16/sn) 24 elemanlı dizi filter'ı + yeni dizi + obje alloc. Tek başına ucuz; ama 60 saniyelik kesintisiz oyunda rAF-yolu üzerinde gereksiz GC çöpü üretir — düşük-tier Android'de minor-GC duraksamaları tam fling süzülmesine denk gelebilir.",
+    "oyuncuNeHisseder": "Uzun fırlatmaların ortasında nadir, rastgele tek-frame atlamalar. Oyuncu adlandıramaz ama 'native gibi pürüzsüz değil' der.",
+    "duzeltme": "Modül seviyesinde kademe→kartlar haritasını BİR KEZ kur: `const HAVUZLAR = {anlamli: FEED.filter(...), ...}` ve kartVerisi'nde `HAVUZLAR[kademe]`'den index'le seç. rAF yolunda sıfır alloc.",
+    "siddet": "DUSUK"
+   },
+   {
+    "baslik": "Boşta bile (hız=0, sürükleme yok) her frame 10 karta aynı transform string'i yeniden yazılıyor",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:158 (koşulsuz el.style.transform yazımı, offset değişmese de)",
+    "kosul": "Oyuncu durup gerçeği beklerken: offset sabit ama her frame 10 template-string üretimi + 10 style setter çağrısı + tarayıcının style-recalc kontrolü. Ayrıca 60sn boyunca CPU'yu boşta uyandırık tutar — düşük-tier cihazda ısınma/throttle'a katkı.",
+    "oyuncuNeHisseder": "Doğrudan hissedilmez; ama 40. saniyeden sonra cihaz ısınıp termal kısılmaya girerse TÜM diğer bulgular kötüleşir — 'oyun sonlara doğru daha çok kasıyor' şikayetinin zemini.",
+    "duzeltme": "Döngü başında `if (s.offset === oncekiOffset && !s.aktifGercek && hud-guncellemesi-yok) { raf devam; return }` erken çıkışı — ya da en azından transform yazımını `offset değişti mi` bayrağına bağla.",
+    "siddet": "DUSUK"
+   },
+   {
+    "baslik": "BeanCozulme pikselleşme rect'leri mount anında transition'sız POP ediyor — 700ms'lik opacity geçişi yeni eklenen elemanda hiç çalışmıyor",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/BeanCozulme.tsx:149-163 (pikselSayisi arttıkça YENİ rect mount edilir; ilk stiliyle geldiği için transition tetiklenmez)",
+    "kosul": "Faz 3→4→5 geçişlerinde (~17→~40→66 rect). CSS transition yalnız VAR OLAN elemanın değeri değişince oynar; yeni mount edilen rect ilk opacity'siyle direkt boyanır. Maliyet tarafı temiz (62px HUD'da 66 subpixel rect ucuz) ama amaçlanan 'yavaşça akışa karışma' efekti hiç render olmuyor.",
+    "oyuncuNeHisseder": "Bean'in çözülmesi kademeli erime yerine anlık 'bozuk piksel bloğu' sıçraması gibi görünüyor — gövdedeki 900ms'lik yumuşak geçişlerle tezat oluşturup ucuz duruyor.",
+    "duzeltme": "66 rect'in HEPSİNİ baştan mount et, görünürlüğü opacity ile sür (görünmeyenler opacity:0). Değer değişimi mevcut elemanda olacağı için 700ms geçiş gerçekten oynar; eleman sayısı sabit kaldığı için mount/unmount maliyeti de sıfırlanır.",
+    "siddet": "DUSUK"
+   }
+  ],
+  "enBuyukRisk": "Düşük-tier Android'de kaydırmanın KENDİSİ akıcı değil: scroll altında her frame yeniden hesaplanan backdrop-blur (HUD çipleri) + geri dönüşen kartların miras aldığı 400ms opacity animasyonları + gerçek belirdiğinde frame başına width-layout, aynı main-thread/GPU bütçesine üst üste biniyor. Fizik artık doğru (1:1 takip, iOS sönümü) ama render katmanı frame'leri düşürdüğü sürece oyuncu bunu 'pelte kaydırma' olarak hissetmeye devam eder — kullanıcının tek talebi olan 'gerçek reel hissi' fizikte değil bu üç render maliyetinde kaybediliyor."
+ },
+ {
+  "boyut": "Marka ve mesaj — ClubBeans tezi oyunda hissediliyor mu, yoksa yalnız metinde mi kalıyor",
+  "bulgular": [
+   {
+    "baslik": "Gerçek nesnenin kendi içeriği yok — yakalanan şey içi boş bir yeşil çerçeve",
+    "dosyaSatir": "SosyalObezite.tsx:370-384 (işaret katmanı) + SosyalObezite.tsx:137 (kartIndex — altta kalan kart kartVerisi'nden sıradan parodi metni alır)",
+    "kosul": "Her gerçek belirişinde. Çerçeve mevcut bir kartın üstüne biner; o kartın içeriği o anki kademenin parodi metni (12 sn sonrası: motivasyon-koçu klişesi veya boş kutu). Çerçevenin kendi içeriği yalnız 'GERÇEK — dokun' rozeti.",
+    "oyuncuNeHisseder": "Neyi kurtardığını asla görmüyor — 'gerçek' dediğin şey bir motivasyon klişesinin etrafındaki yeşil kutu. Tur sonunda 'kurtardığın gerçek 4/12' boş bir sayı; 'Kaçırdığın gerçekler dışarıda duruyor' köprü satırı havada kalıyor. Karar 2'nin özü ('buluşma/insan/davet belirir') UYGULANMAMIŞ — tez metinde kalıyor, mekanikte yaşamıyor.",
+    "duzeltme": "sosyal-obezite-feed.ts'ye GERCEK_DAVETLER havuzu ekle: ClubBeans-ruhlu, somut, kokusu olan davet metinleri ('Perşembe 19.00 — mahalle kahvesinde 3 kişilik masa, 1 yer boş', 'Cumartesi sabahı sahil koşusu, yeni başlayanlar da geliyor'). İşaret katmanı altındaki kartı bu metinle doldur (aktifGercek spawn'ında kartIndex'in dataset'ini gerçek-davet moduna al). Böylece parodi akışın ortasında SICAK bir şey belirir — kontrast tezi kendisi anlatır.",
+    "siddet": "KRITIK"
+   },
+   {
+    "baslik": "Yakalama anının görünür geri bildirimi sıfır — markanın tepe duygu anı ekranda yok",
+    "dosyaSatir": "SosyalObezite.tsx:226-232 (yakalamaDene — yalnız setAnons + 14ms titreşim) + SosyalObezite.tsx:387-394 (anons elementi h-px w-px, görsel olarak GİZLİ, salt ekran okuyucu)",
+    "kosul": "Her başarılı yakalamada ve her yanlış dokunmada. Yakalayınca çerçeve sessizce söner (opacity 0), ekranda başka hiçbir şey olmaz; -20 ceza da görünmez.",
+    "oyuncuNeHisseder": "Dokundum, bir şey oldu mu? Emin değil. '+50', 'kurtardın', seri çarpanı — hiçbiri hissedilmiyor; skor bir sonraki 250ms HUD güncellemesinde sebepsizce oynuyor. 'Kurtarma' kavramı duygusal karşılık bulamadığı için tur sonu 'kurtardığın gerçek' başlığı geriye dönük anlam kazanamıyor.",
+    "duzeltme": "Yakalamada 600-800ms görünür teyit: yakalanan davetin metni kısa bir kartla belirsin ('Kurtardın: kahve buluşması +50'), skor kutusu pulse etsin. Kaçırmada çerçeve solarak aksin (kayboldu hissi), yanlış dokunmada skor kutusunda kısa '-20' görünsün. Havuz-DOM yaklaşımıyla uyumlu: rAF içinde sürülen 1-2 ek sabit eleman yeter.",
+    "siddet": "KRITIK"
+   },
+   {
+    "baslik": "Kademe eşiğinde ekrandaki kartların metni oyuncunun gözü önünde anında değişiyor",
+    "dosyaSatir": "SosyalObezite.tsx:159-168 — anahtar `${index}:${kademeSimdi}`; 12/25/38 sn eşiğinde görünür 10 kartın hepsi aynı frame'de yeni kademe metniyle yeniden yazılır",
+    "kosul": "gecen 12.000/25.000/38.000 ms eşiğini geçtiği an, ekranda duran (kaydırılmayan) kartlar dahil.",
+    "oyuncuNeHisseder": "Okuduğu gönderi gözünün önünde başka bir metne dönüşüyor. 'Gerçek reel kaydırıyormuş' hissi tam bu anda kırılıyor — akış organik değil sahne dekoru gibi. Boşalma yayı 'iniş' değil 'glitch' olarak okunuyor; dramaturji kaza sanılıyor.",
+    "duzeltme": "Kademeyi karta SPAWN anında mühürle: bir index ilk kez ekrana girdiğinde o anki kademeyi dataset'e yaz, kart görünür kaldıkça değiştirme. Boşalma yeni gelen kartlarla aksın — oyuncu 'akış gitgide boşalıyor' hisseder, 'ekran bozuldu' değil.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "Bean 62px HUD boyutunda çözülmeyi anlatamıyor ve Bean'in oyuncu olduğu hiç söylenmiyor",
+    "dosyaSatir": "SosyalObezite.tsx:329 (size=62) + BeanCozulme.tsx:30-35 (fazlar arası fark: göz 3.2→6.2, viewBox 100→62px ölçekte ~1.9px; doygunluk düşüşü koyu zeminde süptil)",
+    "kosul": "60 sn oyun boyunca; oyuncunun gözü akışta ve parmağının altında, Bean periferide.",
+    "oyuncuNeHisseder": "Karar 6'nın tüm duygusal yükü (şişme→solma→cam göz→pikselleşme) fark edilmeden geçiyor; tur sonunda faz-5 Bean'i görünce 'bu ne, ne zaman oldu?' diyor. Hiçbir yüzey 'bu Bean sensin' demediği için çözülme kendine değil maskota oluyor — mesajın hedefi ıskalanıyor.",
+    "duzeltme": "Faz geçiş ANINDA Bean'e 300-400ms scale-pulse ver (dikkati bir kez çeker, sonra geri çekilir; reduced'da atla). İtiraf ekranındaki 110px Bean'in altına tek satır: 'Bu Bean sensin.' Tur sonunda faz-0 → faz-5 yan yana mini kıyas da çözülmeyi geriye dönük okutur.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "Oyun ekranında ne SOSYAL OBEZİTE ne ClubBeans izi var — viral ekran görüntüsü kimliksiz",
+    "dosyaSatir": "SosyalObezite.tsx:322-405 (oyun ekranı: yalnız skor/kalan/Bean/kartlar) — isim yalnız metadata ve paylaşım metninde (sosyal-obezite-feed.ts:145)",
+    "kosul": "Oynanış anının ekran görüntüsü/videosu paylaşıldığında — skor oyununda viralliğin ana taşıyıcısı tam bu kare.",
+    "oyuncuNeHisseder": "Paylaşan da gören de markasız siyah kartlar görüyor; 'bu ne, nereden oynanır' sorusunun cevabı karede yok. Karar 13 İSMİ kilitler, gizlenmesini değil; TANIM_SATIRI da ('obezite' telafi satırı) ismin görünmediği bir oyunda bağlamsız asılı kalıyor.",
+    "duzeltme": "Alt tur-mesajı satırının üstüne kalıcı, silik wordmark: 'SOSYAL OBEZİTE · clubbeans.com' (10-11px mono, text-ghost — akışla yarışmaz ama her karede vardır). Tur sonu kartına da URL satırı.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "İtiraf ekranı her turda yeniden geliyor — karar 3'ün tokadı sıradan başlat ekranına dönüşüyor",
+    "dosyaSatir": "SosyalObezite.tsx:71 (durum başlangıcı 'itiraf') + OyunKabuk.tsx:123 (her turda yeni key → remount → itiraf tekrar)",
+    "kosul": "'bir tur daha' diyen her oyuncu, 2. ve sonraki tüm turlarda.",
+    "oyuncuNeHisseder": "Aynı itirafı ikinci kez okumak zorunda; ilk okuyuştaki 'yüzüne söylüyoruz' cesareti tekrarla klişeleşiyor. Ek dokunuş tekrar-oynama sürtünmesi de yaratıyor (viral döngüde tur sayısı = paylaşım şansı).",
+    "duzeltme": "İtiraf yalnız turNo===1'de gösterilsin (prop zaten geliyor); sonraki turlar doğrudan 'oynaniyor' başlasın. İtirafın geri dönüşü zaten tur sonu ekranında var (OyunKabuk.tsx:255-260) — tekrar oraya ait.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "Tur mesajı 11px ghost gri, tur boyunca sabit ve zaman kipi yanlış — sertleşme merdiveni sessiz",
+    "dosyaSatir": "SosyalObezite.tsx:402-404 + sosyal-obezite-feed.ts:101-108 — 'İlk tur. 60 saniye gitti.' mesajı tur OYNANIRKEN, süre henüz gitmemişken ekranda",
+    "kosul": "Oyun sırasında; oyuncunun gözü akış kartlarında ve gerçek avındayken.",
+    "oyuncuNeHisseder": "Karar 7'nin kümülatif suçlama merdiveni ('Hâlâ buradasın', 'Sen kaydırmıyorsun; kaydırılıyorsun') pratikte hiç okunmuyor — kampanyanın en keskin cümleleri en silik yüzeyde. Okuyan da 'gitti' geçmiş zamanını oyun ortasında görünce tutarsızlık hissediyor.",
+    "duzeltme": "Tur mesajını tur SONU ekranına taşı (orada zaman kipi doğrulanır ve büyük basılabilir); oyun içinde istenirse yalnız son 10 saniyede beliren tek satır kalsın. TUR_MESAJLARI metinlerine dokunma — yalnız gösterim yeri/zamanı.",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "donenOyuncuMesaji ölü kod — 'Akış seni hatırlıyor' kalıbı hiçbir yerden çağrılmıyor",
+    "dosyaSatir": "sosyal-obezite-feed.ts:111-113 (export edilmiş, kullanılmıyor); OyunKabuk.tsx:48 toplamSaniye yalnız oturum-içi ref, gün takibi yok",
+    "kosul": "Oyuncu farklı gün geri döndüğünde — tasarımın öngördüğü tam senaryo.",
+    "oyuncuNeHisseder": "Dönen oyuncu (viral oyunun en değerli kitlesi) sıradan ilk-tur mesajını görüyor; 'seni hatırlıyorum' ürpertisi — karar 7'nin en güçlü kişiselleştirmesi — hiç yaşanmıyor.",
+    "duzeltme": "localStorage'a {tarih, toplamSaniye} yaz; farklı günde dönüşte turMesaji yerine donenOyuncuMesaji(dunDk, bugunDk) bas. KVKK sayfasına yerel-saklama notu ekle.",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "Oyun içi hiyerarşi tur sonunun tersi: tek büyük canlı sayı 'skor', gerçek sayacı yok",
+    "dosyaSatir": "SosyalObezite.tsx:324-333 — HUD'da skor ve kalan büyük; yakalanan gerçek sayısı oyun sırasında hiçbir yerde görünmüyor",
+    "kosul": "60 saniyelik oynanış boyunca; mesafe puanı her kartta skoru büyüttüğü için.",
+    "oyuncuNeHisseder": "Oyun 60 saniye 'kaydır = kazan' öğretiyor, tur sonu ekranı ise 'asıl şey kurtardığın gerçekti' diyor (OyunKabuk.tsx:146 yorumundaki doğru hiyerarşi). Tez oyun içinde ters, sonda düzeltilen bir sürprize dönüşüyor.",
+    "duzeltme": "HUD'a küçük ama kalıcı 'gerçek 3/12' sayacı ekle (Bean'in yanına, mono ghost); yakalamada bu sayaç da pulse etsin. Böylece 'gerçek' oyun içi dikkat ekonomisinde skorla aynı sahnede yaşar.",
+    "siddet": "ORTA"
+   }
+  ],
+  "enBuyukRisk": "Oyuncu \"gerçek\"in ne olduğunu hiç görmüyor: yakaladığı şey içeriksiz bir yeşil çerçeve (altında yine parodi metni duruyor) ve yakalama anı ekranda hiçbir görünür iz bırakmıyor. Bu iki eksik birleşince ClubBeans tezi — \"kaydırırken gerçek buluşmalar yanından akıp gidiyor\" — oyunun mekaniğinde değil yalnız tur-sonu metinlerinde yaşıyor; oyuncu 60 saniyeyi \"kutu avlama refleks oyunu\" olarak bitiriyor ve \"kurtardığın gerçek 4/12\" ekranı duygusal karşılıksız kalıyor. Karar 2 zaten gerçeğin \"buluşma/insan/davet\" olmasını emrediyor; en yüksek kaldıraçlı düzeltme, gerçek nesnesine kendi sıcak davet içeriğini vermek + yakalama anına görünür teyit eklemek."
+ }
+]

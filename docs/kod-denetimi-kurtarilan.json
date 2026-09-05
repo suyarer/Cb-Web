@@ -1,0 +1,384 @@
+[
+ {
+  "boyut": "Erişilebilirlik (WCAG 2.2 AA)",
+  "bulgular": [
+   {
+    "baslik": "Gerçek işareti aria-hidden + hiçbir SR sinyali yok — kör oyuncu için oyun oynanamaz",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:373 (aria-hidden), 194-205 (işaret yalnız style.opacity ile), 174-192 (kart metinleri imperatif textContent)",
+    "kosul": "Ekran okuyucu (VoiceOver/TalkBack/NVDA) açıkken oyun başlatıldığında. Gerçeğin belirdiğini bildiren TEK sinyal görsel işaret (acid çerçeve + 'GERÇEK — dokun' rozeti) ve bu blok aria-hidden. Yakalama/kaçırma anında da hiçbir anons yok; titreşim (satır 235) yalnız başarıda ve yalnız destekleyen cihazlarda.",
+    "nBozulur": "Görme engelli oyuncu gerçeğin belirdiğini HİÇBİR kanaldan öğrenemez → 60 saniye boyunca körlemesine boşluk basar, her basış yanlisDokunma (-20) sayılır, skor 0'a çakılır. WCAG 1.1.1 + 4.1.2 ihlali; viral kampanya sayfasında tam dışlama. role=application zaten sanal imleci kapattığı için kart metinleri de okunamaz — oyunun tamamı SR'a görünmez.",
+    "duzeltme": "Görsel işaret aria-hidden kalsın; yanına sr-only bir aria-live=\"assertive\" bölge ekle: spawn anında 'Gerçek belirdi — boşluk/dokun', yakalamada 'Yakaladın (N)', pencere kapanınca 'Kaçtı'. Bu 3 anons rAF dışında (spawn/pencere-kapanış/dokunmaDene noktalarında) setState ile basılabilir, saniyede 4 HUD güncellemesine bulaşmaz.",
+    "siddet": "KRITIK"
+   },
+   {
+    "baslik": "aria-live=\"polite\" skor 250ms'de bir güncelleniyor — 60 saniyelik anons spam'i",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:335 (aria-live=polite skor) + 208-220 (setHud her 250ms)",
+    "kosul": "Oynanış sırasında kaydırma yapıldığında skor (mesafe puanı) neredeyse her HUD tick'inde değişir → canlı bölge saniyede 4'e kadar yeni anons kuyruklar, 60 sn boyunca.",
+    "nBozulur": "Ekran okuyucu kesintisiz sayı okur ('12… 19… 27…'); polite kuyruk dolduğu için ipucu mesajı (role=status, satır 391) ve bulgu-1'de önerilen gerçek-anonsu ezilir/gecikir. SR kullanıcısı için oyun sesli gürültüye döner; işitsel bilgi kanalı fiilen kapanır.",
+    "duzeltme": "Skor rakamından aria-live'ı kaldır (görsel HUD yeter). Sesli geri bildirim yalnız olay-bazlı olsun: yakala/kaçır anonsları + tur sonunda tek özet anonsu. İstenirse 10 sn'de bir 'skor N' tek satırlık throttle'lı anons ayrı sr-only bölgeden verilebilir.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "ghost #737373 kontrastı AA altında: koyu zeminlerde 4.0–4.3:1, üstelik 10–11px metinde",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:303, 311-315 (klavye talimatı text-[11px] text-ghost), 334, 341 (HUD etiketleri, elevated/90 zemin), 398 (tur mesajı); components/game/OyunKabuk.tsx:151, 156, 166-170, 189 (placeholder, bg-raised), 215, 227, 248, 256, 260",
+    "kosul": "Hesaplanan oranlar: #737373 / #050505 = 4.30:1; #737373 / elevated(≈#090909) = 4.20:1; #737373 / #111 (placeholder) = 4.01:1. Tümü normal-boy metin eşiği 4.5:1'in ALTINDA ve fontlar 10-12px (büyük-metin muafiyeti yok).",
+    "nBozulur": "WCAG 1.4.3 ihlali. En kritik kayıp: klavye alternatifinin VAR OLDUĞUNU söyleyen tek metin ('Klavye: ↓ kaydırır, boşluk yakalar', satır 314) 11px + yetersiz kontrastta — düşük görüşlü kullanıcı alternatifi hiç keşfedemez. Skor tablosu placeholder'ı ve tur mesajları da aynı şekilde okunmaz.",
+    "duzeltme": "ghost token'ını ≥#8A8A8A'ya çek (midnight'ta ≈6:1, raised'da ≈5:1) veya en az bu sayfada text-ghost yerine text-white/60 (#... ≈ 7:1) kullan. Talimat satırını 11px'ten 13-14px'e büyüt.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "Klavye alternatifi eşdeğer değil: tek ArrowDown ~110px (<1 kart), tavan ~3 kart/sn; mobilde alternatif HİÇ yok",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:282-288 (hiz=3*KART_H tek atama), 145-148 (SURTUNME 0.94 sönümü), 34 (dokunma tavanı 8 kart/sn)",
+    "kosul": "ArrowDown hız=396px/s atar; sürtünme %6/frame olduğundan tek basış toplam ≈ 396/60 × 1/(1-0.94) ≈ 110px yol alır — 1 kart (132px) bile etmez. Basılı tutmak OS key-repeat'ine bağlı (ilk ~500ms gecikme + cihaza göre değişen tekrar hızı) ve en iyi ihtimalle 3 kart/sn'de doyar; dokunmatik oyuncu 8 kart/sn'e çıkabilir.",
+    "nBozulur": "Motor kısıtlı klavye oyuncusunun mesafe puanı tavanı ~180'e karşı 480 — matematiksel skor tavanı 1605 yerine ~1305; skor tablosunda yapısal dezavantaj (WCAG 2.1.1'in 'eşdeğer işlevsellik' ruhu). Daha ağırı: oyun mobil-öncelikli ama klavye alternatifi mobilde yok — ekranda kaydır/yakala düğmesi bulunmadığından switch-access ve Sesli Kontrol kullanıcıları mobilde hiçbir alternatife sahip değil.",
+    "duzeltme": "(a) ArrowDown basılı tutulduğunda sürtünmeyi bypass eden sabit 'klavye hızı' uygula (keydown'da bayrak, keyup'ta bırak; hız 8 kart/sn tavanına eşit olsun); (b) mobil için ekrana iki sabit düğme ekle: 'kaydır' (basılı tutunca sabit hız) + 'yakala' — ikisi de min 44x44, role=button.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "prefers-reduced-motion dalında momentum kapatılmıyor — parmak kalktıktan sonra ~1.7 sn tam-ekran sönümlü kayma",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:144-148 (momentum 'reduced'a hiç bakmıyor), 379 (reduced yalnız işaret opacity geçişini kapatıyor); components/game/BeanCozulme.tsx:68 (yalnız SVG geçişleri)",
+    "kosul": "reduced=true iken kullanıcı fırlatma (flick) yapıp parmağını kaldırdığında: hız tavanı 1056px/s'ten 2px/s'e 0.94^n sönümüyle ≈101 frame ≈ 1.7 sn boyunca tam ekran içerik kendi kendine akar. Doğrudan sürükleme (1:1) muaf sayılır ama bırakma-sonrası atalet kullanıcı girdisi olmadan süren harekettir.",
+    "nBozulur": "Vestibüler rahatsızlığı olan ve bu yüzden reduced-motion açan kullanıcı, tam-viewport sürekli hareketten korunmaz (WCAG 2.3.3 hedefi boşa düşer). 60 sn'lik oturum boyunca tekrarlanan atalet kaymaları mide bulantısı/baş dönmesi tetikleyebilir; 'reduced destekleniyor' iddiası kâğıt üstünde kalır.",
+    "duzeltme": "reduced=true iken onUp'ta s.hiz=0 ver (yalnız 1:1 sürükleme kalsın) ve klavye/düğme hızını sabit-adımlı (kart kart, animasyonsuz translate) uygula. Yakalama penceresi 1800ms hızdan bağımsız olduğu için oynanabilirlik bozulmaz.",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "Odak yönetimi yok: oyun başlarken ve tur biterken odak body'ye düşüyor, role=application hiç odak almıyor",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:304-310 ('60 saniye' butonu unmount olur), 347-357 (tabIndex=0 div'e programatik focus verilmiyor); components/game/OyunKabuk.tsx:120-148 (bitti→tur-sonu ekran değişimi odak taşımıyor)",
+    "kosul": "'60 saniye'ye Enter'la basıldığında buton DOM'dan kalkar → odak document.body'ye düşer; role=application div'inin aria-label talimatı hiçbir zaman anons edilmez (klavye yine çalışır çünkü listener window'da — ama SR kullanıcısı bunu bilemez). Tur bittiğinde de tüm ağaç değişir, odak yine body'de kalır.",
+    "nBozulur": "SR kullanıcısı oyunun başladığını, ne yapması gerektiğini ve 60 sn sonra turun bittiğini anons olarak almaz; tur-sonu ekranında (skor, takma ad formu, CTA'lar) kaybolur ve sayfayı baştan taramak zorunda kalır. WCAG 2.4.3 + odak kaybı (SR'da 'focus lost' sessizliği).",
+    "duzeltme": "setDurum('oynaniyor') sonrası kokRef.current?.focus() çağır (aria-label'a klavye talimatını da ekle: '...boşluk yakalar, ok tuşları kaydırır'). OyunKabuk tur-sonu ekranına tabIndex={-1}'li bir h1 ('60 saniye bitti.') koy ve mount'ta focus() et.",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "260ms / 10px dokunma eşiği tremorlu kullanıcının yakalamasını sessizce yutuyor",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:30-31 (TAP_ESIGI_PX=10, TAP_SURESI_MS=260), 262-272 (onUp: eşik dışı dokunuş hiçbir şey yapmaz)",
+    "kosul": "El titremesi/motor kısıtı olan oyuncunun dokunuşu ≥10px kayar veya ≥260ms sürerse dokunmaDene HİÇ çağrılmaz — dokunuş sessizce sürüklemeye dönüşür; kullanıcı bastığını sanır, gerçek kaçar, neden anlaşılmaz.",
+    "nBozulur": "Motor kısıtlı dokunmatik kullanıcı (mobil = birincil platform) 1800ms pencereye rağmen yakalama yapamaz; oyun 'benim elimde çalışmıyor' hissiyle terk edilir. WCAG 2.5.2/2.5.7'nin hedeflediği kullanıcı sınıfı fiilen elenir; klavye telafisi mobilde yok (bulgu 4).",
+    "duzeltme": "TAP_SURESI_MS'i 500ms'e çıkar ve eşiği 10px→24px yap (yanlış-pozitif riski düşük: yanlisDokunma cezası zaten var); ya da bulgu 4'teki sabit 'yakala' düğmesini ekle — düğme yolu bu eşiklerden tamamen bağımsız olur.",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "İpucu mesajı 1600ms'de kayboluyor — okunamadan gidiyor",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:169-171 (setTimeout 1600ms) + 389-396 (role=status, 12px)",
+    "kosul": "İlk gerçek kaçırıldığında 'Az önce bir gerçek kaçırdın. Dokunarak yakalanır.' (49 karakter) ekranda yalnız 1.6 sn kalır; ortalama okuma hızında bu cümle ~2.5-3 sn ister. Düşük görüşlü/dislektik/yavaş okuyan kullanıcı ve o anda kaydırmakta olan herkes için süre yetmez.",
+    "nBozulur": "Oyunun TEK öğretici düzeltme mesajı kaçar; oyuncu mekanik hatasını (dokunarak yakalama) öğrenemeden 60 sn'yi bitirir. role=status polite olduğu için SR'da da skor spam'inin (bulgu 2) arkasına düşüp hiç okunmayabilir.",
+    "duzeltme": "Süreyi 4000ms'e çıkar; mesaj görünürken ekrana dokunulursa erken kapat. Bulgu 2 çözülünce status anonsu da kuyrukta ezilmez.",
+    "siddet": "DUSUK"
+   },
+   {
+    "baslik": "60 sn süre sınırının uzatılabilir/rahat modu yok",
+    "dosyaSatir": "lib/game/engine.ts:13 (TUR_SURESI_MS=60_000) + engine.ts:175 (submit ±2sn dışını reddeder)",
+    "kosul": "Süre sınırı oyunun özü olduğu için WCAG 2.2.1'in 'essential' muafiyeti skor tablosu YARIŞMASI için savunulabilir; ancak sunucu doğrulaması ±2sn dışındaki her turu reddettiğinden, daha yavaş oynamak isteyen kullanıcıya skor-tablosu-dışı bir 'süresiz/rahat tur' bile sunulamıyor.",
+    "nBozulur": "Bilişsel/motor kısıtlı oyuncu için tek seçenek standart tempo; muafiyet savunması 'yarışma modu' ile sınırlı kalır, sayfanın bütünü için erişilebilirlik iddiası zayıflar. (Yasal AA zorunluluğu değil, savunulabilirlik bulgusu.)",
+    "duzeltme": "İtiraf ekranına skor göndermeyen 'sakin tur' bağlantısı ekle (sessionId='' yolu zaten skorsuz oynanışı destekliyor — OyunKabuk.tsx:65 aynı mekanizma yerelde kullanılıyor); süreyi bu modda 120sn yap.",
+    "siddet": "DUSUK"
+   }
+  ],
+  "enBuyukRisk": "Gerçek işaretinin aria-hidden olması + hiçbir işitsel/canlı-bölge sinyali bulunmaması: ekran okuyucu kullanıcısı gerçeğin belirdiğini hiçbir kanaldan öğrenemediği için viral kampanyanın çekirdek mekaniği görme engelliler için sıfır oynanabilirlik demek — role=application sanal imleci de kapattığından oyun SR'a bütünüyle görünmezdir ve lansman sonrası 'erişilemez viral oyun' eleştirisi markaya doğrudan yapışır."
+ },
+ {
+  "boyut": "React 19 / Next.js 16 doğruluğu ('use client' sınırları, effect/deps, rAF-setState, ref callback, hydration, route/metadata)",
+  "bulgular": [
+   {
+    "baslik": "Paylaşım linki /sosyal-obezite/s/[runId] rotası HİÇ YOK — viral link 404",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/OyunKabuk.tsx:107 (link üretimi) + /Users/suyarer/Cb-Web/app/sosyal-obezite/ (ls: sadece page.tsx var) + /Users/suyarer/Cb-Web/app/api/game/submit/route.ts:109-120 (run:{runId} yazımı)",
+    "kosul": "Oyuncu skoru kaydettikten sonra 'Kartını paylaş'a basar (birincil CTA, 1. turda en üstte). kayit.runId dolu olduğu için URL `${origin}/sosyal-obezite/s/${runId}` üretilir; app/ altında `s/[runId]` segmenti hiçbir yerde tanımlı değil (grep: runId yalnız OyunKabuk + submit route'ta).",
+    "nBozulur": "Paylaşılan her tweet/DM linki not-found.tsx'e (404) düşer. Oyunun varlık sebebi olan viral döngü ilk halkada kopar. OG skor kartı da yok — root app/opengraph-image.tsx devralınır, generic site görseli çıkar (spec'in istediği faz-5 Bean skor kartı değil). Ayrıca submit route her kayıtta run:{runId}'yi bilerek TTL'siz Redis'e yazıyor — hiç okunmayacak anahtarlar Upstash'te sınırsız birikir.",
+    "duzeltme": "Lansmandan önce app/sosyal-obezite/s/[runId]/page.tsx (redis.get(`run:${id}`) → skor kartı + generateMetadata ile OG) ve opengraph-image üret; rota gelene kadar paylas() içinde URL'yi `/sosyal-obezite`'ye düşür (OyunKabuk.tsx:107'deki ternary'nin runId dalını kapat).",
+    "siddet": "KRITIK"
+   },
+   {
+    "baslik": "route.ts'ten `export function trGunu` — Next.js build type-check'i route dosyasında bilinmeyen export'u reddeder",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/app/api/game/submit/route.ts:48",
+    "kosul": "`next build` çalıştığında (Vercel deploy dahil) 'Checking validity of types' aşaması .next/types üzerinden route.ts'in yalnız izinli alanları (GET/POST/runtime/dynamic...) export ettiğini doğrular; `trGunu` bu listede yok.",
+    "nBozulur": "Build 'X is not a valid Route export field' tip hatasıyla FAIL olur — deploy hiç çıkmaz. Yerelde .env olmadığı için (Redis.fromEnv bilinçli patlıyor) tam build muhtemelen hiç koşulmadı; hata ilk Vercel build'inde, lansman anında görülür.",
+    "duzeltme": "trGunu'yu lib/game/ altına (örn. lib/game/time.ts) taşı, route.ts'te import et; route dosyasından yalnız POST + runtime + dynamic export kalsın.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "Oturum mount anında açılıyor, TTL 180 sn — itiraf ekranında ~2 dk oyalanan oyuncunun skoru yazılamaz",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/OyunKabuk.tsx:69 (useEffect mount'ta turBaslat) + /Users/suyarer/Cb-Web/app/api/game/start/route.ts:54-59 (ex:180) + /Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:295-318 (süresiz itiraf bekleme ekranı)",
+    "kosul": "Sayfa açılır açılmaz /api/game/start çağrılır ve sess:{id} 180 sn TTL ile yazılır; ama oyun 'itiraf' ekranında oyuncu '60 saniye' butonuna basana dek süresiz bekler. Oyuncu itirafı okur / başka sekmeye gider / 2 dk sonra başlarsa: 120 sn bekleme + 60 sn oyun = TTL aşıldı.",
+    "nBozulur": "Submit'te getdel null döner → 409 'Bu tur zaten kaydedildi ya da süresi doldu.' — oyuncu dürüst oynadığı turun skorunu tabloya yazamaz, hata mesajı da yanlış suçlama yapar. İkincil etki: sayfayı sadece ziyaret eden (hiç oynamayan) herkes Redis session + IP başına 20/dk start limitinden slot yakar; CGNAT arkasındaki Türk mobil operatör IP'lerinde viral trafik limitini boşa tüketir.",
+    "duzeltme": "start çağrısını mount'tan '60 saniye' butonunun onClick'ine taşı (itiraf ekranı OyunKabuk'a alınır ya da SosyalObezite start'ı kendisi tetikler); TTL'yi de gerçek akışa göre (oyun başlangıcından itibaren 180 sn) hesapla.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "reactStrictMode:true + mount-effect'te turNo.current += 1 — dev'de ilk tur DAİMA '2. tur' olarak koşar, öğretim spawn'ı test edilemez",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/OyunKabuk.tsx:50-69 (turBaslat ref mutasyonu + useEffect) + /Users/suyarer/Cb-Web/next.config.ts (reactStrictMode: true)",
+    "kosul": "React 19 StrictMode dev'de effect'i mount-cleanup-mount olarak iki kez koşar; turBaslat iki kez çağrılır, turNo.current 2 olur, iki /api/game/start isteği atılır (ilk session yetim kalır), ikinci yanıt kazanır ve ilkTur=false gelir.",
+    "nBozulur": "Dev ortamında ILK_SPAWN 4-6 sn sabitlemesi (öğretim) ve 'İlk tur. 60 saniye gitti.' mesajı hiçbir zaman görülmez — alt mesaj '2. tur. Toplam 2 dakika.' der ama oyuncu 0 dk oynamıştır. Lansman öncesi tüm yerel QA ilk-temas deneyimini yanlış doğrular; ayrıca CTA sırası ilkKosu'ya bağlı olduğundan dev'de her zaman store-birincil varyant görülür, paylaşım-birincil varyant test edilmeden çıkar.",
+    "duzeltme": "turNo artırımını effect'ten çıkar: mount effect'i boş-bağımlılıkla bir kez 'başlat' işaretlesin ve turNo'yu state ya da ref'te idempotent yönet (örn. useEffect içinde if (turNo.current === 0) turNo.current = 1) veya StrictMode çift-koşusuna dayanıklı guard (başlatıldı ref'i) ekle.",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "setPointerCapture yok — mouse pencere dışında bırakılınca surukleniyor kilitli kalır, akış sabit hızla sonsuza kayar",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:241-272 (onDown/onMove/onUp) + 145-153 (surukleniyor=true iken sönüm atlanır)",
+    "kosul": "Masaüstünde oyuncu pointerdown sonrası imleci tarayıcı penceresi dışına sürükleyip orada bırakır: capture alınmadığı için element pointerup/pointercancel almaz, s.surukleniyor true kalır, s.hiz son değerinde donar; rAF döngüsünde sönüm bloğu (satır 145) surukleniyor=true iken atlanır.",
+    "nBozulur": "Akış son sürükleme hızıyla kendi kendine kaymaya devam eder, s.kart sayacı oyuncu dokunmadan artar (mesafe puanı tavana kadar bedava dolar), aktif gerçekler otomatik kaçar. Bir sonraki pointerdown'a kadar oyun kontrol dışıdır — 60 sn'lik turda bu turu bitirir.",
+    "duzeltme": "onDown'da (e.target as Element).setPointerCapture(e.pointerId) çağır (pointerup/cancel garanti elemente gelir) veya window'a pointerup/pointercancel dinleyicisi ekleyip surukleniyor'u orada da kapat.",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "'React commit = 0' iddiası yanlış: setHud 4x/sn + setIpucu rAF içinden commit üretir; davranış doğru ama sözleşme yanıltıcı + ipucu timeout cleanup'sız",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:20-21 (iddia), 167-171 (setIpucu + setTimeout), 207-220 (setHud), 359-368 (havuz JSX)",
+    "kosul": "Oynanış boyunca setHud her 250 ms'de bir commit tetikler; React 19 automatic batching rAF içindeki setHud+setIpucu'yu tek render'a bağlar (doğru), ve manuel DOM yazımları (transform/textContent/dataset) reconciliation'da korunur çünkü JSX prop'ları (style objesi değerleri, boş children) render'lar arası değişmez — React değişmeyen prop'u DOM'a yeniden yazmaz. Ancak her commit 12 kartın inline ref callback'ini yeni fonksiyon kimliğiyle üretir; React 19 eski callback'i null ile, yenisini elementle çağırır (saniyede ~4×12 detach/attach churn'ü). setTimeout(setIpucu(null),1600) unmount'ta temizlenmez.",
+    "nBozulur": "Bugün fiilen bozulan bir şey yok — ama (a) yorumdaki 'commit=0' garantisine güvenerek karta yeni dinamik JSX prop'u ekleyen ilk değişiklik (örn. kademe rengini className'e taşımak) manuel textContent/dataset yazımlarını sessizce ezer; (b) unmount sonrası setIpucu(null) React 19'da sessiz no-op'tur, hata vermez ama sızıntı kalıbıdır. Havuz kartlarının ref'i inline yerine sabit bir callback'e alınırsa churn de biter.",
+    "duzeltme": "Yorumu gerçeğe çevir ('commit yalnız HUD, 4/sn'); kart ref'lerini useCallback'li tek indeksli callback'e veya ref cleanup dönen (React 19) kalıba al; setTimeout id'sini ref'te tutup rAF effect cleanup'ında clearTimeout et; karta ileride prop eklenmesini yasaklayan yorum satırını havuz JSX'inin üstüne taşı.",
+    "siddet": "DUSUK"
+   }
+  ],
+  "enBuyukRisk": "Viral döngünün kendisi kırık: 'Kartını paylaş' birincil CTA'sının ürettiği /sosyal-obezite/s/{runId} linkinin rotası hiç yazılmamış — lansman günü paylaşılan her link 404'e düşer ve oyunun tek büyüme kanalı ilk halkada kopar (üstelik submit route bu ölü sayfa için run:{runId} anahtarlarını TTL'siz Redis'e sonsuza dek biriktiriyor). İkinci sıradaki sessiz bomba: submit/route.ts:48'deki trGunu export'u yüzünden ilk gerçek `next build` (Vercel deploy) tip hatasıyla hiç çıkmayabilir — yerelde .env olmadığından bu yol muhtemelen hiç koşulmadı. Buna karşılık şüphelenilen React 19 alanları temiz çıktı: 'use client' sınırları doğru, rAF effect'inin bağımlılıkları eksiksiz, kartRef callback'i blok gövdeli olduğu için React 19 cleanup kuralına takılmıyor, hydration'a giren rastgelelik yok (crypto/performance yalnız effect/handler'da), key={sessionId||seed} remount stratejisi ve navigator.share/vibrate guard'ları doğru, force-dynamic+nodejs seçimi yerinde."
+ },
+ {
+  "boyut": "Spec uyumu — karar 6 (Bean çözülme yayı), karar 7 (kümülatif tur mesajı), karar 12+kullanıcı onayı (CTA sırası), metin hiyerarşisi, brand-voice/UI_SOZLUK/TANIM_SATIRI",
+  "bulgular": [
+   {
+    "baslik": "Paylaşım linki /sosyal-obezite/s/{runId} rotası HİÇ yok — paylaşılan her link 404",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/OyunKabuk.tsx:106-108 (URL üretimi) + /Users/suyarer/Cb-Web/app/sosyal-obezite altında yalnız page.tsx var (s/[runId]/page.tsx ve opengraph-image.tsx mevcut değil; find ile doğrulandı)",
+    "kosul": "Oyuncu skor kaydettikten sonra 'Kartını paylaş'a basar; kayit.runId dolu olduğu için URL `${origin}/sosyal-obezite/s/${runId}` olur ve tweet/DM'e bu link gider",
+    "nBozulur": "Viral döngünün ilk halkası: paylaşılan link 404 verir, per-koşu OG kartı (sentez §7 — dinamik görsel + kartta ZORUNLU tanım satırı + faz-5 karesi) hiç üretilmez. submit route'u run:{runId} anahtarını TTL'siz Redis'e yazıyor ama onu okuyan yüzey yok — veri ölü. Kampanyanın varlık sebebi (karar 12, paylaşım kartı 'her koşulda var') ilk paylaşımda kırılır",
+    "duzeltme": "Lansmandan önce app/sosyal-obezite/s/[runId]/page.tsx + opengraph-image.tsx (lib/ogImage.tsx kalıbı) ekle; run:{runId} verisinden kart üret (hiyerarşi: yakalanan BÜYÜK, süre orta, skor küçük + TANIM_SATIRI + faz-5 Bean). Yetişmezse paylas() runId'siz jenerik URL'ye düşsün (graceful degrade zaten spec'te)",
+    "siddet": "KRITIK"
+   },
+   {
+    "baslik": "'React commit = 0 oynanışta' mimari kabulü ihlal: setHud saniyede 4 commit + setIpucu mid-game",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:207-220 (setHud 250ms'de bir) ve 167-171 (setIpucu + setTimeout ile ikinci commit)",
+    "kosul": "Her oynanış turunda, tur boyunca — sentez §4 kabul kriteri 'React'e yalnız tur geçişlerinde commit, React DevTools Profiler ile doğrula' ve görev bağlamındaki 'oynanış sırasında React commit SIFIR' değişmezi",
+    "nBozulur": "60 sn'lik turda ~240 React commit + ilk kaçırmada 2 ek commit. Her commit 12 havuz kartı + HUD + BeanCozulme SVG'sinin reconciliation'ını çalıştırır; düşük-tier Android'de (Moto G/Redmi kabul testi: long task >50ms ≤2) rAF döngüsüyle aynı ana thread'de yarışır. Spec'in kendi kabul testi bu haliyle Profiler'da otomatik FAIL",
+    "duzeltme": "HUD'u da rAF içinde elle sür (skor/kalan/faz için ref'li DOM düğümlerine textContent yaz; BeanCozulme faz değişimini CSS class/attribute ile tetikle) veya spec'in kabul kriterini bilinçli sapma olarak revize edip Moto G sınıfında long-task ölçümüyle kanıtla",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "Karar 7 off-by-one: 6. turda 'Toplam 5 dakika' görünür, kilitli 6. mesaj kopyası hiçbir zaman gösterilmez",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/content/sosyal-obezite-feed.ts:115-121 (turMesaji) + /Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:399 (toplamSaniyeOnce ile çağrı)",
+    "kosul": "turNo=6: i=min(6,6)-1=5, `i < 5` false → dinamik dala düşer; dk=floor(toplamSaniyeOnce/60)=floor(300/60)=5 → '6. tur. Toplam 5 dakika.' Oysa turlar 1-5 sabit mesajları kullanır ve içinde bulunulan turu sayar ('3. turun. Toplam 3 dakika'). TUR_MESAJLARI[5] ('Toplam 6 dakika') hiçbir turNo için erişilebilir değil — ölü sabit",
+    "nBozulur": "Kümülatif sayaç 6. turdan itibaren bir tur geride kalır; sertleşme merdiveninin son basamağı (spec §8'de kilitlenen kopya) hiç görünmez. Karar 7'nin 'panel TÜM turların toplam süresini sayar' iddiası tam da mesajın en sert olduğu yerde yanlış sayı gösterir",
+    "duzeltme": "Dinamik dalda dk hesabını `Math.floor(toplamSaniye/60) + 1` yap (turlar 1-5 ile aynı sayım kuralı) veya koşulu `i < TUR_MESAJLARI.length` yapıp 6. turda sabit kopyayı göster, 7+ için dinamik kal",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "Zorunlu 3-kademe metin hiyerarşisi 2 kademeye inmiş: süre ile skor aynı boyutta",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/OyunKabuk.tsx:166-170 — 'akışa verdiğin süre' ve 'skor' aynı `font-mono text-xs` satırında, aynı `text-white/70` renkte",
+    "kosul": "Her tur sonu ekranında; metin uzmanının ZORUNLU hiyerarşisi (sentez §7/§8): (1) kurtarılan gerçek BÜYÜK ✓ (text-6xl, doğru), (2) süre ORTA, (3) skor KÜÇÜK. Kod 2 ve 3'ü eşitliyor",
+    "nBozulur": "Skor ile süre görsel ağırlıkta eşitlenince ekran görüntüsünde skor, süreyle aynı statüye yükselir; 'en çok kaydıran değil, en çok fark eden kazanır' savunma hattı zayıflar — hiyerarşinin zorunlu kılınma gerekçesi tam buydu ('skoru öne alan kart tezi ters çevirir' — dosyanın kendi yorumu 146. satırda bunu söylüyor ama uygulamıyor)",
+    "duzeltme": "Süre satırını ayrı ve görünür bir ara boyuta çıkar (ör. text-base/text-lg, beyaz), skoru tek başına text-xs ghost bırak",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "Spec 'mutlak sıra yerine yüzdelik + varsayılan Bugün' der; kod tüm-zamanlar mutlak sırası döndürüp gösteriyor",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/app/api/game/submit/route.ts:130-138 (zcount/zcard yalnız lb:all üstünde, mutlak sıra döner) + /Users/suyarer/Cb-Web/components/game/OyunKabuk.tsx:169 ('sıra: N' gösterimi)",
+    "kosul": "Skor kaydeden her oyuncu; sentez §3 tur-sonu satır 1 = \"skor + 'bugün üst %X'tesin' (ZRANK/ZCOUNT)\" ve §11 = 'mutlak sıra yerine yüzdelik'",
+    "nBozulur": "Lansman sonrası tablo büyüdükçe 'sıra: 4187' motivasyon kırar (yüzdelik tam bu yüzden seçilmişti); ayrıca sıra Bugün yerine tüm-zamanlardan geldiği için günün oyuncusuna yanlış bağlam verir. İki ayrı spec maddesi aynı satırda ihlal",
+    "duzeltme": "submit yanıtına `lb:day:{gun}` üzerinden ZCOUNT(skor+1,+inf)/ZCARD ile yüzdelik ekle; UI'da 'bugün üst %X'tesin' göster",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "Duraklat düğmesi + visibilitychange otomatik pause yok — sekmeden ayrılan oyuncunun turu sessizce yanar",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:123-226 (rAF döngüsü duvar-saati `t - s.baslangic` ile ilerler; visibilitychange dinleyicisi ve pause durumu hiçbir yerde yok; spec §3 adım 2: 'Duraklat düğmesi ≥48px sağ üst + visibilitychange otomatik pause')",
+    "kosul": "Oyuncu tur ortasında bildirime/başka sekmeye geçip döner: rAF durur ama performance.now ilerler; dönüşte `gecen >= TUR_SURESI_MS` ise tur anında biter, `bitir()` kalan tüm spawn'ları 'kacir' sayar (satır 107-117)",
+    "nBozulur": "Mobilde (birincil hedef) bildirime bakan dürüst oyuncu 'tüm gerçekleri kaçırdın' ekranıyla döner; sureMs sabit TUR_SURESI_MS yazıldığından sunucu doğrulaması bunu ayırt edemez. Spec'in yazdığı yüzey (pause) hiç kodlanmamış",
+    "duzeltme": "visibilitychange'de `hidden` → duraklat (baslangic'ı gizli kalınan süre kadar kaydır, aktifGercek penceresini dondur); spec'teki duraklat düğmesini ekle veya sapmayı gerekçeli kaydet",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "Submit payload'ında `skor` alanı var (spec: 'payload'da skor alanı HİÇ yok') + red cevabı eşik adını sızdırıyor",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/app/api/game/submit/route.ts:34 (Govde.skor zorunlu alan) ve 96-99 (`sebep: dogrulama.sebep` istemciye döner); sentez §5.1: 'Payload'da skor/rozet alanı HİÇ yok' + 'Tavan-üstü submit: sessizce kabul, tabloya YAZMA (saldırgana bayrak yok)'",
+    "kosul": "Her submit'te; hile deneyen biri 422 cevabındaki `sebep` ('kart-sayisi-imkansiz', 'skor-yeniden-hesap-uyusmazligi'...) ile hangi eşiğe takıldığını öğrenir",
+    "nBozulur": "Sunucu kendi skorunu hesaplıyor (doğru taraf), ama spec'in iki bilinçli kararı ters çevrilmiş: istemci skoru şemada zorunlu alan olmuş ve eşik adları saldırgana geri bildirim oluyor — heuristikleri deneme-yanılmayla haritalamak kolaylaşır",
+    "duzeltme": "`skor` alanını şemadan çıkar (aklaYatkin'deki çapraz kontrol sunucu hesabıyla zaten anlamsızlaşıyor) veya optional yap; 422 gövdesinde yalnız HILE_REDDI mesajı dön, `sebep`i Sentry/log'a yaz",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "ILK_KACIRMA_IPUCU sabiti tanımlı ama SosyalObezite aynı metni elle kopyalamış",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:169 ('Az önce bir gerçek kaçırdın. Dokunarak yakalanır.' string literal) vs /Users/suyarer/Cb-Web/content/sosyal-obezite-feed.ts:152 (ILK_KACIRMA_IPUCU aynı metin; grep ile doğrulandı: sabit hiçbir yerden import edilmiyor)",
+    "kosul": "İlk gerçek kaçırıldığında; içerik dosyasında copy güncellenirse (metin katmanı tek-kaynak varsayımıyla) oyun ekranı eski metni göstermeye devam eder",
+    "nBozulur": "Metin katmanının tek-kaynak sözleşmesi kırılır; sessiz drift — copy revizyonu yayınlandı sanılır ama oyun içi ipucu değişmez",
+    "duzeltme": "SosyalObezite.tsx:169'da literal yerine ILK_KACIRMA_IPUCU import edip kullan (feed.ts'ten zaten 6 sembol import ediliyor, tek satır)",
+    "siddet": "DUSUK"
+   },
+   {
+    "baslik": "donenOyuncuMesaji ölü kod — spec'in oturum-ötesi ayrımı ('hâlâ yalnız aynı oturumda') bağlanmamış",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/content/sosyal-obezite-feed.ts:111-113 (fonksiyon tanımlı, grep: hiçbir çağıran yok); toplamSaniye yalnız OyunKabuk.tsx:48 ref'inde — sayfa yenilemede sıfırlanır, gün-ötesi kalıcılık yok",
+    "kosul": "Dönen oyuncu (farklı gün) tekrar oynar: spec §8'e göre 'Yine geldin. Dün X dakika...' kalıbını görmeli; kodda dünkü süre hiçbir yerde saklanmadığı için her dönüş 'İlk tur' mesajından başlar",
+    "nBozulur": "Karar 7'nin oturum-ötesi katmanı (uzman sentezinde açıkça ayrıştırılmış iki kalıp) fiilen yok; kampanyanın 'akış seni hatırlıyor' anı hiç tetiklenmez. Kırılma değil eksik özellik — ama spec'te teslim edilmiş kopya çöpte",
+    "duzeltme": "localStorage'a gün anahtarlı toplam süre yaz (KVKK: kişisel veri değil, cihazda kalır); farklı gün tespitiyle donenOyuncuMesaji'yi turMesaji yerine göster — ya da bilinçli erteleme olarak karar kaydına yaz ve fonksiyonu kaldır",
+    "siddet": "DUSUK"
+   },
+   {
+    "baslik": "Onaylı C1 varyantının kopyası ('Bu oyunu kapat. Gerçek bir masaya otur.') ve §3 'bırak' seçeneği hiçbir yüzeyde yok",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/OyunKabuk.tsx:204-252 (CTA bloğu: her iki dalda da yalnız ctaUstu='ClubBeans: gerçeğin uygulaması...' + 'bir tur daha'; grep: 'masaya otur' ve 'bırak' repo'da yok)",
+    "kosul": "Tur sonu ekranı; sentez §13 madde 1 onaylanan varyantı store-ikincil bloğunu bu kopyayla tanımlar, §3 tur-sonu akışı ''bir daha' + eşit ağırlıkta 'bırak' seçeneği' ister. CTA SIRASI doğru uygulanmış (1. tur paylaşım birincil, 2+ store birincil ✓) ama varyantın metni ve çıkış seçeneği düşmüş",
+    "nBozulur": "'Onurlu çıkış' anlatısı (kriz savunması: 'oyunda en değerli hamle çıkmak') tur sonunda hiç sunulmaz; sadece sonsuz 'bir tur daha' kalır — eleştirdiğimiz düzenin desenine geri dönülmüş olur. quit_click analitik olayı da (§11) hiç üretilemez",
+    "duzeltme": "Store-ikincil dala onaylı kopyayı ekle; 'bir tur daha' yanına eşit görsel ağırlıkta 'bırak' (ana sayfaya dönüş) koy. 'Bırakabildin' kart göstergesi §13/3'te ayrı onaya tabi — o beklemeli, ama düz 'bırak' seçeneği §3'ün tabanı",
+    "siddet": "DUSUK"
+   }
+  ],
+  "enBuyukRisk": "Paylaşım URL'sinin işaret ettiği /sosyal-obezite/s/[runId] rotası hiç yazılmamış: oyun canlıya çıktığı an her paylaşılan link 404 verir ve dinamik OG kartı (tanım satırı + faz-5 Bean + hiyerarşili skor kartı) hiç var olmaz. Kampanyanın birincil amacı viral döngü olduğu için bu tek eksik, diğer her şey kusursuz çalışsa bile lansmanı işlevsiz bırakır — ve ilk tweet atıldıktan sonra fark edilirse en görünür anda patlar."
+ },
+ {
+  "boyut": "Doğruluk ve mantık hataları (rAF yaşam döngüsü, sayaç tutarlılığı, fizik, zamanlama)",
+  "bulgular": [
+   {
+    "baslik": "Sürükleme sırasında kaydırma mesafesi ÇİFT uygulanıyor; kart sayacı görülenin yarısını sayıyor",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:149-153 + 250-260",
+    "kosul": "Parmak/imleç ekrandayken (surukleniyor=true) her rAF frame'i: onMove offset'e dy'yi doğrudan ekler, dongu AYNI aralıkta sinirliHiz*dt'yi bir daha ekler (dongu'daki offset ilerletme surukleniyor kontrolüne bağlı değil).",
+    "nBozulur": "Görsel akış hızı sürükleme boyunca ~2× (hız tavanı fiilen 16 kart/sn hissi); kart sayacı ise yalnız dongu'nun hiz*dt bileşeninden geçen kartları sayar (oncekiKart onMove güncellemesinden SONRA okunur) → 'N kart kaydırdın' ekranda geçenin yaklaşık yarısı, mesafe puanı görülenle tutarsız. 1.8sn'lik GERÇEK işareti ekrandan iki kat hızlı akar.",
+    "duzeltme": "dongu'daki offset ilerletme ve kart sayımını `if (!s.surukleniyor)` bloğuna al (drag'de konum yalnız pointer'dan, momentum yalnız bırakınca); kart sayımını her frame'de tek noktadan offset-delta ile yap ki drag kaynaklı geçişler de sayılsın.",
+    "siddet": "KRITIK"
+   },
+   {
+    "baslik": "Spawn drain: aktifGercek üzerine yazılan önceki gerçek SESSİZCE kayboluyor (ne yakalanan ne kacan)",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:156-161",
+    "kosul": "(a) Sekme arka plana alınıp dönülünce gecen sıçrar, while birden çok spawn'ı tek frame'de tüketir — her iterasyon aktifGercek'i kontrolsüz ezer; (b) ilkTur'da out[0]∈[4000,6000] ile out[1]∈[6000,9000] arası 1800ms'nin altına düşebilir (out[0]=6000, out[1]=6000 eşitliği dahil) → önceki gerçeğin penceresi kapanmadan yenisi basılır.",
+    "nBozulur": "Ezilen gerçekler için 'kacir' push edilmez, kacan artmaz → tur sonu '/12' yerine '/11' (veya throttle sonrası çok daha az) gösterir; öğretici İLK gerçek ilk turda sessizce yutulabilir. aklaYatkin reddetmez (toplam ≤12 kalır) ama veri yanlış. (Not: prompt'taki 'kalanSpawn+aktifGercek > 12' riski doğrulandı: matematiksel olarak AŞAMAZ — asıl hata aşma değil, eksik sayım.)",
+    "duzeltme": "while gövdesinde yeni spawn'dan önce `if (s.aktifGercek) { s.kacan++; s.olaylar.push('kacir'); }`; ayrıca spawnTakvimi'nde ardışık spawn'lar arasına ≥2000ms taban zorla (ilkTur override sonrası da).",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "visibilitychange pause YOK: tur arka planda duvar saatiyle erimeye devam ediyor",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:123-226 (rAF effect'inde pause dalı hiç yok)",
+    "kosul": "Oyuncu bildirime/başka uygulamaya/başka sekmeye geçince — mobil hedef kitlede son derece olağan. rAF durur ama gecen=t-baslangic gerçek zamanla işler.",
+    "nBozulur": "Dönüşte tur bitmiş (bitir tetiklenir) ya da spawn'lar drain olmuş bulunur; spec §3'ün 'visibilitychange otomatik pause' şartı hiç uygulanmamış. Oyuncu 60 saniyesinin çoğunu hiç oynamadan kaybeder; bulgu 2'deki drain'in ana tetikleyicisi budur.",
+    "duzeltme": "visibilitychange'de hidden anını kaydet, dönüşte s.baslangic'i gizli süre kadar ileri kaydır (spawn takvimi gecen'e bağlı olduğundan otomatik düzelir); sunucu tarafında TTL/duvar-saati bütçesini pause payıyla hizala.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "Oturum TTL'i (180sn) sayfa yüklenince başlıyor; itiraf ekranı + takma ad girişi bütçeyi yiyor → dürüst skor 409 ile kaybolur",
+    "dosyaSatir": "components/game/OyunKabuk.tsx:69 (mount'ta start çağrısı) + app/api/game/start/route.ts:55-59 (ex:180) + components/game/SosyalObezite.tsx:295-318 (süresiz itiraf kapısı)",
+    "kosul": "Sayfa açılışı → BAŞLA dokunuşu arası + 60sn tur + tur sonu takma ad yazımı toplamda 180sn'yi aşarsa (ör. itiraf ekranında 2dk oyalanma — dikkati dağınık kitleye yapılmış oyunda beklenen davranış).",
+    "nBozulur": "getdel null döner → 409 'Bu tur zaten kaydedildi ya da süresi doldu' — tam ve dürüst oynanmış turun skoru tabloya asla yazılamaz; hata metni de yanıltıcı (tur kaydedilmedi).",
+    "duzeltme": "start çağrısını BAŞLA dokunuşuna taşı (itiraf ekranı session'sız gösterilebilir) ve/veya TTL'i 600sn yap; 409 mesajını iki durumu ayıracak şekilde düzelt.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "route.ts'ten `export function trGunu` — geçersiz Route export'u `next build`i düşürür",
+    "dosyaSatir": "app/api/game/submit/route.ts:48-51",
+    "kosul": "App Router build-time tip doğrulaması (varsayılan açık) route modülünün export'larını izinli alan listesiyle karşılaştırdığında.",
+    "nBozulur": "'trGunu is not a valid Route export field' tip hatası → deploy başarısız. Dev'de görünmez, ilk production build'de patlar.",
+    "duzeltme": "trGunu'yu lib/game/ altına taşı (s/[runId] OG kartı da güne ihtiyaç duyacak), route.ts'ten yalnız POST/runtime/dynamic export et.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "setPointerCapture yok: mouse eleman dışında bırakılınca sürükleme kilitlenir, akış sabit hızda sonsuz kayar",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:241-272 (onDown/onUp) + 347-353 (handler bağlama)",
+    "kosul": "Masaüstünde mouse ile sürüklerken imleç oyun alanı/pencere dışına çıkıp orada bırakılırsa (dokunmatikte implicit pointer capture var, mouse'ta YOK).",
+    "nBozulur": "onUp/onMove bir daha gelmez → surukleniyor=true kalır → sürtünme bloğu hiç çalışmaz, son hiz değeriyle offset her frame ilerler: akış tur sonuna dek kontrolsüz kayar, kart sayacı şişer.",
+    "duzeltme": "onDown'da `e.currentTarget.setPointerCapture(e.pointerId)`; onUp/onPointerCancel'da releasePointerCapture.",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "Kademe geçişi ekrandaki kartlara yansımıyor; kaydırmayan oyuncu tüm turu 'anlamli' kartlarla geçirir",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:176-191 (metin yalnız data-idx değişince yazılır) + 39-53 (kademeIcin/kartMetni)",
+    "kosul": "Oyuncu durur ya da yavaş kaydırırsa: 12/25/38sn eşikleri geçildiğinde görünür 12 kart eski kademe metinleriyle kalır (DOM güncellemesi yalnız index değişimine bağlı). Hiç kaydırmayan oyuncu mount'taki gecen≈0 ile yazılmış 'anlamli' kartları 60sn boyunca görür.",
+    "nBozulur": "Oyunun tez taşıyıcısı 'boşalma yayı' (anlamlı→boş kutu) hiç ya da gecikmeli yaşanır. Ayrıca yukarı-aşağı kaydırmada aynı index'e dönüş farklı gecenMs → farklı kademe/metin üretir; satır 46'daki 'aynı tur tekrar aynı görünür' determinizm iddiası kırılır.",
+    "duzeltme": "Frame'de kademeIcin(gecen) sonucunu izle; kademe değiştiğinde havuzdaki data-idx'leri invalidate et (tek satır: anahtar karşılaştırmasına kademe'yi dahil et: `${index}:${kademe}`).",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "Küfür kökü 'pic ' sondaki boşluğunu iskelette kaybediyor → çıplak 'pic' substring'i masum adları blokluyor",
+    "dosyaSatir": "lib/game/nickname.ts:24 ('pic ' kökü) + 67-74 (iskelet non-alnum'u siler) + 114 (GOMULU_ISK.some includes)",
+    "kosul": "İçinde 'pic' geçen her takma ad: 'Picasso', 'Epic', 'Tropical'… — kelime sınırı amaçlanan kök, normalizasyonda substring'e dönüşür.",
+    "nBozulur": "422 'Bu takma ad uygun değil' — dosya başındaki 'uzun kökler FP üretmez' varsayımı tam bu kök için sessizce çöker; FP kapısı ilkesi bozulur.",
+    "duzeltme": "'pic'i GOMULU'dan çıkar, TAM_ESLESME token setine ekle (kelimeler satır 110'da zaten tokenize ediliyor); 'picler' gömülüde kalabilir.",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "turNo≥6'da kümülatif dakika bir eksik: '6. tur. Toplam 5 dakika.'",
+    "dosyaSatir": "content/sosyal-obezite-feed.ts:115-121 + components/game/SosyalObezite.tsx:399 (toplamSaniyeOnce geçirilir)",
+    "kosul": "6. ve sonraki turlar: i=5 sabit-liste dalına girmez, dinamik dal floor(toplamSaniyeOnce/60)=turNo-1 hesaplar (toplamSaniye tur BİTİNCE artırılıyor).",
+    "nBozulur": "1-5. turların 'tur no = dakika' kalıbı ('6. tur. Toplam 6 dakika' beklenirken 'Toplam 5 dakika') kırılır; sertleşme ritmi sayısal olarak tutarsızlaşır.",
+    "duzeltme": "Dinamik dalda `const dk = Math.floor(toplamSaniye/60) + 1;` (içinde bulunulan turu say) — ya da turNo'yu baz al: dk = turNo.",
+    "siddet": "DUSUK"
+   },
+   {
+    "baslik": "pointercancel tap olarak değerlendirilebiliyor → haksız -20 ceza veya istem dışı yakalama",
+    "dosyaSatir": "components/game/SosyalObezite.tsx:352 (onPointerCancel={onUp}) + 262-272 (onUp tap değerlendirmesi)",
+    "kosul": "Tarayıcı jesti / sistem overlay'i dokunuşu 260ms ve 10px altındayken cancel ederse: onUp cancel'ı normal bırakma sanıp dokunmaDene çağırır.",
+    "nBozulur": "Oyuncunun tamamlamadığı dokunuş sayılır: gerçek yoksa yanlisDokunma++ (-20 puan), gerçek varsa niyet dışı yakalama — 'dokundum saymadı' his kırığının tersi olan 'dokunmadım saydı'.",
+    "duzeltme": "Ayrı onCancel handler: yalnız `s.surukleniyor=false; s.hiz=0;` yap, tap değerlendirmesine hiç girme.",
+    "siddet": "DUSUK"
+   }
+  ],
+  "enBuyukRisk": "Sürükleme fiziğindeki çift-uygulama (bulgu 1): her dokunmatik oyuncunun her turunu etkiliyor — görsel hız ~2×, kart sayacı görülenin yarısı, GERÇEK işaretinin ekranda kalma süresi pratikte yarıya iner ve tur sonu metni ('N kart kaydırdın') oyuncunun yaşadığıyla çelişir. Bu fizik düzeltilmeden hız tavanı kalibrasyonu (soft-launch p99) ve skor eğrisi beklentileri (tipik ~400-450) geçersiz veriyle yapılır; lansman öncesi ilk düzeltilmesi gereken bulgu budur."
+ },
+ {
+  "boyut": "Performans ve 60fps",
+  "bulgular": [
+   {
+    "baslik": "Route group yok: oyun, root layout'un TÜM global ağırlığıyla (grain-overlay, LiveTicker, CursorBean, PostHog autocapture) oynanıyor — spec §4'ün performans mimarisi devre dışı",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/app/sosyal-obezite/page.tsx (dizin konumu) + /Users/suyarer/Cb-Web/app/layout.tsx:168-178",
+    "kosul": "Her oynanışta; en sert etki düşük-tier Android'de. Spec §4 açıkça `app/(game)/sosyal-obezite/` + minimal layout istiyor ve grain-overlay/LiveTicker/ClientExtras/CosyMode/ScrollManager'ı 'DAHİL DEĞİL' listeliyor — sayfa route-group'suz yazılmış, hepsi dahil.",
+    "nBozulur": "grain-overlay `fixed inset-0 mix-blend-overlay` (globals.css:79-82) oyunun 13 hareketli will-change katmanının ÜSTÜNDE durur → her frame'de tüm viewport için blend re-composite; LiveTicker 9sn/30sn setInterval React commit'leri (LiveTicker.tsx:41-45) + oyunun üstüne çizilen fixed şerit; ClientExtras→CursorBean mousemove + 2 spring motion-loop (CursorBean.tsx:15-40, masaüstünde oyunun pointer akışıyla yarışır), ExitIntent/SerendipityBean dinleyicileri; PostHog autocapture kapatılmamış → 60 sn'lik hızlı tap serisi rageclick/event yakalama main-thread işi üretir. C2 mimari kararının telafi şartı ('ana thread neredeyse boş') çöker; 'Moto G sınıfında long task >50ms ≤2' kabul testi bu yükle büyük olasılıkla geçmez.",
+    "duzeltme": "Sayfayı `app/(game)/sosyal-obezite/` altına taşı; kendi minimal layout.tsx'i (font + children + PostHog manuel-capture). Spec §4'teki dışlama listesi birebir uygulanır.",
+    "siddet": "KRITIK"
+   },
+   {
+    "baslik": "'React commit = 0' iddiası yanlış: setHud 250ms'de bir TÜM oyun ağacını re-render ediyor (~240 commit/tur), inline ref callback'ler her commit'te detach/attach oluyor",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:208-219 (setHud), 359-368 (inline ref'ler)",
+    "kosul": "Oynanış boyunca 4 Hz — değerler değişmese bile her seferinde yeni obje ile setHud çağrılıyor (skor 0'ken bile).",
+    "nBozulur": "Her commit 12 kartlık havuz JSX'i + HUD + isaret'i yeniden reconcile eder; :362'deki inline ref callback her render'da yeni kimlik aldığı için React eski ref'i null, yenisini node ile çağırır (kartRef churn). Düşük-tier cihazda commit başına 1-3ms scripting, scroll frame'ine bindiğinde 16.7ms bütçesini taşırır. Spec §4 'React'e yalnız tur geçişlerinde commit' der; kod yorumundaki 'saniyede 4 kez' kabulü bile spec'le çelişiyor.",
+    "duzeltme": "HUD'u kendi state'ini tutan ayrı child'a izole et (parent re-render olmaz) veya skor/kalan sayılarını da rAF içinde textContent ile sür; ref callback'leri stabil yap; hud değerleri değişmedikçe setHud atla.",
+    "siddet": "YUKSEK"
+   },
+   {
+    "baslik": "BeanCozulme faz eşiklerinde 66 rect'e kadar DOM mount + SVG <g> üzerinde 900ms main-thread transform/opacity transition — jank tam scroll ortasında",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/BeanCozulme.tsx:54-63 (66 blokluk ızgara), 89-96 (g transition), 149-163 (koşullu rect mount)",
+    "kosul": "t≈12/25/38/50/57 sn eşiklerinde, parmak ekrandayken; faz 3→4→5'te 17→40→66 rect mount edilir.",
+    "nBozulur": "SVG iç transform'u (inline style scale <g> üzerinde) çoğu tarayıcıda compositor'a çıkmaz → 900ms boyunca her frame main-thread style+paint; aynı anda 2 gövde path'inin fill transition'ı koşar. Tur başına 5 kez, oynanışın en kritik anlarında jank penceresi açılır. Ayrıca rect'ler mount anında final opacity ile gelir: :160'taki 'opacity 700ms' transition mount'ta HİÇ çalışmaz (sessiz ölü kod), pikselleşme blokları aniden belirir — spec §2.4'ün 'crossfade' niyeti gerçekleşmiyor.",
+    "duzeltme": "66 rect'i baştan mount edip yalnız opacity ile aç/kapa (mount/unmount yok, transition gerçekten çalışır); HUD Bean'ini spec §2.4'teki sprite/crossfade yaklaşımına al ya da geçişleri opacity-only yap.",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "isaretRef her frame `--kalan` yazıyor ama bu değişkeni OKUYAN hiçbir CSS yok — ölü per-frame style invalidation + spec'teki 'daralan süre çemberi' hiç render edilmiyor",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:201 (yazma), 370-386 (tüketen kural yok)",
+    "kosul": "Aktif gerçek ekrandayken her frame (1800ms pencere ≈ 108 frame × 12 spawn/tur).",
+    "nBozulur": "setProperty her çağrıda isaret elementinde style recalc tetikler; değer hiçbir kuralda kullanılmadığı için maliyet %100 boşa. Daha önemlisi spec §2.2'nin ilk-tur affordance'ı ('daralan süre çemberi') sessizce yok: oyuncu pencerenin kapanmakta olduğunu göremez, %90-ilk-yakalama kabul ölçütü riske girer.",
+    "duzeltme": "Ya çemberi bağla (span'e `conic-gradient(#A8E600 calc(var(--kalan)*360deg), transparent 0)` veya SVG stroke-dashoffset) ya da :201 satırını sil.",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "HUD çiplerinde backdrop-blur, her frame hareket eden kartların üstünde — GPU'da frame başına 2 blur pass",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:333, 340",
+    "kosul": "Oynanış boyunca her scroll frame'i; düşük-tier Android GPU'da en sert.",
+    "nBozulur": "backdrop-filter, altındaki pikseller her değiştiğinde yeniden hesaplanır; kartlar her frame translate olduğu için 2 çip × her frame blur. Bulgu 1'deki mix-blend-overlay ile üst üste binince compositor bütçesi taşar, frame süresi uzar — tam da spec'in korumaya çalıştığı Moto G sınıfında.",
+    "duzeltme": "Oynanış HUD'unda opak `bg-elevated` kullan (blur'suz); blur yalnız oynanış-dışı ekranlarda kalsın.",
+    "siddet": "ORTA"
+   },
+   {
+    "baslik": "`transition: 'd 900ms linear'` Safari'de sessiz ölü kod — yaprak morph'u iOS'ta anında zıplar",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/BeanCozulme.tsx:125, 134",
+    "kosul": "iOS/macOS Safari (mobil-öncelikli TR kitlesinin büyük dilimi); faz 2 eşiği geçilirken.",
+    "nBozulur": "CSS `d` özelliği Chromium ve Firefox'ta animasyon edilebilir (buradaki iki path aynı M/C/C/Z yapısında olduğundan orada morph çalışır) ama WebKit `d` CSS özelliğini desteklemiyor → Safari'de transition hiç uygulanmaz, yaprak 'sarkma' geçişi tek karede snap eder. Perf zararı yok; tarayıcılar arası görsel tutarsızlık + bakımı yanıltan ölü satır var.",
+    "duzeltme": "İki yaprak path'ini üst üste koyup opacity crossfade yap (her tarayıcıda çalışır, compositor-dostu) veya Safari'de snap'i bilinçli kabul edip koda not düş.",
+    "siddet": "DUSUK"
+   },
+   {
+    "baslik": "HAVUZ=12 yalnız 1452px'e kadar kapsıyor: uzun viewport'ta alt boşluk, 1320px+ viewport'ta kart geri dönüşümü (metin değişimi) görünür kenarda",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:28-29 (KART_H=132, HAVUZ=12), 176-181 (konumlama)",
+    "kosul": "Garanti kapsam = HAVUZ×132 − 132 = 1452px (ilk kart 132px'e kadar üstte taşar). Viewport >1452px (4K/portre masaüstü) → kalıcı alt boşluk; ~1320-1452px (F11 tam-ekran 1440p) → sıfır tampon.",
+    "nBozulur": ">1452px'te ekranın altında boş şerit kalır ve kartlar 'pop' ederek belirir; sıfır-tampon aralığında recycle anındaki textContent değişimi tam görünür alt kenarda gerçekleşir (metin göz önünde değişir). Telefonlarda (≤950px) sorun yok — masaüstü karar 14'e göre 'çalışır' olmalı ama burada görsel olarak kırık.",
+    "duzeltme": "HAVUZ'u mount'ta `Math.ceil(viewportH/KART_H)+2` ile hesapla ya da sabit 16'ya çıkar (spec §4 zaten '12-16' diyor); 4 ek kart DOM maliyeti önemsiz.",
+    "siddet": "DUSUK"
+   },
+   {
+    "baslik": "kartMetni her geri dönüşümde FEED.filter ile yeni dizi + rng closure tahsis ediyor — rAF döngüsünde gereksiz GC baskısı",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:47-53 (filter+rng), 183-191 (çağrı noktası)",
+    "kosul": "Tavan hızda ~8 recycle/sn; fling'de tek frame'de birden çok recycle. 60 sn kesintisiz döngüde birikir.",
+    "nBozulur": "Her recycle'da FEED (24 eleman) üzerinde filter → yeni dizi + yeni rng closure; minor GC duraklamaları tam scroll sırasında düşer. Ana rAF gövdesi bunun dışında tahsissiz ve okuma/yazma sırası temiz (layout-okuyan çağrı yok — bu kısım doğru kurulmuş), israf yalnız burada.",
+    "duzeltme": "Kademe→FeedKarti[] haritasını modül seviyesinde bir kez kur; kart seçimi için rng closure yerine `seedInt+index` üzerinden tek hash hesabı kullan.",
+    "siddet": "DUSUK"
+   },
+   {
+    "baslik": "Her tur `key` remount: 12 kartlık havuz + tüm listener'lar yıkılıp yeniden kuruluyor (spec §4 'havuz + game-loop yaşar' ihlali); ipucu setTimeout'u unmount'ta temizlenmiyor",
+    "dosyaSatir": "/Users/suyarer/Cb-Web/components/game/OyunKabuk.tsx:123 (key remount); /Users/suyarer/Cb-Web/components/game/SosyalObezite.tsx:170-171 (setTimeout)",
+    "kosul": "'bir tur daha' her tıklandığında; ipucu 1600ms penceresi içinde tur biterse/bileşen unmount olursa.",
+    "nBozulur": "Tur geçişinde tek seferlik büyük commit (13 will-change katmanı yeniden mount + compositing layer'ları yeniden kurulur) — spec'in '10 tur sonrası heap <5MB, detached node = 0' kabulü hiç ölçülmemiş. setTimeout closure'ı unmount sonrası setIpucu çağırır: React 18+ ile zararsız ama 1.6 sn boyunca detached ağacı canlı tutar.",
+    "duzeltme": "Timeout id'sini ref'e alıp effect cleanup'ında clearTimeout; lansman öncesi 10-tur heap/detached-node ölçümünü checklist'e ekle (remount mimarisi kalabilir, ölçümle aklanmalı).",
+    "siddet": "DUSUK"
+   }
+  ],
+  "enBuyukRisk": "Route-group eksikliği (bulgu 1): oyun, spec §4'ün açıkça dışladığı grain-overlay (fixed mix-blend-overlay), LiveTicker, CursorBean/ClientExtras ve PostHog autocapture ile aynı sayfada koşuyor. 'React commit = 0 + boş main thread' üzerine kurulu tüm C2 mimari telafisi bu global yükün altında eziliyor; Moto G sınıfı 'long task ≤2' kabul testi bu haliyle büyük olasılıkla kalır — üstelik düzeltme ucuz (sayfayı (game) grubuna taşı, minimal layout)."
+ }
+]
