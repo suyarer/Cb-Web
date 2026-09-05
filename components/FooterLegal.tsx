@@ -40,7 +40,7 @@ export default function FooterLegal() {
           </div>
 
           <div>
-            <div className="text-xs uppercase tracking-wider text-zinc-600 mb-4 font-mono">
+            <div className="text-xs uppercase tracking-wider text-zinc-400 mb-4 font-mono">
               Yasal
             </div>
             <ul className="space-y-3 text-sm list-none pl-0">
@@ -63,7 +63,7 @@ export default function FooterLegal() {
           </div>
 
           <div>
-            <div className="text-xs uppercase tracking-wider text-zinc-600 mb-4 font-mono">
+            <div className="text-xs uppercase tracking-wider text-zinc-400 mb-4 font-mono">
               İletişim
             </div>
             <ul className="space-y-3 text-sm list-none pl-0">
@@ -94,7 +94,7 @@ export default function FooterLegal() {
 
         {/* Sosyal medya — canlı kanallar */}
         <div className="flex flex-wrap items-center gap-3 pt-8 pb-6 border-t border-border">
-          <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-600 mr-2">
+          <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-zinc-400 mr-2">
             Sosyal
           </span>
           <SocialIcon
@@ -125,7 +125,7 @@ export default function FooterLegal() {
         </div>
 
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pt-6 border-t border-border">
-          <div className="text-xs text-zinc-600">
+          <div className="text-xs text-zinc-400">
             © {new Date().getFullYear()} ClubBeans · dikkatini çalmadan.
           </div>
           <div className="text-[10px] font-mono text-zinc-500 italic">

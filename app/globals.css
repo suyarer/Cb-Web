@@ -127,7 +127,8 @@
     @apply list-disc list-outside pl-6 space-y-2 text-zinc-400 mb-6;
   }
   .prose-legal a {
-    @apply text-acid hover:underline;
+    /* Yalnız renkle ayrılan bağlantı 1.7:1'di; alt çizgi dokunmatikte de görünür (denetim erisilebilirlik-9) */
+    @apply text-acid underline decoration-dotted underline-offset-2 hover:decoration-solid;
   }
   .prose-legal strong {
     @apply text-white;
