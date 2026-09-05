@@ -1,16 +1,10 @@
-import ClientExtras from '@/components/ClientExtras';
 import { CompassProvider } from '@/components/compass/CompassContext';
 import CompassTint from '@/components/compass/CompassTint';
-import CookieConsent from '@/components/CookieConsent';
-import CosyMode from '@/components/CosyMode';
+import SiteKatmanlari from '@/components/SiteKatmanlari';
 import { FAQS } from '@/lib/faqs';
-import GutterSprout from '@/components/GutterSprout';
-import LiveTicker from '@/components/LiveTicker';
 import MetaPixel from '@/components/MetaPixel';
 import MotionProvider from '@/components/MotionProvider';
 import PosthogProvider from '@/components/PosthogProvider';
-import ScrollManager from '@/components/ScrollManager';
-import ScrollRoots from '@/components/ScrollRoots';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata, Viewport } from 'next';
@@ -165,16 +159,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <PosthogProvider>
           <MotionProvider>
             <CompassProvider>
-              <ScrollManager />
-              <CosyMode />
+              {/* Global süs katmanları — /sosyal-obezite'de kapalı (60fps bütçesi) */}
+              <SiteKatmanlari konum="on" />
               <div className="grain-overlay" aria-hidden />
               <CompassTint />
-              <ScrollRoots />
-              <GutterSprout />
               {children}
-              <LiveTicker />
-              <ClientExtras />
-              <CookieConsent />
+              <SiteKatmanlari konum="arka" />
             </CompassProvider>
           </MotionProvider>
         </PosthogProvider>

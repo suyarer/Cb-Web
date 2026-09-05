@@ -3,8 +3,22 @@
 import { AnimatePresence, motion, useReducedMotion } from '@/lib/motion';
 import { useEffect, useRef, useState } from 'react';
 import { useCompass } from './CompassContext';
+import { usePathname } from 'next/navigation';
+import { sadeMi } from '@/components/SiteKatmanlari';
 
 export default function CompassTint() {
+  /**
+   * Oyun rotasında tamamen kapalı.
+   *
+   * Bu bileşen `fixed inset-0` + `mix-blend-screen` bir katman çiziyor; altındaki
+   * içerik her karede değiştiği için karışım her karede tüm ekran için yeniden
+   * hesaplanıyor. Aynı gerekçeyle `.grain-overlay` zaten kapatılmıştı, bu katman
+   * o temizlikte atlanmış. 60 saniye boyunca 60 fps hedefleyen bir sayfada
+   * gereksiz tam-ekran karışım katmanı taşımanın anlamı yok.
+   */
+  const pathname = usePathname();
+  if (sadeMi(pathname)) return null;
+
   const { color, mode } = useCompass();
   const firstRender = useRef(true);
   const [badgeOpen, setBadgeOpen] = useState(false);

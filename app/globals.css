@@ -172,6 +172,12 @@
     pointer-events: none;
     z-index: 0;
   }
+  /* Oyun rotasi: grain-overlay fixed + mix-blend-overlay, oyunun hareketli
+     katmanlarinin ustunde her frame tum viewport'u yeniden karistiriyordu. */
+  html[data-oyun='1'] .grain-overlay {
+    display: none;
+  }
+
   .cosy-mode .grain-overlay {
     opacity: 0.06;
   }
