@@ -12,6 +12,26 @@ console.log('\n== REDDEDİLMELİ: marka/yetki taklidi ==');
 ['ClubBeans','clubbeans','C1ubBeans','Club Beans','CLUB.BEANS','admin','Yönetici','Moderator','sosyalobezite'].forEach(s=>
   ok(red(s), `"${s}"`));
 
+console.log('\n== REDDEDİLMELİ: gömülü marka/yetki taklidi (denetim guvenlik-3) ==');
+['ClubBeans Resmi','clubbeans_tr','Admin1','Destek Ekibi','Yönetici-CB','moderator1','C1ub Beans TR','sosyalobezite2026'].forEach(s=>
+  ok(red(s), `"${s}"`));
+
+console.log('\n== KABUL: gömülü kökün masum taşıyıcıları ==');
+['Resmiye','SolgunBean42','Beanie'].forEach(s=>
+  ok(kabul(s), `"${s}"`, JSON.stringify(takmaAdGecerli(s))));
+
+console.log('\n== REDDEDİLMELİ: tek harfli iskelet ==');
+['aЖЖЖ','aДДД'].forEach(s=> ok(red(s), `"${s}"`));
+
+console.log('\n== ÖNERİ ADI ==');
+{
+  const { oneriAdUret } = await import('../lib/game/nickname.ts');
+  const a=oneriAdUret('seed-1'), b=oneriAdUret('seed-1'), c=oneriAdUret('seed-2');
+  ok(a===b, 'aynı seed → aynı öneri', a);
+  ok(/Bean\d{2}$/.test(a), 'kalıp <Sıfat>Bean<NN>', a);
+  ok(kabul(a) && kabul(c), 'öneri filtreden geçer', a+' / '+c);
+}
+
 console.log('\n== REDDEDİLMELİ: küfür (gömülü + ekli) ==');
 ['orospu','orospucocugu','siktir','siktirgit','amcik','kaltak','şerefsiz','g0tver','0r0spu'].forEach(s=>
   ok(red(s), `"${s}"`));

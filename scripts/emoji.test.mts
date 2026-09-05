@@ -15,6 +15,8 @@ ok(m.includes('#'),'gün numarası var (ortak bulmaca hissi)');
 ok(m.includes('🔥4'),'gün serisi görünüyor');
 ok(gunNo(new Date(Date.UTC(2026,7,18)))===1,'epok günü = 1');
 ok(gunNo(new Date(Date.UTC(2026,7,25)))===8,'bir hafta sonra = 8');
+ok(gunNo(new Date(Date.UTC(2026,7,18,21,30)))===2,'TR 00:30 (UTC 21:30) → ertesi gün (günlük seed ile aynı eksen)');
+ok(gunNo(new Date(Date.UTC(2026,7,18,20,59)))===1,'TR 23:59 → hâlâ aynı gün');
 
 // ── Panel sonrası: kimlik etiketi, fiyasko dalı, X linksiz varyantı ─────────
 {
@@ -56,6 +58,10 @@ ok(gunNo(new Date(Date.UTC(2026,7,25)))===8,'bir hafta sonra = 8');
   });
   dogru(!fiyasko.includes(ITIRAF_KISA), 'fiyaskoda itiraf satırı GİRMEZ');
   dogru(/[Aa]kış/.test(fiyasko), 'fiyasko satırının öznesi akış (oyuncu değil)');
+  {
+    const { FIYASKO_SATIRLARI } = await import('../content/sosyal-obezite-feed.ts');
+    dogru(FIYASKO_SATIRLARI.every((f: string) => /[Aa]kış/.test(f)), 'HER fiyasko satırının öznesi akış (gün-bağımsız)');
+  }
   dogru(genelMetin.includes(ITIRAF_KISA), 'normal turda itiraf satırı var');
 
   console.log('\n--- satır bütçesi + X 280 karakter ---');
@@ -72,9 +78,25 @@ ok(gunNo(new Date(Date.UTC(2026,7,25)))===8,'bir hafta sonra = 8');
   }
 
   console.log('\n--- meydan okuma ---');
-  const md = meydanOkumaMetni({ olaylar: olaylar12(8), yakalanan: 8, toplam: 12 });
-  dogru(!md.includes('http'), 'meydan okumada URL YOK');
-  dogru(md.includes('geçemezsin'), 'meydan okuma cümlesi var');
+  const mdX = meydanOkumaMetni({ olaylar: olaylar12(8), yakalanan: 8, toplam: 12, kanal: 'x' });
+  dogru(!mdX.includes('http'), 'X meydan okumasında URL YOK (düz alan adı var)');
+  dogru(mdX.includes('kurtarırsın'), 'meydan okuma fiili "kurtar" ("geçemezsin" değil)');
+  const mdGenel = meydanOkumaMetni({
+    olaylar: olaylar12(8), yakalanan: 8, toplam: 12, kanal: 'genel',
+    url: 'https://clubbeans.com/sosyal-obezite/s/abc',
+  });
+  dogru(mdGenel.includes('/s/abc'), 'genel meydan okuması kart linki taşıyor (cevap yolu)');
+  const mdRakip = meydanOkumaMetni({
+    olaylar: olaylar12(7), yakalanan: 7, toplam: 12, kanal: 'genel', url: 'https://x/s/1',
+    rakip: { ad: 'sartaa', yakalanan: 6 },
+  });
+  dogru(mdRakip.includes('sartaa 6, ben 7') && mdRakip.includes('Sıra sende'), 'rakip cevabı rakibi anıyor');
+
+  console.log('\n--- tanım satırı her paylaşım yüzeyinde (spec §12) ---');
+  dogru(xMetin.includes('Sosyal obezite:'), 'X metninde kısa tanım satırı var');
+  dogru(mdX.includes('Sosyal obezite:'), 'meydan okumada kısa tanım satırı var');
+  dogru(xMetin.includes('clubbeans.com/sosyal-obezite'), 'X metninde düz alan adı var (oyuna yol)');
+  dogru(xMetin.split('\n').length <= 6, 'X metni ≤6 satır');
 }
 
 console.log(fail?`\n❌ ${fail} BAŞARISIZ\n`:'\n✅ GEÇTİ\n'); process.exit(fail?1:0);

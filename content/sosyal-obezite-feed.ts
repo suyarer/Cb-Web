@@ -35,6 +35,13 @@ export const UI_SOZLUK = {
  */
 export const TANIM_SATIRI = 'Sosyal obezite: kilonun değil, zamanın yutulması.';
 
+/**
+ * Kısa tanım — X ve meydan okuma METİNLERİ için (spec §12: "obezite" geçen HER yüzey).
+ * Linksiz X gönderisinde OG önizlemesi olmadığı için tanım metnin kendisinde taşınır;
+ * 280 karakter bütçesine sığsın diye kısa varyant.
+ */
+export const TANIM_KISA = 'Sosyal obezite: bedenle değil, zamanla ilgili.';
+
 /** Açılış itirafı — karar 3. Tek dokunuşla geçilebilir, son ekranda geri döner. */
 export const ITIRAF = {
   satir1: 'Bu oyun seni burada tutmak için yapıldı.',
@@ -150,8 +157,19 @@ export function turMesaji(turNo: number, toplamSaniye: number): string {
   const i = Math.min(turNo, TUR_MESAJLARI.length) - 1;
   if (i < TUR_MESAJLARI.length - 1) return TUR_MESAJLARI[Math.max(0, i)];
   // 6+ turdan sonra son mesaj kalır ama süre gerçek değeri gösterir
-  const dk = Math.floor(toplamSaniye / 60);
+  const dk = Math.max(1, Math.round(toplamSaniye / 60));
   return `${turNo}. tur. Toplam ${dk} dakika. Biz kapıyı açık bıraktık. Diğerleri bırakmaz.`;
+}
+
+/**
+ * Oyun SIRASINDA alt satır. Tur mesajı ("60 saniye gitti") tur bitmeden görünüyordu
+ * (denetim oyun-11 / gorsel-10 / etkilesim-14); karar-7 metni tur SONUNA taşındı,
+ * oyun içinde yalnız yönlendirme ya da tur sayacı kalır.
+ */
+export function oyunIciSatir(turNo: number, toplamSaniyeOnce: number): string {
+  if (turNo <= 1) return 'Kaydır. Yeşil çerçeve bir davet — dokun.';
+  const dk = Math.max(1, Math.round(toplamSaniyeOnce / 60));
+  return `${turNo}. tur · akışa toplam ${dk} dk verdin`;
 }
 
 /**
@@ -161,13 +179,32 @@ export function turMesaji(turNo: number, toplamSaniye: number): string {
 export const TUR_SONU = {
   baslik: '60 saniye bitti.',
   kopruSatiri: 'Kaçırdığın gerçekler ekranda değil, dışarıda duruyor.',
-  ctaUstu: 'ClubBeans: gerçeğin uygulaması. Akışı değil, buluşmayı açar.',
+  // Near-miss ile mağaza düğmesi arasında köprü: akıştaki davetler uydurmaydı, uygulamadakiler değil.
+  ctaUstu: 'Akıştaki davetler uydurmaydı. ClubBeans’tekiler değil.',
   storeAppleEtiket: 'App Store',
   storeGoogleEtiket: 'Google Play',
+  kvkkSatiri: 'Takma adın ve skorun herkese açık tabloda ve paylaşım kartında görünür.',
+  kvkkLink: 'Hangi veriler işleniyor?',
 } as const;
 
+/**
+ * Tur sonu gövdesi — EKSİZ kalıp. Önceki `${kacan}'i` sayıların 13'te 9'unda yanlıştı
+ * ("7'i" → "7'si", "12'i" → "12'si"); ünlü uyumlu ek üreteci yerine kalıp değiştirildi
+ * (denetim viral-5 / dogruluk-11).
+ */
 export function turSonuGovde(kartSayisi: number, yakalanan: number, kacan: number): string {
-  return `${kartSayisi} kart kaydırdın. ${yakalanan} gerçeği yakaladın; ${kacan}'i akıp gitti.`;
+  const kart = `${kartSayisi} kart kaydırdın.`;
+  if (yakalanan === 0) return `${kart} Hiçbirini yakalamadın; ${kacan} davet akıp gitti.`;
+  if (kacan === 0) return `${kart} ${yakalanan} gerçeğin hepsini yakaladın.`;
+  return `${kart} ${yakalanan} gerçeği yakaladın; ${kacan} tanesi akıp gitti.`;
+}
+
+/** Rakip hükmü — ad ek almaz. */
+export function rakipHukmu(rakipAd: string, benimSkor: number, rakipSkor: number): string {
+  if (benimSkor > rakipSkor) return `${rakipAd} geçildi.`;
+  const fark = rakipSkor - benimSkor + 1;
+  if (fark <= 100) return `${rakipAd} ile arana ${Math.max(1, Math.ceil(fark / 50))} yakalama kaldı.`;
+  return `${rakipAd} önde.`;
 }
 
 /**
@@ -193,10 +230,16 @@ export function paylasimMetni(yakalanan: number, toplamDk: number): string {
  * olduğu için desen tırtıklı çıkıyordu.
  * Skor küçük yazılır: kartın kahramanı "kaç gerçeği kurtardın", "kaç puan yaptın" değil.
  */
-export const OYUN_EPOK = Date.UTC(2026, 7, 18); // 18 Ağustos 2026 = 1. gün
+/**
+ * 18 Ağustos 2026 TR gece yarısı = 1. gün. Epok UTC gece yarısıydı; günlük seed ve tablo
+ * TR (UTC+3) gece yarısında değişirken paylaşım numarası 00:00-03:00 arası bir gün
+ * geride kalıyordu (denetim dogruluk-4). Artık iki eksen aynı.
+ */
+export const OYUN_EPOK = Date.UTC(2026, 7, 17, 21); // 2026-08-18T00:00+03:00
+const TR_OFSET = 3 * 60 * 60 * 1000;
 
 export function gunNo(now: Date = new Date()): number {
-  return Math.max(1, Math.floor((now.getTime() - OYUN_EPOK) / 86_400_000) + 1);
+  return Math.max(1, Math.floor((now.getTime() + TR_OFSET - (OYUN_EPOK + TR_OFSET)) / 86_400_000) + 1);
 }
 
 export function emojiSatiri(olaylar: Array<'yakala' | 'kacir'>): string {
@@ -232,7 +275,7 @@ export const FIYASKO_SATIRLARI = [
   'Akış bugün beni yuttu.',
   'Akış 60 saniyemi aldı, karşılığında hiçbir şey vermedi.',
   'Bugün akışın tarafındaydım.',
-  'Kaydırdım, kaydırdım, kaçırdım.',
+  'Akış kaydırdı, ben kaçırdım.',
 ] as const;
 
 /** Kısa itiraf — paylaşım metni tıklanmasa bile markanın tezini taşır. */
@@ -242,10 +285,13 @@ export const ITIRAF_KISA = 'Bu oyun seni tutmak için yapıldı. Yüzüne söyl�
  * SATIR BÜTÇESİ ANAYASASI (panel kararı):
  *   sabit çekirdek  = başlık + emoji ızgarası + sonuç/etiket
  *   + EN FAZLA 1 koşullu satır (öncelik: fiyasko > kısa itiraf)
- *   + URL yalnız kanal 'genel' iken
+ *   + kısa tanım satırı (spec §12 — "obezite" geçen her yüzey; denetim viral-4)
+ *   + son satır: kanal 'genel' → URL; kanal 'x' → düz alan adı (X düz alan adını
+ *     link saymaz, erişim cezası uygulamaz; okuyan yazıp girebilir — denetim viral-3)
  * Toplam ≤ 6 satır. Sebep: X'te 280 karakter sınırı (12 emoji = 24 karakter,
  * URL = 23 karakter sabit sayılır) ve uzun metin kopyalanmaz.
  */
+export const OYUN_ALAN_ADI = 'clubbeans.com/sosyal-obezite';
 export function emojiPaylasim(opts: {
   olaylar: Array<'yakala' | 'kacir'>;
   yakalanan: number;
@@ -279,22 +325,41 @@ export function emojiPaylasim(opts: {
     emojiSatiri(olaylar),
     `${yakalanan}/${toplam} gerçek · ${etiket}${seri && seri > 1 ? ` · 🔥${seri}. gün` : ''}`,
     kosullu,
+    TANIM_KISA,
+    kanal === 'genel' ? url : OYUN_ALAN_ADI,
   ];
-  if (kanal === 'genel') satirlar.push('', url);
   return satirlar.join('\n');
 }
 
-/** Meydan okuma metni — X'te en çok alıntılanan biçim. Link YOK. */
+/**
+ * Meydan okuma metni.
+ *
+ * Denetim (viral-1, CONFIRMED): 'Meydan oku' hiçbir kanalda link taşımıyordu; alıcı
+ * ?rakip= ekranına hiçbir yoldan giremiyordu. Artık 'genel' kanalda paylaşım kartı
+ * linki taşır (kart sayfası ?rakip=<runId> ile oyuna geri döner); X'te düz alan adı.
+ * Fiil "kurtar" (spec §7: "geç beni" değil); ton düzene, kişiye değil (karar 4).
+ */
 export function meydanOkumaMetni(opts: {
   olaylar: Array<'yakala' | 'kacir'>;
   yakalanan: number;
   toplam: number;
+  url?: string;
+  kanal?: 'x' | 'genel';
+  /** Rakiple oynandıysa cevap metni: "sartaa 6, ben 7. Sıra sende." */
+  rakip?: { ad: string; yakalanan: number };
 }): string {
+  const kanal = opts.kanal ?? 'genel';
+  const sonuc = opts.rakip
+    ? `${opts.rakip.ad} ${opts.rakip.yakalanan}, ben ${opts.yakalanan}. ${
+        opts.yakalanan > opts.rakip.yakalanan ? 'Sıra sende.' : 'Bir tur daha alıyorum.'
+      }`
+    : `${opts.yakalanan}/${opts.toplam} gerçeği kurtardım. Sen kaçını kurtarırsın?`;
   return [
     `SOSYAL OBEZİTE #${gunNo()}`,
     emojiSatiri(opts.olaylar),
-    `${opts.yakalanan}/${opts.toplam} gerçek kurtardım.`,
-    'Sen bunu geçemezsin.',
+    sonuc,
+    TANIM_KISA,
+    kanal === 'genel' && opts.url ? opts.url : OYUN_ALAN_ADI,
   ].join('\n');
 }
 

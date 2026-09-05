@@ -29,11 +29,19 @@ const GOMULU = [
   'salak', 'gerizekali', 'oruspu', 'sirtlan',
 ];
 
-/** Rezerve — marka ve yetki taklidi */
-const REZERVE = [
-  'clubbeans', 'club beans', 'admin', 'yonetici', 'moderator', 'destek',
-  'clubbeansdestek', 'resmi', 'official', 'sosyalobezite',
+/**
+ * Rezerve — marka ve yetki taklidi.
+ *
+ * Denetim (guvenlik-hile-3, CONFIRMED): yalnız TAM eşleşme aranıyordu, 'ClubBeans Resmi',
+ * 'clubbeans_tr', 'Admin1', 'Destek Ekibi', 'moderator1' geçiyordu. Uzun kökler artık
+ * GÖMÜLÜ aranır; kısa/masum-kelimede-geçebilen kökler ('resmi' → Resmiye, 'bean' →
+ * SolgunBean42 öneri adı) TAM eşleşmede kalır.
+ */
+const REZERVE_GOMULU = [
+  'clubbeans', 'club beans', 'sosyalobezite', 'admin', 'yonetici', 'moderator',
+  'official', 'destek',
 ];
+const REZERVE_TAM = ['resmi', 'bean', 'clubbeansdestek'];
 
 /**
  * Karıştırılabilir harf SINIFLARI. Tek yönlü homoglif eşlemesi yetmez:
@@ -83,7 +91,8 @@ export function iskelet(s: string): string {
  */
 const TAM_ESLESME_ISK = new Set([...TAM_ESLESME].map(iskelet).filter(Boolean));
 const GOMULU_ISK = GOMULU.map(iskelet).filter(Boolean);
-const REZERVE_ISK = REZERVE.map(iskelet).filter(Boolean);
+const REZERVE_GOMULU_ISK = REZERVE_GOMULU.map(iskelet).filter(Boolean);
+const REZERVE_TAM_ISK = new Set(REZERVE_TAM.map(iskelet).filter(Boolean));
 
 export type AdSonucu =
   | { gecerli: true; temiz: string; iskelet: string }
@@ -105,9 +114,10 @@ export function takmaAdGecerli(ham: string): AdSonucu {
   }
 
   const isk = iskelet(temiz);
-  if (!isk) return { gecerli: false, mesaj: 'Takma ad okunabilir olmalı.' };
+  // Tek karakterlik iskelet ('aЖЖЖ' → 'a') rezerve edilebiliyordu; okunabilir ad en az 2 harf
+  if (isk.length < 2) return { gecerli: false, mesaj: 'Takma ad okunabilir olmalı.' };
 
-  if (REZERVE_ISK.some((r) => isk === r)) {
+  if (REZERVE_TAM_ISK.has(isk) || REZERVE_GOMULU_ISK.some((r) => isk.includes(r))) {
     return { gecerli: false, mesaj: 'Bu takma ad ayrılmış. Başka bir şey dene.' };
   }
 
@@ -120,4 +130,28 @@ export function takmaAdGecerli(ham: string): AdSonucu {
   }
 
   return { gecerli: true, temiz, iskelet: isk };
+}
+
+/**
+ * Sunucu-üretimi takma ad önerisi (spec §3.4 — "SolgunBean42" kalıbı).
+ *
+ * Ad alanı boş geldiği için oyuncuların çoğu ad yazmadan paylaşıyor, kişisel kart ve
+ * meydan okuma zinciri hiç oluşmuyordu (denetim viral-2). Öneri deterministik değil
+ * (aynı oturumda aynı olsun diye seed alır), her zaman filtreden geçer.
+ */
+const ONERI_SIFATLAR = [
+  'Solgun', 'Uyanık', 'Sessiz', 'Dalgın', 'Kararlı', 'Yorgun', 'Şaşkın', 'Sakin',
+  'Meraklı', 'Çekingen', 'Uykusuz', 'Neşeli', 'İnatçı', 'Hızlı', 'Yavaş', 'Gizli',
+];
+
+export function oneriAdUret(seed: string): string {
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < seed.length; i++) {
+    h ^= seed.charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
+  }
+  const sifat = ONERI_SIFATLAR[h % ONERI_SIFATLAR.length];
+  const sayi = 10 + ((h >>> 8) % 90);
+  const aday = `${sifat}Bean${sayi}`;
+  return takmaAdGecerli(aday).gecerli ? aday : `Bean${sayi}`;
 }

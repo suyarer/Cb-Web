@@ -19,6 +19,12 @@ export const SPAWN_PENCERESI_MS = 5_000;
 export const SPAWN_JITTER_MS = 1_500;
 /** Bir gerçek en az bu kadar süre yakalanabilir kalır — hız kademesinden BAĞIMSIZ (a11y, §C5) */
 export const YAKALANABILIR_MS = 1_500;
+/**
+ * Gerçeğin ekranda yakalanabilir kaldığı GERÇEK pencere (istemci ve çubuk bunu kullanır).
+ * Takvimin son sınırı da bu sayıdan türetilir: önceki 1500 ms sınırı son gerçeğin
+ * çubuğunu tur biterken %17 dolu bırakıyordu (denetim dogruluk-10). Tek sabit, iki yer.
+ */
+export const YAKALAMA_PENCERESI_MS = 1_800;
 /** İki spawn arası taban — yakalama penceresinden (1800ms) geniş olmak ZORUNDA */
 export const MIN_SPAWN_ARALIGI_MS = 2_000;
 /** İlk turda ilk gerçek bu aralığa sabitlenir (öğretim) */
@@ -82,8 +88,8 @@ export function spawnTakvimi(seed: string, ilkTur = false): number[] {
   if (ilkTur) {
     out[0] = Math.round(ILK_SPAWN_MIN_MS + r() * (ILK_SPAWN_MAX_MS - ILK_SPAWN_MIN_MS));
   }
-  // Sıralı ve tur içinde kalmalı; son gerçeğin yakalanabilir penceresi de sığmalı
-  const enSon = TUR_SURESI_MS - YAKALANABILIR_MS;
+  // Sıralı ve tur içinde kalmalı; son gerçeğin TAM yakalama penceresi de sığmalı
+  const enSon = TUR_SURESI_MS - YAKALAMA_PENCERESI_MS;
   const sirali = out.map((t) => Math.min(Math.max(t, 500), enSon)).sort((a, b) => a - b);
 
   /**
