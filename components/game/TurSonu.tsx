@@ -97,22 +97,20 @@ export default function TurSonu({
 
   return (
     <div className="mx-auto flex min-h-[100dvh] max-w-md flex-col justify-center gap-6 px-6 py-10">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h1 ref={h1Ref} tabIndex={-1} className="font-mono text-xs uppercase tracking-widest text-ghost outline-none">
-            {TUR_SONU.baslik}
-          </h1>
-          <p role="alert" className="sr-only">
-            {`${TUR_SONU.baslik} ${sonuc.ozet.yakalanan} de ${toplamGercek} gerçek kurtardın, skor ${sonuc.skor}.`}
-          </p>
-          {/* Karar-7 tur mesajı — artık oyunun içinde değil, burada */}
-          <p className="mt-2 text-[15px] leading-snug text-white/85">{turMesaji(turNo, toplamSaniye)}</p>
-        </div>
+      <div className="flex items-center justify-between gap-4">
+        <h1 ref={h1Ref} tabIndex={-1} className="font-mono text-xs uppercase tracking-widest text-ghost outline-none">
+          {TUR_SONU.baslik}
+        </h1>
+        <p role="alert" className="sr-only">
+          {`${TUR_SONU.baslik} ${toplamGercek} gerçekten ${sonuc.ozet.yakalanan} tanesini kurtardın, skor ${sonuc.skor}.`}
+        </p>
         <div className="flex shrink-0 flex-col items-center gap-1">
           <BeanCozulme faz={5} size={64} reduced={reduced} />
           <span className="font-mono text-[9px] uppercase tracking-widest text-ghost">akışa karıştı</span>
         </div>
       </div>
+      {/* Karar-7 tur mesajı — artık oyunun içinde değil, burada; tam genişlik */}
+      <p className="-mt-2 text-[15px] leading-snug text-white/85">{turMesaji(turNo, toplamSaniye)}</p>
 
       {/* (1) BÜYÜK */}
       <div>
