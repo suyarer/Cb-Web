@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { oyunOlay } from '@/lib/game/olay';
 
 /**
  * Skor tablosu — yarışmanın görünür yüzü.
@@ -35,7 +36,7 @@ export default function SkorTablosu({ benimSkorum }: { benimSkorum?: number }) {
     let iptal = false;
     fetch('/api/game/leaderboard', { cache: 'no-store' })
       .then((r) => r.json())
-      .then((d: Veri) => { if (!iptal) setVeri(d); })
+      .then((d: Veri) => { if (!iptal) { setVeri(d); oyunOlay('tablo_goruntulendi', { acik: !!d.acik, bugun: d.bugun?.length ?? 0 }); } })
       .catch(() => { if (!iptal) setVeri({ acik: false, bugun: [], tumZamanlar: [] }); });
     return () => { iptal = true; };
   }, []);
@@ -61,11 +62,13 @@ export default function SkorTablosu({ benimSkorum }: { benimSkorum?: number }) {
    */
   const YAKINLIK_ESIGI = 100;
   const YAKALAMA_PUANI = 50;
+  // Baz: tablodaki KENDİ satırım (en iyi skor), yoksa bu turun skoru; kendimi rakip ilan etmem (dogruluk-3)
+  const baz = benimSatirim?.skor ?? satirlar.find((s) => s.ben)?.skor ?? benimSkorum;
   const ustum =
-    benimSkorum != null
-      ? [...satirlar].reverse().find((s) => s.skor > benimSkorum)
+    baz != null
+      ? [...satirlar].reverse().find((s) => !s.ben && s.skor > baz)
       : undefined;
-  const fark = ustum && benimSkorum != null ? ustum.skor - benimSkorum + 1 : 0;
+  const fark = ustum && baz != null ? ustum.skor - baz + 1 : 0;
   const yakin = !!ustum && fark <= YAKINLIK_ESIGI;
   const gerekenYakalama = Math.max(1, Math.ceil(fark / YAKALAMA_PUANI));
 
@@ -77,7 +80,8 @@ export default function SkorTablosu({ benimSkorum }: { benimSkorum?: number }) {
             key={k}
             type="button"
             onClick={() => setSekme(k)}
-            className={`min-h-[36px] rounded-full px-3 font-mono text-[11px] uppercase tracking-widest transition-colors ${
+            aria-pressed={sekme === k}
+            className={`min-h-[44px] rounded-full px-3 font-mono text-[11px] uppercase tracking-widest transition-colors ${
               sekme === k ? 'bg-acid text-midnight' : 'text-ghost'
             }`}
           >
@@ -112,7 +116,7 @@ export default function SkorTablosu({ benimSkorum }: { benimSkorum?: number }) {
               </span>
               <span className={`flex-1 truncate text-[14px] ${s.ben ? 'text-acid' : 'text-white/85'}`}>
                 {s.ad}
-                {s.ben && <span className="ml-1 font-mono text-[10px] text-ghost">sen</span>}
+                {s.ben && <span className="ml-1 font-mono text-[10px] text-white/60">sen</span>}
               </span>
               <span className="font-mono text-[14px] tabular-nums text-white/70">{s.skor}</span>
             </li>
@@ -127,7 +131,7 @@ export default function SkorTablosu({ benimSkorum }: { benimSkorum?: number }) {
           </span>
           <span className="flex-1 truncate text-[14px] text-acid">
             {benimSatirim.ad}
-            <span className="ml-1 font-mono text-[10px] text-ghost">sen</span>
+            <span className="ml-1 font-mono text-[10px] text-white/60">sen</span>
           </span>
           <span className="font-mono text-[14px] tabular-nums text-white/70">{benimSatirim.skor}</span>
         </div>
@@ -135,7 +139,7 @@ export default function SkorTablosu({ benimSkorum }: { benimSkorum?: number }) {
 
       {yakin && ustum && (
         <p className="mt-3 border-t border-border pt-3 font-mono text-[12px] text-acid">
-          {ustum.ad}’ı geçmek için {gerekenYakalama} yakalama yeter.
+          {ustum.ad} ile arana en fazla {gerekenYakalama} yakalama var.
         </p>
       )}
     </section>

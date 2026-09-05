@@ -228,9 +228,11 @@ async function motorDenetle(tarayiciTipi, ad) {
     yakalama.oncekiSkor != null && yakalama.sonrakiSkor > yakalama.oncekiSkor;
   // Klavye yolu — giriş ekranı "boşluk yakalar" diyor, sözünü tutuyor mu?
   {
+    // AKTİF gerçek: işaret görünür VE rozet 'GERÇEK' diyor (ödül/kaçırma imzası 350 ms görünür kalır)
     const bekle = await p.evaluate(async () => {
       const isaret = () => [...document.querySelectorAll('div[aria-hidden]')].find(
-        (d) => d.className.includes?.('border-2') && Number(getComputedStyle(d).opacity) > 0.5);
+        (d) => d.className.includes?.('border-2') && Number(getComputedStyle(d).opacity) > 0.5
+          && (d.firstElementChild?.textContent ?? '').startsWith('GERÇEK'));
       const bas = performance.now();
       while (performance.now() - bas < 22000) {
         if (isaret()) return true;

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import OyunKabuk from '@/components/game/OyunKabuk';
+import Yakinda from '@/components/game/Yakinda';
 import { TANIM_SATIRI } from '@/content/sosyal-obezite-feed';
 
 /**
@@ -32,14 +33,20 @@ export const metadata: Metadata = {
     title: 'Sosyal Obezite — 60 saniye',
     description: `${TANIM_SATIRI} Sen kaçını kurtarabilirsin?`,
     type: 'website',
+    siteName: 'ClubBeans',
+    locale: 'tr_TR',
+    url: 'https://clubbeans.com/sosyal-obezite',
   },
-  twitter: { card: 'summary_large_image' },
+  twitter: { card: 'summary_large_image', site: '@ClubBeansapp' },
 };
 
 export default function Page() {
+  // Kill-switch katman 1 (yapı zamanı): Vercel env NEXT_PUBLIC_OYUN_KAPALI=1 + Redeploy.
+  // Katman 2 (dağıtımsız): Redis oyun:kapali → start 503 → OyunKabuk Yakinda'ya düşer.
+  const kapali = process.env.NEXT_PUBLIC_OYUN_KAPALI === '1';
   return (
     <main className="min-h-[100dvh] bg-midnight">
-      <OyunKabuk />
+      {kapali ? <Yakinda /> : <OyunKabuk />}
     </main>
   );
 }
