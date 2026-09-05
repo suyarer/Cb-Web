@@ -55,6 +55,14 @@ async function motorDenetle(tarayiciTipi, ad) {
 
   const konsolHatalari = [];
   const agHatalari = [];
+  /**
+   * KVKK BEKÇİSİ (P0, 2026-09-05): oyun rotalarında Meta Pixel / CAPI / PostHog çerezli
+   * örneği HİÇ istek atmamalı. Bir kez rızasız ateşlenmişti; bu sayaç 0 değilse KALDI.
+   */
+  const izleyiciIstekleri = [];
+  p.on('request', (r) => {
+    if (/facebook\.|fbevents|meta-capi|connect\.facebook/i.test(r.url())) izleyiciIstekleri.push(r.url().slice(0, 120));
+  });
   p.on('console', (m) => { if (m.type() === 'error') konsolHatalari.push(m.text().slice(0, 200)); });
   p.on('requestfailed', (r) => agHatalari.push(`${r.url().slice(0, 120)} — ${r.failure()?.errorText}`));
   p.on('response', (r) => { if (r.status() >= 400) agHatalari.push(`HTTP ${r.status()} ${r.url().slice(0, 140)}`); });
@@ -268,6 +276,24 @@ async function motorDenetle(tarayiciTipi, ad) {
 
   await p2.screenshot({ path: `/tmp/so-${ad}-tursonu.png`, fullPage: true }).catch(() => {});
   await p.screenshot({ path: `/tmp/so-${ad}-oynanis.png` }).catch(() => {});
+
+  // ── 7b) KVKK bekçisi: utm'li açılışta ve önceden onaylı profilde bile izleyici yok ──
+  {
+    const p3 = await baglam.newPage();
+    await p3.addInitScript(() => { try { localStorage.setItem('clubbeans-consent-v1', 'granted'); } catch {} });
+    const p3Istek = [];
+    p3.on('request', (r) => {
+      if (/facebook\.|fbevents|meta-capi|connect\.facebook/i.test(r.url())) p3Istek.push(r.url().slice(0, 120));
+    });
+    await p3.goto(`${OYUN}?utm_source=denetim`, { waitUntil: 'load' });
+    await p3.waitForTimeout(1500);
+    const rizaYazildi = await p3.evaluate(() => localStorage.getItem('clubbeans-consent-v1'));
+    const toplam = izleyiciIstekleri.length + p3Istek.length;
+    not(ad, 'kvkk-izleyici', toplam === 0 ? 'GECTI' : 'KALDI',
+        `oyun rotasında Meta/CAPI isteği: ${toplam} (onaylı profil + utm dahil)`,
+        toplam ? { organik: izleyiciIstekleri.slice(0, 3), onayliUtm: p3Istek.slice(0, 3), rizaYazildi } : undefined);
+    await p3.close();
+  }
 
   // ── 8) Hata günlükleri ────────────────────────────────────────────────────
   const gercekAgHatalari = agHatalari.filter((x) => !x.includes('_vercel'));

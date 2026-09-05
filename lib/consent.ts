@@ -23,8 +23,11 @@ function checkAdTrafficAutoGrant(): boolean {
   if (typeof window === 'undefined') return false;
   try {
     const url = new URL(window.location.href);
-    // Meta (fbclid), Google (gclid), TikTok (ttclid) reklam trafiği işaretleri
-    const adClickIds = ['fbclid', 'gclid', 'ttclid', 'utm_source'];
+    // Meta (fbclid), Google (gclid), TikTok (ttclid) reklam trafiği işaretleri.
+    // `utm_source` LİSTEDE DEĞİL (KVKK P0, 2026-09-05): utm bir reklam platformunda
+    // verilmiş onay değildir — bülten, X yanıtı, paylaşılan link de utm taşır; bu
+    // ziyaretçiye hiç sorulmadan "granted" yazılıyor ve Pixel/CAPI ateşleniyordu.
+    const adClickIds = ['fbclid', 'gclid', 'ttclid'];
     const hasAdClick = adClickIds.some((param) => url.searchParams.has(param));
 
     // fbclid varsa landing timestamp'i sessionStorage'a kaydet (Meta fbc synthesis için)

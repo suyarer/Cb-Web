@@ -99,6 +99,11 @@ export default function Page() {
             <li>Konum — <strong>hiç okumuyoruz</strong></li>
             <li>Reklam kimliği, parmak izi, cihaz takibi — <strong>yok</strong></li>
             <li>Oyun verisi reklam amacıyla üçüncü taraflarla <strong>paylaşılmıyor</strong></li>
+            <li>
+              Bu sayfalarda (oyun, paylaşım kartı, bu metin) sitenin reklam ölçüm izleyicisi
+              (Meta Pikseli) <strong>çalışmaz</strong>; sitenin diğer sayfalarında yalnız
+              onayınla çalışır.
+            </li>
           </ul>
 
           <h2>4. Hukuki sebep</h2>

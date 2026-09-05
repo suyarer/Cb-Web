@@ -2,9 +2,25 @@
 
 import { getConsent, type ConsentValue } from '@/lib/consent';
 import { sendCapi } from '@/lib/metaPixel';
+import { sadeMi } from '@/components/SiteKatmanlari';
 import Script from 'next/script';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+
+/**
+ * Oyun rotalarında (/sosyal-obezite, /s/[runId], /kvkk) Pixel ve CAPI HİÇ çalışmaz.
+ *
+ * KVKK P0 (denetim 2026-09-05): CookieConsent oyun rotasında kapalıydı ama MetaPixel
+ * SiteKatmanlari'nın dışında kaldığı için önceden onay vermiş ya da utm taşıyan
+ * ziyaretçide Pixel + CAPI (IP, UA, _fbp, ?rakip=<runId> URL'si) Meta'ya gidiyordu;
+ * aydınlatma metni ise "reklam kimliği yok, üçüncü tarafla paylaşılmıyor" diyordu.
+ * Kapı hook'lardan ÖNCE değil, ayrı sarmalayıcıda — rules-of-hooks korunur.
+ */
+export default function MetaPixel() {
+  const pathname = usePathname();
+  if (sadeMi(pathname)) return null;
+  return <MetaPixelIc pathname={pathname} />;
+}
 
 /**
  * Stable UUID v4 generator — same logic as metaPixel.generateEventId()
@@ -25,11 +41,10 @@ function generateEventId(): string {
  *
  * @governing_law clubbeans-privacy-v1
  */
-export default function MetaPixel() {
+function MetaPixelIc({ pathname }: { pathname: string | null }) {
   const [consent, setConsentState] = useState<ConsentValue>('unset');
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const pixelId = process.env.NEXT_PUBLIC_FB_PIXEL_ID;
-  const pathname = usePathname();
 
   // Consent state senkronizasyonu
   useEffect(() => {
