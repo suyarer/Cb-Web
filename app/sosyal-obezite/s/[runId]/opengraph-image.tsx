@@ -56,15 +56,15 @@ export default async function Image({ params }: { params: Promise<{ runId: strin
         {/* Üst: marka + faz-5 Bean */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', fontSize: 26, letterSpacing: 6, color: '#737373' }}>SOSYAL OBEZİTE</div>
-            <div style={{ display: 'flex', fontSize: 20, color: '#737373', marginTop: 8 }}>clubbeans.com</div>
+            <div style={{ display: 'flex', fontSize: 26, letterSpacing: 6, color: '#8A8A8A' }}>SOSYAL OBEZİTE</div>
+            <div style={{ display: 'flex', fontSize: 20, color: '#8A8A8A', marginTop: 8 }}>clubbeans.com</div>
           </div>
           <PikselBean />
         </div>
 
         {/* Orta: HİYERARŞİ — kurtarılan gerçek en büyük */}
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <div style={{ display: 'flex', fontSize: 24, color: '#737373', marginBottom: 6 }}>
+          <div style={{ display: 'flex', fontSize: 24, color: '#8A8A8A', marginBottom: 6 }}>
             {k ? `${k.takmaAd} kurtardı` : 'kaç gerçeği kurtarabilirsin'}
           </div>
           <div style={{ display: 'flex', alignItems: 'flex-end' }}>
@@ -72,17 +72,17 @@ export default async function Image({ params }: { params: Promise<{ runId: strin
               {k ? k.yakalanan : '?'}
             </div>
             {/* Satori: gövde TEK çocuk olmalı — "/{toplam}" iki düğüm üretiyordu */}
-            <div style={{ display: 'flex', fontSize: 56, color: '#737373', marginLeft: 10, marginBottom: 20 }}>
+            <div style={{ display: 'flex', fontSize: 56, color: '#8A8A8A', marginLeft: 10, marginBottom: 20 }}>
               {`/${toplam}`}
             </div>
-            <div style={{ display: 'flex', fontSize: 30, color: '#737373', marginLeft: 22, marginBottom: 28 }}>
+            <div style={{ display: 'flex', fontSize: 30, color: '#8A8A8A', marginLeft: 22, marginBottom: 28 }}>
               gerçek
             </div>
           </div>
           {k && (
             <div style={{ display: 'flex', alignItems: 'baseline', marginTop: 14 }}>
               <div style={{ display: 'flex', fontSize: 34, color: '#e8eaf0' }}>{`${dk} dakikasını akış aldı`}</div>
-              <div style={{ display: 'flex', fontSize: 20, color: '#737373', marginLeft: 20 }}>{`skor ${k.skor}`}</div>
+              <div style={{ display: 'flex', fontSize: 20, color: '#8A8A8A', marginLeft: 20 }}>{`skor ${k.skor}`}</div>
             </div>
           )}
         </div>
@@ -95,7 +95,7 @@ export default async function Image({ params }: { params: Promise<{ runId: strin
           }}
         >
           <div style={{ display: 'flex', fontSize: 26, color: '#9aa1b4' }}>{TANIM_SATIRI}</div>
-          <div style={{ display: 'flex', fontSize: 22, color: '#737373', marginTop: 8 }}>
+          <div style={{ display: 'flex', fontSize: 22, color: '#8A8A8A', marginTop: 8 }}>
             Kaçırdığın gerçekler ekranda değil, dışarıda duruyor.
           </div>
         </div>

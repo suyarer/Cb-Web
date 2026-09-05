@@ -48,6 +48,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.7,
     },
+    // Oyun (Sosyal Obezite) — kart sayfaları (/s/[runId]) bilerek yok: noindex
+    {
+      url: `${base}/sosyal-obezite`,
+      lastModified: now,
+      changeFrequency: 'daily',
+      priority: 0.8,
+    },
+    {
+      url: `${base}/sosyal-obezite/kvkk`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.4,
+    },
     // Yasal / destek
     {
       url: `${base}/privacy`,

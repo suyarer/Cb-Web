@@ -216,6 +216,11 @@ export function paylasimMetni(yakalanan: number, toplamDk: number): string {
   return `SOSYAL OBEZİTE — ${yakalanan} gerçeği kurtardım. ${toplamDk} dakikamı akış aldı. Sen kaçını kurtarabilirsin?`;
 }
 
+/** Kart sayfasının OG açıklaması — başlıkla aynı ses (3. şahıs); ad ek almaz. */
+export function kartAciklamasi(ad: string, yakalanan: number, toplam: number, toplamDk: number): string {
+  return `${ad}, ${toplam} gerçeğin ${yakalanan} tanesini kurtardı; akış ${toplamDk} dakikasını aldı. ${TANIM_SATIRI} Sen kaçını kurtarabilirsin?`;
+}
+
 /**
  * Wordle biçimi paylaşım satırı — dış referans araştırmasının en yüksek
  * değerli/en ucuz kazanımı (72 kaynaklı sentez §3).

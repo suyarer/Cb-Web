@@ -177,6 +177,12 @@
   html[data-oyun='1'] .grain-overlay {
     display: none;
   }
+  /* dvh desteksiz tarayıcıda (iOS ≤15.3, eski WebView) oyun kökü 0px oluyor → siyah ekran (denetim tarayici-2) */
+  @supports not (min-height: 100dvh) {
+    .min-h-\[100dvh\] {
+      min-height: 100vh;
+    }
+  }
 
   .cosy-mode .grain-overlay {
     opacity: 0.06;

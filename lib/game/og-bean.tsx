@@ -26,8 +26,9 @@
 
 /** 9×7 filiz maskesi — 1 = gövde/yaprak var. */
 const MASKE = [
-  '..#....#.',
-  '...#..#..',
+  '.##....##',
+  '..##..##.',
+  '...####..',
   '....#....',
   '.#######.',
   '.#######.',
@@ -50,8 +51,9 @@ export function PikselBean({ olcek = 1 }: { olcek?: number }) {
         <div key={y} style={{ display: 'flex' }}>
           {satir.split('').map((h, x) => {
             // Çözülme: aşağı ve kenarlara doğru blok kaybolur
-            const dagilma = (y / (MASKE.length - 1)) * 0.45 + (Math.abs(x - 4) / 4) * 0.35;
-            const o = h === '#' ? Math.max(0.14, 1 - dagilma) : 0;
+            // Çözülme aşağı ve kenarlara doğru; en açık blok ≥ #9A9A9A ki küçük önizlemede seçilsin
+            const dagilma = (y / (MASKE.length - 1)) * 0.4 + (Math.abs(x - 4) / 4) * 0.3;
+            const o = h === '#' ? Math.max(0.3, 1 - dagilma) : 0;
             return (
               <div
                 key={x}
@@ -59,7 +61,7 @@ export function PikselBean({ olcek = 1 }: { olcek?: number }) {
                   display: 'flex',
                   width: blok,
                   height: blok,
-                  background: o > 0 ? '#6E6E6E' : 'transparent',
+                  background: o > 0 ? '#9A9A9A' : 'transparent',
                   opacity: o,
                 }}
               />

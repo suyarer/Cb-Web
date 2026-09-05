@@ -37,20 +37,20 @@ export default function Image() {
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ fontSize: 26, letterSpacing: 6, color: '#737373' }}>SOSYAL OBEZİTE</div>
-            <div style={{ fontSize: 20, color: '#737373', marginTop: 8 }}>clubbeans.com</div>
+            <div style={{ fontSize: 26, letterSpacing: 6, color: '#8A8A8A' }}>SOSYAL OBEZİTE</div>
+            <div style={{ fontSize: 20, color: '#8A8A8A', marginTop: 8 }}>clubbeans.com</div>
           </div>
           <PikselBean />
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <div style={{ fontSize: 92, fontWeight: 700, lineHeight: 1.05, color: '#fff' }}>
+          <div style={{ display: 'flex', fontSize: 76, fontWeight: 700, lineHeight: 1.05, color: '#fff' }}>
             {`${saniye} saniye.`}
           </div>
-          <div style={{ fontSize: 92, fontWeight: 700, lineHeight: 1.05, color: '#A8E600' }}>
+          <div style={{ display: 'flex', fontSize: 76, fontWeight: 700, lineHeight: 1.05, color: '#A8E600' }}>
             Akış akmaya devam edecek.
           </div>
-          <div style={{ fontSize: 34, color: '#9aa1b4', marginTop: 26 }}>
+          <div style={{ display: 'flex', fontSize: 32, color: '#9aa1b4', marginTop: 22, marginBottom: 28 }}>
             {`Arada ${GERCEK_SAYISI} gerçek davet belirir. Kaçını kurtarabilirsin?`}
           </div>
         </div>

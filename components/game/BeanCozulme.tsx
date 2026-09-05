@@ -32,13 +32,15 @@ const FAZLAR = [
   { scale: 1.12, doygunluk: 0.6, aciklik: 0.88, gozBoyut: 4.4, pikselle: 0 },
   { scale: 1.15, doygunluk: 0.38, aciklik: 0.74, gozBoyut: 5.2, pikselle: 0.25 },
   { scale: 1.15, doygunluk: 0.18, aciklik: 0.58, gozBoyut: 5.8, pikselle: 0.6 },
-  { scale: 1.15, doygunluk: 0.0, aciklik: 0.4, gozBoyut: 6.2, pikselle: 1.0 },
+  // Faz 5: gri palet ama GÖRÜNÜR — #3A3A3A × 0.4 tur sonu/kart sayfasında 1.17:1 leke oluyordu
+  // (denetim gorsel-5). og-bean.tsx ile aynı taban: tek "son hâl".
+  { scale: 1.15, doygunluk: 0.0, aciklik: 0.8, gozBoyut: 6.2, pikselle: 1.0 },
 ] as const;
 
 /** Faz 5'te palet gri-siyah aralığına iner; #A8E600 yok. */
 function govdeRengi(faz: BeanFaz): { ust: string; alt: string } {
   const f = FAZLAR[faz];
-  if (faz >= 5) return { ust: '#3A3A3A', alt: '#151515' };
+  if (faz >= 5) return { ust: '#6E6E6E', alt: '#3A3A3A' };
   // canlı yeşilden griye interpolasyon (doygunluk düşerken)
   const mix = (canli: [number, number, number], gri: number) => {
     const s = f.doygunluk;
@@ -135,7 +137,9 @@ function BeanCozulmeIc({ faz, size = 96, reduced = false, className }: Props) {
           style={{ transition: reduced ? 'none' : 'fill 900ms linear' }}
         />
 
-        {/* Sap + yapraklar — faz ilerledikçe düşer (canlılığın kaybı) */}
+        {/* Sap + yapraklar — faz ilerledikçe düşer (canlılığın kaybı).
+            Safari SVG 'd' geçişini desteklemez (snap); diri ve sarkmış yaprak iki ayrı
+            path, opacity ile çapraz solar (denetim tarayici-6). */}
         <g style={{ opacity: Math.max(0, 1 - faz * 0.24), transition: gecis }}>
           <path
             d="M 50 66 C 50 58 50 52 50 40"
@@ -144,24 +148,14 @@ function BeanCozulmeIc({ faz, size = 96, reduced = false, className }: Props) {
             strokeLinecap="round"
             fill="none"
           />
-          <path
-            d={
-              faz < 2
-                ? 'M 50 44 C 36 40 24 30 22 18 C 36 18 48 30 50 44 Z'
-                : 'M 50 46 C 38 46 28 42 24 34 C 36 30 48 36 50 46 Z' /* sarkmış */
-            }
-            fill={renk.alt}
-            style={{ transition: reduced ? 'none' : 'd 900ms linear' }}
-          />
-          <path
-            d={
-              faz < 2
-                ? 'M 50 44 C 66 38 80 26 82 12 C 68 13 54 26 50 44 Z'
-                : 'M 50 46 C 64 46 74 42 78 34 C 66 30 54 36 50 46 Z'
-            }
-            fill={renk.ust}
-            style={{ transition: reduced ? 'none' : 'd 900ms linear' }}
-          />
+          <g style={{ opacity: faz < 2 ? 1 : 0, transition: reduced ? 'none' : 'opacity 900ms linear' }}>
+            <path d="M 50 44 C 36 40 24 30 22 18 C 36 18 48 30 50 44 Z" fill={renk.alt} style={{ transition: reduced ? 'none' : 'fill 900ms linear' }} />
+            <path d="M 50 44 C 66 38 80 26 82 12 C 68 13 54 26 50 44 Z" fill={renk.ust} style={{ transition: reduced ? 'none' : 'fill 900ms linear' }} />
+          </g>
+          <g style={{ opacity: faz < 2 ? 0 : 1, transition: reduced ? 'none' : 'opacity 900ms linear' }}>
+            <path d="M 50 46 C 38 46 28 42 24 34 C 36 30 48 36 50 46 Z" fill={renk.alt} style={{ transition: reduced ? 'none' : 'fill 900ms linear' }} />
+            <path d="M 50 46 C 64 46 74 42 78 34 C 66 30 54 36 50 46 Z" fill={renk.ust} style={{ transition: reduced ? 'none' : 'fill 900ms linear' }} />
+          </g>
         </g>
 
         {/* Gözler — faz ilerledikçe büyür ve camsılaşır (uyuşma sinyali) */}
