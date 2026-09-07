@@ -16,7 +16,7 @@ export interface ClubPublic {
   id: string;
   name: string;
   description: string | null;
-  avatar_url: string | null;
+  logo_url: string | null; // clubs.avatar_url YOK — kolon adı logo_url (BLINDSPOT REACT-NATIVE-M1, 42703)
   member_count: number | null;
 }
 
@@ -26,7 +26,7 @@ export async function fetchClubPublic(id: string): Promise<ClubPublic | null> {
 
   const { data, error } = await supabaseAnon
     .from('clubs')
-    .select('id, name, description, avatar_url, member_count')
+    .select('id, name, description, logo_url, member_count')
     .eq('id', id)
     .eq('is_active', true)
     .maybeSingle();
