@@ -8,6 +8,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 const LINKS = [
+  { href: '/indir', label: 'İndir' },
   { href: '/manifesto', label: 'Manifesto' },
   { href: '/club-kur', label: 'Kulüp aç' },
   { href: '/urun', label: 'Ürün' },
@@ -30,19 +31,14 @@ export default function Nav() {
     }
   };
 
-  // Launch CTA — ana sayfada scrollIntoView, başka sayfada cross-page hash
-  // navigation (sessionStorage flag + ScrollManager mount handler).
-  const handleLaunchClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  // İndir düğmeleri /indir'e gider (telefona uygun mağaza + QR). Zaten oradaysa sayfa başına kaydırır.
+  const handleIndirClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     setOpen(false);
-    if (pathname === '/') {
-      document.getElementById('launch')?.scrollIntoView({ behavior: 'smooth' });
-    } else if (pathname === '/indir') {
-      // İndirme sayfasındaki ziyaretçiyi ana sayfaya atma — düğmeler sayfanın başında.
+    if (pathname === '/indir') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      sessionStorage.setItem('scrollToLaunch', '1');
-      router.push('/');
+      router.push('/indir');
     }
   };
   const firstLinkRef = useRef<HTMLAnchorElement>(null);
@@ -127,7 +123,7 @@ export default function Nav() {
           </Link>
 
           {/* Desktop menü */}
-          <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-sm">
+          <nav className="hidden md:flex items-center gap-4 lg:gap-8 text-sm">
             {LINKS.map((link) => (
               <Link
                 key={link.href}
@@ -138,8 +134,8 @@ export default function Nav() {
               </Link>
             ))}
             <a
-              href="/#launch"
-              onClick={handleLaunchClick}
+              href="/indir"
+              onClick={handleIndirClick}
               className="bg-white/5 border border-white/10 hover:bg-white/10 hover:border-acid/50 transition px-4 py-2 rounded-full text-white text-xs font-medium no-underline"
             >
               İndir →
@@ -217,8 +213,8 @@ export default function Nav() {
                 animate={{ y: 0, opacity: 1 }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ delay: 0.4, duration: 0.5, ease: easeOutExpo }}
-                href="/#launch"
-                onClick={handleLaunchClick}
+                href="/indir"
+                onClick={handleIndirClick}
                 className="mt-8 bg-acid text-midnight font-bold text-center py-4 rounded-full no-underline"
               >
                 Uygulamayı indir →
