@@ -14,9 +14,8 @@ export type FAQItem = {
  *
  * @governing_law clubbeans-content-v1
  *
- * GEÇİCİ SORULAR (lansman sonrası kaldırılacak):
- *  - "Ne zaman çıkacak?" (index 4) — uygulama yayına girdiğinde sil
- *  - "Erken erişim nasıl sağlarım?" (index 7) — uygulama yayına girdiğinde sil
+ * GEÇİCİ SORU kalmadı: "Ne zaman çıkacak?" ve "Erken erişim nasıl sağlarım?" uygulama
+ * yayına girince kaldırıldı (ikincisi 2026-09-17, /indir sprinti). Sayı /sss metadata'sında da geçer.
  *
  * Brand kuralları:
  *  - Bean kelimesi DM dışında kullanılmaz (jargon ziyaretçiyi kafalar)
@@ -46,7 +45,7 @@ export const FAQS: FAQItem[] = [
   },
   {
     q: 'Nasıl indiririm?',
-    a: 'App Store ve Google Play\'de yayında — ücretsiz. Ana sayfadaki indir butonundan telefonuna alabilirsin.',
+    a: 'App Store ve Google Play\'de yayında — ücretsiz. Telefonundan clubbeans.com/indir adresini aç; telefonuna uygun mağaza karşına gelir.',
   },
   {
     q: 'iOS ve Android\'de var mı?',
@@ -55,11 +54,6 @@ export const FAQS: FAQItem[] = [
   {
     q: 'Şu an hangi şehirlerde aktif?',
     a: 'İlk etapta İstanbul\'da başlıyoruz. Diğer şehirler için çalışmalarımız devam ediyor. Yaşadığın şehirde ClubBeans\'i görmek istersen info@clubbeans.com adresinden bize yazabilirsin.',
-  },
-  // GEÇİCİ — uygulama yayına girince bu kaydı kaldır
-  {
-    q: 'Erken erişim nasıl sağlarım?',
-    a: 'Ana sayfadaki e-posta listesine veya WhatsApp kanalımıza katıl. Lansmanda indir linkini sana iletelim.',
   },
   {
     q: 'Trust Score nedir ve neden önemli?',

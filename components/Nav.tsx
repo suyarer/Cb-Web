@@ -37,6 +37,9 @@ export default function Nav() {
     setOpen(false);
     if (pathname === '/') {
       document.getElementById('launch')?.scrollIntoView({ behavior: 'smooth' });
+    } else if (pathname === '/indir') {
+      // İndirme sayfasındaki ziyaretçiyi ana sayfaya atma — düğmeler sayfanın başında.
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       sessionStorage.setItem('scrollToLaunch', '1');
       router.push('/');

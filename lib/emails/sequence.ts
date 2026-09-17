@@ -278,8 +278,7 @@ const MAIL_8: SequenceMail = {
 </ol>
 </td></tr>
 <tr><td style="padding-bottom:16px;">
-<a href="${baseUrl}/#launch" style="display:inline-block;background:#A8E600;color:#050505;text-decoration:none;font-weight:700;padding:14px 24px;border-radius:999px;font-size:14px;margin-right:8px;">App Store →</a>
-<a href="${baseUrl}/#launch" style="display:inline-block;background:#A8E600;color:#050505;text-decoration:none;font-weight:700;padding:14px 24px;border-radius:999px;font-size:14px;">Google Play →</a>
+<a href="${baseUrl}/indir" style="display:inline-block;background:#A8E600;color:#050505;text-decoration:none;font-weight:700;padding:14px 24px;border-radius:999px;font-size:14px;">Uygulamayı indir →</a>
 </td></tr>
 <tr><td style="padding-bottom:32px;">
 <p style="margin:0;font-size:14px;line-height:1.7;color:#71717a;">Bu maili 8 hafta okuduğun için teşekkürler. Telefonu kapat → hayatın başlasın.</p>
@@ -288,8 +287,7 @@ ${footer(email, unsubscribeUrl, baseUrl)}`
     ),
   buildText: ({ email, unsubscribeUrl, baseUrl }) => `Geldik.
 
-App Store: ${baseUrl}/#launch
-Google Play: ${baseUrl}/#launch
+İndir (App Store · Google Play): ${baseUrl}/indir
 
 İlk 5 dakika:
 1. Kayıt

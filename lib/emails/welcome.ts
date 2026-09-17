@@ -42,7 +42,8 @@ export function welcomeEmailHtml({ email, position, unsubscribeUrl, baseUrl }: W
         <tr><td style="padding-bottom:24px;">
           <p style="margin:0;font-size:16px;line-height:1.6;color:#a1a1aa;">
             Sen <strong style="color:#A8E600;font-family:ui-monospace,monospace;">${position}.</strong> kişisin.
-            Lansman olduğunda tek mail gelir — uygulama App Store ve Google Play'de senin için hazır.
+            Uygulama App Store ve Google Play'de yayında:
+            <a href="${baseUrl}/indir" style="color:#A8E600;text-decoration:underline;">clubbeans.com/indir</a>
           </p>
         </td></tr>
 
@@ -93,7 +94,7 @@ export function welcomeEmailText({ email, position, unsubscribeUrl, baseUrl }: W
   return `Kaydın alındı.
 
 Sen ${position}. kişisin. ClubBeans App Store ve Google Play'de
-yayında — hemen indirebilirsin.
+yayında: ${baseUrl}/indir
 
 ClubBeans bir anti-platformdur. Dikkatini çalmak için değil,
 masaya çağırmak için çalışır.
