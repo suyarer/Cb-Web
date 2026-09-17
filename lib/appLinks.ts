@@ -21,12 +21,13 @@ export const PLAY_STORE_URL =
  * Links'ten alınan `pt` (provider token) eklenmeden Apple bu kampanyayı raporlamaz;
  * `NEXT_PUBLIC_APPLE_PT` env'i tanımlanınca otomatik eklenir (link yine çalışır).
  * Play: `referrer` → Install Referrer API ile utm_* uygulama tarafına ulaşır.
+ * `ortam` Play'de `utm_medium` olur (oyun · web); iOS'ta karşılığı yok.
  */
-export function magazaLinki(store: 'ios' | 'android', kampanya = 'site'): string {
+export function magazaLinki(store: 'ios' | 'android', kampanya = 'site', ortam = 'oyun'): string {
   if (store === 'ios') {
     const pt = process.env.NEXT_PUBLIC_APPLE_PT;
     return `${APP_STORE_URL}?${pt ? `pt=${encodeURIComponent(pt)}&` : ''}ct=${encodeURIComponent(kampanya)}&mt=8`;
   }
-  const referrer = `utm_source=clubbeans.com&utm_medium=oyun&utm_campaign=${kampanya}`;
+  const referrer = `utm_source=clubbeans.com&utm_medium=${ortam}&utm_campaign=${kampanya}`;
   return `${PLAY_STORE_URL}&referrer=${encodeURIComponent(referrer)}`;
 }

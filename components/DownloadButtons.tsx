@@ -28,10 +28,7 @@ export default function DownloadButtons({
   align = 'start',
   className = '',
 }: Props) {
-  const handleClick = (platform: 'ios' | 'android') => {
-    trackDownloadClick(platform, source);
-    trackEvent('app_download_click', { platform, source });
-  };
+  const handleClick = (platform: 'ios' | 'android') => indirmeTiklandi(platform, source);
 
   return (
     <div
@@ -53,7 +50,13 @@ export default function DownloadButtons({
   );
 }
 
-function StoreButton({
+/** Mağaza tıklaması — Meta Pixel + PostHog. Tüm indirme yüzeyleri aynı olayı atar. */
+export function indirmeTiklandi(platform: 'ios' | 'android', source: string) {
+  trackDownloadClick(platform, source);
+  trackEvent('app_download_click', { platform, source });
+}
+
+export function StoreButton({
   platform,
   href,
   onClick,
