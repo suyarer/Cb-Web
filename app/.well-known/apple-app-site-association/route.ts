@@ -45,6 +45,7 @@ const AASA = {
           'NOT /urun',
           'NOT /yol-haritasi',
           'NOT /unsubscribed',
+          'NOT /indir',
         ],
       },
     ],
