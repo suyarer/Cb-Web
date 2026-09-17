@@ -27,6 +27,13 @@ export const metadata: Metadata = {
     description: "App Store ve Google Play'de ücretsiz. Etkinliğe katıl ya da kulübünü kur.",
     url: 'https://clubbeans.com/indir',
   },
+  // Kök layout'un twitter başlığı açıkça tanımlı → og'a düşmez; X kartı sayfanın kendi metnini göstersin.
+  twitter: {
+    card: 'summary_large_image',
+    site: '@ClubBeansapp',
+    title: 'ClubBeans uygulamasını indir',
+    description: "App Store ve Google Play'de ücretsiz. Etkinliğe katıl ya da kulübünü kur.",
+  },
   alternates: { canonical: 'https://clubbeans.com/indir' },
 };
 
