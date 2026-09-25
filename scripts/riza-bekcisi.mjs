@@ -22,6 +22,9 @@ const IZLEYICI = /facebook\.(com|net)|fbevents|\/api\/meta-capi|posthog|127\.0\.
 // PostHog ilk isteğini init'ten saniyeler sonra atar (config.js) → "izleyici yok" iddiası için TAM bekle,
 // "izleyici başladı" iddiası için yokla. 2,5 sn'lik ilk sürüm başlamış PostHog'u göremedi (2026-09-25).
 const SESSIZLIK_MS = 6000;
+// Canlıda NEXT_PUBLIC_POSTHOG_KEY Vercel'de tanımlı değil (25.09: derlenmiş kodda anahtar yok) → PostHog hiç başlamaz.
+// O sitede 'İzin ver' sonrası yalnız Meta beklenir: BEKCI_POSTHOG=yok node scripts/riza-bekcisi.mjs <url>
+const POSTHOG_BEKLE = process.env.BEKCI_POSTHOG !== 'yok';
 const bekle = async (sayfa, kosul, ms = 12000) => { for (let t = 0; t < ms && !kosul(); t += 500) await sayfa.waitForTimeout(500); };
 const V1 = 'clubbeans-consent-v1';
 const V2 = 'clubbeans-consent-v2';
@@ -105,11 +108,12 @@ async function denetle(tur, motor) {
     await sayfa.getByRole('button', { name: 'İzin ver' }).click({ timeout: 8000 });
     const metaSay = () => istekler.filter((u) => /facebook|fbevents|meta-capi/i.test(u)).length;
     const phSay = () => istekler.filter((u) => /posthog|127\.0\.0\.1:9/i.test(u)).length;
-    await bekle(sayfa, () => metaSay() > 0 && phSay() > 0);
+    await bekle(sayfa, () => metaSay() > 0 && (phSay() > 0 || !POSTHOG_BEKLE));
     const meta = metaSay();
     const ph = phSay();
     const ts = await sayfa.evaluate(() => sessionStorage.getItem('cb-fbclid-ts'));
-    kontrol(motor, '4 İzin ver → Meta + PostHog başlar', meta > 0 && ph > 0 && !!ts, { meta, ph, ts: !!ts });
+    kontrol(motor, POSTHOG_BEKLE ? '4 İzin ver → Meta + PostHog başlar' : '4 İzin ver → Meta başlar (PostHog bu sitede yapılandırılmamış)',
+      meta > 0 && (ph > 0 || !POSTHOG_BEKLE) && !!ts, { meta, ph, ts: !!ts });
 
     await sayfa.getByRole('button', { name: 'Çerez tercihleri' }).click();
     await sayfa.waitForTimeout(500);
