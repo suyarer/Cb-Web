@@ -59,6 +59,13 @@ function MetaPixelIc({ pathname }: { pathname: string | null }) {
       window.removeEventListener('clubbeans:consent', handleConsentChange);
   }, []);
 
+  // Onay geri alınırsa ("Çerez tercihleri" → Hayır) sayfada zaten yüklü Pixel'i de sustur —
+  // Meta'nın otomatik olayları dahil. Yeniden onayda aç. Script hiç yüklenmediyse fbq yoktur.
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.fbq !== 'function') return;
+    window.fbq('consent', consent === 'granted' ? 'grant' : 'revoke');
+  }, [consent]);
+
   // SPA route değişimi → Pixel + CAPI dual-channel PageView
   // Aynı eventId ile çift kanal → Meta otomatik dedupe (iOS ATT %25 kazanç)
   useEffect(() => {

@@ -1,74 +1,47 @@
 /**
  * Çerez tercih yönetimi
  *
- * Anti-platform manifestomuza uygun şekilde:
- * - Organik trafik için hiçbir tracking varsayılan olarak çalışmaz.
- * - Kullanıcı açıkça izin verene kadar Meta Pixel yüklenmez.
- * - Reklam trafiği (fbclid query param) için otomatik consent —
- *   Meta tarafında zaten kullanıcı onayı verilmiş kabul edilir.
- * - localStorage'da küçük bir flag tutulur.
- * - Kullanıcı tercihi sonradan değiştirebilir.
+ * - Hiçbir izleyici (Meta Pikseli + Dönüşüm API'si, PostHog) açık onay olmadan çalışmaz.
+ * - Reklamdan gelmek (fbclid/gclid/ttclid) ONAY DEĞİLDİR ve önceki "Hayır"ı asla ezmez
+ *   (KVKK 2026-09-25: eski auto-grant, "Hayır" demiş ziyaretçiyi reklam tıklamasıyla
+ *   "granted" yapıyordu; Meta'daki reklam onayı bu sitenin çerezleri için rıza sayılmaz).
+ * - Anahtar v2: v1'deki "granted" kayıtlarının bir kısmı auto-grant ile yazıldı ve gerçek
+ *   onaydan ayırt edilemez → hepsi geçersiz, herkese bir kez yeniden sorulur.
+ * - Onay, "Çerez tercihleri" düğmesiyle (FooterLegal) her an geri alınabilir.
+ *
+ * @governing_law clubbeans-privacy-v1
  */
 
 export type ConsentValue = 'granted' | 'denied' | 'unset';
 
-const STORAGE_KEY = 'clubbeans-consent-v1';
+const STORAGE_KEY = 'clubbeans-consent-v2';
+const ESKI_ANAHTAR = 'clubbeans-consent-v1';
 
 /**
- * Reklam trafiği auto-grant — fbclid varsa Meta'da consent verilmiş demektir.
- * Bu sayede %98'lere ulaşan event loss düşer.
- * KVKK açısından: legitimate interest + ad platform'da verilen onay devam ediyor.
+ * Reklam tıklamasının iniş anı — YALNIZ onay verildiyse saklanır (Dönüşüm API'sinde fbc için).
+ * Onaysız ziyaretçinin cihazına reklam kimliği yazılmaz.
  */
-function checkAdTrafficAutoGrant(): boolean {
-  if (typeof window === 'undefined') return false;
+function reklamTiklamasiniKaydet(): void {
   try {
-    const url = new URL(window.location.href);
-    // Meta (fbclid), Google (gclid), TikTok (ttclid) reklam trafiği işaretleri.
-    // `utm_source` LİSTEDE DEĞİL (KVKK P0, 2026-09-05): utm bir reklam platformunda
-    // verilmiş onay değildir — bülten, X yanıtı, paylaşılan link de utm taşır; bu
-    // ziyaretçiye hiç sorulmadan "granted" yazılıyor ve Pixel/CAPI ateşleniyordu.
-    const adClickIds = ['fbclid', 'gclid', 'ttclid'];
-    const hasAdClick = adClickIds.some((param) => url.searchParams.has(param));
-
-    // fbclid varsa landing timestamp'i sessionStorage'a kaydet (Meta fbc synthesis için)
-    // Server Date.now() yerine gerçek click anı kullanılacak
-    if (hasAdClick && url.searchParams.has('fbclid')) {
-      try {
-        const existing = sessionStorage.getItem('cb-fbclid-ts');
-        if (!existing) {
-          sessionStorage.setItem('cb-fbclid-ts', String(Date.now()));
-        }
-      } catch {
-        // sessionStorage erişilemez (incognito vb.) — sessiz fail
-      }
+    if (!new URL(window.location.href).searchParams.has('fbclid')) return;
+    if (!sessionStorage.getItem('cb-fbclid-ts')) {
+      sessionStorage.setItem('cb-fbclid-ts', String(Date.now()));
     }
-
-    return hasAdClick;
   } catch {
-    return false;
+    // sessionStorage erişilemez (gizli pencere vb.) — sessiz geç
   }
 }
 
 export function getConsent(): ConsentValue {
   if (typeof window === 'undefined') return 'unset';
   try {
-    // ÖNCELİK: Reklam trafiği auto-grant
-    // Önceki "denied" kararı varsa BİLE — yeni ziyaret fbclid taşıyorsa
-    // kullanıcı Meta'daki onayını yenilemiş kabul edilir.
-    // Bu, organik visitor'lardaki "Hayır" tercihini etkilemez (onlar yine denied).
-    if (checkAdTrafficAutoGrant()) {
-      try {
-        localStorage.setItem(STORAGE_KEY, 'granted');
-      } catch {
-        // Sessiz fail — incognito vb.
-      }
-      return 'granted';
-    }
-
-    // Reklam trafiği değilse: kayıtlı tercihe bak
+    localStorage.removeItem(ESKI_ANAHTAR);
     const v = localStorage.getItem(STORAGE_KEY);
-    if (v === 'granted' || v === 'denied') return v;
-
+    if (v === 'granted') {
+      reklamTiklamasiniKaydet();
+      return v;
+    }
+    if (v === 'denied') return v;
     return 'unset';
   } catch {
     return 'unset';
@@ -79,6 +52,7 @@ export function setConsent(value: 'granted' | 'denied'): void {
   if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(STORAGE_KEY, value);
+    if (value === 'granted') reklamTiklamasiniKaydet();
     // Diğer sekmelere/komponentlere haber ver
     window.dispatchEvent(new CustomEvent('clubbeans:consent', { detail: value }));
   } catch {

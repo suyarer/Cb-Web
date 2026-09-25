@@ -60,7 +60,9 @@ export default function CookieConsent() {
         id="consent-desc"
         className="mb-4 text-sm leading-relaxed text-zinc-200"
       >
-        Ziyaretçi sayısını ölçüyoruz, kişisel veri toplamıyoruz. Ölçmemize izin verir misin?
+        İzin verirsen iki ölçüm aracı çalışır: reklamlarımızın işe yarayıp yaramadığını görmek için
+        Meta Pikseli, siteyi iyileştirmek için PostHog (tıklamalar ve oturum kaydı; yazdıkların
+        gizlenir). Reklamdan gelmen izin sayılmaz. İzin vermezsen site aynen çalışır.
         <Link
           href="/privacy"
           className="ml-1 text-zinc-500 underline-offset-2 hover:text-acid hover:underline"
@@ -70,19 +72,20 @@ export default function CookieConsent() {
       </p>
 
       <div className="flex items-center justify-end gap-2">
+        {/* KVKK Çerez Rehberi: reddetmek kabul etmek kadar kolay ve görünür olmalı → iki düğme AYNI stil */}
         <button
           type="button"
           onClick={handleDecline}
-          className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-zinc-300 transition hover:border-white/30 hover:text-white"
+          className="rounded-full border border-white/25 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/50"
         >
           Hayır
         </button>
         <button
           type="button"
           onClick={handleAccept}
-          className="rounded-full bg-acid px-4 py-2 text-sm font-semibold text-midnight transition hover:bg-acid-400"
+          className="rounded-full border border-white/25 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/50"
         >
-          Tamam
+          İzin ver
         </button>
       </div>
 

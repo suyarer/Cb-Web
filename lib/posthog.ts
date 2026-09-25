@@ -2,7 +2,8 @@
  * PostHog client-side analytics + session recording
  *
  * Anti-platform manifestomuza uygun şekilde:
- * - Consent verilmediyse hiçbir event/recording yapılmaz
+ * - AÇIK ONAY ('granted') olmadan init EDİLMEZ — ne olay, ne kayıt, ne çerez (KVKK 2026-09-25:
+ *   önceden yalnız 'denied'de duruyordu; karar vermemiş ziyaretçide oturum kaydı + IP toplanıyordu)
  * - PostHog Key env var yoksa init edilmez (dev/preview safe)
  * - Session recording'de TÜM input'lar maskeli (KVKK + privacy first)
  * - autocapture aktif ama PII alanları filtreleniyor
@@ -30,8 +31,8 @@ export function initPostHog(): void {
   if (initialized) return;
   if (!POSTHOG_KEY) return;
 
-  // Consent gate — eğer kullanıcı reddetmişse hiçbir şey gönderme
-  if (getConsent() === 'denied') return;
+  // Onay kapısı — yalnız açık onayla ('unset' = karar yok = izleme yok)
+  if (getConsent() !== 'granted') return;
 
   posthog.init(POSTHOG_KEY, {
     api_host: POSTHOG_HOST,
@@ -85,7 +86,7 @@ export function initPostHog(): void {
 export function trackEvent(name: string, properties?: Record<string, unknown>): void {
   if (typeof window === 'undefined') return;
   if (!initialized || !POSTHOG_KEY) return;
-  if (getConsent() === 'denied') return;
+  if (getConsent() !== 'granted') return;
 
   try {
     posthog.capture(name, properties);
@@ -101,7 +102,7 @@ export function trackEvent(name: string, properties?: Record<string, unknown>): 
 export function identifyUser(emailHash: string, properties?: Record<string, unknown>): void {
   if (typeof window === 'undefined') return;
   if (!initialized || !POSTHOG_KEY) return;
-  if (getConsent() === 'denied') return;
+  if (getConsent() !== 'granted') return;
 
   try {
     posthog.identify(emailHash, properties);
@@ -111,17 +112,21 @@ export function identifyUser(emailHash: string, properties?: Record<string, unkn
 }
 
 /**
- * Consent değişikliğine tepki: 'denied' olunca opt out, 'granted' olunca opt in.
- * window event 'clubbeans:consent' tetiklenince çağrılır.
+ * Onay değişikliğine tepki ('clubbeans:consent'): 'granted' → ilk kez init ya da opt in;
+ * 'denied'/'unset' (onay geri alındı) → opt out. Init onaydan ÖNCE hiç yapılmadığı için
+ * ilk "İzin ver" tıklaması burada init eder.
  */
 export function syncPostHogConsent(): void {
   if (typeof window === 'undefined') return;
-  if (!initialized) return;
 
   const consent = getConsent();
-  if (consent === 'denied') {
-    posthog.opt_out_capturing();
-  } else if (consent === 'granted') {
+  if (consent === 'granted') {
+    if (!initialized) {
+      initPostHog();
+      return;
+    }
     posthog.opt_in_capturing();
+  } else if (initialized) {
+    posthog.opt_out_capturing();
   }
 }

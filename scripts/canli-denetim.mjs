@@ -283,14 +283,14 @@ async function motorDenetle(tarayiciTipi, ad) {
   // ── 7b) KVKK bekçisi: utm'li açılışta ve önceden onaylı profilde bile izleyici yok ──
   {
     const p3 = await baglam.newPage();
-    await p3.addInitScript(() => { try { localStorage.setItem('clubbeans-consent-v1', 'granted'); } catch {} });
+    await p3.addInitScript(() => { try { localStorage.setItem('clubbeans-consent-v2', 'granted'); } catch {} });
     const p3Istek = [];
     p3.on('request', (r) => {
       if (/facebook\.|fbevents|meta-capi|connect\.facebook/i.test(r.url())) p3Istek.push(r.url().slice(0, 120));
     });
     await p3.goto(`${OYUN}?utm_source=denetim`, { waitUntil: 'load' });
     await p3.waitForTimeout(1500);
-    const rizaYazildi = await p3.evaluate(() => localStorage.getItem('clubbeans-consent-v1'));
+    const rizaYazildi = await p3.evaluate(() => localStorage.getItem('clubbeans-consent-v2'));
     const toplam = izleyiciIstekleri.length + p3Istek.length;
     not(ad, 'kvkk-izleyici', toplam === 0 ? 'GECTI' : 'KALDI',
         `oyun rotasında Meta/CAPI isteği: ${toplam} (onaylı profil + utm dahil)`,

@@ -1,5 +1,6 @@
 import AntiTrackerBadge from '@/components/AntiTrackerBadge';
 import BeanSprout from '@/components/BeanSprout';
+import CerezTercihleri from '@/components/CerezTercihleri';
 import Link from 'next/link';
 
 export default function FooterLegal() {
@@ -58,6 +59,9 @@ export default function FooterLegal() {
                 <Link href="/delete-account" className="inline-flex items-center min-h-[44px] text-zinc-400 hover:text-white transition no-underline">
                   Hesap Silme
                 </Link>
+              </li>
+              <li>
+                <CerezTercihleri className="inline-flex items-center min-h-[44px] text-sm text-zinc-400 hover:text-white transition" />
               </li>
             </ul>
           </div>
