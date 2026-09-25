@@ -22,7 +22,7 @@ export default function PrivacyPage() {
         <article className="prose-legal">
           <h1>Gizlilik Politikası</h1>
           <p className="text-sm text-zinc-500 font-mono">
-            Yürürlük tarihi: 17 Nisan 2026 · Son güncelleme: 7 Mayıs 2026
+            Yürürlük tarihi: 17 Nisan 2026 · Son güncelleme: 25 Eylül 2026
           </p>
 
           <p>
@@ -33,8 +33,8 @@ export default function PrivacyPage() {
 
           <h2>1. Veri Sorumlusu</h2>
           <p>
-            Veri sorumlusu sıfatıyla hareket eden ClubBeans&apos;e aşağıdaki iletişim kanallarından
-            ulaşabilirsiniz:
+            Veri sorumlusu: <strong>CLUBBEANS TEKNOLOJİ LTD ŞTİ</strong>, Dere Mah. Cavit Öztürk Sokak
+            No:16, Merkez/Amasya. Aşağıdaki iletişim kanallarından ulaşabilirsiniz:
           </p>
           <ul>
             <li>E-posta: <a href="mailto:privacy@clubbeans.com">privacy@clubbeans.com</a></li>
@@ -87,6 +87,33 @@ export default function PrivacyPage() {
             <li>Yalnızca doğrulama durumu (verified/unverified) tarafımızda tutulur.</li>
           </ul>
 
+          <h3>2.6. Kulüp Kurma Başvuru Formu (Facebook / Instagram reklamı)</h3>
+          <ul>
+            <li>
+              Reklamdaki formu doldurursanız: ad soyad, telefon numarası ve formdaki yanıtlarınız
+              (semt, masa türü, çağırabileceğiniz kişi sayısı, zamanlama). E-posta adresi istenmez.
+            </li>
+            <li>
+              Formdaki isteğe bağlı kutuyu işaretlerseniz: ticari elektronik ileti onayınız. Onay,
+              yasa gereği İleti Yönetim Sistemi&apos;ne (İYS) kaydedilir. Kutuyu işaretlememeniz
+              başvurunuzu etkilemez.
+            </li>
+            <li>
+              Form Meta&apos;nın (Facebook / Instagram) altyapısında doldurulur; yanıtlarınız yurt
+              dışındaki Meta sunucularında işlenir ve bize iletilir.
+            </li>
+          </ul>
+
+          <h3>2.7. Web Sitesi (clubbeans.com)</h3>
+          <ul>
+            <li>Bülten formunu doldurursanız e-posta adresiniz.</li>
+            <li>Yalnızca onay verirseniz: Meta Pikseli ve PostHog ölçüm verileri (Bölüm 6).</li>
+            <li>
+              Vercel&apos;in çerez kullanmayan, günlük sıfırlanan anonim ziyaret sayımı ve performans
+              ölçümü.
+            </li>
+          </ul>
+
           <h2>3. İşlenme Amaçları</h2>
           <ul>
             <li>Hesap oluşturma ve kimlik doğrulama</li>
@@ -94,6 +121,24 @@ export default function PrivacyPage() {
             <li>Bildirim gönderimi (push + in-app)</li>
             <li>Uygulama performans iyileştirmesi (anonim crash raporu)</li>
             <li>Yasal yükümlülüklerin yerine getirilmesi</li>
+            <li>
+              Reklamla gelen kulüp kurma başvurularını değerlendirmek, başvuru sahibiyle telefon veya
+              SMS ile iletişime geçmek ve kulübünü kurarken yardımcı olmak
+            </li>
+            <li>Onay verenlere yeni masa, kulüp ve etkinlik duyuruları göndermek</li>
+            <li>Onay verilirse reklamlarımızın ve web sitesinin nasıl çalıştığını ölçmek</li>
+          </ul>
+
+          <h3>Hukuki sebepler</h3>
+          <ul>
+            <li>
+              Kulüp kurma başvurusu: talebiniz üzerine sözleşme öncesi adımlar (KVKK m.5/2-c) ve
+              talepleri yönetmedeki meşru menfaatimiz (KVKK m.5/2-f).
+            </li>
+            <li>
+              Ticari elektronik ileti, Meta Pikseli ve PostHog: açık rızanız (KVKK m.5/1). Rızanızı
+              istediğiniz zaman geri alabilirsiniz.
+            </li>
           </ul>
 
           <h2>4. Veri Saklama Süresi</h2>
@@ -101,6 +146,12 @@ export default function PrivacyPage() {
             <li>Hesap verileri: Hesabınız aktif olduğu sürece</li>
             <li>Hesap silme talebinde: 30 gün içinde tüm veriler silinir</li>
             <li>Yasal gereklilikler: İlgili mevzuat gereği saklama süreleri (örn. fatura 10 yıl)</li>
+            <li>
+              Kulüp kurma başvuruları: Meta&apos;nın reklam panelinde ve şirketimizin şifreli
+              bilgisayarında tutulur; eşleşme olmazsa en geç 6 ay içinde silinir.
+            </li>
+            <li>Ticari ileti onayı: geri alınana kadar; geri alındığında ileti gönderimi durur.</li>
+            <li>Çerez tercihiniz: tarayıcınızda, siz değiştirene kadar.</li>
           </ul>
 
           <h2>5. Üçüncü Taraflar</h2>
@@ -116,38 +167,59 @@ export default function PrivacyPage() {
             <li><strong>Mapbox</strong> (harita görselleri — konum paylaşılmaz)</li>
             <li><strong>Didit</strong> (KYC — opsiyonel, sadece kullanıcı tercihiyle)</li>
             <li>
-              <strong>Meta (Facebook / Instagram)</strong> — yalnızca clubbeans.com web sitesinde,
-              yalnızca açık onayınızla, yalnızca reklam ölçümü için (aşağıda detay).
+              <strong>Meta Platforms Ireland (Facebook / Instagram)</strong> — (1) kulüp kurma başvuru
+              formu: form Meta altyapısında doldurulur, yanıtlarınız yurt dışındaki Meta
+              sunucularında işlenir ve bize iletilir; (2) web sitesinde yalnızca açık onayınızla
+              reklam ölçümü (Bölüm 6).
+            </li>
+            <li>
+              <strong>PostHog</strong> (web sitesi kullanım analizi ve oturum kaydı — yalnızca açık
+              onayınızla) — AB/Frankfurt sunucuları
+            </li>
+            <li>
+              <strong>İleti Yönetim Sistemi (İYS)</strong> — ticari ileti onayı verenlerin yasal kaydı
             </li>
           </ul>
-          <p>Hiçbir üçüncü tarafa veri <strong>satılmaz</strong>.</p>
-
-          <h2>6. Çerezler ve Reklam Ölçümü</h2>
           <p>
-            ClubBeans mobil uygulaması hiçbir çerez veya pazarlama izleyicisi içermez. Web sitesinde
-            (clubbeans.com) ise yalnızca <strong>açık onay</strong>ınızla aktive olan tek bir izleyici
-            mevcuttur:
+            Yukarıdaki sağlayıcıların sunucuları büyük ölçüde yurt dışındadır; bu hizmetleri
+            kullandığımız ölçüde verileriniz yurt dışına aktarılır.
+          </p>
+          <p>
+            Hiçbir üçüncü tarafa veri <strong>satılmaz</strong>; başvuru formundaki verileriniz
+            pazarlama için üçüncü kişilere verilmez.
+          </p>
+
+          <h2>6. Çerezler ve Ölçüm</h2>
+          <p>
+            ClubBeans mobil uygulaması çerez veya pazarlama izleyicisi içermez. Web sitesinde
+            (clubbeans.com) iki ölçüm aracı <strong>yalnızca açık onayınızla</strong> çalışır:
           </p>
           <ul>
             <li>
-              <strong>Meta Pikseli (Facebook / Instagram):</strong> Lansman dönemindeki reklamlarımızın
-              hangi ziyaretçilere ulaştığını ölçmek için kullanılır.
+              <strong>Meta Pikseli ve Dönüşüm API&apos;si (Facebook / Instagram):</strong>{' '}
+              reklamlarımızın işe yarayıp yaramadığını ölçmek için. Sayfa görüntülemeleriniz, IP
+              adresiniz ve tarayıcı bilginiz Meta&apos;ya iletilir. Bülten formunu doldurursanız e-posta
+              adresiniz geri döndürülemez biçimde şifrelenerek (SHA-256) iletilir; açık hâli gönderilmez.
             </li>
-            <li>Sayfa açıldığında otomatik çalışmaz; site üzerinde gösterilen onay kutucuğuna
-              &quot;İzin ver&quot; tıklanırsa devreye girer.</li>
-            <li>Onay verdiğiniz takdirde sayfa görüntülemeniz Meta&apos;ya iletilir; konum, isim,
-              e-posta veya başka kişisel bilginiz aktarılmaz.</li>
             <li>
-              Onayınızı istediğiniz zaman tarayıcı ayarlarından çerezleri silerek veya{' '}
-              <a href="mailto:privacy@clubbeans.com">privacy@clubbeans.com</a> adresine yazarak geri
-              alabilirsiniz.
+              <strong>PostHog:</strong> siteyi iyileştirmek için tıklamalar, sayfa geçişleri, IP
+              adresi (kaba konum için) ve oturum kaydı. Formlara yazdıklarınız kayda girmez.
             </li>
-            <li>Onay vermezseniz site özelliklerinin tamamı sorunsuz çalışır.</li>
+            <li>
+              Reklamdan gelmeniz (bağlantıdaki reklam kimliği) onay sayılmaz; daha önce
+              &quot;Hayır&quot; dediyseniz bu tercihiniz korunur.
+            </li>
+            <li>Onay vermezseniz hiçbiri yüklenmez ve site özelliklerinin tamamı sorunsuz çalışır.</li>
+            <li>
+              Kararınızı istediğiniz zaman sayfanın altındaki <strong>Çerez tercihleri</strong>{' '}
+              düğmesiyle değiştirebilir ya da{' '}
+              <a href="mailto:privacy@clubbeans.com">privacy@clubbeans.com</a> adresine yazabilirsiniz.
+            </li>
+            <li>
+              Vercel&apos;in çerez kullanmayan, kişiyi tanımlamayan ziyaret sayımı ve performans
+              ölçümü onaydan bağımsız çalışır.
+            </li>
           </ul>
-          <p>
-            ClubBeans mobil uygulaması içerisinde Meta Pikseli veya benzeri pazarlama izleyici
-            kullanılmaz.
-          </p>
 
           <h2>7. KVKK Haklarınız</h2>
           <p>KVKK&apos;nın 11. maddesi uyarınca:</p>
@@ -164,7 +236,8 @@ export default function PrivacyPage() {
           <p>
             Bu haklarınızı kullanmak için{' '}
             <a href="mailto:privacy@clubbeans.com">privacy@clubbeans.com</a> adresine yazabilir veya
-            uygulama içinden &quot;Hesap Silme&quot; işlemini başlatabilirsiniz.
+            uygulama içinden &quot;Hesap Silme&quot; işlemini başlatabilirsiniz. Ticari ileti
+            onayınızı istediğiniz zaman ücretsiz geri alabilirsiniz.
           </p>
 
           <h2>8. Çocukların Gizliliği</h2>
