@@ -22,7 +22,7 @@ export default function PrivacyPage() {
         <article className="prose-legal">
           <h1>Gizlilik Politikası</h1>
           <p className="text-sm text-zinc-500 font-mono">
-            Yürürlük tarihi: 17 Nisan 2026 · Son güncelleme: 25 Eylül 2026
+            Yürürlük tarihi: 17 Nisan 2026 · Son güncelleme: 27 Eylül 2026
           </p>
 
           <p>
@@ -91,12 +91,13 @@ export default function PrivacyPage() {
           <ul>
             <li>
               Reklamdaki formu doldurursanız: ad soyad, telefon numarası ve formdaki yanıtlarınız
-              (semt, masa türü, çağırabileceğiniz kişi sayısı, zamanlama). E-posta adresi istenmez.
+              (semt, ilk masanın zamanı, çevrenizden kaç kişinin gelebileceği; formun ilk sürümünde
+              masa türü de soruluyordu). E-posta adresi istenmez.
             </li>
             <li>
-              Formdaki isteğe bağlı kutuyu işaretlerseniz: ticari elektronik ileti onayınız. Onay,
-              yasa gereği İleti Yönetim Sistemi&apos;ne (İYS) kaydedilir. Kutuyu işaretlememeniz
-              başvurunuzu etkilemez.
+              Amaç: formunuzu değerlendirmek, size bu konuda telefonla ya da SMS ile dönmek ve ilk
+              masanızı kurarken yardımcı olmak. Form ticari ileti onayı istemez; size tanıtım
+              göndermeyiz. Eşleşme olmazsa verileriniz en geç 6 ay içinde silinir.
             </li>
             <li>
               Form Meta&apos;nın (Facebook / Instagram) altyapısında doldurulur; yanıtlarınız yurt
@@ -136,8 +137,8 @@ export default function PrivacyPage() {
               talepleri yönetmedeki meşru menfaatimiz (KVKK m.5/2-f).
             </li>
             <li>
-              Ticari elektronik ileti, Meta Pikseli ve PostHog: açık rızanız (KVKK m.5/1). Rızanızı
-              istediğiniz zaman geri alabilirsiniz.
+              Bülten e-postaları (ticari elektronik ileti), Meta Pikseli ve PostHog: açık rızanız
+              (KVKK m.5/1). Rızanızı istediğiniz zaman geri alabilirsiniz.
             </li>
           </ul>
 
@@ -177,7 +178,8 @@ export default function PrivacyPage() {
               onayınızla) — AB/Frankfurt sunucuları
             </li>
             <li>
-              <strong>İleti Yönetim Sistemi (İYS)</strong> — ticari ileti onayı verenlerin yasal kaydı
+              <strong>İleti Yönetim Sistemi (İYS)</strong> — bülten için ticari ileti onayı verenlerin
+              yasal kaydı
             </li>
           </ul>
           <p>
