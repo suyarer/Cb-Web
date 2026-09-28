@@ -88,7 +88,7 @@ export default async function PostPage({ params }: Props) {
         )}
 
         <p className="text-zinc-500 text-sm mb-12">
-          {new Date(post.created_at).toLocaleString('tr-TR')}
+          {new Date(post.created_at).toLocaleString('tr-TR', { timeZone: 'Europe/Istanbul', dateStyle: 'long', timeStyle: 'short' })}
         </p>
 
         <a
