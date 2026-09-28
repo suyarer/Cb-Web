@@ -54,6 +54,18 @@ export function reklamTrafigiMi(search: string): boolean {
   return Boolean(p.get('utm_source') || p.get('fbclid'));
 }
 
+/**
+ * Site indirme düğmeleri için kampanya etiketi (2026-09-29): URL'de utm_campaign → temizlenmiş hâli; yalnız reklam izi
+ * (utm_source / fbclid) varsa `meta_<varsayılan>`; organikte varsayılan. "Doğum günü deneme" reklamı ana sayfaya yalnız
+ * fbclid ile iniyordu ve düğmeler kampanyasızdı → reklam kurulumu organikten ayrışmıyordu.
+ */
+export function sayfaKampanyasi(search: string, varsayilan: string): string {
+  const p = new URLSearchParams(search);
+  const ham = p.get('utm_campaign');
+  if (ham) return kampanyaTemiz(ham, varsayilan);
+  return reklamTrafigiMi(search) ? kampanyaTemiz(`meta_${varsayilan}`, varsayilan) : varsayilan;
+}
+
 export function magazaLinki(store: 'ios' | 'android', kampanya = 'site', ortam = 'oyun'): string {
   if (store === 'ios') {
     // pt = App Store Connect sağlayıcı kimliği (Campaign Links'te herkese açık görünür, gizli değil). Env yoksa varsayılan

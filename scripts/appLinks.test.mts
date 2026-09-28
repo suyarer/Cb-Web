@@ -4,7 +4,7 @@
  * kampanyasızdı; /indir reklamın kampanya adını mağazaya taşımıyordu.
  * Çalıştır: node scripts/appLinks.test.mts
  */
-import { kampanyaTemiz, reklamTrafigiMi, magazaLinki } from '../lib/appLinks.ts';
+import { kampanyaTemiz, reklamTrafigiMi, magazaLinki, sayfaKampanyasi } from '../lib/appLinks.ts';
 
 let fail = 0;
 const ok = (c: boolean, m: string, x = '') => { if (!c) { console.log('  ✗', m, x); fail++; } else console.log('  ✓', m); };
@@ -27,6 +27,13 @@ ok(reklamTrafigiMi('?fbclid=IwAR123') === true, 'fbclid → reklam');
 ok(reklamTrafigiMi('?utm_source=') === false, 'boş utm_source reklam değil');
 ok(reklamTrafigiMi('') === false, 'parametresiz = organik paylaşım');
 ok(reklamTrafigiMi('?ref=share') === false, 'başka parametre = organik');
+
+// sayfaKampanyasi — site indirme düğmeleri (ana sayfa/alt sayfa): reklam trafiğini organikten ayır (2026-09-29)
+// "Doğum günü deneme" reklamı ana sayfaya yalnız fbclid ile iniyor; düğmeler kampanyasızdı → kurulum ayrışmıyordu
+ok(sayfaKampanyasi('?utm_source=meta&utm_campaign=Doğum Günü', 'site_hero') === 'dogum_gunu', 'utm_campaign öncelikli');
+ok(sayfaKampanyasi('?fbclid=IwAR1', 'site_hero') === 'meta_site_hero', 'yalnız fbclid → meta_ öneki');
+ok(sayfaKampanyasi('', 'site_hero') === 'site_hero', 'organik → varsayılan');
+ok(sayfaKampanyasi('?utm_source=meta', 'site_hero') === 'meta_site_hero', 'utm_source var, kampanya yok → meta_ öneki');
 
 // magazaLinki kampanya taşır (mevcut davranış korunur)
 ok(magazaLinki('ios', 'masa_e05e4108', 'reklam').includes('ct=masa_e05e4108'), 'iOS ct');

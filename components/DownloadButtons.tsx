@@ -1,7 +1,8 @@
 'use client';
 
 import { motion } from '@/lib/motion';
-import { APP_STORE_URL, PLAY_STORE_URL } from '@/lib/appLinks';
+import { useEffect, useState } from 'react';
+import { magazaLinki, reklamTrafigiMi, sayfaKampanyasi } from '@/lib/appLinks';
 import { trackDownloadClick } from '@/lib/metaPixel';
 import { trackEvent } from '@/lib/posthog';
 
@@ -29,6 +30,16 @@ export default function DownloadButtons({
   className = '',
 }: Props) {
   const handleClick = (platform: 'ios' | 'android') => indirmeTiklandi(platform, source);
+  // Kampanya etiketli mağaza linki (2026-09-29): ilk render organik varsayılan (SSR ile aynı → hidrasyon uyuşur),
+  // yüklenince sayfa adresindeki utm/fbclid'e göre güncellenir.
+  const varsayilan = `site_${source}`;
+  const [href, setHref] = useState({ ios: magazaLinki('ios', varsayilan, 'web'), android: magazaLinki('android', varsayilan, 'web') });
+  useEffect(() => {
+    const s = window.location.search;
+    const k = sayfaKampanyasi(s, varsayilan);
+    const ortam = reklamTrafigiMi(s) ? 'reklam' : 'web';
+    setHref({ ios: magazaLinki('ios', k, ortam), android: magazaLinki('android', k, ortam) });
+  }, [varsayilan]);
 
   return (
     <div
@@ -38,12 +49,12 @@ export default function DownloadButtons({
     >
       <StoreButton
         platform="apple"
-        href={APP_STORE_URL}
+        href={href.ios}
         onClick={() => handleClick('ios')}
       />
       <StoreButton
         platform="google"
-        href={PLAY_STORE_URL}
+        href={href.android}
         onClick={() => handleClick('android')}
       />
     </div>
