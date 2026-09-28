@@ -11,6 +11,7 @@
  * hardcode ETME (drift = kırık link).
  */
 export const APP_STORE_URL = 'https://apps.apple.com/app/id6778042472';
+const APPLE_PT_VARSAYILAN = '129009038';
 export const PLAY_STORE_URL =
   'https://play.google.com/store/apps/details?id=com.clubbeans';
 
@@ -55,7 +56,9 @@ export function reklamTrafigiMi(search: string): boolean {
 
 export function magazaLinki(store: 'ios' | 'android', kampanya = 'site', ortam = 'oyun'): string {
   if (store === 'ios') {
-    const pt = process.env.NEXT_PUBLIC_APPLE_PT;
+    // pt = App Store Connect sağlayıcı kimliği (Campaign Links'te herkese açık görünür, gizli değil). Env yoksa varsayılan
+    // (2026-09-29, App Store Connect'ten okundu) — ct raporu Apple'da ancak pt ile görünür; kampanya ≥5 kurulumdan sonra listelenir.
+    const pt = process.env.NEXT_PUBLIC_APPLE_PT || APPLE_PT_VARSAYILAN;
     return `${APP_STORE_URL}?${pt ? `pt=${encodeURIComponent(pt)}&` : ''}ct=${encodeURIComponent(kampanya)}&mt=8`;
   }
   const referrer = `utm_source=clubbeans.com&utm_medium=${ortam}&utm_campaign=${kampanya}`;

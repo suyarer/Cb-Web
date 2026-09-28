@@ -30,6 +30,8 @@ ok(reklamTrafigiMi('?ref=share') === false, 'başka parametre = organik');
 
 // magazaLinki kampanya taşır (mevcut davranış korunur)
 ok(magazaLinki('ios', 'masa_e05e4108', 'reklam').includes('ct=masa_e05e4108'), 'iOS ct');
+// Apple ct'yi yalnız pt (sağlayıcı kimliği) ile raporlar — pt herkese açık bir kimlik, env yoksa varsayılan (2026-09-29)
+ok(magazaLinki('ios', 'x').includes('pt=129009038&ct=x'), 'iOS pt varsayılanı', magazaLinki('ios', 'x'));
 ok(decodeURIComponent(magazaLinki('android', 'masa_e05e4108', 'reklam')).includes('utm_campaign=masa_e05e4108&') ||
    decodeURIComponent(magazaLinki('android', 'masa_e05e4108', 'reklam')).endsWith('utm_campaign=masa_e05e4108'), 'Play referrer utm_campaign');
 
