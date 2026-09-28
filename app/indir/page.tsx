@@ -2,6 +2,7 @@ import FooterLegal from '@/components/FooterLegal';
 import IndirButonlari from '@/components/indir/IndirButonlari';
 import Nav from '@/components/Nav';
 import ViewContentTracker from '@/components/ViewContentTracker';
+import { kampanyaTemiz } from '@/lib/appLinks';
 import { platformBul } from '@/lib/platform';
 import type { Metadata } from 'next';
 import Image from 'next/image';
@@ -58,8 +59,14 @@ const YOLLAR = [
   },
 ];
 
-export default async function IndirPage() {
+export default async function IndirPage({
+  searchParams,
+}: {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const platform = platformBul((await headers()).get('user-agent'));
+  // Reklamın kampanya adı mağaza linkine taşınır (2026-09-29 ölçüm köprüsü); yoksa 'indir'
+  const kampanya = kampanyaTemiz(((await searchParams) ?? {}).utm_campaign, 'indir');
 
   return (
     <>
@@ -81,7 +88,7 @@ export default async function IndirPage() {
                 Etkinliğe katılmak da kendi kulübünü kurmak da aynı uygulamadan.
               </p>
 
-              <IndirButonlari platform={platform} />
+              <IndirButonlari platform={platform} kampanya={kampanya} />
 
               <ul className="mt-6 flex flex-wrap gap-x-3 gap-y-1 text-xs font-mono text-zinc-500 [&>li+li]:before:content-['·'] [&>li+li]:before:mr-3">
                 <li>Ücretsiz</li>

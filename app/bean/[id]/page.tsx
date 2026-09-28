@@ -13,9 +13,11 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { fetchBeanPublic } from '@/lib/supabase/bean';
 import { SmartRedirect } from '@/components/SmartRedirect';
+import { kampanyaTemiz, magazaLinki } from '@/lib/appLinks';
 
 interface Props {
   params: Promise<{ id: string }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -60,11 +62,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function BeanPage({ params }: Props) {
+export default async function BeanPage({ params, searchParams }: Props) {
   const { id } = await params;
+  const sp = (await searchParams) ?? {};
   const bean = await fetchBeanPublic(id);
 
   if (!bean) notFound();
+
+  // Mağaza linkleri kampanya etiketli (2026-09-29): reklam utm_campaign'i ya da masa kimliği → App Store ct / Play referrer
+  const kampanya = kampanyaTemiz(sp.utm_campaign, `masa_${id.slice(0, 8)}`);
+  const ortam = sp.utm_source ? 'reklam' : 'web';
 
   const deepLink = `clubbeans://bean/${id}`;
 
@@ -92,7 +99,7 @@ export default async function BeanPage({ params }: Props) {
         )}
 
         <p className="text-zinc-400 mb-12">
-          🕒 {new Date(bean.start_time).toLocaleString('tr-TR')}
+          🕒 {new Date(bean.start_time).toLocaleString('tr-TR', { timeZone: 'Europe/Istanbul', dateStyle: 'long', timeStyle: 'short' })}
         </p>
 
         {/* Manuel "Open in App" — in-app browser fallback */}
@@ -105,13 +112,13 @@ export default async function BeanPage({ params }: Props) {
 
         <div className="mt-12 text-center text-zinc-500 text-sm">
           <a
-            href="https://apps.apple.com/app/id6778042472"
+            href={magazaLinki('ios', kampanya, ortam)}
             className="underline mr-4"
           >
             App Store
           </a>
           <a
-            href="https://play.google.com/store/apps/details?id=com.clubbeans"
+            href={magazaLinki('android', kampanya, ortam)}
             className="underline"
           >
             Google Play

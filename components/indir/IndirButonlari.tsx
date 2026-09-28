@@ -11,13 +11,13 @@ import type { Platform } from '@/lib/platform';
  *   (UA yanılırsa ya da ziyaretçi linki başkası için açtıysa yol kapanmasın).
  * - bilinmiyor: iki mağaza yan yana (masaüstü, iPadOS, önizleme botu).
  *
- * Linkler kampanya atıflı (`indir` · `web`); tıklama Pixel + PostHog `source: 'indir'`.
+ * Linkler kampanya atıflı (URL'deki temizlenmiş `utm_campaign`, yoksa `indir` · `web`); tıklama Pixel + PostHog `source: 'indir'`.
  *
  * @governing_law clubbeans-privacy-v1
  */
-export default function IndirButonlari({ platform }: { platform: Platform }) {
-  const iosHref = magazaLinki('ios', 'indir', 'web');
-  const androidHref = magazaLinki('android', 'indir', 'web');
+export default function IndirButonlari({ platform, kampanya = 'indir' }: { platform: Platform; kampanya?: string }) {
+  const iosHref = magazaLinki('ios', kampanya, 'web');
+  const androidHref = magazaLinki('android', kampanya, 'web');
 
   if (platform === 'bilinmiyor') {
     return (

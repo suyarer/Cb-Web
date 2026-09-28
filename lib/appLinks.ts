@@ -23,6 +23,36 @@ export const PLAY_STORE_URL =
  * Play: `referrer` → Install Referrer API ile utm_* uygulama tarafına ulaşır.
  * `ortam` Play'de `utm_medium` olur (oyun · web); iOS'ta karşılığı yok.
  */
+const TR_ASCII: Record<string, string> = { ç: 'c', ğ: 'g', ı: 'i', i̇: 'i', ö: 'o', ş: 's', ü: 'u' };
+
+/**
+ * URL'den gelen kampanya adını mağaza etiketine çevirir (2026-09-29, reklam ölçüm köprüsü).
+ * Türkçe harf → ASCII, boşluk → `_`, izinli dışı karakter atılır, en çok 40 karakter; sonuç boşsa `varsayilan`.
+ * Neden: panelde "Doğum Günü Deneme" yazılırsa sessizce varsayılana düşüp kampanya ayrışması kaybolmasın,
+ * ama URL'deki serbest metin mağaza linkine ham da akmasın.
+ */
+export function kampanyaTemiz(ham: string | string[] | undefined, varsayilan: string): string {
+  const deger = Array.isArray(ham) ? ham[0] : ham;
+  if (!deger) return varsayilan;
+  const temiz = deger
+    .toLocaleLowerCase('tr-TR')
+    .replace(/[çğıöşü]|i̇/g, (h) => TR_ASCII[h] ?? h)
+    .trim()
+    .replace(/\s+/g, '_')
+    .replace(/[^a-z0-9_-]/g, '')
+    .slice(0, 40);
+  return temiz || varsayilan;
+}
+
+/**
+ * Reklam trafiği mi? `utm_source` dolu ya da `fbclid` var (Meta her reklam tıklamasına ekler).
+ * SmartRedirect reklam trafiğinde otomatik uygulama/mağaza yönlendirmesi YAPMAZ — kişi masayı okur.
+ */
+export function reklamTrafigiMi(search: string): boolean {
+  const p = new URLSearchParams(search);
+  return Boolean(p.get('utm_source') || p.get('fbclid'));
+}
+
 export function magazaLinki(store: 'ios' | 'android', kampanya = 'site', ortam = 'oyun'): string {
   if (store === 'ios') {
     const pt = process.env.NEXT_PUBLIC_APPLE_PT;

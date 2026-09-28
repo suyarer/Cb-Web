@@ -10,11 +10,13 @@
  * In-app browser (Instagram/Twitter WKWebView) Universal Link tetiklemez —
  * "Open in App" manuel button SSR HTML'de ayrıca render edilmeli.
  *
+ * Reklam trafiğinde (utm_source / fbclid) yönlendirme yapmaz — `reklamTrafigiMi` (2026-09-29).
+ *
  * Sprint: share-2-alpha-web Commit 6
  */
 
 import { useEffect, useRef } from 'react';
-import { APP_STORE_URL, PLAY_STORE_URL } from '@/lib/appLinks';
+import { APP_STORE_URL, PLAY_STORE_URL, reklamTrafigiMi } from '@/lib/appLinks';
 
 interface Props {
   deepLink: string;
@@ -38,6 +40,9 @@ export function SmartRedirect({
     const isAndroid = /Android/.test(ua);
 
     if (!isIOS && !isAndroid) return;
+    // Reklam trafiği (utm_source / fbclid): otomatik yönlendirme YOK — kişi sayfayı okur, düğmeyle ilerler.
+    // 2026-09-29: reklamdan gelen kişi 2 sn'de mağazaya atılıyor, masa bağlamı kayboluyordu.
+    if (reklamTrafigiMi(window.location.search)) return;
 
     const start = Date.now();
 
