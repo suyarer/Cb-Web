@@ -8,7 +8,7 @@
  */
 
 import * as Sentry from '@sentry/nextjs';
-import type { EtkinlikSatiri } from '@/lib/pazarProgrami';
+import { sorguAltSiniri, type EtkinlikSatiri } from '@/lib/pazarProgrami';
 import { supabaseAnon } from './client';
 
 export async function fetchPazarEtkinlikleri(kulupIdleri: string[], simdi: Date): Promise<EtkinlikSatiri[] | null> {
@@ -24,7 +24,7 @@ export async function fetchPazarEtkinlikleri(kulupIdleri: string[], simdi: Date)
     .eq('is_public', true)
     .not('is_cancelled', 'is', true)
     .not('is_test', 'is', true)
-    .gt('start_time', simdi.toISOString())
+    .gt('start_time', sorguAltSiniri(simdi).toISOString())
     .order('start_time', { ascending: true })
     .limit(30);
 

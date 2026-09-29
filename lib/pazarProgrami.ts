@@ -103,15 +103,25 @@ export function testBasligi(baslik: string | null): boolean {
 // eşleme "biraz"/"sipariş"i yakalardı (hasım H2). Tam sözcükler + kökler (ünsüz yumuşaması dahil: şarap/şarab).
 const ALKOL_SOZCUK = new Set([
   'bira', 'biralar', 'birası', 'birayı', 'bar', 'barı', 'barda', 'pub', 'wine', 'wines', 'beer', 'sip', 'cocktail', 'cocktails',
-  'viski', 'whisky', 'votka', 'vodka', 'tekila', 'likör', 'gin', 'prosecco', 'şampanya', 'sangria', 'mojito', 'aperol', 'spritz',
-  'alkol', 'alkollü',
+  'viski', 'whisky', 'whiskey', 'votka', 'vodka', 'tekila', 'tequila', 'likör', 'gin', 'rom', 'rum', 'bourbon', 'vermut', 'martini',
+  'margarita', 'negroni', 'mimosa', 'sake', 'cider', 'prosecco', 'şampanya', 'champagne', 'sangria', 'mojito', 'aperol', 'spritz',
+  'rakı', 'rakısı', 'rakılı', 'raki', 'içki', 'içkili', 'alkol', 'alkollü',
 ]);
-const ALKOL_KOK = ['şarap', 'şarab', 'kokteyl', 'meyhane', 'rakı', 'kadeh'];
+// "rakı" kök DEĞİL: "rakım" (yükseklik) yanlış alarm verirdi (7b bulgusu) → tam sözcük listesinde.
+const ALKOL_KOK = ['şarap', 'şarab', 'kokteyl', 'meyhane', 'kadeh'];
 const ALKOL_EMOJI = /[🍷🥂🍹🍺🍻🍸🥃🍾]/u;
 
 export function alkolCagrisimi(...metinler: (string | null | undefined)[]): boolean {
   if (metinler.some((m) => m && ALKOL_EMOJI.test(m))) return true;
   return sozcukler(...metinler).some((s) => ALKOL_SOZCUK.has(s) || ALKOL_KOK.some((k) => s.startsWith(k)));
+}
+
+/**
+ * DB sorgusunun alt sınırı: şimdi − 24 sa. Başlamış etkinlik de gelmeli ki `pazarProgrami` o Pazar'ı "geçti" sayıp sıradakine
+ * geçsin; `start_time > şimdi` ile etkinlik günü başlangıçtan gece yarısına kadar kart "kayıtlar yakında" diyordu (7b bulgusu).
+ */
+export function sorguAltSiniri(simdi: Date): Date {
+  return new Date(simdi.getTime() - 24 * 60 * 60 * 1000);
 }
 
 /** Kalan yer; kapasite bilinmiyorsa null. */

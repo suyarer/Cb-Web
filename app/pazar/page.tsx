@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 
 const ADIMLAR = [
   'Uygulamayı indir, hesabını aç.',
-  'Kurduktan sonra bu sayfaya dön, "Uygulamada aç"a dokun ve yerini ayır.',
+  'Kayıtlar açıkken bu sayfadaki "Uygulamada aç"a dokun ve yerini ayır.',
   // Onay sorusu: DB `send_confirmation_pulses` etkinlik günü sorar, 1 saat pencere, cevapsız yer açılır (2026-09-29 canlı okundu).
   'Etkinlik günü uygulama "geliyor musun?" diye sorar. Bildirimleri açık tut ve 1 saat içinde onayla; onaylanmayan yer başkasına açılır.',
   'Etkinliğe gel. Biletin telefonunda; girişte okutulur.',

@@ -8,7 +8,7 @@
 process.env.TZ = 'UTC';
 import {
   PAZAR_PROGRAMI, pazarProgrami, eslesenEtkinlik, istanbulGunu, istanbulTarih, istanbulTarihSaat, alkolCagrisimi,
-  testBasligi, kalanYer, kimlikGerekirMi, type EtkinlikSatiri, type ProgramGirdisi,
+  testBasligi, kalanYer, kimlikGerekirMi, sorguAltSiniri, type EtkinlikSatiri, type ProgramGirdisi,
 } from '../lib/pazarProgrami.ts';
 
 let fail = 0;
@@ -60,6 +60,11 @@ ok(!alkolCagrisimi('Biraz sohbet, biraz kahve'), '"biraz" alkol değil');
 ok(!alkolCagrisimi('Siparişinizi kendiniz verin'), '"sipariş" alkol değil');
 ok(!alkolCagrisimi('Barış ile resim', null, 'Canopy by Hilton İstanbul Taksim'), '"Barış" ve otel adı alkol değil');
 ok(!alkolCagrisimi('Vision Board Workshop', 'Sonbaharın ruhuyla. Filtre kahveniz bizden. Katılım: 350₺', 'Kafe'), 'Vision Board metni geçer');
+// 7b bulguları (2026-09-29): emoji katmanı tek başına sınanmıyordu; kaçan içki adları; "rakım" yanlış alarmı
+ok(alkolCagrisimi('Pazar keyfi 🍷'), 'yalnız emoji de yakalanır');
+ok(alkolCagrisimi('Mimosa brunch') && alkolCagrisimi('Sake tadımı') && alkolCagrisimi('Cider akşamı'), 'mimosa · sake · cider');
+ok(alkolCagrisimi('Raki sofrası') && alkolCagrisimi('İçkili sohbet'), 'ASCII raki · içkili');
+ok(!alkolCagrisimi('Rakım 1200 m yürüyüş'), '"rakım" (yükseklik) alkol değil');
 
 // eslesenEtkinlik — aynı kulüp + aynı İstanbul günü + iptal/test değil + test başlığı değil + alkolsüz; en erken
 const g = G({});
@@ -85,6 +90,13 @@ ok(pazarProgrami([G({})], [E({})], new Date('2026-10-25T12:00:00Z')).buPazar ===
 ok(pazarProgrami([G({}), G({ tarih: '2026-11-01' }), G({ tarih: '2026-11-08' }), G({ tarih: '2026-11-15' }), G({ tarih: '2026-11-22' })], [], SIMDI)
   .sonrakiler.length === 3, 'sonrakiler en çok 3');
 ok(pazarProgrami([], [E({})], SIMDI).buPazar === null, 'program boşsa hiçbir etkinlik görünmez (insan onayı)');
+
+// sorguAltSiniri — DB sorgusu başlamış etkinliği de getirmeli; yoksa etkinlik günü başlangıçtan gece yarısına kadar
+// sayfa "kayıtlar yakında" der (7b bulgusu: .gt(start_time, şimdi) başlamış satırı hiç getirmiyordu)
+ok(sorguAltSiniri(new Date('2026-10-25T12:00:00Z')).toISOString() === '2026-10-24T12:00:00.000Z', 'sorgu 24 sa geriden başlar');
+const gun = new Date('2026-10-25T12:00:00Z');
+const basladi = pazarProgrami([G({}), G({ tarih: '2026-11-01' })], [E({ start_time: '2026-10-25T11:00:00Z' })], gun);
+ok(basladi.buPazar?.girdi.tarih === '2026-11-01', 'etkinlik günü başladıktan sonra sıradaki Pazar öne çıkar', JSON.stringify(basladi.buPazar?.girdi.tarih));
 
 // taşınanlar
 ok(kalanYer(E({ max_capacity: 12, current_attendees: 15 })) === 0 && kalanYer(E({ max_capacity: null })) === null, 'kalanYer güvenli');

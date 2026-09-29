@@ -33,7 +33,7 @@ export const FAQS: FAQItem[] = [
   },
   {
     q: 'Ücretsiz mi?',
-    a: 'Uygulamayı indirmek, etkinliklere katılmak, kulüp kurmak ve etkinlik düzenlemek tamamen ücretsiz. Abonelik yok, zorunlu premium üyelik yok ve temel deneyim her zaman ücretsiz kalacak. İleride ek özellikler içeren gönüllü ücretli seçenekler gelebilir.',
+    a: 'Uygulamayı indirmek, kulüp kurmak ve etkinlik düzenlemek ücretsiz; ClubBeans katılım için ücret almaz. Bazı etkinliklerde ev sahibi malzeme ya da mekân için katılım ücreti isteyebilir; bu ücret etkinlik sayfasında yazar ve ev sahibine ödenir. Abonelik yok, zorunlu premium üyelik yok ve temel deneyim her zaman ücretsiz kalacak. İleride ek özellikler içeren gönüllü ücretli seçenekler gelebilir.',
   },
   {
     q: 'ClubBeans kimin için?',
