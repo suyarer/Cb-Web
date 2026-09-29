@@ -3,7 +3,7 @@ import IndirButonlari from '@/components/indir/IndirButonlari';
 import Nav from '@/components/Nav';
 import ViewContentTracker from '@/components/ViewContentTracker';
 import { reklamTrafigiMi, sayfaKampanyasi } from '@/lib/appLinks';
-import { istanbulTarihSaat, kalanYer, siradakiMasa, type SeciliMasa } from '@/lib/masaSecim';
+import { istanbulTarihSaat, kalanYer, kimlikGerekirMi, siradakiMasa, type SeciliMasa } from '@/lib/masaSecim';
 import { platformBul } from '@/lib/platform';
 import { fetchPilotMasalar } from '@/lib/supabase/masa';
 import type { Metadata } from 'next';
@@ -61,6 +61,9 @@ function MasaKarti({ secili }: { secili: SeciliMasa }) {
         <p className="text-zinc-400">Bu masa doldu. Sıradaki Perşembe Masası açılınca burada.</p>
       ) : (
         kalan != null && <p className="text-acid font-medium mb-6">{kalan} yer kaldı</p>
+      )}
+      {!dolu && kimlikGerekirMi(masa) && (
+        <p className="text-sm text-zinc-400 -mt-3 mb-6">İlk biletinde kimliğini bir kez doğrularsın; belgen bizde saklanmaz.</p>
       )}
       {!dolu && (
         <a

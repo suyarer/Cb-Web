@@ -19,7 +19,7 @@ export async function fetchPilotMasalar(simdi: Date): Promise<MasaSatiri[] | nul
 
   const { data, error } = await supabaseAnon
     .from('beans')
-    .select('id, title, start_time, venue_name, max_capacity, current_attendees, is_cancelled, is_test')
+    .select('id, title, start_time, venue_name, max_capacity, current_attendees, is_cancelled, is_test, identity_required')
     .eq('club_id', RESMI_KULUP_ID)
     .eq('is_public', true)
     .not('is_cancelled', 'is', true)

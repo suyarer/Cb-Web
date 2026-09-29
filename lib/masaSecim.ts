@@ -25,6 +25,7 @@ export interface MasaSatiri {
   current_attendees: number | null;
   is_cancelled: boolean | null;
   is_test: boolean | null;
+  identity_required: boolean | null;
 }
 
 export interface SeciliMasa {
@@ -49,6 +50,14 @@ export function pilotMasasiMi(baslik: string | null): boolean {
 export function kalanYer(m: MasaSatiri): number | null {
   if (m.max_capacity == null) return null;
   return Math.max(0, m.max_capacity - (m.current_attendees ?? 0));
+}
+
+/**
+ * Sayfa "ilk biletinde kimliğini doğrularsın" demeli mi? Masa bazında `identity_required` (DB varsayılanı true);
+ * yalnız açıkça false ise susar — sayfa metni masanın gerçek ayarıyla çelişmesin (7b bulgusu, 2026-09-29).
+ */
+export function kimlikGerekirMi(m: MasaSatiri): boolean {
+  return m.identity_required !== false;
 }
 
 export function siradakiMasa(satirlar: MasaSatiri[], simdi: Date): SeciliMasa | null {
