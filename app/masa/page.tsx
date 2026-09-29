@@ -3,7 +3,15 @@ import IndirButonlari from '@/components/indir/IndirButonlari';
 import Nav from '@/components/Nav';
 import ViewContentTracker from '@/components/ViewContentTracker';
 import { reklamTrafigiMi, sayfaKampanyasi } from '@/lib/appLinks';
-import { istanbulTarihSaat, kalanYer, kimlikGerekirMi, siradakiMasa, type SeciliMasa } from '@/lib/masaSecim';
+import {
+  istanbulTarihSaat,
+  kalanYer,
+  kimlikGerekirMi,
+  PILOT,
+  PILOT_BASLIK_ONEKI,
+  siradakiMasa,
+  type SeciliMasa,
+} from '@/lib/masaSecim';
 import { platformBul } from '@/lib/platform';
 import { fetchPilotMasalar } from '@/lib/supabase/masa';
 import type { Metadata } from 'next';
@@ -14,20 +22,21 @@ import { headers } from 'next/headers';
  * @governing_law BEAN_ANAYASASI, KVKK_ANAYASASI K6, clubbeans-privacy-v1
  *
  * Masa Ritüeli Pilotu (2026-09-29) — reklamın SABİT iniş sayfası. Resmi kulübün sıradaki
- * "Perşembe Masası"nı her istekte kendisi bulur (`siradakiMasa`); masa dolunca/geçince bir
+ * pilot masasını (`PILOT`, 2026-09-29'dan beri Pazar 15:00) her istekte kendisi bulur (`siradakiMasa`); masa dolunca/geçince bir
  * sonrakini gösterir → reklam adresi hiç değişmez. Masa açıklaması bilerek gösterilmez (serbest metin).
  * SmartRedirect YOK: reklamdan gelen kişi masayı okur, kendi seçer.
  */
 export const dynamic = 'force-dynamic';
 
-const BASLIK = 'Perşembe Masası — ClubBeans';
-const ACIKLAMA = 'Her Perşembe akşamı 8 kişilik bir masa. Tanımadığın insanlarla aynı masada; katılım ücretsiz, herkes kendi hesabını öder.';
+// Gün/saat metinleri PILOT'tan türer; saat eksiz yazılır (Türkçe ek saate göre değişir).
+const BASLIK = `${PILOT_BASLIK_ONEKI} — ClubBeans`;
+const ACIKLAMA = `Her ${PILOT.gun}, saat ${PILOT.saat}: 8 kişilik bir masa. Tanımadığın insanlarla aynı masada; katılım ücretsiz, herkes kendi hesabını öder.`;
 
 export const metadata: Metadata = {
   title: BASLIK,
   description: ACIKLAMA,
-  openGraph: { title: 'Perşembe Masası', description: ACIKLAMA, url: 'https://www.clubbeans.com/masa', locale: 'tr_TR' },
-  twitter: { card: 'summary_large_image', site: '@ClubBeansapp', title: 'Perşembe Masası', description: ACIKLAMA },
+  openGraph: { title: PILOT_BASLIK_ONEKI, description: ACIKLAMA, url: 'https://www.clubbeans.com/masa', locale: 'tr_TR' },
+  twitter: { card: 'summary_large_image', site: '@ClubBeansapp', title: PILOT_BASLIK_ONEKI, description: ACIKLAMA },
   alternates: { canonical: 'https://www.clubbeans.com/masa' },
 };
 
@@ -37,7 +46,10 @@ const DAVET_KODU = '';
 const ADIMLAR = [
   'Uygulamayı indir, hesabını aç.',
   'Kurduktan sonra bu sayfaya dön, "Uygulamada aç"a dokun ve yerini ayır.',
-  'Perşembe 20:00\'de masaya gel. Biletin telefonunda; masada okutulur.',
+  // Onay sorusu: DB `send_confirmation_pulses` masa günü sorar, 1 saat cevap penceresi, cevapsız yer açılır (2026-09-29
+  // canlı okundu). Saati masa saatinden türer (`pulse_soru_zamani`) → metinde saat YOK, yalnız davranış.
+  'Masa günü uygulama "geliyor musun?" diye sorar. Bildirimleri açık tut ve 1 saat içinde onayla; onaylanmayan yer başkasına açılır.',
+  `Masaya gel (${PILOT.gun} ${PILOT.saat}). Biletin telefonunda; masada okutulur.`,
 ];
 
 function aramaDizesi(sp: Record<string, string | string[] | undefined>): string {
@@ -58,7 +70,7 @@ function MasaKarti({ secili }: { secili: SeciliMasa }) {
       <p className="text-2xl md:text-3xl font-bold text-white mb-2">{istanbulTarihSaat(masa.start_time)}</p>
       {masa.venue_name && <p className="text-lg text-zinc-300 mb-4">{masa.venue_name}</p>}
       {dolu ? (
-        <p className="text-zinc-400">Bu masa doldu. Sıradaki Perşembe Masası açılınca burada.</p>
+        <p className="text-zinc-400">Bu masa doldu. Sıradaki {PILOT_BASLIK_ONEKI} açılınca burada.</p>
       ) : (
         kalan != null && <p className="text-acid font-medium mb-6">{kalan} yer kaldı</p>
       )}
@@ -99,20 +111,20 @@ export default async function MasaPage({
           <div className="container-x relative">
             <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-acid mb-4 font-mono">
               <span className="w-1.5 h-1.5 rounded-full bg-acid" aria-hidden />
-              Her Perşembe · 20:00
+              Her {PILOT.gun} · {PILOT.saat}
             </div>
             <h1 className="text-display font-bold tracking-tight text-white leading-tight mb-4">
-              Perşembe akşamı, <span className="text-gradient-acid">8 kişilik</span> bir masa.
+              {PILOT.zamanIfadesi}, <span className="text-gradient-acid">8 kişilik</span> bir masa.
             </h1>
             <p className="text-lg md:text-xl text-zinc-400 max-w-xl leading-relaxed mb-8">
-              Tanımadığın insanlarla aynı masada bir akşam. Katılım ücretsiz, herkes kendi hesabını öder.
+              Tanımadığın insanlarla aynı masada, sakin bir sohbet. Katılım ücretsiz, herkes kendi hesabını öder.
             </p>
 
             {secili ? (
               <MasaKarti secili={secili} />
             ) : (
               <p className="text-zinc-300 max-w-xl mb-8">
-                Sıradaki Perşembe Masası henüz açılmadı. Her hafta bu sayfada; uygulamayı şimdiden indir, masa açılınca
+                Sıradaki {PILOT_BASLIK_ONEKI} henüz açılmadı. Her hafta bu sayfada; uygulamayı şimdiden indir, masa açılınca
                 buradan yerini ayır.
               </p>
             )}

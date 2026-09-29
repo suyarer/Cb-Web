@@ -2,8 +2,8 @@
  * @module masaSecim
  * Masa Ritüeli Pilotu (2026-09-29) — /masa sayfasının saf seçim kuralı.
  *
- * Reklam adresi sabit kalır (clubbeans.com/masa); sayfa her istekte resmi kulübün sıradaki
- * "Perşembe Masası"nı bu kuralla bulur: iptal · geçmiş · test · başka başlık elenir; en yakın tarihli
+ * Reklam adresi sabit kalır (clubbeans.com/masa); sayfa her istekte resmi kulübün sıradaki pilot
+ * masasını (`PILOT_BASLIK_ONEKI`) bu kuralla bulur: iptal · geçmiş · test · başka başlık elenir; en yakın tarihli
  * ve yeri olan seçilir; hepsi doluysa en yakını "dolu" işaretiyle döner.
  * Test: `node scripts/masa.test.mts`.
  *
@@ -13,8 +13,15 @@
 /** Resmi kulüp (ClubBeans Club) — pilot masalarını yalnız bu kulüp açar. */
 export const RESMI_KULUP_ID = 'bbfb93e4-25dc-481f-ad07-e1698db4b672';
 
+/**
+ * Pilotun ritüel günü/saati — gün değişirse YALNIZ burası değişir (başlık öneki, sayfa metinleri, SQL deseni türer).
+ * Kullanıcı kararı 2026-09-29: Pazar 15:00 (Perşembe 20:00'den; dayanak meta-reklam `masa-gunu-arastirmasi-2026-09-29`).
+ * `saat` metinde eksiz kullanılır ("Her Pazar · 15:00") — Türkçe saat eki saate göre değişir.
+ */
+export const PILOT = { gun: 'Pazar', saat: '15:00', zamanIfadesi: 'Pazar öğleden sonra' } as const;
+
 /** Pilot masa başlığının kanonik öneki; karşılaştırma harf/aksan katlanmış yapılır. */
-export const PILOT_BASLIK_ONEKI = 'Perşembe Masası';
+export const PILOT_BASLIK_ONEKI = `${PILOT.gun} Masası`;
 
 export interface MasaSatiri {
   id: string;
@@ -41,6 +48,15 @@ function katla(s: string): string {
 }
 
 const ONEK = katla(PILOT_BASLIK_ONEKI);
+
+/**
+ * DB ön süzgeci için `ILIKE` deseni. DB collation en_US.UTF-8 Türkçe harfi katlamaz ve `İ` küçülünce iki kod
+ * noktası olur (`_` eşleşmez — canlı SQL 2026-09-29: 'PAZARTESİ MASASI' ILIKE 'pazartes_ masas_%' = false) →
+ * Türkçe harfler ve `i` `%` olur. Desen gevşektir; kesin eleme `pilotMasasiMi`'de.
+ */
+export function ilikeDeseni(onek: string): string {
+  return `${onek.trim().toLocaleLowerCase('tr-TR').replace(/[çğıöşüi]/g, '%')}%`.replace(/%+/g, '%');
+}
 
 export function pilotMasasiMi(baslik: string | null): boolean {
   return baslik != null && katla(baslik).startsWith(ONEK);
@@ -72,7 +88,7 @@ export function siradakiMasa(satirlar: MasaSatiri[], simdi: Date): SeciliMasa | 
   return yeriOlan ? { masa: yeriOlan, dolu: false } : { masa: gelecek[0], dolu: true };
 }
 
-/** "8 Ekim Perşembe, 20:00" — sunucu UTC'de çalışsa da saat İstanbul'a göre. */
+/** "11 Ekim Pazar, 15:00" — sunucu UTC'de çalışsa da saat İstanbul'a göre. */
 export function istanbulTarihSaat(iso: string): string {
   const d = new Date(iso);
   const gun = new Intl.DateTimeFormat('tr-TR', { timeZone: 'Europe/Istanbul', day: 'numeric', month: 'long', weekday: 'long' }).format(d);
