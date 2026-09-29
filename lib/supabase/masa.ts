@@ -10,6 +10,7 @@
  * desende hiç geçmez (Türkçe büyük/küçük harf farkı sorguyu sessizce boşaltmasın).
  */
 
+import * as Sentry from '@sentry/nextjs';
 import { RESMI_KULUP_ID, type MasaSatiri } from '@/lib/masaSecim';
 import { supabaseAnon } from './client';
 
@@ -29,8 +30,14 @@ export async function fetchPilotMasalar(simdi: Date): Promise<MasaSatiri[] | nul
     .limit(6);
 
   if (error) {
-    // Vercel fonksiyon logu — sayfa "yakında"ya düşer ama sessiz kalmaz
+    // Sayfa "yakında"ya düşer ama sessiz kalmaz: reklam parası boş sayfaya akıyor olabilir.
     console.error('[masa] pilot masa sorgusu başarısız:', error.code, error.message);
+    Sentry.captureMessage('masa: pilot masa sorgusu başarısız', {
+      level: 'error',
+      tags: { alan: 'masa', rota: 'masa' },
+      extra: { pg_code: error.code, mesaj: error.message },
+      fingerprint: ['masa-pilot-sorgu'],
+    });
     return null;
   }
   return (data ?? []) as MasaSatiri[];
