@@ -66,6 +66,19 @@ export function sayfaKampanyasi(search: string, varsayilan: string): string {
   return reklamTrafigiMi(search) ? kampanyaTemiz(`meta_${varsayilan}`, varsayilan) : varsayilan;
 }
 
+/**
+ * Next `searchParams` nesnesi → sorgu dizesi (dizi değerde ilki; boşlar atılır). /pazar ve /masa yönlendirmesi reklam
+ * parametrelerini (utm_*, fbclid) böyle taşır (2026-09-29).
+ */
+export function aramaDizesi(sp: Record<string, string | string[] | undefined>): string {
+  const p = new URLSearchParams();
+  for (const [k, v] of Object.entries(sp)) {
+    const d = Array.isArray(v) ? v[0] : v;
+    if (d) p.set(k, d);
+  }
+  return p.toString();
+}
+
 export function magazaLinki(store: 'ios' | 'android', kampanya = 'site', ortam = 'oyun'): string {
   if (store === 'ios') {
     // pt = App Store Connect sağlayıcı kimliği (Campaign Links'te herkese açık görünür, gizli değil). Env yoksa varsayılan

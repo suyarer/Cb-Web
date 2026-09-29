@@ -76,6 +76,12 @@ const nextConfig: NextConfig = {
     // Production'da console.log otomatik silinir, console.error bırakılır
     removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
   },
+  // 2026-09-29: "Pazar Masası" pilotu "Her Pazar bir etkinlik" programına dönüştü (/pazar). Sayfa içinden
+  // permanentRedirect akış başladığı için 200 + meta-refresh üretiyordu; reklam tarayıcısı/OG için gerçek 308 burada.
+  // Sorgu dizesi (utm_*, fbclid) Next tarafından korunur.
+  async redirects() {
+    return [{ source: '/masa', destination: '/pazar', permanent: true }];
+  },
   async headers() {
     return [
       {

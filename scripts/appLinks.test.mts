@@ -4,7 +4,7 @@
  * kampanyasızdı; /indir reklamın kampanya adını mağazaya taşımıyordu.
  * Çalıştır: node scripts/appLinks.test.mts
  */
-import { kampanyaTemiz, reklamTrafigiMi, magazaLinki, sayfaKampanyasi } from '../lib/appLinks.ts';
+import { kampanyaTemiz, reklamTrafigiMi, magazaLinki, sayfaKampanyasi, aramaDizesi } from '../lib/appLinks.ts';
 
 let fail = 0;
 const ok = (c: boolean, m: string, x = '') => { if (!c) { console.log('  ✗', m, x); fail++; } else console.log('  ✓', m); };
@@ -41,6 +41,11 @@ ok(magazaLinki('ios', 'masa_e05e4108', 'reklam').includes('ct=masa_e05e4108'), '
 ok(magazaLinki('ios', 'x').includes('pt=129009038&ct=x'), 'iOS pt varsayılanı', magazaLinki('ios', 'x'));
 ok(decodeURIComponent(magazaLinki('android', 'masa_e05e4108', 'reklam')).includes('utm_campaign=masa_e05e4108&') ||
    decodeURIComponent(magazaLinki('android', 'masa_e05e4108', 'reklam')).endsWith('utm_campaign=masa_e05e4108'), 'Play referrer utm_campaign');
+
+// aramaDizesi — /masa → /pazar yönlendirmesi reklam parametrelerini kaybetmesin
+ok(aramaDizesi({ utm_source: 'meta', utm_campaign: 'pazar_x' }) === 'utm_source=meta&utm_campaign=pazar_x', 'utm taşınır', aramaDizesi({ utm_source: 'meta', utm_campaign: 'pazar_x' }));
+ok(aramaDizesi({ fbclid: ['a', 'b'], bos: '', yok: undefined }) === 'fbclid=a', 'dizide ilki, boşlar atılır', aramaDizesi({ fbclid: ['a', 'b'], bos: '', yok: undefined }));
+ok(aramaDizesi({}) === '', 'parametresiz → boş');
 
 console.log(fail ? `\n✗ ${fail} başarısız` : '\n✅ GEÇTİ');
 process.exit(fail ? 1 : 0);
