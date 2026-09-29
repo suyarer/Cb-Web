@@ -3,19 +3,22 @@ import BeanSprout from '@/components/BeanSprout';
 import CerezTercihleri from '@/components/CerezTercihleri';
 import Link from 'next/link';
 
-export default function FooterLegal() {
+/** `kapanis={false}`: "önümüzdeki Cumartesi" kapanış satırı gizlenir (gün vaat eden sayfalar, ör. /masa Pazar). Varsayılan açık. */
+export default function FooterLegal({ kapanis = true }: { kapanis?: boolean } = {}) {
   return (
     <footer className="relative border-t border-border overflow-hidden">
       {/* Kapanış satırı */}
-      <div className="container-x pt-16 md:pt-20 pb-12 md:pb-16 border-b border-border">
-        <p className="text-2xl md:text-5xl font-bold tracking-tight text-white leading-tight max-w-3xl">
-          Bu sayfayı şimdi kapat.
-          <br />
-          <span className="text-zinc-500">
-            En iyi test: önümüzdeki Cumartesi.
-          </span>
-        </p>
-      </div>
+      {kapanis && (
+        <div className="container-x pt-16 md:pt-20 pb-12 md:pb-16 border-b border-border">
+          <p className="text-2xl md:text-5xl font-bold tracking-tight text-white leading-tight max-w-3xl">
+            Bu sayfayı şimdi kapat.
+            <br />
+            <span className="text-zinc-500">
+              En iyi test: önümüzdeki Cumartesi.
+            </span>
+          </p>
+        </div>
+      )}
 
       {/* Anti-tracker mührü — sessiz marka beyanı */}
       <div className="container-x py-2">

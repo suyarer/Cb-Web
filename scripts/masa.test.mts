@@ -8,7 +8,8 @@
 // silinse de geçer (7b bulgusu, 2026-09-29). Test sunucu koşulunda koşsun:
 process.env.TZ = 'UTC';
 import {
-  siradakiMasa, pilotMasasiMi, kalanYer, kimlikGerekirMi, istanbulTarihSaat, ilikeDeseni, PILOT, PILOT_BASLIK_ONEKI, type MasaSatiri,
+  siradakiMasa, pilotMasasiMi, pilotSaatindeMi, kalanYer, kimlikGerekirMi, istanbulTarihSaat, ilikeDeseni, PILOT, PILOT_BASLIK_ONEKI,
+  type MasaSatiri,
 } from '../lib/masaSecim.ts';
 
 let fail = 0;
@@ -23,6 +24,13 @@ const m = (o: Partial<MasaSatiri>): MasaSatiri => ({
 // Karar bekçisi — kullanıcı kararı 2026-09-29: pilot Pazar 15:00 (Perşembe 20:00'den taşındı). Değişirse bilerek değişsin.
 ok(PILOT.gun === 'Pazar' && PILOT.saat === '15:00', 'pilot günü/saati Pazar 15:00', JSON.stringify(PILOT));
 ok(PILOT_BASLIK_ONEKI === 'Pazar Masası', 'başlık öneki günden türer', PILOT_BASLIK_ONEKI);
+ok(PILOT.zamanIfadesi.startsWith(PILOT.gun), 'H1 zaman ifadesi günle aynı (7b: gün değişip ifade kalmasın)', PILOT.zamanIfadesi);
+
+// pilotSaatindeMi — masa pilot gün/saatinde mi açılmış? (7b: "Pazar Masası" 16:00'ya açılırsa üst satır ile kart çelişir)
+ok(pilotSaatindeMi('2026-10-11T12:00:00Z'), 'Pazar 15:00 İstanbul → uyumlu');
+ok(!pilotSaatindeMi('2026-10-11T13:00:00Z'), 'Pazar 16:00 → uyumsuz');
+ok(!pilotSaatindeMi('2026-10-10T12:00:00Z'), 'Cumartesi 15:00 → uyumsuz');
+ok(!pilotSaatindeMi('bozuk'), 'bozuk tarih → uyumsuz');
 
 // pilotMasasiMi — Türkçe büyük/küçük harf ve ASCII yazım (DB ilike ı/I katlamaz; kod katlar)
 ok(pilotMasasiMi('Pazar Masası · Moda'), 'kanonik başlık');

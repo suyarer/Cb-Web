@@ -88,6 +88,19 @@ export function siradakiMasa(satirlar: MasaSatiri[], simdi: Date): SeciliMasa | 
   return yeriOlan ? { masa: yeriOlan, dolu: false } : { masa: gelecek[0], dolu: true };
 }
 
+/**
+ * Masa pilot gün/saatinde mi (İstanbul)? Sayfanın üst satırı sabit ("Her Pazar · 15:00"), kart masanın gerçek saatini
+ * gösterir; masa aynı başlıkla başka saate açılırsa ikisi çelişir (7b bulgusu 2026-09-29) → sayfa `data-pilot-saat`
+ * ile işaretler, reklam öncesi kapı `uyumlu` arar.
+ */
+export function pilotSaatindeMi(iso: string): boolean {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return false;
+  const gun = new Intl.DateTimeFormat('tr-TR', { timeZone: 'Europe/Istanbul', weekday: 'long' }).format(d);
+  const saat = new Intl.DateTimeFormat('tr-TR', { timeZone: 'Europe/Istanbul', hour: '2-digit', minute: '2-digit', hour12: false }).format(d);
+  return gun === PILOT.gun && saat === PILOT.saat;
+}
+
 /** "11 Ekim Pazar, 15:00" — sunucu UTC'de çalışsa da saat İstanbul'a göre. */
 export function istanbulTarihSaat(iso: string): string {
   const d = new Date(iso);

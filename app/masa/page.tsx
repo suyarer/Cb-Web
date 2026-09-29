@@ -9,6 +9,7 @@ import {
   kimlikGerekirMi,
   PILOT,
   PILOT_BASLIK_ONEKI,
+  pilotSaatindeMi,
   siradakiMasa,
   type SeciliMasa,
 } from '@/lib/masaSecim';
@@ -105,7 +106,11 @@ export default async function MasaPage({
     <>
       <ViewContentTracker contentName="masa" contentCategory="masa-pilot" />
       <Nav />
-      <main data-platform={platform} data-masa={secili ? (secili.dolu ? 'dolu' : 'acik') : 'yok'}>
+      <main
+        data-platform={platform}
+        data-masa={secili ? (secili.dolu ? 'dolu' : 'acik') : 'yok'}
+        data-pilot-saat={secili ? (pilotSaatindeMi(secili.masa.start_time) ? 'uyumlu' : 'uyumsuz') : undefined}
+      >
         <section className="relative pt-28 md:pt-36 pb-14 md:pb-20 overflow-hidden">
           <div className="absolute inset-0 bg-radial-glow opacity-40 pointer-events-none" />
           <div className="container-x relative">
@@ -155,7 +160,8 @@ export default async function MasaPage({
           </div>
         </section>
       </main>
-      <FooterLegal />
+      {/* Kapanış satırı "En iyi test: önümüzdeki Cumartesi" Pazar masası sayfasında çelişik (7b bulgusu) */}
+      <FooterLegal kapanis={false} />
     </>
   );
 }
