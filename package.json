@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "check:well-known": "node scripts/check-well-known.mjs && node scripts/check-well-known.mjs --selftest",
     "start": "next start",
     "typecheck": "tsc --noEmit"
   },

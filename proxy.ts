@@ -21,6 +21,13 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // 1b. /auth/callback (şifre sıfırlama / sihirli bağlantı dönüşü) apex'te de DOĞRUDAN — Supabase redirect_to
+  //     https://clubbeans.com/auth/callback; 308 → www bir atlama ekliyor, App Link/Universal Link değerlendirmesini
+  //     yönlendirme zincirine bırakıyordu (CB2026 İP-H, 2026-09-30). Sayfa noindex; SEO etkisi yok.
+  if (request.nextUrl.pathname === '/auth/callback') {
+    return NextResponse.next();
+  }
+
   // 2. Apex (clubbeans.com) → www 308 permanent redirect (SEO canonical)
   if (host === 'clubbeans.com') {
     const url = request.nextUrl.clone();
