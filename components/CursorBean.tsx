@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, useMotionValue, useReducedMotion, useSpring } from '@/lib/motion';
+import { hedefElemani } from '@/lib/olayHedefi';
 import { useEffect, useState } from 'react';
 
 // Masaüstü: imleci takip eden küçük bir Bean filiz.
@@ -30,9 +31,9 @@ export default function CursorBean() {
     };
 
     const onOver = (e: MouseEvent) => {
-      const t = e.target as HTMLElement | null;
-      if (!t) return setHovering(false);
-      const interactive = t.closest('a, button, [role="button"], input, textarea, select, label');
+      const el = hedefElemani(e.target);
+      if (!el) return setHovering(false);
+      const interactive = el.closest('a, button, [role="button"], input, textarea, select, label');
       setHovering(!!interactive);
     };
 
