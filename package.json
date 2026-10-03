@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@sentry/nextjs": "^10.50.0",
+    "@sentry/nextjs": "^10.75.3",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.107.0",
     "@upstash/ratelimit": "^2.0.8",
