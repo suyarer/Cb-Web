@@ -29,6 +29,8 @@ export function denetle(assetlinks, aasa) {
   if (!/package_name:\s*'com\.clubbeans'/.test(assetlinks)) hatalar.push("assetlinks: package_name 'com.clubbeans' yok");
   if (!aasa.includes('S8RNZ754YW.com.clubbeans')) hatalar.push('AASA: appID S8RNZ754YW.com.clubbeans yok');
   if (!aasa.includes("'/auth/callback'")) hatalar.push("AASA: '/auth/callback' yolu yok");
+  // /hazir uygulamaya devredilirse anahtar sayfaya ulaşmaz, giriş bağlantısı ölür (CB2026 2026-10-06)
+  if (!aasa.includes("'NOT /hazir'")) hatalar.push("AASA: 'NOT /hazir' yok — giriş bağlantısı web'de açılmalı");
   return hatalar;
 }
 
@@ -37,12 +39,13 @@ const oku = (y) => readFileSync(join(KOK, y), 'utf8');
 if (process.argv.includes('--selftest')) {
   const saglam = "package_name: 'com.clubbeans', ['07:4D:B7:02:43:84:EE:2F:1E:1A:90:A2:E6:DA:6E:A8:AB:88:59:FF:49:52:83:7A:E8:FB:DB:45:8B:A1:C7:55']";
   const bozuk = "package_name: 'com.clubbeans', ['D3:BE:03:07:BD:36:E3:7F:38:10:4D:85:D4:4D:40:F7:40:36:13:A0:C0:E8:40:3C:00:1F:3C:E7:D1:45:E3:DE:76:F3:7E:C0:13:C1:41:0C:1E:39:F0:10:35:0B:BE:79']";
-  const aasa = "appIDs: ['S8RNZ754YW.com.clubbeans'], paths: ['/auth/callback']";
+  const aasa = "appIDs: ['S8RNZ754YW.com.clubbeans'], paths: ['/auth/callback', 'NOT /hazir']";
   const s = denetle(saglam, aasa).length === 0;
   const b = denetle(bozuk, aasa).length > 0;
-  const a = denetle(saglam, "appIDs: ['X.com.baska']").length === 2;
-  console.log(`selftest sağlam=${s} bozuk-kırmızı=${b} aasa-kırmızı=${a}`);
-  process.exit(s && b && a ? 0 : 1);
+  const a = denetle(saglam, "appIDs: ['X.com.baska']").length === 3;
+  const h = denetle(saglam, "appIDs: ['S8RNZ754YW.com.clubbeans'], paths: ['/auth/callback']").length === 1;
+  console.log(`selftest sağlam=${s} bozuk-kırmızı=${b} aasa-kırmızı=${a} hazir-kırmızı=${h}`);
+  process.exit(s && b && a && h ? 0 : 1);
 }
 
 const hatalar = denetle(

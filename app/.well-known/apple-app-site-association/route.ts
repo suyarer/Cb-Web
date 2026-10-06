@@ -46,6 +46,10 @@ const AASA = {
           'NOT /yol-haritasi',
           'NOT /unsubscribed',
           'NOT /indir',
+          // CB2026 hazir-hesap-giris-baglantisi (2026-10-06): hazır hesap giriş bağlantısı HER ZAMAN web
+          // sayfasında açılır — anahtar yalnız sayfadaki dokunuşla harcanır, uygulama oturumu jetonla alır.
+          'NOT /hazir',
+          'NOT /hazir/*',
         ],
       },
     ],

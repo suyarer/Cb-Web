@@ -9,6 +9,7 @@ import GutterSprout from '@/components/GutterSprout';
 import LiveTicker from '@/components/LiveTicker';
 import ScrollManager from '@/components/ScrollManager';
 import ScrollRoots from '@/components/ScrollRoots';
+import { izleyicisizMi } from '@/lib/hazirGiris';
 
 /**
  * Sitenin global süs/etkileşim katmanları — OYUN ROTASINDA KAPALI.
@@ -34,8 +35,13 @@ import ScrollRoots from '@/components/ScrollRoots';
 /** Global süs katmanlarının kapatılacağı rotalar */
 const SADE_ROTALAR = ['/sosyal-obezite'];
 
+/**
+ * İzleyicisiz rotalar (/hazir — hazır hesap giriş bağlantısı, CB2026 2026-10-06) da sade sayılır: PostHog,
+ * Meta Pikseli/CAPI ve çerez bandı bu işlevden geçtiği için oradaki anahtar/jeton hiçbir izleyiciye ulaşmaz.
+ */
 export function sadeMi(pathname: string | null): boolean {
   if (!pathname) return false;
+  if (izleyicisizMi(pathname)) return true;
   return SADE_ROTALAR.some((r) => pathname === r || pathname.startsWith(`${r}/`));
 }
 

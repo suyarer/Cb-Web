@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/nextjs';
+import { olayMaskele } from '@/lib/hazirGiris';
 
 const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
 
@@ -18,5 +19,9 @@ if (dsn) {
     integrations: [],
     // Brand tutarlı
     environment: process.env.NODE_ENV,
+    // Gizli parametre maskesi (CB2026 hazir-hesap-giris-baglantisi): /hazir#k=<anahtar>, uygulamayı açan
+    // adresteki access_token/refresh_token ve çıplak JWT — URL, işlem adı, gezinme izleri dahil her alanda.
+    beforeSend: (olay) => olayMaskele(olay),
+    beforeSendTransaction: (olay) => olayMaskele(olay),
   });
 }

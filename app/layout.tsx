@@ -5,8 +5,7 @@ import { FAQS } from '@/lib/faqs';
 import MetaPixel from '@/components/MetaPixel';
 import MotionProvider from '@/components/MotionProvider';
 import PosthogProvider from '@/components/PosthogProvider';
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/next';
+import WebOlcum from '@/components/WebOlcum';
 import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
@@ -172,8 +171,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <Analytics />
-        <SpeedInsights />
+        {/* Vercel Analytics + Speed Insights — /hazir'da kapalı (CB2026 hazir-hesap-giris-baglantisi) */}
+        <WebOlcum />
         <MetaPixel />
       </body>
     </html>
