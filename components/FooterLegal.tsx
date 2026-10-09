@@ -131,6 +131,23 @@ export default function FooterLegal({ kapanis = true }: { kapanis?: boolean } = 
           />
         </div>
 
+        {/* Şirket künyesi — 6563 sayılı Kanun / ETAHS genel bilgilendirmesi; ödeme kuruluşu başvurularında aranır */}
+        <address className="not-italic text-xs text-zinc-500 leading-relaxed pb-6 max-w-2xl">
+          <span className="text-zinc-400 font-medium">CLUBBEANS TEKNOLOJİ LTD. ŞTİ.</span> · MERSİS: 0211155783200001
+          <br />
+          Dere Mah. Cavit Öztürk Sk. No:16 D:4, 05100 Merkez/Amasya
+          <br />
+          Tel:{' '}
+          <a href="tel:+905384947155" className="text-zinc-400 hover:text-white transition no-underline">
+            +90 538 494 71 55
+          </a>{' '}
+          · E-posta:{' '}
+          <a href="mailto:info@clubbeans.com" className="text-zinc-400 hover:text-white transition no-underline">
+            info@clubbeans.com
+          </a>{' '}
+          · KEP: clubbeasns@hs01.kep.tr
+        </address>
+
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pt-6 border-t border-border">
           <div className="text-xs text-zinc-400">
             © {new Date().getFullYear()} ClubBeans · dikkatini çalmadan.
