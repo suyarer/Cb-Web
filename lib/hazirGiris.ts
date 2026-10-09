@@ -17,7 +17,11 @@ export const PLAY = 'https://play.google.com/store/apps/details?id=com.clubbeans
 export const APP_STORE = 'https://apps.apple.com/app/id6778042472';
 /** CB2026 `growth_os/lib/hazirHesapDm.ts` WEB_GIR_DUGMESI ile AYNI — DM bu düğmeyi adıyla anar. */
 export const GIR_DUGMESI = 'Hesabına gir';
-export const IZLEYICISIZ_ROTALAR = ['/hazir'];
+/**
+ * /auth/callback (CB2026 google-donus-acil 2026-10-09): şifre sıfırlama / giriş bağlantısı / Google dönüşü kodu (?code=)
+ * adreste taşır — kod içeren adres hiçbir izleyiciye gitmez (Meta Pikseli/CAPI, PostHog, çerez bandı, Vercel ölçümü).
+ */
+export const IZLEYICISIZ_ROTALAR = ['/hazir', '/auth/callback'];
 
 /** Uygulama içi tarayıcılar: özel şema/intent'i engelleyebilir; "Tarayıcıda aç" adres çubuğundaki adresi taşır. */
 const UYGULAMA_ICI_KAYNAK = 'Instagram|FBAN|FBAV|FB_IAB|FBIOS|musical_ly|BytedanceWebview|Snapchat|Line\\/|Twitter';
@@ -105,8 +109,8 @@ export function hataBilgisi(durum: number, kod: unknown): HataBilgisi {
   return { metin: `Şu an hesabını açamadık. Biraz sonra yeniden dokun; olmazsa ${YEDEK}`, tekrarDenenir: true };
 }
 
-/** Gizli değer taşıyabilecek parametreler + çıplak JWT. Sentry olaylarında maskelenir. */
-const GIZLI_PARAM_RE = /((?:^|[#?&;\s"'(/\\])(?:k|access_token|refresh_token|token_hash)=)[^&#\s"'\\]+/g;
+/** Gizli değer taşıyabilecek parametreler (PKCE `code` dahil — google-donus-acil) + çıplak JWT. Sentry olaylarında maskelenir. */
+const GIZLI_PARAM_RE = /((?:^|[#?&;\s"'(/\\])(?:k|access_token|refresh_token|token_hash|code)=)[^&#\s"'\\]+/g;
 const JWT_GOVDE_RE = /eyJ[A-Za-z0-9_-]{5,}\.[A-Za-z0-9_-]{5,}\.[A-Za-z0-9_-]{5,}/g;
 
 export const gizliMaskele = (s: string): string =>

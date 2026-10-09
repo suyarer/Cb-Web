@@ -35,6 +35,14 @@ ok(GIR_DUGMESI === 'Hesabına gir', 'düğme adı DM ile aynı (hazirHesapDm WEB
 // İzleyicisiz rota
 ok(izleyicisizMi('/hazir') && izleyicisizMi('/hazir/x'), '/hazir izleyicisiz');
 ok(!izleyicisizMi('/hazirlik') && !izleyicisizMi('/') && !izleyicisizMi(null), '/hazirlik, kök, null izleyicili');
+// google-donus-acil (2026-10-09): giriş dönüş sayfası ?code= taşır → izleyicisiz; benzer adlar izleyicili kalır
+ok(izleyicisizMi('/auth/callback') && izleyicisizMi('/auth/callback/x'), '/auth/callback izleyicisiz');
+ok(!izleyicisizMi('/auth/callbackx') && !izleyicisizMi('/auth') && !izleyicisizMi('/auth/giris'), '/auth/callbackx, /auth izleyicili');
+{
+  const om = olayMaskele({ request: { url: 'https://clubbeans.com/auth/callback?code=gizli-kod-123&recovery=1&error_code=otp_expired' } }) as { request: { url: string } };
+  ok(!om.request.url.includes('gizli-kod-123'), 'Sentry: ?code= maskelendi', om.request.url);
+  ok(om.request.url.includes('recovery=1') && om.request.url.includes('error_code=otp_expired'), 'Sentry: recovery ve error_code korunur', om.request.url);
+}
 
 // Cihaz sınıfı
 ok(cihazSinifi(CHROME_AND, 5) === 'android', 'Android Chrome → android');
