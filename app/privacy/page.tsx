@@ -22,7 +22,7 @@ export default function PrivacyPage() {
         <article className="prose-legal">
           <h1>Gizlilik Politikası</h1>
           <p className="text-sm text-zinc-500 font-mono">
-            Yürürlük tarihi: 17 Nisan 2026 · Son güncelleme: 27 Eylül 2026
+            Yürürlük tarihi: 17 Nisan 2026 · Son güncelleme: 10 Ekim 2026
           </p>
 
           <p>
@@ -115,6 +115,51 @@ export default function PrivacyPage() {
             </li>
           </ul>
 
+          <h3 id="google-ile-giris">2.8. Google ile Giriş ve Apple ile Giriş</h3>
+          <p>
+            &quot;Google ile devam et&quot;i seçtiğinizde Google, izninizle bize şu bilgileri iletir: Google
+            hesabınızın <strong>e-posta adresi</strong>, <strong>hesap kimliği</strong> (Google&apos;ın size özgü
+            numarası) ve hesabınızda tanımlı <strong>ad ile profil fotoğrafı bağlantısı</strong>. Yalnızca temel
+            profil izinlerini isteriz (openid, e-posta, profil); Gmail, Drive, kişiler veya takvim gibi başka hiçbir
+            Google verisine erişmeyiz.
+          </p>
+          <ul>
+            <li>
+              <strong>Kullanım:</strong> Bu bilgileri yalnızca ClubBeans hesabınızı oluşturmak, sizi tanımak ve
+              giriş yapmanızı sağlamak için kullanırız. Google&apos;dan gelen ad ve profil fotoğrafı ClubBeans
+              profilinize aktarılmaz; profilinizdeki adı ve fotoğrafı siz belirlersiniz.
+            </li>
+            <li>
+              <strong>Saklama:</strong> Bu bilgiler kimlik doğrulama kaydınızda (Supabase — AB/Frankfurt)
+              hesabınız açık kaldığı sürece saklanır; hesabınızı sildiğinizde Bölüm 4&apos;teki sürelerle silinir.
+            </li>
+            <li>
+              <strong>Paylaşım:</strong> Google&apos;dan aldığımız bilgileri satmayız; reklam, profilleme veya
+              yapay zekâ modeli eğitimi için kullanmayız. Yalnızca hizmeti sunmak için altyapı sağlayıcımız
+              Supabase&apos;de işlenir.
+            </li>
+            <li>
+              <strong>Erişimi kaldırma:</strong> ClubBeans&apos;in Google hesabınıza erişimini istediğiniz zaman{' '}
+              <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a> adresinden
+              kaldırabilir, hesabınızı uygulamada Ayarlar → Hesabı Sil ya da{' '}
+              <a href="https://www.clubbeans.com/delete-account">clubbeans.com/delete-account</a> üzerinden
+              silebilirsiniz.
+            </li>
+          </ul>
+          <p>
+            ClubBeans&apos;in Google API&apos;lerinden aldığı bilgileri kullanması ve başka herhangi bir uygulamaya
+            aktarması, Sınırlı Kullanım (Limited Use) gereklilikleri dahil{' '}
+            <a href="https://developers.google.com/terms/api-services-user-data-policy">
+              Google API Hizmetleri Kullanıcı Verileri Politikası
+            </a>
+            &apos;na uyar.
+          </p>
+          <p>
+            &quot;Apple ile devam et&quot;i seçtiğinizde Apple bize e-posta adresinizi (dilerseniz Apple&apos;ın
+            gizli iletim adresini) ve Apple hesap kimliğinizi iletir; aynı kullanım, saklama ve paylaşım kuralları
+            geçerlidir.
+          </p>
+
           <h2>3. İşlenme Amaçları</h2>
           <ul>
             <li>Hesap oluşturma ve kimlik doğrulama</li>
@@ -159,6 +204,8 @@ export default function PrivacyPage() {
           <p>Aşağıdaki hizmet sağlayıcılarla veri paylaşıyoruz:</p>
           <ul>
             <li><strong>Supabase</strong> (uygulama veritabanı + auth) — AB/Frankfurt sunucuları</li>
+            <li><strong>Google</strong> (Google ile Giriş — kimlik doğrulama; Bölüm 2.8)</li>
+            <li><strong>Apple</strong> (Apple ile Giriş — kimlik doğrulama; Bölüm 2.8)</li>
             <li><strong>Upstash</strong> (lansman e-posta listesi + rate limit) — AB/Frankfurt</li>
             <li><strong>Resend</strong> (lansman e-postası gönderimi) — AB sunucuları</li>
             <li><strong>Vercel</strong> (barındırma + analytics + blob yedekleme) — global CDN</li>
@@ -259,6 +306,47 @@ export default function PrivacyPage() {
             Soru ve talepleriniz için:{' '}
             <a href="mailto:privacy@clubbeans.com">privacy@clubbeans.com</a>
           </p>
+
+          <h2 id="sign-in-with-google" lang="en">Sign in with Google — Google user data (English)</h2>
+          <div lang="en">
+            <p>
+              When you choose &quot;Continue with Google&quot;, Google shares with ClubBeans, with your permission,
+              your Google account <strong>email address</strong>, <strong>account identifier</strong>, and the{' '}
+              <strong>name and profile picture link</strong> set on your Google account. We request only the basic
+              profile scopes (openid, email, profile) and do not access Gmail, Drive, contacts, calendar or any
+              other Google data.
+            </p>
+            <ul>
+              <li>
+                <strong>Use:</strong> only to create your ClubBeans account, recognise you and sign you in. Your
+                Google name and photo are not copied into your ClubBeans profile.
+              </li>
+              <li>
+                <strong>Storage:</strong> in our authentication record (Supabase, EU/Frankfurt) while your account
+                exists; deleted when you delete your account (section 4).
+              </li>
+              <li>
+                <strong>Sharing:</strong> we do not sell this data and do not use it for advertising, profiling or
+                training AI models; it is processed only by our infrastructure provider Supabase to provide the
+                service.
+              </li>
+              <li>
+                <strong>Revoking access:</strong> at{' '}
+                <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>; delete your
+                account in the app (Settings → Delete account) or at{' '}
+                <a href="https://www.clubbeans.com/delete-account">clubbeans.com/delete-account</a>.
+              </li>
+            </ul>
+            <p>
+              ClubBeans&apos;s use and transfer to any other app of information received from Google APIs will adhere
+              to the{' '}
+              <a href="https://developers.google.com/terms/api-services-user-data-policy">
+                Google API Services User Data Policy
+              </a>
+              , including the Limited Use requirements. Contact:{' '}
+              <a href="mailto:privacy@clubbeans.com">privacy@clubbeans.com</a>.
+            </p>
+          </div>
         </article>
       </main>
       <FooterLegal />

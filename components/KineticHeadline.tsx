@@ -29,9 +29,10 @@ export default function KineticHeadline() {
         {/* Marka adı h1'in İÇİNDE: Google OAuth marka doğrulaması ana başlıkta uygulama
             adını arıyor ("app name does not match the app name on your home page",
             2026-08-17 red gerekçesi). Slogan korunur. */}
-        <span className="block text-sm sm:text-base md:text-lg font-semibold uppercase tracking-[0.18em] leading-none text-acid mb-3 md:mb-4">
+        <span className="block text-sm sm:text-base md:text-lg font-semibold tracking-wide leading-none text-acid mb-3 md:mb-4">
           ClubBeans
         </span>
+        <span className="sr-only"> — </span>
         Ekran süresi değil,
         <br />
         <span className="text-gradient-acid">yaşam süresi.</span>
@@ -53,9 +54,12 @@ export default function KineticHeadline() {
           ⚠️ BİLEREK motion DEĞİL: motion.span SSR'da style="opacity:0" basıyor — JS
           çalıştırmayan bir denetleyici satırı GÖREMEZ. Bu satırın tek işi görünmek, o yüzden
           animasyondan bağımsız. motion'a çevirme. */}
-      <span className="block text-sm sm:text-base md:text-lg font-semibold uppercase tracking-[0.18em] leading-none text-acid mb-3 md:mb-4">
+      <span className="block text-sm sm:text-base md:text-lg font-semibold tracking-wide leading-none text-acid mb-3 md:mb-4">
         ClubBeans
       </span>
+      {/* 2026-10-10: büyük harf (CSS uppercase) kaldırıldı — Google incelemecisi ekranda "CLUBBEANS" görüyordu, uygulama
+          adı "ClubBeans" ile birebir eşleşmeli. Ayırıcı: metin çıkarımı "ClubBeansEkran…" yerine "ClubBeans — Ekran…" okusun. */}
+      <span className="sr-only"> — </span>
 
       <span className="block overflow-hidden">
         <motion.span variants={word} className="inline-block relative">

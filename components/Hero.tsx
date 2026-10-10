@@ -171,6 +171,11 @@ export default function Hero() {
               uygulaması: yakınındaki etkinlikleri bul ve katıl, ya da kendi etkinliğini bir
               dakikada kur.
             </p>
+            {/* 2026-10-10 marka doğrulaması: inceleme ekibi için aynı amaç İngilizce (motion DEĞİL — SSR'da görünmeli). */}
+            <p lang="en" className="max-w-xl -mt-5 md:-mt-6 mb-7 md:mb-8 text-sm leading-relaxed text-zinc-500">
+              ClubBeans is a community app for finding and joining real-life events near you — or hosting your own in a
+              minute. Available on iPhone and Android.
+            </p>
 
             {/* PRIMARY CTA — App CANLI: indirme modülü (App Store + Google Play).
                 Tıklama Meta Pixel AppDownloadClick + PostHog fırlatır → lookalike tohumu. */}
