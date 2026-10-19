@@ -22,7 +22,7 @@ export default function PrivacyPage() {
         <article className="prose-legal">
           <h1>Gizlilik Politikası</h1>
           <p className="text-sm text-zinc-500 font-mono">
-            Yürürlük tarihi: 17 Nisan 2026 · Son güncelleme: 10 Ekim 2026
+            Yürürlük tarihi: 17 Nisan 2026 · Son güncelleme: 19 Ekim 2026
           </p>
 
           <p>
@@ -112,6 +112,10 @@ export default function PrivacyPage() {
             <li>
               Vercel&apos;in çerez kullanmayan, günlük sıfırlanan anonim ziyaret sayımı ve performans
               ölçümü.
+            </li>
+            <li>
+              Reklamdan gelişlerin ve mağaza düğmelerine basışların günlük toplam sayısı (reklam kodu,
+              iPhone/Android ve sayfa adına göre; çerez kullanmaz, kişiyi tanımlamaz — Bölüm 6).
             </li>
           </ul>
 
@@ -203,7 +207,7 @@ export default function PrivacyPage() {
           <h2>5. Üçüncü Taraflar</h2>
           <p>Aşağıdaki hizmet sağlayıcılarla veri paylaşıyoruz:</p>
           <ul>
-            <li><strong>Supabase</strong> (uygulama veritabanı + auth) — AB/Frankfurt sunucuları</li>
+            <li><strong>Supabase</strong> (uygulama veritabanı + auth + web sitesi toplam sayaçları) — AB/Frankfurt sunucuları</li>
             <li><strong>Google</strong> (Google ile Giriş — kimlik doğrulama; Bölüm 2.8)</li>
             <li><strong>Apple</strong> (Apple ile Giriş — kimlik doğrulama; Bölüm 2.8)</li>
             <li><strong>Upstash</strong> (lansman e-posta listesi + rate limit) — AB/Frankfurt</li>
@@ -267,6 +271,14 @@ export default function PrivacyPage() {
             <li>
               Vercel&apos;in çerez kullanmayan, kişiyi tanımlamayan ziyaret sayımı ve performans
               ölçümü onaydan bağımsız çalışır.
+            </li>
+            <li>
+              Reklamlarımızın ziyaretçileri uygulama mağazasına ulaştırıp ulaştırmadığını görmek için
+              sitenin kendi sayacı da onaydan bağımsız çalışır: reklamdan gelişleri ve App Store / Google
+              Play düğmelerine basışları yalnızca <strong>günlük toplam sayı</strong> olarak (reklam kodu,
+              iPhone/Android ve sayfa adına göre) Supabase&apos;de (AB/Frankfurt) tutar. Çerez ya da
+              cihazınızda saklanan bir bilgi kullanmaz; IP adresiniz, kimliğiniz veya tarayıcı bilginiz
+              kaydedilmez (IP adresi yalnızca kötüye kullanımı önleyen hız sınırında anlık kullanılır).
             </li>
           </ul>
 

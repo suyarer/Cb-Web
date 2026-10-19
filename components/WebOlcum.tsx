@@ -10,6 +10,7 @@
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { usePathname } from 'next/navigation';
+import SayacInis from '@/components/SayacInis';
 import { izleyicisizMi } from '@/lib/hazirGiris';
 
 function izleyicisizAdres(url: string): boolean {
@@ -27,6 +28,7 @@ export default function WebOlcum() {
     <>
       <Analytics beforeSend={(e) => (izleyicisizAdres(e.url) ? null : e)} />
       <SpeedInsights beforeSend={(e) => (izleyicisizAdres(e.url) ? null : e)} />
+      <SayacInis />
     </>
   );
 }

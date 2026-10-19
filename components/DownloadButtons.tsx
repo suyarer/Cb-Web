@@ -5,13 +5,15 @@ import { useEffect, useState } from 'react';
 import { magazaLinki, reklamTrafigiMi, sayfaKampanyasi } from '@/lib/appLinks';
 import { trackDownloadClick } from '@/lib/metaPixel';
 import { trackEvent } from '@/lib/posthog';
+import { magazaSay } from '@/lib/sayac';
 
 /**
  * DownloadButtons — App Store + Google Play indirme modülü.
  *
  * App CANLI olduğundan sitenin BİRİNCİL CTA'sı. Tıklama:
- * - Meta Pixel `AppDownloadClick` (yüksek-niyet lookalike tohumu)
- * - PostHog `app_download_click`
+ * - Kişisel verisiz mağaza sayacı (onaydan bağımsız; lib/sayac — reklam kodu × platform × kaynak toplam sayım)
+ * - Meta Pixel `AppDownloadClick` (yüksek-niyet lookalike tohumu; yalnız onayla)
+ * - PostHog `app_download_click` (yalnız onayla)
  *
  * @governing_law clubbeans-privacy-v1
  */
@@ -63,6 +65,7 @@ export default function DownloadButtons({
 
 /** Mağaza tıklaması — Meta Pixel + PostHog. Tüm indirme yüzeyleri aynı olayı atar. */
 export function indirmeTiklandi(platform: 'ios' | 'android', source: string) {
+  magazaSay('tik', platform, source);
   trackDownloadClick(platform, source);
   trackEvent('app_download_click', { platform, source });
 }
