@@ -19,6 +19,7 @@
  */
 
 import crypto from 'node:crypto';
+import { istemciIp } from '@/lib/istemciIp';
 
 const META_API_VERSION = 'v21.0';
 const META_API_BASE = `https://graph.facebook.com/${META_API_VERSION}`;
@@ -194,11 +195,9 @@ export function extractUserDataFromRequest(
   const headers = req.headers;
   const cookieHeader = headers.get('cookie') ?? '';
 
-  // x-forwarded-for ilk IP (Vercel + Cloudflare arkasında)
-  const xff = headers.get('x-forwarded-for');
-  const clientIpAddress = xff
-    ? xff.split(',')[0].trim()
-    : (headers.get('x-real-ip') ?? undefined);
+  // Gerçek ziyaretçi IP'si (lib/istemciIp; Cloudflare arkasında cf-connecting-ip). 19.10'a kadar x-forwarded-for
+  // okunuyordu → Meta'ya Cloudflare çıkış IP'si gidiyordu (eşleşme kalitesi düşük). Yalnız onaylı ziyaretçide çağrılır.
+  const clientIpAddress = istemciIp(req) ?? undefined;
 
   const clientUserAgent = headers.get('user-agent') ?? undefined;
 

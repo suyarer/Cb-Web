@@ -4,6 +4,7 @@ import disposableDomains from 'disposable-email-domains';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { welcomeEmailHtml, welcomeEmailSubject, welcomeEmailText } from '@/lib/emails/welcome';
+import { istemciIp } from '@/lib/istemciIp';
 import { MAIL_FROM, REPLY_TO, getResend } from '@/lib/resend';
 import { signUnsubscribeToken } from '@/lib/unsubscribeToken';
 
@@ -46,12 +47,10 @@ const subscribeSchema = z.object({
   ref: z.string().max(32).optional(),
 });
 
+// Cloudflare arkasında gerçek ziyaretçi IP'si (lib/istemciIp). 19.10'a kadar x-forwarded-for = Cloudflare çıkış
+// IP'si okunuyordu → 5/10 dk sınırı TÜM ziyaretçilere ortaktı (6. kişi "Çok sık deniyorsun" alırdı).
 function getClientIp(req: NextRequest): string {
-  const fwd = req.headers.get('x-forwarded-for');
-  if (fwd) return fwd.split(',')[0].trim();
-  const real = req.headers.get('x-real-ip');
-  if (real) return real;
-  return 'unknown';
+  return istemciIp(req) ?? 'unknown';
 }
 
 async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
