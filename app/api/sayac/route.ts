@@ -3,7 +3,10 @@
  *
  * Gövde: {tur: 'inis'|'tik', kod, platform: 'ios'|'android'|'yok', kaynak} → Supabase `site_magaza_say` (anon RPC) → 204.
  * - KVKK: tabloya yalnız günlük toplam sayı yazılır. IP yalnız hız sınırı anahtarıdır (Upstash kayan pencere, saklanmaz) —
- *   abonelik rotasıyla aynı desen; gizlilik sayfası §5 Upstash "rate limit".
+ *   gizlilik sayfası §5 Upstash "rate limit". IP lib/istemciIp'ten (Cloudflare arkası gerçek ziyaretçi; 19.10'a kadar
+ *   x-forwarded-for = Cloudflare çıkış IP'si okunuyordu → tüm ziyaretçiler tek kovadaydı).
+ * - Yanıt başlığı `x-ip-kaynak: cf|real|vercel|yok` — IP'nin KENDİSİ değil yalnız kaynağı; DB'ye yazmayan 400 isteğiyle
+ *   bile canlı doğrulanır (`curl -si -X POST -d '{}' https://www.clubbeans.com/api/sayac` → beklenen `cf`).
  * - Önizleme / dal dağıtımı üretim sayacına YAZMAZ (plan hasımı H5): `VERCEL==='1' && VERCEL_ENV!=='production'` → 204.
  * - Hız sınırı aşımı ve sayım hatası ziyaretçiye yansımaz (204); RPC hatası Sentry `api.sayac` (gövde/IP eklenmez).
  * - Kill-switch DB'de: `REVOKE EXECUTE ON FUNCTION public.site_magaza_say(text,text,text,text) FROM anon`.
@@ -16,6 +19,7 @@ import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 import { type NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { istemciIpKaynagi } from '@/lib/istemciIp';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -43,29 +47,27 @@ function hizSiniriKur(): Ratelimit | null {
 }
 const hizSiniri = hizSiniriKur();
 
-function istemciIp(req: NextRequest): string {
-  const fwd = req.headers.get('x-forwarded-for');
-  if (fwd) return fwd.split(',')[0].trim();
-  return req.headers.get('x-real-ip') ?? 'unknown';
-}
-
-const bos = () => new NextResponse(null, { status: 204 });
-
 export async function POST(req: NextRequest) {
+  // İlk satır: IP kaynağı her yanıtta (400 dahil) başlıkta görünsün — canlı ölçüt DB'ye yazmadan okunur.
+  const { ip, kaynak } = istemciIpKaynagi(req);
+  const baslik = { 'x-ip-kaynak': kaynak };
+  const bos = () => new NextResponse(null, { status: 204, headers: baslik });
+  const gecersiz = () => NextResponse.json({ ok: false }, { status: 400, headers: baslik });
+
   if (process.env.VERCEL === '1' && process.env.VERCEL_ENV !== 'production') return bos();
 
   let ham: unknown;
   try {
     ham = JSON.parse(await req.text());
   } catch {
-    return NextResponse.json({ ok: false }, { status: 400 });
+    return gecersiz();
   }
   const g = Govde.safeParse(ham);
-  if (!g.success) return NextResponse.json({ ok: false }, { status: 400 });
+  if (!g.success) return gecersiz();
 
   if (hizSiniri) {
     try {
-      const { success } = await hizSiniri.limit(istemciIp(req));
+      const { success } = await hizSiniri.limit(ip ?? 'ipsiz');
       if (!success) return bos();
     } catch {
       // Upstash erişilemezse açık geçiş — sayım sürer, DB tavanı sınırlar
