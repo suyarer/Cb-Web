@@ -8,7 +8,8 @@
  *
  * Kural (yorumlar soyulduktan sonra, büyük/küçük harf duyarsız): IP başlığı adı literali, 'x-vercel-ip-' öneki,
  * ipAddress( / geolocation( çağrısı ya da '@vercel/functions' importu → İHLAL.
- * Tarama: app/ lib/ components/ altındaki .ts/.tsx + kökte proxy, middleware, instrumentation(-client), sentry.X.config (.ts).
+ * Tarama: app/ lib/ components/ altındaki .ts/.tsx/.js/.jsx/.mjs/.cjs/.mts/.cts + kökte proxy, middleware,
+ * instrumentation(-client), sentry.X.config (.ts).
  * İzinli tek dosya: lib/istemciIp.ts. scripts/ ve docs/ taranmaz.
  * Kullanım: node scripts/ip-bekcisi.mjs            → 0 temiz, 1 ihlal
  *           node scripts/ip-bekcisi.mjs --selftest → ihlal örnekleri KIRMIZI, temiz örnekler YEŞİL olmalı
@@ -20,6 +21,8 @@ import { fileURLToPath } from 'node:url';
 const KOK = join(dirname(fileURLToPath(import.meta.url)), '..');
 const IZINLI = 'lib/istemciIp.ts';
 const ATLA = new Set(['node_modules', '.next', '.git', '.vercel']);
+// .js/.jsx/.mjs/.cjs/.mts/.cts de (7b 19.10: yalnız .ts/.tsx taranırsa gelecekteki bir .js rota kapıdan kaçar)
+const KOD_UZANTISI = /\.(?:[cm]?[jt]s|[jt]sx)$/;
 const DESENLER = [
   [/['"`](x-forwarded-for|x-real-ip|cf-connecting-ip|x-vercel-forwarded-for|true-client-ip|x-client-ip)['"`]/i, 'IP başlığı'],
   [/['"`]x-vercel-ip-/i, 'x-vercel-ip-* (Cloudflare IP\'sinden türer)'],
@@ -51,7 +54,7 @@ function dosyalar(dizin) {
     if (ATLA.has(ad)) continue; // .well-known gibi noktalı ROTA klasörleri taranır
     const yol = join(dizin, ad);
     if (statSync(yol).isDirectory()) sonuc.push(...dosyalar(yol));
-    else if (/\.tsx?$/.test(ad)) sonuc.push(yol);
+    else if (KOD_UZANTISI.test(ad)) sonuc.push(yol);
   }
   return sonuc;
 }
