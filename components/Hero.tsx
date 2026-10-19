@@ -159,6 +159,24 @@ export default function Hero() {
 
             <KineticHeadline />
 
+            {/* PRIMARY CTA — App CANLI: indirme modülü (App Store + Google Play).
+                Tıklama: kişisel verisiz site sayacı + (onaylıysa) Meta Pixel AppDownloadClick + PostHog.
+                2026-10-19: başlığın HEMEN altında ve animasyonsuz — telefonda ilk ekranda, çerez bandının üstünde
+                görünsün (eskiden iki amaç paragrafının altındaydı ve SSR'da opacity:0'dı; 393 reklam inişine 0 basış).
+                Takas: JS bağlanmadan yapılan dokunuş mağazaya gider ama sayılmaz (defter site-sayac-hidrasyon-oncesi-tik). */}
+            <div className="scroll-mt-24 mb-7 md:mb-8" id="indir">
+              <DownloadButtons source="hero" />
+              <p className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-medium text-zinc-500">
+                <span className="text-acid">Ücretsiz</span>
+                <span className="text-zinc-700" aria-hidden>·</span>
+                <span>iPhone &amp; Android</span>
+                <span className="text-zinc-700" aria-hidden>·</span>
+                <span>18+</span>
+                <span className="text-zinc-700" aria-hidden>·</span>
+                <span>Türkiye&apos;de yapıldı</span>
+              </p>
+            </div>
+
             {/* AMAÇ CÜMLESİ — Google OAuth marka doğrulaması ana sayfada uygulamanın ne
                 yaptığının DÜZ bir cümleyle açıklanmasını istiyor ("your home page does not
                 explain the purpose of your app", 2026-08-17 red gerekçesi). Slogan şiirsel
@@ -176,28 +194,6 @@ export default function Hero() {
               ClubBeans is a community app for finding and joining real-life events near you — or hosting your own in a
               minute. Available on iPhone and Android.
             </p>
-
-            {/* PRIMARY CTA — App CANLI: indirme modülü (App Store + Google Play).
-                Tıklama Meta Pixel AppDownloadClick + PostHog fırlatır → lookalike tohumu. */}
-            <motion.div
-              variants={variants}
-              initial="hidden"
-              animate="visible"
-              custom={2.8}
-              className="scroll-mt-24"
-              id="indir"
-            >
-              <DownloadButtons source="hero" />
-              <p className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-medium text-zinc-500">
-                <span className="text-acid">Ücretsiz</span>
-                <span className="text-zinc-700" aria-hidden>·</span>
-                <span>iPhone &amp; Android</span>
-                <span className="text-zinc-700" aria-hidden>·</span>
-                <span>18+</span>
-                <span className="text-zinc-700" aria-hidden>·</span>
-                <span>Türkiye&apos;de yapıldı</span>
-              </p>
-            </motion.div>
 
             {/* SECONDARY — topluluk: WhatsApp kanalı (güncel kal / indirmeden bağlan).
                 Env yoksa WhatsAppCTA null döner → ayıracı da gizle (sarkma olmasın). */}
