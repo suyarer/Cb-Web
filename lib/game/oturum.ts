@@ -98,23 +98,8 @@ export async function anonIdOku(): Promise<string | null> {
 }
 
 /**
- * İstemci IP'si.
- *
- * clubbeans.com Cloudflare proxy'sinin arkasında; Vercel `x-real-ip`'i Cloudflare çıkış
- * IP'siyle EZİYOR (denetim site-regresyon-1, CONFIRMED: tüm oyuncular tek hız-sınırı
- * kovasına düşüyordu). Cloudflare'dan gelen istekte (`cf-ray` var) gerçek IP
- * `cf-connecting-ip`; onun dışında Vercel platform başlıkları. XFF'in sol ucu
- * istemci tarafından uydurulabildiği için hiç okunmaz (spec §5.3).
- * IP hiç yoksa null döner; çağıran taraf ayrı, daha sıkı 'ipsiz' kovası kullanır.
+ * İstemci IP'si — sitenin ortak tek kaynağına taşındı (lib/istemciIp; 19.10 site-ip-cloudflare).
+ * Mantık birebir aynı (Cloudflare arkasında cf-ray → cf-connecting-ip; XFF sol ucu okunmaz; IP yoksa null).
+ * Oyun rotaları bu dosyadan import etmeye devam eder.
  */
-export function istemciIp(req: Request): string | null {
-  if (req.headers.get('cf-ray')) {
-    const cf = req.headers.get('cf-connecting-ip')?.trim();
-    if (cf) return cf;
-  }
-  const real = req.headers.get('x-real-ip')?.trim();
-  if (real) return real;
-  const vercel = req.headers.get('x-vercel-forwarded-for')?.trim();
-  if (vercel) return vercel.split(',')[0]?.trim() || null;
-  return null;
-}
+export { istemciIp } from '@/lib/istemciIp';
