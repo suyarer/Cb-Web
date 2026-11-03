@@ -27,18 +27,22 @@ export interface ProgramGirdisi {
   izin: string;
 }
 
-/** Programa girdi eklemek insan onayıdır: tarih + kulüp + teyitli ücret + ortak onayı. */
+/**
+ * Programa girdi eklemek insan onayıdır: tarih + kulüp + teyitli ücret + ortak onayı.
+ * kulupId DB'deki etkinliğin kulübünden KOPYALANIR (25.10 girdisi yanlış kulübü — cbfdbede — gösterdiği için sayfa etkinliği hiç
+ * eşleştiremedi; geçmiş girdiler 2026-11-03'te kaldırıldı, git geçmişinde durur). Yayından önce önizlemede `data-pazar="acik"`.
+ */
 export const PAZAR_PROGRAMI: readonly ProgramGirdisi[] = [
   {
-    tarih: '2026-10-25',
-    kulupId: 'cbfdbede-2692-405f-a64a-2fdf116e0952',
+    tarih: '2026-11-08',
+    kulupId: '99492f9a-d32e-413f-a3a5-e01e0f8fa67c',
     kulupAdi: 'Rotaİsta',
     baslik: 'Vision Board Workshop',
     tanitim:
-      'Sonbaharın ruhuyla: hedeflerimizi panoya dönüştürüyoruz. Birlikte hayal edip ilham alıyor, kafamızdaki hedefleri somut bir görsele çeviriyoruz.',
-    ucretTl: 350,
-    dahil: 'tüm atölye malzemeleri ve filtre kahve',
-    izin: 'kullanıcı 2026-09-29: dış ev sahibi, reklamda kulüp ve etkinlik adının kullanımına izin verdi',
+      'Hedeflerini bir panoya dönüştürdüğün bir Pazar: hazırlanan görseller ve süslemelerle fotoblok üzerine kendi kompozisyonunu oluşturuyorsun. Malzeme getirmen gerekmiyor. Ev sahibinin notu: etkinlik kadınlara özel; arkadaşınla gelirsen ikiniz toplam 900₺.',
+    ucretTl: 500,
+    dahil: 'malzemeler ve bir kahve (filtre, americano ya da latte)',
+    izin: 'kullanıcı 2026-11-03 (onay@12:53:26 "İzin var, 7 yer ayrılmış"): ev sahibi 8 Kasım etkinliğinin /pazar sayfasında gösterilmesine izin verdi; uygulamadaki 7 yer ayrılmış',
   },
 ];
 

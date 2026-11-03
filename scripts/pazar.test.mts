@@ -26,14 +26,29 @@ const E = (o: Partial<EtkinlikSatiri>): EtkinlikSatiri => ({
 });
 const SIMDI = new Date('2026-10-20T09:00:00Z');
 
-// Program bekçisi — programa giren her girdi: Pazar günü (İstanbul), alkolsüz, ortak onayı yazılı, ilk girdi 25.10 Rotaİsta
-ok(PAZAR_PROGRAMI.length >= 1 && PAZAR_PROGRAMI[0].tarih === '2026-10-25' && PAZAR_PROGRAMI[0].kulupId === ROTA,
-  'ilk Pazar: 25 Ekim Rotaİsta (kullanıcı kararı 2026-09-29)');
+// Program bekçisi — kalıcı kurallar (geçmiş girdiye bağlı iddia yok; 25.10 girdisi 2026-11-03'te kaldırıldı):
+// her girdi Pazar günü (İstanbul), alkolsüz, ortak onayı yazılı, kulupId tam UUID, ücret pozitif tam sayı ya da null; tarihler artan + tekil
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+ok(PAZAR_PROGRAMI.length >= 1, 'programda en az bir girdi');
+ok(PAZAR_PROGRAMI.every((g, i, a) => i === 0 || a[i - 1].tarih < g.tarih), 'girdiler tarih sırasında ve tekil');
 for (const g of PAZAR_PROGRAMI) {
   ok(istanbulTarih(g.tarih).endsWith('Pazar'), `${g.tarih} Pazar günü`, istanbulTarih(g.tarih));
   ok(!alkolCagrisimi(g.baslik, g.tanitim, g.dahil), `${g.tarih} girdisi alkolsüz`);
   ok(g.izin.trim().length > 0, `${g.tarih} ortak onayı kayıtlı`);
+  ok(UUID.test(g.kulupId), `${g.tarih} kulupId tam UUID`, g.kulupId);
+  ok(g.ucretTl === null || (Number.isInteger(g.ucretTl) && g.ucretTl > 0), `${g.tarih} ücret geçerli`, String(g.ucretTl));
 }
+
+// 8 Kasım girdisi — DB'deki gerçek etkinliğin kulübü (canlı salt okuma 2026-11-03: bean 82145d7b, kulüp 99492f9a, 11-08 12:00Z,
+// kapasite 7). 25.10 hatası: girdi YANLIŞ kulübü (cbfdbede) gösterdi → sayfa etkinliği eşleştiremedi, kart "kayıtlar yakında" kaldı.
+const ROTA_GERCEK = '99492f9a-d32e-413f-a3a5-e01e0f8fa67c';
+const g8 = PAZAR_PROGRAMI.find((x) => x.tarih === '2026-11-08');
+const e8 = E({ id: '82145d7b', club_id: ROTA_GERCEK, start_time: '2026-11-08T12:00:00Z', max_capacity: 7, current_attendees: 0 });
+ok(g8?.kulupId === ROTA_GERCEK && g8.ucretTl === 500, '8 Kasım girdisi: Rotaİsta 99492f9a, 500₺ (kullanıcı kararı 2026-11-03)', String(g8?.kulupId));
+ok(!!g8 && eslesenEtkinlik(g8, [e8])?.id === '82145d7b', '8 Kasım girdisi gerçek etkinlikle eşleşir');
+ok(!!g8 && eslesenEtkinlik({ ...g8, kulupId: ROTA }, [e8]) === null, 'yanlış kulüp kimliği (25.10 hatası) eşleşmez');
+ok(!!g8 && pazarProgrami([g8], [e8], new Date('2026-11-03T10:00:00Z')).buPazar?.etkinlik?.id === '82145d7b', '11-03: kart açık, etkinliğe bağlı');
+ok(!!g8 && pazarProgrami([g8], [e8], new Date('2026-11-08T12:30:00Z')).buPazar === null, '8 Kasım etkinliği başlayınca girdi düşer');
 
 // istanbulGunu — gün sınırı İstanbul'a göre
 ok(istanbulGunu('2026-10-24T21:30:00Z') === '2026-10-25', '24.10 21:30Z = 25.10 00:30 İstanbul', String(istanbulGunu('2026-10-24T21:30:00Z')));
