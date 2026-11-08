@@ -9,6 +9,7 @@ import { platformBul } from '@/lib/platform';
 import { fetchPazarEtkinlikleri } from '@/lib/supabase/pazar';
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 /**
  * @route /pazar
@@ -17,6 +18,9 @@ import { headers } from 'next/headers';
  * Pazar Programı (2026-09-29) — reklamın SABİT iniş sayfası: "Her Pazar bir etkinlik". Sayfaya yalnız `PAZAR_PROGRAMI`
  * girdisi çıkar (insan onayı); girdi DB'deki etkinlikle eşlenir, yoksa "kayıtlar yakında". Ev sahibinin açıklaması
  * gösterilmez. SmartRedirect YOK: reklamdan gelen kişi etkinliği okur, kendi seçer. /masa buraya 308 ile yönlenir.
+ * 2026-11-08 (kullanıcı kararı D1 "Boşken ana sayfaya yönlendir"; CB2026 defter pazar-programi-haftalik-besleme): programda yaklaşan
+ * Pazar YOKKEN sayfa boş "yakında" metni göstermez — ana sayfaya GEÇİCİ (307) yönlenir, utm/fbclid korunur (ana sayfa da kampanya
+ * kodunu mağaza bağlantısına taşır). Girdi eklenince sayfa kendiliğinden geri gelir (yönlendirme kalıcı değil, önbelleğe yazılmaz).
  */
 export const dynamic = 'force-dynamic';
 
@@ -51,7 +55,8 @@ export default async function PazarPage({
   const simdi = new Date();
   const kulupler = [...new Set(PAZAR_PROGRAMI.map((g) => g.kulupId))];
   const { buPazar, sonrakiler } = pazarProgrami(PAZAR_PROGRAMI, (await fetchPazarEtkinlikleri(kulupler, simdi)) ?? [], simdi);
-  const durum = !buPazar ? 'yok' : !buPazar.etkinlik ? 'yakinda' : buPazar.dolu ? 'dolu' : 'acik';
+  if (!buPazar) redirect(qs ? `/?${qs}` : '/');
+  const durum = !buPazar.etkinlik ? 'yakinda' : buPazar.dolu ? 'dolu' : 'acik';
 
   return (
     <>
@@ -78,13 +83,7 @@ export default async function PazarPage({
               ClubBeans&apos;teki kulüplerin Pazar etkinlikleri. Tanımadığın insanlarla, yeni bir şey yaparak.
             </p>
 
-            {buPazar ? (
-              <PazarKarti kalem={buPazar} />
-            ) : (
-              <p className="text-zinc-300 max-w-xl mb-8">
-                Sıradaki Pazar etkinliği yakında burada. Uygulamayı şimdiden indir, açılınca buradan yerini ayır.
-              </p>
-            )}
+            <PazarKarti kalem={buPazar} />
 
             <p className="text-sm text-zinc-500 mb-3">Uygulama telefonunda yoksa önce indir:</p>
             <IndirButonlari platform={platform} kampanya={kampanya} kaynak="pazar" ortam={ortam} />
