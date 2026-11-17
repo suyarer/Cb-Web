@@ -4,15 +4,13 @@
   "buildCommand": "node scripts/check-well-known.mjs && node scripts/ip-bekcisi.mjs && next build",
   "outputDirectory": ".next",
   "installCommand": "npm install",
-  "regions": ["fra1"],
+  "regions": [
+    "fra1"
+  ],
   "crons": [
     {
       "path": "/api/cron/backup-subscribers",
       "schedule": "0 3 * * 1"
-    },
-    {
-      "path": "/api/cron/email-sequence",
-      "schedule": "0 9 * * *"
     }
   ]
 }
