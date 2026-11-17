@@ -1,7 +1,6 @@
 'use client';
 
 import DownloadButtons from '@/components/DownloadButtons';
-import SubscribeForm from '@/components/SubscribeForm';
 import { easeOutExpo } from '@/lib/motion';
 import { motion } from '@/lib/motion';
 
@@ -33,21 +32,10 @@ export default function Launch() {
             yakınındaki etkinlikleri keşfet ya da bir dakikada kendi kulübünü kur.
           </p>
 
-          <div className="flex justify-center mb-8">
+          <div className="flex justify-center">
             <DownloadButtons source="launch" align="center" />
           </div>
 
-          {/* İkincil — bülten: indirmeden güncel kalmak isteyenler için */}
-          <div className="max-w-md mx-auto">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="h-px flex-1 bg-zinc-800" />
-              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-600">
-                veya — güncel kal
-              </span>
-              <span className="h-px flex-1 bg-zinc-800" />
-            </div>
-            <SubscribeForm source="launch" />
-          </div>
         </motion.div>
       </div>
     </section>

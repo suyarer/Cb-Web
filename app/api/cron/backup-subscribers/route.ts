@@ -1,63 +1,41 @@
-import { Redis } from '@upstash/redis';
-import { put } from '@vercel/blob';
+import { del, list } from '@vercel/blob';
 import { NextRequest, NextResponse } from 'next/server';
 
-// Haftalık cron: Redis'teki abone listesini Vercel Blob'a JSON snapshot olarak yaz.
-// Vercel Cron sadece /api/cron/* rotalarını CRON_SECRET header ile çağırır.
+// Haftalık cron: abone yedeklerinin SÜRE TEMİZLİĞİ.
+// Bülten 2026-11-17'de kapandı (hukuk T1 KARAR-205); yeni yedek ALINMAZ.
+// Gizlilik metni "yedekler en geç 6 ay içinde silinir" der (KARAR-6): haftalık koşuda
+// 173 günden eski yedekler silinir → hiçbir yedek 180 günü aşmaz.
 
-const redis = Redis.fromEnv();
+const SAKLAMA_GUN = 173;
 
 export async function GET(req: NextRequest) {
-  // Sadece Vercel Cron veya yetkili çağrı
   const authHeader = req.headers.get('authorization');
   const expected = `Bearer ${process.env.CRON_SECRET}`;
   if (!process.env.CRON_SECRET) {
-    return NextResponse.json(
-      { ok: false, error: 'CRON_SECRET tanımlı değil.' },
-      { status: 500 }
-    );
+    return NextResponse.json({ ok: false, error: 'CRON_SECRET tanımlı değil.' }, { status: 500 });
   }
   if (authHeader !== expected) {
     return NextResponse.json({ ok: false, error: 'Yetkisiz.' }, { status: 401 });
   }
 
+  const sinir = Date.now() - SAKLAMA_GUN * 24 * 60 * 60 * 1000;
+  let incelenen = 0;
+  const silinecek: string[] = [];
   try {
-    const emails = (await redis.smembers('subscribers')) as string[];
+    let cursor: string | undefined;
+    do {
+      const sayfa = await list({ prefix: 'subscribers/', cursor, limit: 1000 });
+      for (const b of sayfa.blobs) {
+        incelenen++;
+        if (new Date(b.uploadedAt).getTime() < sinir) silinecek.push(b.url);
+      }
+      cursor = sayfa.hasMore ? sayfa.cursor : undefined;
+    } while (cursor);
 
-    // Her abone için metadata topla (pipeline — tek roundtrip)
-    const pipeline = redis.pipeline();
-    emails.forEach((email) => pipeline.hgetall(`subscriber:${email}`));
-    const metadata = (await pipeline.exec()) as Array<Record<string, string | number>>;
-
-    const snapshot = {
-      generatedAt: new Date().toISOString(),
-      count: emails.length,
-      subscribers: emails.map((email, i) => ({
-        email,
-        ...(metadata[i] || {}),
-      })),
-    };
-
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const filename = `subscribers/backup-${timestamp}.json`;
-
-    const blob = await put(filename, JSON.stringify(snapshot, null, 2), {
-      access: 'public', // PII olduğu için URL'i paylaşma; addRandomSuffix ile tahmin edilemez
-      contentType: 'application/json',
-      addRandomSuffix: true,
-    });
-
-    return NextResponse.json({
-      ok: true,
-      count: emails.length,
-      url: blob.url,
-      filename,
-    });
+    if (silinecek.length > 0) await del(silinecek);
+    return NextResponse.json({ ok: true, incelenen, silinen: silinecek.length });
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'unknown';
-    return NextResponse.json(
-      { ok: false, error: `Backup başarısız: ${msg}` },
-      { status: 500 }
-    );
+    return NextResponse.json({ ok: false, error: `Yedek temizliği başarısız: ${msg}` }, { status: 500 });
   }
 }
